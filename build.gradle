@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'com.example'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven {
+        url 'https://djl-ai.s3.amazonaws.com/dev'
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile "net.java.dev.jna:jna:5.3.0"
+    compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.12'
+    compile "commons-cli:commons-cli:1.4"
+    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.29'
+    compile group: 'org.apache.commons', name: 'commons-csv', version: '1.7'
+    compile "com.google.code.gson:gson:2.8.5"
+    compile "ai.djl:api:0.2.0-SNAPSHOT"
+    compile "ai.djl:basicdataset:0.2.0-SNAPSHOT"
+    compile "ai.djl:model-zoo:0.2.0-SNAPSHOT"
+    compile "ai.djl.mxnet:mxnet-model-zoo:0.2.0-SNAPSHOT"
+    //Mac runtime
+    runtime "ai.djl.mxnet:mxnet-native-mkl:1.6.0:osx-x86_64"
+    // Linux runtime
+    //runtime "ai.djl.mxnet:mxnet-native-mkl:1.6.0:linux-x86_64"
+    //Linux GPU runtime
+    //runtime "ai.djl.mxnet:mxnet-native-cu101mkl:1.6.0:linux-x86_64"
+}
+
+application {
+    mainClassName = System.getProperty("main", "com.example.FilterProxy")
+}
+
+task train(type:JavaExec) {
+    main = System.getProperty("main", "com.example.ModelTrainer")
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+configure(this){
+    defaultTasks 'jar'
+
+    apply from: file("${rootProject.projectDir}/tools/gradle/formatter.gradle")
+}
