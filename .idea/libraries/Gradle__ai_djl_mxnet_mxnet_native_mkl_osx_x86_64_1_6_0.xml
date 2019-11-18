@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: ai.djl.mxnet:mxnet-native-mkl:osx-x86_64:1.6.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/ai.djl.mxnet/mxnet-native-mkl/1.6.0/5ef3168722978ad99fedc17c2c0bade67a2f3f34/mxnet-native-mkl-1.6.0-osx-x86_64.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

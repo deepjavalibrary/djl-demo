@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: ai.djl:repository:0.2.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/ai.djl/repository/0.2.0-SNAPSHOT/5ed56f0bc04ad92f820c1135602fc258de0299bd/repository-0.2.0-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/ai.djl/repository/0.2.0-SNAPSHOT/558557234ca9eaa3552eb9427804396b23adc2e5/repository-0.2.0-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

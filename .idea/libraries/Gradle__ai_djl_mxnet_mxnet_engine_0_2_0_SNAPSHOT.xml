@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: ai.djl.mxnet:mxnet-engine:0.2.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/ai.djl.mxnet/mxnet-engine/0.2.0-SNAPSHOT/a49e8e1014203fcab14d954c231046a2111b4e16/mxnet-engine-0.2.0-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/ai.djl.mxnet/mxnet-engine/0.2.0-SNAPSHOT/677e5e7a75dc29c82a87dc61c547b5aa6a030d43/mxnet-engine-0.2.0-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
