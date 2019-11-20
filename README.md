@@ -45,7 +45,7 @@ The model has toe following architecture
 ```
 There are 2 output classification labels as shown above, either benign or malicious.
 
-The general model structure is based out of the [Character CNNs paper's](https://arxiv.org/abs/1509.01626) model description.
+The general model structure is based out of the [Character level CNNs paper's](https://arxiv.org/abs/1509.01626) model description.
 
 ![Model Architecture](docs/convolutional_layers.png) 
 
