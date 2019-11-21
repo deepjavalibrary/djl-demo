@@ -4,12 +4,11 @@
 
 This repository is a Demo application, built using [Deep Java Library(DJL)](https://github.com/awslabs/djl). The application, detects malicious url based on a trained [Character Level CNN model](https://arxiv.org/abs/1509.01626).
 
-We use a dataset that is a amalgamation of the following malicious URL databases.
+We use a third-party dataset that is a amalgamation of the following malicious URL databases.
 
 Benign
 
 1. Custom automated webscraping of Alexa Top 1M with recursive depth of scraping of level 1.
-2. Custom entries of our own
 
 Malicious
 
@@ -17,9 +16,9 @@ Malicious
 2. openphish
 3. phishtank
 4. public GitHub faizann24
-5. Some custom entries of our own.
+5. Some custom entries.
 
-The dataset is an extension of Dataset found at [this repository](https://github.com/incertum/cyber-matrix-ai/tree/master/Malicious-URL-Detection-Deep-Learning).
+The dataset can be  found at [this repository](https://github.com/incertum/cyber-matrix-ai/tree/master/Malicious-URL-Detection-Deep-Learning).
 
 ## Model architecture
 
@@ -102,6 +101,10 @@ In the build.gradle enable the GPU runtime of mxnet
 ```groovy
 runtime "ai.djl.mxnet:mxnet-native-cu101mkl:1.6.0:linux-x86_64"
 //comment out the CPU runtime
+```
+Download the dataset
+```bash
+$ wget -O src/main/resources/malicious_url_data.csv https://raw.githubusercontent.com/incertum/cyber-matrix-ai/master/Malicious-URL-Detection-Deep-Learning/data/url_data_mega_deep_learning.csv
 ```
 
 Run the following in command line

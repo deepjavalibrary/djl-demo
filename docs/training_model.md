@@ -5,8 +5,13 @@ This document covers Training on an imperative model. To learn about defining an
 
 To simply train the model as is, run the following command 
 
+
+
 ```bash
-./gradlew train
+# Download the dataset
+$ wget -O src/main/resources/malicious_url_data.csv https://raw.githubusercontent.com/incertum/cyber-matrix-ai/master/Malicious-URL-Detection-Deep-Learning/data/url_data_mega_deep_learning.csv
+# Run train command
+$ ./gradlew train
 ```
 The default training runs for 10 epochs. with pre-set training configurations, we discuss in detail below.
 
