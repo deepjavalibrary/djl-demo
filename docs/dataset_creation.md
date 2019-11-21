@@ -3,7 +3,7 @@
 # Introduction
 In this document we discuss how to create a dataset class that prepares data from the CSV file, to be consumed during batch training. To learn more about training refer to the [training document](training_model.md).
 
-We use a csv file to store our dataset. This available under [dataset/malicious_url_data.csv](../dataset/malicious_url_data.csv)
+A csv file is used to store tye dataset. This available under this [third-party repository](https://github.com/incertum/cyber-matrix-ai/tree/master/Malicious-URL-Detection-Deep-Learning).
 
 The CSV file is of the format
 
