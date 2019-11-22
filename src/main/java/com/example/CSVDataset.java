@@ -34,16 +34,11 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 public class CSVDataset extends RandomAccessDataset {
-    private String allChars =
-            "abcdefghijklmnopqrstuvwxyz0123456789-,;.!?:'\"/\\|_@#$%^&*~`+ =<>()[]{}";
     private static final int FEATURE_LENGTH = 1014;
+    private static final String ALL_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789-,;.!?:'\"/\\|_@#$%^&*~`+ =<>()[]{}";
     private List<Character> alphabets;
     private Map<Character, Integer> alphabetsIndex;
-    private NDManager manager;
-    private Usage usage;
-    private List<CSVRecord> csvRecords;
-    private List<CSVRecord> subRecord;
-    private int size;
+    private List<CSVRecord> dataset;
 
     private Shape initializeShape;
     /**
@@ -53,37 +48,18 @@ public class CSVDataset extends RandomAccessDataset {
      */
     private CSVDataset(Builder builder) {
         super(builder);
-        this.manager = builder.manager;
-        this.usage = builder.usage;
+        dataset = builder.dataset;
         // Load CSV dataset into CSV REcords
-        String csvFileLocation = "src/main/resources/malicious_url_data.csv";
         // set encoding base information
-        alphabets = allChars.chars().mapToObj(e -> (char) e).collect(Collectors.toList());
+        alphabets = ALL_CHARS.chars().mapToObj(e -> (char) e).collect(Collectors.toList());
         alphabetsIndex =
                 IntStream.range(0, alphabets.size()).boxed().collect(toMap(alphabets::get, i -> i));
-        try (Reader reader = Files.newBufferedReader(Paths.get(csvFileLocation));
-                CSVParser csvParser =
-                        new CSVParser(
-                                reader,
-                                CSVFormat.DEFAULT
-                                        .withHeader("url", "isMalicious")
-                                        .withIgnoreHeaderCase()
-                                        .withTrim()); ) {
-            csvRecords = csvParser.getRecords();
-            csvRecords.remove(0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         // For use with Trainer initializer
         initializeShape = new Shape(1, alphabets.size(), FEATURE_LENGTH);
     }
 
-    public Shape getInitializeShape() {
+    Shape getInitializeShape() {
         return initializeShape;
-    }
-
-    public static Builder builder(NDManager manager) {
-        return new Builder().setManager(manager);
     }
 
     /** {@inheritDoc} */
@@ -91,22 +67,17 @@ public class CSVDataset extends RandomAccessDataset {
     public Record get(NDManager manager, long index) {
         NDList datum = new NDList();
         NDList label = new NDList();
-        CSVRecord record = subRecord.get((int) index);
+        CSVRecord record = dataset.get(Math.toIntExact(index));
         // Get a single data, label pair, encode them using helpers
-        datum.add(encodeData(record.get("url")));
-        label.add(encodeLabel(record.get("isMalicious")));
-        datum.attach(manager);
-        label.attach(manager);
+        datum.add(encodeData(manager, record.get("url")));
+        label.add(encodeLabel(manager, record.get("isMalicious")));
         return new Record(datum, label);
     }
 
     /** {@inheritDoc} */
     @Override
     public long size() {
-        if (size == 0) {
-            throw new RuntimeException(" call PrepareData() before calling size()");
-        }
-        return size;
+        return dataset.size();
     }
 
     /**
@@ -114,7 +85,7 @@ public class CSVDataset extends RandomAccessDataset {
      *
      * @param url URL in string format
      */
-    private NDArray encodeData(String url) {
+    private NDArray encodeData(NDManager manager, String url) {
         FloatBuffer buf = FloatBuffer.allocate(alphabets.size() * FEATURE_LENGTH);
         char[] arrayText = url.toCharArray();
         for (int i = 0; i < url.length(); i++) {
@@ -133,44 +104,15 @@ public class CSVDataset extends RandomAccessDataset {
      *
      * @param isMalicious indicating if sample is malicious or not (label)
      */
-    private NDArray encodeLabel(String isMalicious) {
+    private NDArray encodeLabel(NDManager manager, String isMalicious) {
         return manager.create(Float.parseFloat(isMalicious));
     }
 
-    /**
-     * Divide CSVRecords to TRAIN and TEST datasets Needed subuset is set
-     *
-     * @param usage TRAIN or TEST usage
-     */
-    void prepareData(Usage usage) {
-        // 80% of records for TRAIN rest for TEST
-        Double temp = csvRecords.size() * 0.8;
-        int splitIndex = temp.intValue();
-        switch (usage) {
-            case TRAIN:
-                {
-                    subRecord = csvRecords.subList(0, splitIndex);
-                    size = subRecord.size();
-                    break;
-                }
-            case TEST:
-                {
-                    subRecord = csvRecords.subList(splitIndex, csvRecords.size());
-                    size = subRecord.size();
-                    break;
-                }
-            default:
-                {
-                    throw new RuntimeException("Wrong usage passed");
-                }
-        }
-    }
-
     public static final class Builder extends BaseBuilder<Builder> {
-        private NDManager manager;
         private Usage usage;
+        List<CSVRecord> dataset;
 
-        public Builder() {
+        Builder() {
             this.usage = Usage.TRAIN;
         }
 
@@ -178,18 +120,37 @@ public class CSVDataset extends RandomAccessDataset {
             return this;
         }
 
-        public Builder setManager(NDManager manager) {
-            this.manager = manager.newSubManager();
-            return this;
-        }
-
-        public Builder optUsage(Usage usage) {
+        Builder optUsage(Usage usage) {
             this.usage = usage;
             return this;
         }
 
-        public CSVDataset build() {
-            return new CSVDataset(this);
+        CSVDataset build() throws IOException {
+            String csvFileLocation = "path/malicious_url_data.csv";
+            try (Reader reader = Files.newBufferedReader(Paths.get(csvFileLocation));
+                    CSVParser csvParser =
+                            new CSVParser(
+                                    reader,
+                                    CSVFormat.DEFAULT
+                                            .withHeader("url", "isMalicious")
+                                            .withFirstRecordAsHeader()
+                                            .withIgnoreHeaderCase()
+                                            .withTrim())) {
+                List<CSVRecord> csvRecords = csvParser.getRecords();
+                int index = (int)(csvRecords.size() * 0.8);
+                // split the dataset into training and testing
+                switch (usage) {
+                    case TRAIN: {
+                        dataset = csvRecords.subList(0, index);
+                        break;
+                    }
+                    case TEST: {
+                        dataset = csvRecords.subList(index, csvRecords.size());
+                        break;
+                    }
+                }
+                return new CSVDataset(this);
+            }
         }
     }
 }
