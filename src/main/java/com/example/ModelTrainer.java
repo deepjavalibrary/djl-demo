@@ -16,7 +16,6 @@ import ai.djl.Device;
 import ai.djl.Model;
 import ai.djl.metric.Metric;
 import ai.djl.metric.Metrics;
-import ai.djl.ndarray.NDManager;
 import ai.djl.ndarray.types.Shape;
 import ai.djl.training.DefaultTrainingConfig;
 import ai.djl.training.Trainer;
@@ -73,18 +72,16 @@ public class ModelTrainer implements TrainingListener {
     /**
      * Get dataset for use-case TRAIN or TEST. Look at CSVDataset class for split details.
      *
-     * @param manager manager of arrays in context.
      * @param usage defines dataset usage TRAIN or TEST
      * @return Dataset object for given usage.
      */
-    private Dataset getDataset(NDManager manager, Dataset.Usage usage) {
+    private Dataset getDataset(Dataset.Usage usage) throws IOException {
         CSVDataset csvDataset =
-                CSVDataset.builder(manager).optUsage(usage).setSampling(batchSize, true).build();
+                new CSVDataset.Builder().optUsage(usage).setSampling(batchSize, true).build();
         if (initializeShape == null) {
             initializeShape = csvDataset.getInitializeShape();
         }
 
-        csvDataset.prepareData(usage);
         if (usage == Dataset.Usage.TRAIN) {
             trainDataSize = (int) csvDataset.size() / batchSize;
         } else {
@@ -97,8 +94,8 @@ public class ModelTrainer implements TrainingListener {
     private void train() {
         try {
             logger.info("Loading Dataset");
-            Dataset trainingDataset = getDataset(model.getNDManager(), Dataset.Usage.TRAIN);
-            Dataset validateDataset = getDataset(model.getNDManager(), Dataset.Usage.TEST);
+            Dataset trainingDataset = getDataset(Dataset.Usage.TRAIN);
+            Dataset validateDataset = getDataset(Dataset.Usage.TEST);
             TrainingConfig config = setupTraining();
 
             try (Trainer trainer = model.newTrainer(config)) {
