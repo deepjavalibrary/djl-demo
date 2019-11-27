@@ -1,9 +1,9 @@
 # Creating a CSV Reading Dataset
 
 # Introduction
-In this document we discuss how to create a dataset class that prepares data from the CSV file, to be consumed during batch training. To learn more about training refer to the [training document](training_model.md).
+In this document you learn how to create a dataset class that can prepare data from a .csv file to be consumed during batch training. To learn more about training refer to the [training document](training_model.md).
 
-A csv file is used to store tye dataset. This available under this [third-party repository](https://github.com/incertum/cyber-matrix-ai/tree/master/Malicious-URL-Detection-Deep-Learning).
+The example here uses a .csv file to store the data. The .csv is available under this [third-party repository](https://github.com/incertum/cyber-matrix-ai/tree/master/Malicious-URL-Detection-Deep-Learning).
 
 The CSV file is of the format
 
@@ -13,7 +13,7 @@ The CSV file is of the format
 | sample.url.bad.com  | 1  |
 
 
-# DJL Dataset blueprints
+# DJL dataset blueprints
 
 DJL by default provides abstract classes for different styles of Datasets
 
@@ -21,9 +21,9 @@ DJL by default provides abstract classes for different styles of Datasets
 2. AbstractImageFolder - A dataset to load images from folder structures.
 3. ArrayDataSet - An array based extension of RandomAccessDataset.
 
-For reading the CSV file we implement a CSVDataset class that extends RandomAccessDataset. The Dataset APIs follow the builder pattern.
+To read the CSV file, implement a CSVDataset class that extends RandomAccessDataset. The Dataset APIs follow the builder pattern.
 
-## CSVDataset
+## The CSVDataset
 
 
 The CSVDataset definition looks like the following.
@@ -69,7 +69,7 @@ Every RandomAccessDataSet extension needs to implement a per index getter method
     }
 ```
 
-The ```encodeData()```  method encodes the input text into NDArrays. Based on the [Character CNNs paper's](https://arxiv.org/abs/1509.01626), we implement a one-hot encoding.
+The ```encodeData()```  method encodes the input text into NDArrays. This is seen in the following code example. This implements a one-hot encoding that is based on the work described in [Character-level Convolutional Networks for Text Classification](https://arxiv.org/abs/1509.01626).
 
 ```java
  /**
@@ -93,7 +93,7 @@ The ```encodeData()```  method encodes the input text into NDArrays. Based on th
     }
 ```
 
-We also define a ```prepareData()``` method, which initializes the dataset object for TRAIN or TEST subsets.
+Also define a ```prepareData()``` method, which initializes the dataset object for TRAIN or TEST subsets.
 
 ```java
     /**
@@ -125,7 +125,7 @@ We also define a ```prepareData()``` method, which initializes the dataset objec
     }
 ```
 
-A typical call flow for declaring a dataset object based on CSVDataset would be as follows.
+A typical call flow to declare a dataset object based on CSVDataset would be as follows.
 
 ```java
 // For train subset
@@ -134,6 +134,5 @@ CSVDataset trainSet = CSVDataset.builder(manager).optUsage(Usage.TRAIN).setSampl
 //prepare for trainset
 trainset.prepareData();
 ```
-Pass the dataset object to Trainer object, after this, refer [training documentation](training_model.md) for more information.
-
+After this, pass the dataset object to trainer object. For more information, see the [training documentation](training_model.md).
     
