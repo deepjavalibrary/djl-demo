@@ -1,9 +1,9 @@
-# Training the Character-level CNN model on CSV Dataset
+# Training the character-level CNN model on a CSV dataset
 
-This document covers Training on an imperative model. To learn about defining an imperative model, refer to this [document](define_model.md).
+This document explains training on an imperative model. To learn about defining an imperative model, see the [model definition document](define_model.md).
 
 
-To simply train the model as is, run the following command 
+To train the model as-is, run the following command. 
 
 
 
@@ -13,14 +13,14 @@ $ wget -O src/main/resources/malicious_url_data.csv https://raw.githubuserconten
 # Run train command
 $ ./gradlew train
 ```
-The default training runs for 10 epochs. with pre-set training configurations, we discuss in detail below.
+The default training runs for 10 epochs. Pre-set training configurations are discussed in-detail below.
 
 
-## Training Configuration
+## Training configuration
 
-DJL provides a [TrainingConfig](https://github.com/awslabs/djl) class to define hyperparameters for training. Hyperparameters including learning rate, optimizer is provided to the Trainer object using the TrainingConfig
+Deep Java Library (DJL) provides a [TrainingConfig](https://github.com/awslabs/djl) class to define hyperparameters for training. Hyperparameters, including learning rate and optimizer are provided to the Trainer object using the TrainingConfig class.
 
-For example
+For example:
 ```java
     /**
     *Learning Rate definition, FactorTracker is a parent for simimlar hyperparameteres
@@ -57,13 +57,13 @@ For example
                                         .setBatchSize(batchSize)
                                        .setDevices(new Device[] {Device.defaultDevice()});
 ```
-This training Configuration is then used to initialize the Trainer object, which in turn initializes the parameters of the model.
+This trainingcConfiguration is then used to initialize the Trainer object, which in turn initializes the parameters of the model.
 
 ## Trainer 
 
-The Trainer, is a per model instance object, that provides, training functionality using simple API
+The Trainer is a per-model instance object that provides training functionality using a simple API.
 
-To initialize trainer and use trainer.
+The following commands initialize trainer and use trainer:
 
 ```java
 //Define and load model
@@ -96,4 +96,4 @@ for (int epoch = 0; epoch < 10; epoch++) {
 }
 ```
 
-As shown above , the trainer object, manages the lifcycle of training, form initialization to backPropagation on model. Trainer handles, loading dataset and batching during training.
+The trainer object manages the lifcycle of training from initialization to backPropagation on the model. The Trainer handles loading dataset and batching during training.
