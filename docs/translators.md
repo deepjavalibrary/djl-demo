@@ -1,18 +1,18 @@
 ## Translators
 
-Translator classes provides a mechanism  to include methods that pre-process inputs and post-process output during inference. It wraps around this logic. Passing a translator to a model predictor object, enable automatic invocation of this logic.
+Translator classes provide a way to include methods that pre-process input and post-process output during inference. It wraps around this logic. Passing a translator to a model predictor object enables automatic invocation of this logic.
 
 
 ## Writing the CSV Translator
 
-The CSVTranslator needs to handle the following
+The comma separated values (CSV) Translator needs to handle the following:
 
-   1. Pre-process input - Convert the input text to a two-dimensional NDArray , using a one-hot encoding to a shape of (AllPossibleCharacters, MaxTextlength) - In our case this (69, 1014). Refer the [Character level CNN paper](https://arxiv.org/abs/1509.01626) for more information.
+   1. Pre-process input - Convert the input text to a two-dimensional NDArray. Use one-hot encoding to a shape of (AllPossibleCharacters, MaxTextlength). In this example, it's (69, 1014). For more infomation, see the [character level CNN research paper](https://arxiv.org/abs/1509.01626).
    
    2. Post-process output - Convert the output to a Classification object.
    
    
- If extend the base Translator class where input type and output types are provided as template parameters.The pre-process logic is very similar to the ```encodeData()``` logic in [CSVDataset](dataset_creation.md)
+ If you extend the base Translator class where input type and output type are provided as template parameters, then the pre-process logic is very similar to the ```encodeData()``` logic in [CSVDataset](dataset_creation.md)
  
  ```java
 // Get String text input and a List of Classification objects as output, for the URL translator
@@ -59,7 +59,7 @@ public class URLTranslator implements Translator<String, List<Classifications>> 
     }
 ```
 
-The post-process method, takes the result of the neural network and adds  labels (These labels can be more descriptive than the ones in dataset). The softmax on the output and labels are used to create a Classification probability list.
+The post-process method takes the result of the neural network and adds labels. These labels can be more descriptive than the ones in the dataset. The softmax on the output and labels are used to create a Classification probability list.
 
 ```java
 
@@ -85,7 +85,7 @@ The post-process method, takes the result of the neural network and adds  labels
     }
 ```
 
-Translators are typically attached to model predictors to integrate them easily with inference call flow.
+Translators are typically attached to model predictors in order to integrate them easily with inference call flow.
 
 ```java
 URLTranslator urlTranslator = new URLTranslator(); 
