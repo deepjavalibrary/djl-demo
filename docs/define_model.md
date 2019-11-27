@@ -1,8 +1,8 @@
-# Defining the CharacterlevelCNN imperative model
+# Defining the character-level CNN imperative model
 
-This section deals with defining the Characterlevel CNN imperative model using DJL block API.
+This section provides information about defining the character-level convolutional neural network imperative model by using the Deep Java Library block API.
 
-As discussed the model architecture of the model is
+The model architecture is as follows:
 
 ```
   (0): Conv1D(None -> 256, kernel_size=(7,), stride=(1,))
@@ -23,14 +23,14 @@ As discussed the model architecture of the model is
 
 ```
 
-We have input of shape (69,1014) Where 69 is the total number of characters, and 1014 is the maximum string length. The NDArray is one-hot encoded per character. 
+The input shape is (69,1014). Where 69 is the total number of characters, and 1014 is the maximum string length. The NDArray is one-hot encoded per character. 
 
-The output layer represents two possible classifications, malicious or benign. The Conv layers have 256 single-dimensional filters of varying kernel sizes. They feed into FullyConnected layers after pooling.
+The output layer represents two possible classifications, malicious or benign. The convolutional layers have 256 single-dimensional filters of varying kernel sizes. They feed into FullyConnected layers after pooling.
 
 
 ## Defining the model in DJL
 
-DJL uses a Block level definition of various operators, each block can have sub-blocks. Individual blocks have their own parameters defined. The model consists of a single block which contains many sub-blocks
+DJL uses a block level definition of various operators. Each block can have sub-blocks. Individual blocks have their own parameters defined. The model consists of a single block that contains many sub-blocks.
 
 ```java
 // Declare a model
