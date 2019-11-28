@@ -35,7 +35,8 @@ import org.apache.commons.csv.CSVRecord;
 
 public class CSVDataset extends RandomAccessDataset {
     private static final int FEATURE_LENGTH = 1014;
-    private static final String ALL_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789-,;.!?:'\"/\\|_@#$%^&*~`+ =<>()[]{}";
+    private static final String ALL_CHARS =
+            "abcdefghijklmnopqrstuvwxyz0123456789-,;.!?:'\"/\\|_@#$%^&*~`+ =<>()[]{}";
     private List<Character> alphabets;
     private Map<Character, Integer> alphabetsIndex;
     private List<CSVRecord> dataset;
@@ -83,6 +84,7 @@ public class CSVDataset extends RandomAccessDataset {
     /**
      * Convert the URL string to NDArray encoded form
      *
+     * @param manager NDManager for NDArray context
      * @param url URL in string format
      */
     private NDArray encodeData(NDManager manager, String url) {
@@ -102,6 +104,7 @@ public class CSVDataset extends RandomAccessDataset {
     /**
      * Convert the label string to NDArray encoded form
      *
+     * @param manager NDManager for NDArray context
      * @param isMalicious indicating if sample is malicious or not (label)
      */
     private NDArray encodeLabel(NDManager manager, String isMalicious) {
@@ -126,7 +129,7 @@ public class CSVDataset extends RandomAccessDataset {
         }
 
         CSVDataset build() throws IOException {
-            String csvFileLocation = "path/malicious_url_data.csv";
+            String csvFileLocation = "src/main/resources/malicious_url_data.csv";
             try (Reader reader = Files.newBufferedReader(Paths.get(csvFileLocation));
                     CSVParser csvParser =
                             new CSVParser(
@@ -137,17 +140,19 @@ public class CSVDataset extends RandomAccessDataset {
                                             .withIgnoreHeaderCase()
                                             .withTrim())) {
                 List<CSVRecord> csvRecords = csvParser.getRecords();
-                int index = (int)(csvRecords.size() * 0.8);
+                int index = (int) (csvRecords.size() * 0.8);
                 // split the dataset into training and testing
                 switch (usage) {
-                    case TRAIN: {
-                        dataset = csvRecords.subList(0, index);
-                        break;
-                    }
-                    case TEST: {
-                        dataset = csvRecords.subList(index, csvRecords.size());
-                        break;
-                    }
+                    case TRAIN:
+                        {
+                            dataset = csvRecords.subList(0, index);
+                            break;
+                        }
+                    case TEST:
+                        {
+                            dataset = csvRecords.subList(index, csvRecords.size());
+                            break;
+                        }
                 }
                 return new CSVDataset(this);
             }

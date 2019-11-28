@@ -31,21 +31,13 @@ The CSVDataset definition looks like the following.
 
 ```java
 public class CSVDataset extends RandomAccessDataset {
-    // All characters we recogonize using CharCNN
-    private String allChars =
-            "abcdefghijklmnopqrstuvwxyz0123456789-,;.!?:'\"/\\|_@#$%^&*~`+ =<>()[]{}";
-    //Maximum length of input text
     private static final int FEATURE_LENGTH = 1014;
+    private static final String ALL_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789-,;.!?:'\"/\\|_@#$%^&*~`+ =<>()[]{}";
     private List<Character> alphabets;
     private Map<Character, Integer> alphabetsIndex;
-    private NDManager manager;
-    private Usage usage;
-    // All CSV entries from CSV file.
-    private List<CSVRecord> csvRecords;
-    // TRAIN vs TEST split for records
-    private List<CSVRecord> subRecord;
-    //Size of current instance, depends on Dataset Split
-    private int size;
+    private List<CSVRecord> dataset;
+
+    private Shape initializeShape;
 ```
 
 The CSVDataset class defines, all the parameters , needed to process the input CSV entry into encoded NDArray.
@@ -58,13 +50,10 @@ Every RandomAccessDataSet extension needs to implement a per index getter method
     public Record get(NDManager manager, long index) {
         NDList datum = new NDList();
         NDList label = new NDList();
-        // From the TRAIN or TEST split, get a record at index
-        CSVRecord record = subRecord.get((int) index);
+        CSVRecord record = dataset.get(Math.toIntExact(index));
         // Get a single data, label pair, encode them using helpers
-        datum.add(encodeData(record.get("url")));
-        label.add(encodeLabel(record.get("isMalicious")));
-        datum.attach(manager);
-        label.attach(manager);
+        datum.add(encodeData(manager, record.get("url")));
+        label.add(encodeLabel(manager, record.get("isMalicious")));
         return new Record(datum, label);
     }
 ```
@@ -72,12 +61,13 @@ Every RandomAccessDataSet extension needs to implement a per index getter method
 The ```encodeData()```  method encodes the input text into NDArrays. This is seen in the following code example. This implements a one-hot encoding that is based on the work described in [Character-level Convolutional Networks for Text Classification](https://arxiv.org/abs/1509.01626).
 
 ```java
- /**
+    /**
      * Convert the URL string to NDArray encoded form
      *
+     * @param manager NDManager for NDArray context
      * @param url URL in string format
      */
-    private NDArray encodeData(String url) {
+    private NDArray encodeData(NDManager manager, String url) {
         FloatBuffer buf = FloatBuffer.allocate(alphabets.size() * FEATURE_LENGTH);
         char[] arrayText = url.toCharArray();
         for (int i = 0; i < url.length(); i++) {
@@ -93,34 +83,52 @@ The ```encodeData()```  method encodes the input text into NDArrays. This is see
     }
 ```
 
-Also define a ```prepareData()``` method, which initializes the dataset object for TRAIN or TEST subsets.
+Also  a ```builder``` class, which initializes the dataset object for TRAIN or TEST subsets.
 
 ```java
-    /**
-     * Divide CSVRecords to TRAIN and TEST datasets Needed subuset is set
-     *
-     * @param usage TRAIN or TEST usage
-     */
-    void prepareData(Usage usage) {
-        // 80% of records for TRAIN rest for TEST
-        int splitIndex = (int) (csvRecords.size() * 0.8);
-        switch (usage) {
-            case TRAIN:
-                {
-                    subRecord = csvRecords.subList(0, splitIndex);
-                    size = subRecord.size();
-                    break;
+public static final class Builder extends BaseBuilder<Builder> {
+        private Usage usage;
+        List<CSVRecord> dataset;
+
+        Builder() {
+            this.usage = Usage.TRAIN;
+        }
+
+        protected Builder self() {
+            return this;
+        }
+
+        Builder optUsage(Usage usage) {
+            this.usage = usage;
+            return this;
+        }
+
+        CSVDataset build() throws IOException {
+            String csvFileLocation = "src/main/resources/malicious_url_data.csv";
+            try (Reader reader = Files.newBufferedReader(Paths.get(csvFileLocation));
+                    CSVParser csvParser =
+                            new CSVParser(
+                                    reader,
+                                    CSVFormat.DEFAULT
+                                            .withHeader("url", "isMalicious")
+                                            .withFirstRecordAsHeader()
+                                            .withIgnoreHeaderCase()
+                                            .withTrim())) {
+                List<CSVRecord> csvRecords = csvParser.getRecords();
+                int index = (int)(csvRecords.size() * 0.8);
+                // split the dataset into training and testing
+                switch (usage) {
+                    case TRAIN: {
+                        dataset = csvRecords.subList(0, index);
+                        break;
+                    }
+                    case TEST: {
+                        dataset = csvRecords.subList(index, csvRecords.size());
+                        break;
+                    }
                 }
-            case TEST:
-                {
-                    subRecord = csvRecords.subList(splitIndex, csvRecords.size());
-                    size = subRecord.size();
-                    break;
-                }
-            default:
-                {
-                    throw new RuntimeException("Wrong usage passed");
-                }
+                return new CSVDataset(this);
+            }
         }
     }
 ```
@@ -130,9 +138,8 @@ A typical call flow to declare a dataset object based on CSVDataset would be as 
 ```java
 // For train subset
 int batchSize = 128;
-CSVDataset trainSet = CSVDataset.builder(manager).optUsage(Usage.TRAIN).setSampling(batchSize, true).build();
-//prepare for trainset
-trainset.prepareData();
+CSVDataset csvDataset =
+       new CSVDataset.Builder().optUsage(Usage.TRAIN).setSampling(batchSize, true).build();
 ```
 After this, pass the dataset object to trainer object. For more information, see the [training documentation](training_model.md).
     
