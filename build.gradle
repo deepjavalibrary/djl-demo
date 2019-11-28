@@ -11,9 +11,6 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
     jcenter()
-    maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots/'
-    }
 }
 
 dependencies {
@@ -24,16 +21,16 @@ dependencies {
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.29'
     compile group: 'org.apache.commons', name: 'commons-csv', version: '1.7'
     compile "com.google.code.gson:gson:2.8.5"
-    compile "ai.djl:api:0.2.0-SNAPSHOT"
-    compile "ai.djl:basicdataset:0.2.0-SNAPSHOT"
-    compile "ai.djl:model-zoo:0.2.0-SNAPSHOT"
-    compile "ai.djl.mxnet:mxnet-model-zoo:0.2.0-SNAPSHOT"
+    compile "ai.djl:api:0.2.0"
+    compile "ai.djl:basicdataset:0.2.0"
+    compile "ai.djl:model-zoo:0.2.0"
+    compile "ai.djl.mxnet:mxnet-model-zoo:0.2.0"
     //Mac runtime
-    runtime "ai.djl.mxnet:mxnet-native-mkl:1.6.0:osx-x86_64"
+    runtime "ai.djl.mxnet:mxnet-native-mkl:1.6.0-a:osx-x86_64"
     // Linux runtime
-    //runtime "ai.djl.mxnet:mxnet-native-mkl:1.6.0:linux-x86_64"
+    //runtime "ai.djl.mxnet:mxnet-native-mkl:1.6.0-a:linux-x86_64"
     //Linux GPU runtime
-    //runtime "ai.djl.mxnet:mxnet-native-cu101mkl:1.6.0:linux-x86_64"
+    //runtime "ai.djl.mxnet:mxnet-native-cu101mkl:1.6.0-a:linux-x86_64"
 }
 
 application {

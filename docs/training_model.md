@@ -8,6 +8,7 @@ To train the model as-is, run the following command.
 
 
 ```bash
+mkdir -p src/main/resources
 # Download the dataset
 $ wget -O src/main/resources/malicious_url_data.csv https://raw.githubusercontent.com/incertum/cyber-matrix-ai/master/Malicious-URL-Detection-Deep-Learning/data/url_data_mega_deep_learning.csv
 # Run train command

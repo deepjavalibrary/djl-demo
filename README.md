@@ -52,12 +52,13 @@ The general model structure is based out of the [Character level CNNs paper's](h
 
 ## Running the Proxy Server to detect malicious URLs
 
-We have writen a simple proxy server, that can work with browsers, to detect malicious URLs. This demo example does not cache requests. However acts like a filter of malicious URLs, I works with both HTTP and HTTPs requests.
+We have writen a simple proxy server, that can work with browsers, to detect malicious URLs. This demo example does not cache requests. However acts like a filter of malicious URLs, It works with both HTTP and HTTPs requests.
 
 To run the example copy over the per-trained parameters file under the [parameters directory](trained_parameters/) to the ``` src/main/resources``` directory using.
 
 ```bash
 # Copy pre-trained parameters for inference
+$ mkdir -p src/main/resources
 $ cp trained_parameters/*.params src/main/resources/
 ```
 
@@ -102,8 +103,9 @@ In the build.gradle enable the GPU runtime of mxnet
 runtime "ai.djl.mxnet:mxnet-native-cu101mkl:1.6.0:linux-x86_64"
 //comment out the CPU runtime
 ```
-Download the dataset
+Create resources folder and download the dataset
 ```bash
+$ mkdir -p src/main/resources
 $ wget -O src/main/resources/malicious_url_data.csv https://raw.githubusercontent.com/incertum/cyber-matrix-ai/master/Malicious-URL-Detection-Deep-Learning/data/url_data_mega_deep_learning.csv
 ```
 
