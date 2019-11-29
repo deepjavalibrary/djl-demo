@@ -18,7 +18,7 @@ Malicious
 4. public GitHub faizann24
 5. Some custom entries.
 
-The dataset can be  found at [this repository](https://github.com/incertum/cyber-matrix-ai/tree/master/Malicious-URL-Detection-Deep-Learning).
+The dataset can be found at [this repository](https://github.com/incertum/cyber-matrix-ai/tree/master/Malicious-URL-Detection-Deep-Learning).
 
 ## Model architecture
 
@@ -48,13 +48,13 @@ The general model structure is based out of the [Character level CNNs paper's](h
 
 ![Model Architecture](docs/convolutional_layers.png) 
 
-![ModelArchitecure2](docs/dense_layer.png)
+![Model Architecture 2](docs/dense_layer.png)
 
 ## Running the Proxy Server to detect malicious URLs
 
-We have writen a simple proxy server, that can work with browsers, to detect malicious URLs. This demo example does not cache requests. However acts like a filter of malicious URLs, It works with both HTTP and HTTPs requests.
+We have written a simple proxy server that can work with browsers, to detect malicious URLs. This demo  acts like a filter of malicious URLs, It works with both HTTP and HTTPs requests.
 
-To run the example copy over the per-trained parameters file under the [parameters directory](trained_parameters/) to the ``` src/main/resources``` directory using.
+To run the example copy over the pre-trained parameters file under the [parameters directory](trained_parameters) to the ``` src/main/resources``` directory using.
 
 ```bash
 # Copy pre-trained parameters for inference
@@ -70,9 +70,9 @@ $ ./gradlew run
 Which should start the server listening at port 8085.
 ```bash
 > Task :run
-[main] INFO com.example.FilterProxy - Waiting for client on port 8085..
+[main] INFO com.example.FilterProxy - Waiting for request(s) on port 8080
 ```
-In your browser settings (We use firefox as example), set the proxy settings to 127.0.0.1:8085
+In your browser settings (We use firefox as example), set the proxy settings to 127.0.0.1:8080
 
 ![Proxy Settings Firefox](docs/proxy_firefox.png)
 
@@ -83,9 +83,8 @@ Now we can try a wrongly spelt URL of amazon.com in the browser navigator and se
 The proxy server prints the following on the terminal screen.
 ```bash
 > Task :run
-[main] INFO com.example.FilterProxy - Waiting for client on port 8085..
-[Thread-1] INFO com.example.RequestHandler - Request Received GET http://amazom.com/ HTTP/1.1
-[Thread-1] INFO com.example.RequestHandler - Blocked site : http://amazom.com/
+[main] INFO com.example.FilterProxy - Waiting for client on port 8080..
+[Thread-1] INFO com.example.RequestHandler - Malicious URL detected and blocked http://amazom.com/
 ```
 
 Typing the correct URL should show the correct website.
@@ -100,7 +99,7 @@ To train the model, A GPU instance is recommended. CPU works, But is very slow c
 In the build.gradle enable the GPU runtime of mxnet
 
 ```groovy
-runtime "ai.djl.mxnet:mxnet-native-cu101mkl:1.6.0:linux-x86_64"
+runtime "ai.djl.mxnet:mxnet-native-cu101mkl:1.6.0-a:linux-x86_64"
 //comment out the CPU runtime
 ```
 Create resources folder and download the dataset
@@ -178,7 +177,7 @@ For re-running inference, copy the ```.params``` file ```src\main\resources\``` 
 
 This repository also contains documentation regarding how to rain the model using DJL, writing Datasets and how to use Translators. Here are some links to them
 
-1. [Creating a Dataset to read in from the CSV file](docs/dataset_creation.md)
+1. [Creating a dataset to read in from the CSV file](docs/dataset_creation.md)
 2. [Creating an imperative model in DJL.](docs/define_model.md)
 3. [Training Model using DJL and imperative model.](docs/training_model.md)
 4. [Writing Translators, to handle pre-process and post-process during inference.](docs/translators.md)
