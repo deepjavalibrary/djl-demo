@@ -176,7 +176,7 @@ This repository contains documentation on training the model using DJL, writing 
 1. [Creating a CSV Reading Dataset](docs/dataset_creation.md)
 2. [Defining the Character-level CNN Imperative Model](docs/define_model.md)
 3. [Training the Character-level CNN Model on a CSV Dataset](docs/training_model.md)
-4. [Writing Translators](docs/translators.md)
+4. [Writing the CSV Translator](docs/translators.md)
 
 ## License
 
