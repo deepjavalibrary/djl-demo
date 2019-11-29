@@ -95,7 +95,7 @@ public class CSVDataset extends RandomAccessDataset {
                 break;
             }
             if (alphabetsIndex.containsKey(arrayText[i])) {
-                int index = arrayText[i] * alphabets.size() + i;
+                int index = alphabetsIndex.get(arrayText[i]) * alphabets.size() + i;
                 buf.put(index, 1);
             }
         }
