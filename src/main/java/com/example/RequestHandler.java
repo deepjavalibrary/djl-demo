@@ -86,7 +86,7 @@ public class RequestHandler implements Runnable {
         String[] parts = requestString.split(" ", 3);
         String requestType = parts[0];
         String urlString = parts[1];
-        if (!urlString.substring(0, 4).equals("http")) {
+        if (!urlString.substring(0, 4).equals("http") && !requestType.equals("CONNECT")) {
             urlString = "http://" + urlString;
         }
         // malicious url detector

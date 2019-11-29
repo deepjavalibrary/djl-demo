@@ -62,6 +62,16 @@ $ mkdir -p src/main/resources
 $ cp trained_parameters/*.params src/main/resources/
 ```
 
+Pick the right MXNet backend for your operating system, under ```build.gradle``` file. 
+
+```groovy
+//Mac runtime
+runtime "ai.djl.mxnet:mxnet-native-mkl:1.6.0-a:osx-x86_64"
+// Linux runtime
+runtime "ai.djl.mxnet:mxnet-native-mkl:1.6.0-a:linux-x86_64"
+//Edit Gradle file to pick one
+```
+
 Run the proxy server using the following command in terminal.
 
 ```bash
