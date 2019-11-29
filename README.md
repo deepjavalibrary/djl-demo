@@ -126,59 +126,47 @@ $./gradle train
 > Task :train
 [main] INFO com.example.ModelTrainer - Loading Dataset
 [main] INFO com.example.ModelTrainer - Initialize Trainer
-[02:17:17] src/operator/nn/./cudnn/cudnn_pooling-inl.h:375: 1D pooling is not supported by cudnn, MXNet 1D pooling is applied.
+[main] INFO com.example.ModelTrainer - Loading Dataset
+[main] INFO com.example.ModelTrainer - Initialize Trainer
+[12:45:09] src/operator/nn/./cudnn/cudnn_pooling-inl.h:375: 1D pooling is not supported by cudnn, MXNet 1D pooling is applied.
 [main] INFO com.example.ModelTrainer - Begin Training
-[02:17:18] src/operator/nn/./cudnn/./cudnn_algoreg-inl.h:97: Running performance tests to find the best convolution algorithm, this can take a while... (set the environment variable MXNET_CUDNN_AUTOTUNE_DEFAULT to 0 to disable)
-Training:    100% |████████████████████████████████████████| accuracy: 0.73 loss: 0.53 speed: 1734.70 urls/sec
+[12:45:09] src/operator/nn/./cudnn/./cudnn_algoreg-inl.h:97: Running performance tests to find the best convolution algorithm, this can take a while... (set the environment variable MXNET_CUDNN_AUTOTUNE_DEFAULT to 0 to disable)
+Training:    100% |████████████████████████████████████████| accuracy: 0.71 loss: 0.54 speed: 323.74 urls/sec
 Validating:  100% |████████████████████████████████████████|
 [main] INFO com.example.ModelTrainer - Epoch 0 finished.
-[main] INFO com.example.ModelTrainer - train accuracy: 0.7282877, train loss: 0.52515125
-[main] INFO com.example.ModelTrainer - validate accuracy: 0.7402341, validate loss: 0.56785536
-Training:    100% |████████████████████████████████████████| accuracy: 0.84 loss: 0.36 speed: 1741.51 urls/sec
+[main] INFO com.example.ModelTrainer - train accuracy: 0.7131701, train loss: 0.5386256
+[main] INFO com.example.ModelTrainer - validate accuracy: 0.89068836, validate loss: 0.30017522
+Training:     15% |███████                                 | accuracy: 0.90 loss: 0.26 speed: 383.75 urls/sec
+Training:    100% |████████████████████████████████████████| accuracy: 0.92 loss: 0.21 speed: 336.71 urls/sec
 Validating:  100% |████████████████████████████████████████|
 [main] INFO com.example.ModelTrainer - Epoch 1 finished.
-[main] INFO com.example.ModelTrainer - train accuracy: 0.8411242, train loss: 0.36307296
-[main] INFO com.example.ModelTrainer - validate accuracy: 0.7726503, validate loss: 0.541216
-Training:    100% |████████████████████████████████████████| accuracy: 0.86 loss: 0.32 speed: 1755.39 urls/sec
+[main] INFO com.example.ModelTrainer - train accuracy: 0.91614103, train loss: 0.21319388
+[main] INFO com.example.ModelTrainer - validate accuracy: 0.81641084, validate loss: 0.43587697
+Training:    100% |████████████████████████████████████████| accuracy: 0.95 loss: 0.14 speed: 340.42 urls/sec
 Validating:  100% |████████████████████████████████████████|
 [main] INFO com.example.ModelTrainer - Epoch 2 finished.
-[main] INFO com.example.ModelTrainer - train accuracy: 0.8616253, train loss: 0.31982687
-[main] INFO com.example.ModelTrainer - validate accuracy: 0.8153842, validate loss: 0.42479417
-Training:    100% |████████████████████████████████████████| accuracy: 0.88 loss: 0.29 speed: 1547.37 urls/sec
+[main] INFO com.example.ModelTrainer - train accuracy: 0.9457474, train loss: 0.14361516
+[main] INFO com.example.ModelTrainer - validate accuracy: 0.89394796, validate loss: 0.26676258
+Training:    100% |████████████████████████████████████████| accuracy: 0.96 loss: 0.11 speed: 339.22 urls/sec
 Validating:  100% |████████████████████████████████████████|
 [main] INFO com.example.ModelTrainer - Epoch 3 finished.
-[main] INFO com.example.ModelTrainer - train accuracy: 0.87562, train loss: 0.2914456
-[main] INFO com.example.ModelTrainer - validate accuracy: 0.8426159, validate loss: 0.3691258
-Training:    100% |████████████████████████████████████████| accuracy: 0.89 loss: 0.27 speed: 1766.33 urls/sec
+[main] INFO com.example.ModelTrainer - train accuracy: 0.9595303, train loss: 0.10922413
+[main] INFO com.example.ModelTrainer - validate accuracy: 0.9005698, validate loss: 0.26299196
+Training:    100% |████████████████████████████████████████| accuracy: 0.97 loss: 0.09 speed: 338.12 urls/sec
 Validating:  100% |████████████████████████████████████████|
 [main] INFO com.example.ModelTrainer - Epoch 4 finished.
-[main] INFO com.example.ModelTrainer - train accuracy: 0.88663095, train loss: 0.26910067
-[main] INFO com.example.ModelTrainer - validate accuracy: 0.83453107, validate loss: 0.3761223
-Training:    100% |████████████████████████████████████████| accuracy: 0.90 loss: 0.25 speed: 1764.38 urls/sec
+[main] INFO com.example.ModelTrainer - train accuracy: 0.9665886, train loss: 0.08993893
+[main] INFO com.example.ModelTrainer - validate accuracy: 0.85562855, validate loss: 0.38608122
+Training:    100% |████████████████████████████████████████| accuracy: 0.97 loss: 0.07 speed: 292.06 urls/sec
 Validating:  100% |████████████████████████████████████████|
 [main] INFO com.example.ModelTrainer - Epoch 5 finished.
-[main] INFO com.example.ModelTrainer - train accuracy: 0.89527416, train loss: 0.24976254
-[main] INFO com.example.ModelTrainer - validate accuracy: 0.8775217, validate loss: 0.28764376
-Training:    100% |████████████████████████████████████████| accuracy: 0.90 loss: 0.23 speed: 1778.58 urls/sec
+[main] INFO com.example.ModelTrainer - train accuracy: 0.97365975, train loss: 0.07207036
+[main] INFO com.example.ModelTrainer - validate accuracy: 0.92241156, validate loss: 0.22621335
+Training:    100% |████████████████████████████████████████| accuracy: 0.98 loss: 0.06 speed: 319.64 urls/sec
 Validating:  100% |████████████████████████████████████████|
 [main] INFO com.example.ModelTrainer - Epoch 6 finished.
-[main] INFO com.example.ModelTrainer - train accuracy: 0.90326285, train loss: 0.23195234
-[main] INFO com.example.ModelTrainer - validate accuracy: 0.86032546, validate loss: 0.33043325
-Training:    100% |████████████████████████████████████████| accuracy: 0.91 loss: 0.21 speed: 1747.46 urls/sec
-Validating:  100% |████████████████████████████████████████|
-[main] INFO com.example.ModelTrainer - Epoch 7 finished.
-[main] INFO com.example.ModelTrainer - train accuracy: 0.9120857, train loss: 0.2143221
-[main] INFO com.example.ModelTrainer - validate accuracy: 0.8480314, validate loss: 0.34760192
-Training:    100% |████████████████████████████████████████| accuracy: 0.92 loss: 0.20 speed: 1789.17 urls/sec
-Validating:  100% |████████████████████████████████████████|
-[main] INFO com.example.ModelTrainer - Epoch 8 finished.
-[main] INFO com.example.ModelTrainer - train accuracy: 0.91793126, train loss: 0.19966042
-[main] INFO com.example.ModelTrainer - validate accuracy: 0.8967969, validate loss: 0.24789414
-Training:    100% |████████████████████████████████████████| accuracy: 0.92 loss: 0.18 speed: 1708.66 urls/sec
-Validating:  100% |████████████████████████████████████████|
-[main] INFO com.example.ModelTrainer - Epoch 9 finished.
-[main] INFO com.example.ModelTrainer - train accuracy: 0.92416185, train loss: 0.18444999
-[main] INFO com.example.ModelTrainer - validate accuracy: 0.8903034, validate loss: 0.27242142
+[main] INFO com.example.ModelTrainer - train accuracy: 0.9785428, train loss: 0.05851153
+[main] INFO com.example.ModelTrainer - validate accuracy: 0.9198193, validate loss: 0.2653344       
 ```
 
 For re-running inference, copy the ```.params``` file ```src\main\resources\``` folder.

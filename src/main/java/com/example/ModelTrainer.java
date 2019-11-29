@@ -110,7 +110,7 @@ public class ModelTrainer implements TrainingListener {
                 // initialize trainer with proper input shape
                 trainer.initialize(initializeShape);
                 logger.info("Begin Training");
-                int epoch = 10;
+                int epoch = 7;
                 TrainingUtils.fit(
                         trainer,
                         epoch,
