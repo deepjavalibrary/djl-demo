@@ -1,4 +1,4 @@
-# Training the character-level CNN model on a CSV dataset
+# Training the Character-level CNN Model on a CSV Dataset
 
 This document explains training on an imperative model. To learn about defining an imperative model, see the [model definition document](define_model.md).
 
@@ -14,14 +14,14 @@ $ wget -O src/main/resources/malicious_url_data.csv https://raw.githubuserconten
 # Run train command
 $ ./gradlew train
 ```
-The default training runs for 7 epochs. Pre-set training configurations are discussed in-detail below.
+The default training runs for 7 epochs. Pre-set training configurations are discussed in-detail in the following section.
 
 
 ## Training configuration
 
-Deep Java Library (DJL) provides a [TrainingConfig](https://github.com/awslabs/djl) class to define hyperparameters for training. Hyperparameters, including learning rate and optimizer are provided to the Trainer object using the TrainingConfig class.
+Deep Java Library (DJL) provides a [TrainingConfig](https://github.com/awslabs/djl) class to define hyperparameters for training. Hyperparameters, including learning rate and optimizer, are provided to the Trainer object using the TrainingConfig class.
 
-For example:
+For example, this trainingConfiguration is used to initialize the Trainer object, which in turn initializes the parameters of the model.
 ```java
     /**
     *Learning Rate definition, FactorTracker is a parent for simimlar hyperparameteres
@@ -58,13 +58,12 @@ For example:
                                         .setBatchSize(batchSize)
                                        .setDevices(new Device[] {Device.defaultDevice()});
 ```
-This trainingcConfiguration is then used to initialize the Trainer object, which in turn initializes the parameters of the model.
 
 ## Trainer 
 
 The Trainer is a per-model instance object that provides training functionality using a simple API.
 
-The following commands initialize trainer and use trainer:
+The following commands initialize and use trainer:
 
 ```java
 //Define and load model
@@ -97,4 +96,4 @@ for (int epoch = 0; epoch < 10; epoch++) {
 }
 ```
 
-The trainer object manages the lifcycle of training from initialization to backPropagation on the model. The Trainer handles loading dataset and batching during training.
+The Trainer object manages the lifecycle of training from initialization to backPropagation on the model. The Trainer handles loading the dataset and batching during training.
