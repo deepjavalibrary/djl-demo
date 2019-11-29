@@ -17,6 +17,7 @@ import static java.util.stream.Collectors.toMap;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
+import ai.djl.ndarray.index.NDIndex;
 import ai.djl.ndarray.types.Shape;
 import ai.djl.training.dataset.RandomAccessDataset;
 import ai.djl.training.dataset.Record;
@@ -88,18 +89,17 @@ public class CSVDataset extends RandomAccessDataset {
      * @param url URL in string format
      */
     private NDArray encodeData(NDManager manager, String url) {
-        FloatBuffer buf = FloatBuffer.allocate(alphabets.size() * FEATURE_LENGTH);
+        NDArray encoded = manager.zeros(new Shape(alphabets.size(), FEATURE_LENGTH));
         char[] arrayText = url.toCharArray();
         for (int i = 0; i < url.length(); i++) {
             if (i > FEATURE_LENGTH) {
                 break;
             }
             if (alphabetsIndex.containsKey(arrayText[i])) {
-                int index = alphabetsIndex.get(arrayText[i]) * alphabets.size() + i;
-                buf.put(index, 1);
+                encoded.set(new NDIndex(alphabetsIndex.get(arrayText[i]), i), 1);
             }
         }
-        return manager.create(buf, new Shape(alphabets.size(), FEATURE_LENGTH));
+        return encoded;
     }
     /**
      * Convert the label string to NDArray encoded form
