@@ -2,27 +2,27 @@
 
 ## Introduction
 
-This repository is a Demo application, built using [Deep Java Library(DJL)](https://github.com/awslabs/djl). The application, detects malicious url based on a trained [Character Level CNN model](https://arxiv.org/abs/1509.01626).
+This repository contains a Demo application built using [Deep Java Library(DJL)](https://github.com/awslabs/djl). The application detects malicious urls based on a trained [Character Level CNN model](https://arxiv.org/abs/1509.01626).
 
-We use a third-party dataset that is a amalgamation of the following malicious URL databases.
+It uses a third-party dataset that is a amalgamation of the following malicious URL databases:
 
 Benign
 
-1. Custom automated webscraping of Alexa Top 1M with recursive depth of scraping of level 1.
+1. Custom automated webscraping of Alexa Top 1M with recursive depth of scraping of level 1
 
 Malicious
 
 1. Various blacklists
 2. openphish
 3. phishtank
-4. public GitHub faizann24
-5. Some custom entries.
+4. Public GitHub faizann24
+5. Some custom entries
 
-The dataset can be found at [this repository](https://github.com/incertum/cyber-matrix-ai/tree/master/Malicious-URL-Detection-Deep-Learning).
+The dataset can be found in the [Malicious-URL-Detection-Deep-Learning repository](https://github.com/incertum/cyber-matrix-ai/tree/master/Malicious-URL-Detection-Deep-Learning).
 
 ## Model architecture
 
-The model has toe following architecture
+The model has the following architecture:
 
 ```
   (0): Conv1D(None -> 256, kernel_size=(7,), stride=(1,))
@@ -42,9 +42,9 @@ The model has toe following architecture
   (14): Dense(None -> 2, linear)
 
 ```
-There are 2 output classification labels as shown above, either benign or malicious.
+There are 2 output classification labels, benign or malicious.
 
-The general model structure is based out of the [Character level CNNs paper's](https://arxiv.org/abs/1509.01626) model description.
+The general model structure is based on the [Character level CNNs paper's](https://arxiv.org/abs/1509.01626) model description.
 
 ![Model Architecture](docs/convolutional_layers.png) 
 
@@ -52,9 +52,9 @@ The general model structure is based out of the [Character level CNNs paper's](h
 
 ## Running the Proxy Server to detect malicious URLs
 
-We have written a simple proxy server that can work with browsers, to detect malicious URLs. This demo  acts like a filter of malicious URLs, It works with both HTTP and HTTPs requests.
+This demo contains a simple proxy server that can work with browsers to detect malicious URLs. This demo acts as a filter for malicious URLs. It works with both HTTP and HTTPs requests.
 
-To run the example copy over the pre-trained parameters file under the [parameters directory](trained_parameters) to the ``` src/main/resources``` directory using.
+To run the example, copy the pre-trained parameters file under the [parameters directory](trained_parameters) to the ``` src/main/resources``` directory using the following commands:
 
 ```bash
 # Copy pre-trained parameters for inference
@@ -62,63 +62,61 @@ $ mkdir -p src/main/resources
 $ cp trained_parameters/*.params src/main/resources/
 ```
 
-Pick the right MXNet backend for your operating system, under ```build.gradle``` file. 
+Select the MXNet backend for your operating system in the ```build.gradle``` file as follows:
 
 ```groovy
 //Mac runtime
 runtime "ai.djl.mxnet:mxnet-native-mkl:1.6.0-a:osx-x86_64"
 // Linux runtime
 runtime "ai.djl.mxnet:mxnet-native-mkl:1.6.0-a:linux-x86_64"
-//Edit Gradle file to pick one
+//Edit the Gradle file to select one
 ```
 
-Run the proxy server using the following command in terminal.
+Run the proxy server using the following command in your terminal:
 
 ```bash
 $ ./gradlew run
 ```
-Which should start the server listening at port 8085.
+This command starts the serve, listening at port 8080.
 ```bash
 > Task :run
 [main] INFO com.example.FilterProxy - Waiting for request(s) on port 8080
 ```
-In your browser settings (We use firefox as example), set the proxy settings to 127.0.0.1:8080
+In your browser settings (firefox, for example), set the proxy settings to 127.0.0.1:8080.
 
 ![Proxy Settings Firefox](docs/proxy_firefox.png)
 
-Now we can try a wrongly spelt URL of amazon.com in the browser navigator and see the proxy at work
+Now you can try to navigate to a mispelled amazon.com URL in the browser navigator and see the proxy at work.
 
 ![Oops Malicious URL](docs/wrong_url_firefox.png)
 
-The proxy server prints the following on the terminal screen.
+The proxy server prints the following on the terminal screen:
 ```bash
 > Task :run
 [main] INFO com.example.FilterProxy - Waiting for client on port 8080..
 [Thread-1] INFO com.example.RequestHandler - Malicious URL detected and blocked http://amazom.com/
 ```
 
-Typing the correct URL should show the correct website.
+Typing the correct URL should show the correct website as follows:
 ![Benign Website](docs/correct_firefox.png)    
 
-That is it for the inference demo.
+## Train the model in the command line
 
-## Train model on command line
+To train the model, a GPU instance is recommended. Training with a CPU is very slow compared to training with a GPU.
 
-To train the model, A GPU instance is recommended. CPU works, But is very slow compared to a GPU run of the train loop
-
-In the build.gradle enable the GPU runtime of mxnet
+In the ```build.gradle``` file, enable the MXNet GPU runtime as follows:
 
 ```groovy
 runtime "ai.djl.mxnet:mxnet-native-cu101mkl:1.6.0-a:linux-x86_64"
 //comment out the CPU runtime
 ```
-Create resources folder and download the dataset
+Create a ```resources``` folder and download the dataset using the following commands:
 ```bash
 $ mkdir -p src/main/resources
 $ wget -O src/main/resources/malicious_url_data.csv https://raw.githubusercontent.com/incertum/cyber-matrix-ai/master/Malicious-URL-Detection-Deep-Learning/data/url_data_mega_deep_learning.csv
 ```
 
-Run the following in command line
+Train the model using the following command:
 
 ```bash
 $./gradle train
@@ -169,16 +167,16 @@ Validating:  100% |████████████████████�
 [main] INFO com.example.ModelTrainer - validate accuracy: 0.9198193, validate loss: 0.2653344       
 ```
 
-For re-running inference, copy the ```.params``` file ```src\main\resources\``` folder.
+To run inference again, copy the ```.params``` file to the ```src\main\resources\``` folder.
 
 ## More Reading
 
-This repository also contains documentation regarding how to rain the model using DJL, writing Datasets and how to use Translators. Here are some links to them
+This repository contains documentation on training the model using DJL, writing Datasets, and using Translators.
 
-1. [Creating a dataset to read in from the CSV file](docs/dataset_creation.md)
-2. [Creating an imperative model in DJL.](docs/define_model.md)
-3. [Training Model using DJL and imperative model.](docs/training_model.md)
-4. [Writing Translators, to handle pre-process and post-process during inference.](docs/translators.md)
+1. [Creating a CSV Reading Dataset](docs/dataset_creation.md)
+2. [Defining the Character-level CNN Imperative Model](docs/define_model.md)
+3. [Training the Character-level CNN Model on a CSV Dataset](docs/training_model.md)
+4. [Writing Translators](docs/translators.md)
 
 ## License
 
