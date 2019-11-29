@@ -83,7 +83,7 @@ The ```encodeData()```  method encodes the input text into NDArrays. This is see
     }
 ```
 
-Also  a ```builder``` class, which initializes the dataset object for TRAIN or TEST subsets.
+We also define  a ```builder``` class, which initializes the dataset object for TRAIN or TEST subsets.
 
 ```java
 public static final class Builder extends BaseBuilder<Builder> {

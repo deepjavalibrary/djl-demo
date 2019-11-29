@@ -96,10 +96,9 @@ public class RequestHandler implements Runnable {
                 maliciousURLModel.defineModel();
                 maliciousURLModel.loadModel();
                 output = maliciousURLModel.inference(urlString);
-                logger.info(output.toString());
             }
             if (output.get("malicious").getProbability() >= 0.50) {
-                logger.info("Malicious URL detected and blocked" + urlString);
+                logger.info("Malicious URL detected and blocked " + urlString);
                 blockedMaliciousSiteRequested();
                 return;
             }
