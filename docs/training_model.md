@@ -14,7 +14,7 @@ $ wget -O src/main/resources/malicious_url_data.csv https://raw.githubuserconten
 # Run train command
 $ ./gradlew train
 ```
-The default training runs for 10 epochs. Pre-set training configurations are discussed in-detail below.
+The default training runs for 7 epochs. Pre-set training configurations are discussed in-detail below.
 
 
 ## Training configuration
