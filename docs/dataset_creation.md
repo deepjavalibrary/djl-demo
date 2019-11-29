@@ -61,26 +61,25 @@ Every RandomAccessDataSet extension needs to implement a per index getter method
 The ```encodeData()```  method encodes the input text into NDArrays. This is seen in the following code example. This implements a one-hot encoding that is based on the work described in [Character-level Convolutional Networks for Text Classification](https://arxiv.org/abs/1509.01626).
 
 ```java
-    /**
-     * Convert the URL string to NDArray encoded form
-     *
-     * @param manager NDManager for NDArray context
-     * @param url URL in string format
-     */
-    private NDArray encodeData(NDManager manager, String url) {
-        FloatBuffer buf = FloatBuffer.allocate(alphabets.size() * FEATURE_LENGTH);
-        char[] arrayText = url.toCharArray();
-        for (int i = 0; i < url.length(); i++) {
-            if (i > FEATURE_LENGTH) {
-                break;
-            }
-            if (alphabetsIndex.containsKey(arrayText[i])) {
-                int index = arrayText[i] * alphabets.size() + i;
-                buf.put(index, 1);
-            }
+/**
+ * Convert the URL string to NDArray encoded form
+ *
+ * @param manager NDManager for NDArray context
+ * @param url URL in string format
+ */
+private NDArray encodeData(NDManager manager, String url) {
+    NDArray encoded = manager.zeros(new Shape(alphabets.size(), FEATURE_LENGTH));
+    char[] arrayText = url.toCharArray();
+    for (int i = 0; i < url.length(); i++) {
+        if (i > FEATURE_LENGTH) {
+            break;
         }
-        return manager.create(buf, new Shape(alphabets.size(), FEATURE_LENGTH));
+        if (alphabetsIndex.containsKey(arrayText[i])) {
+            encoded.set(new NDIndex(alphabetsIndex.get(arrayText[i]), i), 1);
+        }
     }
+    return encoded;
+}
 ```
 
 We also define  a ```builder``` class, which initializes the dataset object for TRAIN or TEST subsets.
