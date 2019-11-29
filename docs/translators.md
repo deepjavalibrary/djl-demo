@@ -1,4 +1,4 @@
-## Translators
+## Writing Translators
 
 Translator classes provide a way to include methods that pre-process input and post-process output during inference. It wraps around this logic. Passing a translator to a model predictor object enables automatic invocation of this logic.
 
@@ -85,7 +85,7 @@ The post-process method takes the result of the neural network and adds labels. 
     }
 ```
 
-Translators are typically attached to model predictors in order to integrate them easily with inference call flow.
+Translators are typically attached to model predictors in order to integrate them easily with the inference call flow.
 
 ```java
 URLTranslator urlTranslator = new URLTranslator(); 
