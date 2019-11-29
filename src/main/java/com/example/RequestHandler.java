@@ -86,7 +86,7 @@ public class RequestHandler implements Runnable {
         String[] parts = requestString.split(" ", 3);
         String requestType = parts[0];
         String urlString = parts[1];
-        if (!urlString.substring(0, 4).equals("http") && !requestType.equals("CONNECT")) {
+        if (!urlString.substring(0, 4).equals("http")) {
             urlString = "http://" + urlString;
         }
         // malicious url detector
@@ -96,6 +96,7 @@ public class RequestHandler implements Runnable {
                 maliciousURLModel.defineModel();
                 maliciousURLModel.loadModel();
                 output = maliciousURLModel.inference(urlString);
+                logger.info(output.toString());
             }
             if (output.get("malicious").getProbability() >= 0.50) {
                 logger.info("Malicious URL detected and blocked " + urlString);
