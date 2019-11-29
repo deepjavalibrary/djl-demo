@@ -1,6 +1,6 @@
-# Defining the character-level CNN imperative model
+# Defining the Character-level CNN Imperative Model
 
-This section provides information about defining the character-level convolutional neural network imperative model by using the Deep Java Library block API.
+This section provides information on defining the character-level convolutional neural network imperative model by using the Deep Java Library block API.
 
 The model architecture is as follows:
 
@@ -23,7 +23,7 @@ The model architecture is as follows:
 
 ```
 
-The input shape is (69,1014). Where 69 is the total number of characters, and 1014 is the maximum string length. The NDArray is one-hot encoded per character. 
+The input shape is (69,1014), where 69 is the total number of characters and 1014 is the maximum string length. The NDArray is one-hot encoded per character. 
 
 The output layer represents two possible classifications, malicious or benign. The convolutional layers have 256 single-dimensional filters of varying kernel sizes. They feed into FullyConnected layers after pooling.
 
