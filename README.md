@@ -4,7 +4,7 @@
 
 This repository contains a Demo application built using [Deep Java Library(DJL)](https://github.com/awslabs/djl). The application detects malicious urls based on a trained [Character Level CNN model](https://arxiv.org/abs/1509.01626).
 
-It uses a third-party dataset that is a amalgamation of the following malicious URL databases:
+It uses a third-party dataset that is a amalgamation of the following malicious URL databases.
 
 Benign
 
@@ -22,7 +22,7 @@ The dataset can be found in the [Malicious-URL-Detection-Deep-Learning repositor
 
 ## Model architecture
 
-The model has the following architecture:
+The model has the following architecture.
 
 ```
   (0): Conv1D(None -> 256, kernel_size=(7,), stride=(1,))
@@ -54,7 +54,7 @@ The general model structure is based on the [Character level CNNs paper's](https
 
 This demo contains a simple proxy server that can work with browsers to detect malicious URLs. This demo acts as a filter for malicious URLs. It works with both HTTP and HTTPs requests.
 
-To run the example, copy the pre-trained parameters file under the [parameters directory](trained_parameters) to the ``` src/main/resources``` directory using the following commands:
+To run the example, copy the pre-trained parameters file under the [parameters directory](trained_parameters) to the ``` src/main/resources``` directory.
 
 ```bash
 # Copy pre-trained parameters for inference
@@ -62,7 +62,7 @@ $ mkdir -p src/main/resources
 $ cp trained_parameters/*.params src/main/resources/
 ```
 
-Select the MXNet backend for your operating system in the ```build.gradle``` file as follows:
+Select the MXNet backend for your operating system in the ```build.gradle``` file.
 
 ```groovy
 //Mac runtime
@@ -72,12 +72,12 @@ runtime "ai.djl.mxnet:mxnet-native-mkl:1.6.0-a:linux-x86_64"
 //Edit the Gradle file to select one
 ```
 
-Run the proxy server using the following command in your terminal:
+Run the proxy server from your terminal.
 
 ```bash
 $ ./gradlew run
 ```
-This command starts the serve, listening at port 8080.
+This command starts the server, listening at port 8080.
 ```bash
 > Task :run
 [main] INFO com.example.FilterProxy - Waiting for request(s) on port 8080
@@ -90,33 +90,33 @@ Now you can try to navigate to a mispelled amazon.com URL in the browser navigat
 
 ![Oops Malicious URL](docs/wrong_url_firefox.png)
 
-The proxy server prints the following on the terminal screen:
+The proxy server prints the following on the terminal screen.
 ```bash
 > Task :run
 [main] INFO com.example.FilterProxy - Waiting for client on port 8080..
 [Thread-1] INFO com.example.RequestHandler - Malicious URL detected and blocked http://amazom.com/
 ```
 
-Typing the correct URL should show the correct website as follows:
+Typing the correct URL should show the correct website.
 ![Benign Website](docs/correct_firefox.png)    
 
 ## Train the model in the command line
 
 To train the model, a GPU instance is recommended. Training with a CPU is very slow compared to training with a GPU.
 
-In the ```build.gradle``` file, enable the MXNet GPU runtime as follows:
+In the ```build.gradle``` file, enable the MXNet GPU runtime.
 
 ```groovy
 runtime "ai.djl.mxnet:mxnet-native-cu101mkl:1.6.0-a:linux-x86_64"
 //comment out the CPU runtime
 ```
-Create a ```resources``` folder and download the dataset using the following commands:
+Create a ```resources``` folder and download the dataset.
 ```bash
 $ mkdir -p src/main/resources
 $ wget -O src/main/resources/malicious_url_data.csv https://raw.githubusercontent.com/incertum/cyber-matrix-ai/master/Malicious-URL-Detection-Deep-Learning/data/url_data_mega_deep_learning.csv
 ```
 
-Train the model using the following command:
+Train the model.
 
 ```bash
 $./gradle train
