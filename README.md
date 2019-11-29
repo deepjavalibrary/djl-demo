@@ -22,7 +22,7 @@ The dataset can be found at [this repository](https://github.com/incertum/cyber-
 
 ## Model architecture
 
-The model has toe following architecture
+The model has the following architecture
 
 ```
   (0): Conv1D(None -> 256, kernel_size=(7,), stride=(1,))
