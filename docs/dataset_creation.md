@@ -1,11 +1,11 @@
 # Creating a CSV Reading Dataset
 
 # Introduction
-In this document you learn how to create a dataset class that can prepare data from a .csv file to be consumed during batch training. To learn more about training refer to the [training document](training_model.md).
+In this document, you learn how to create a dataset class that can prepare data from a .csv file to be consumed during batch training. To learn more about training, refer to the [training document](training_model.md).
 
-The example here uses a .csv file to store the data. The .csv is available under this [third-party repository](https://github.com/incertum/cyber-matrix-ai/tree/master/Malicious-URL-Detection-Deep-Learning).
+This example uses a .csv file to store the data. The .csv is available under this [third-party repository](https://github.com/incertum/cyber-matrix-ai/tree/master/Malicious-URL-Detection-Deep-Learning).
 
-The CSV file is of the format
+The CSV file has the following format.
 
 |url   | isMalicious  |
 |---|---|
@@ -15,9 +15,9 @@ The CSV file is of the format
 
 # DJL dataset blueprints
 
-DJL by default provides abstract classes for different styles of Datasets
+DJL by default provides abstract classes for different styles of Datasets.
 
-1. RandomAccessDatset - A dataset that supports random access of data from dataset , by using indices.
+1. RandomAccessDataset - A dataset that supports random access of data it using indices.
 2. AbstractImageFolder - A dataset to load images from folder structures.
 3. ArrayDataSet - An array based extension of RandomAccessDataset.
 
@@ -40,9 +40,9 @@ public class CSVDataset extends RandomAccessDataset {
     private Shape initializeShape;
 ```
 
-The CSVDataset class defines, all the parameters , needed to process the input CSV entry into encoded NDArray.
+The CSVDataset class defines the parameters needed to process the input CSV entry into an encoded NDArray.
 
-Every RandomAccessDataSet extension needs to implement a per index getter method. The getter method returns a Record object, that consists of a encoded input and label.
+Every RandomAccessDataSet extension needs to implement a per-index getter method. The getter method returns a Record object that consists of an encoded input and label.
 
  ```java
     /** {@inheritDoc} */
@@ -58,7 +58,7 @@ Every RandomAccessDataSet extension needs to implement a per index getter method
     }
 ```
 
-The ```encodeData()```  method encodes the input text into NDArrays. This is seen in the following code example. This implements a one-hot encoding that is based on the work described in [Character-level Convolutional Networks for Text Classification](https://arxiv.org/abs/1509.01626).
+The ```encodeData()```  method encodes the input text into NDArrays. The following example implements a one-hot encoding based on the work described in [Character-level Convolutional Networks for Text Classification](https://arxiv.org/abs/1509.01626).
 
 ```java
 /**
@@ -82,7 +82,7 @@ private NDArray encodeData(NDManager manager, String url) {
 }
 ```
 
-We also define  a ```builder``` class, which initializes the dataset object for TRAIN or TEST subsets.
+Define  a ```builder``` class, which initializes the dataset object for TRAIN or TEST subsets.
 
 ```java
 public static final class Builder extends BaseBuilder<Builder> {
@@ -132,7 +132,7 @@ public static final class Builder extends BaseBuilder<Builder> {
     }
 ```
 
-A typical call flow to declare a dataset object based on CSVDataset would be as follows.
+The following code illustrates a typical call flow to declare a dataset object based on CSVDataset.
 
 ```java
 // For train subset
@@ -140,5 +140,5 @@ int batchSize = 128;
 CSVDataset csvDataset =
        new CSVDataset.Builder().optUsage(Usage.TRAIN).setSampling(batchSize, true).build();
 ```
-After this, pass the dataset object to trainer object. For more information, see the [training documentation](training_model.md).
+After this, pass the dataset object to the trainer object. For more information, see the [training documentation](training_model.md).
     
