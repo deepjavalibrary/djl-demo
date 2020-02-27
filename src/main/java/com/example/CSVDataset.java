@@ -23,8 +23,9 @@ import ai.djl.training.dataset.RandomAccessDataset;
 import ai.djl.training.dataset.Record;
 import java.io.IOException;
 import java.io.Reader;
-import java.nio.FloatBuffer;
+import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
@@ -33,16 +34,21 @@ import java.util.stream.IntStream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CSVDataset extends RandomAccessDataset {
+
+    private static final Logger logger = LoggerFactory.getLogger(CSVDataset.class);
+
     private static final int FEATURE_LENGTH = 1014;
     private static final String ALL_CHARS =
             "abcdefghijklmnopqrstuvwxyz0123456789-,;.!?:'\"/\\|_@#$%^&*~`+ =<>()[]{}";
+
     private List<Character> alphabets;
     private Map<Character, Integer> alphabetsIndex;
     private List<CSVRecord> dataset;
 
-    private Shape initializeShape;
     /**
      * Reads CSV File and sets up information for encoding.
      *
@@ -56,12 +62,10 @@ public class CSVDataset extends RandomAccessDataset {
         alphabets = ALL_CHARS.chars().mapToObj(e -> (char) e).collect(Collectors.toList());
         alphabetsIndex =
                 IntStream.range(0, alphabets.size()).boxed().collect(toMap(alphabets::get, i -> i));
-        // For use with Trainer initializer
-        initializeShape = new Shape(1, alphabets.size(), FEATURE_LENGTH);
     }
 
-    Shape getInitializeShape() {
-        return initializeShape;
+    public static Shape getInitializeShape() {
+        return new Shape(1, ALL_CHARS.length(), FEATURE_LENGTH);
     }
 
     /** {@inheritDoc} */
@@ -111,26 +115,31 @@ public class CSVDataset extends RandomAccessDataset {
         return manager.create(Float.parseFloat(isMalicious));
     }
 
-    public static final class Builder extends BaseBuilder<Builder> {
-        private Usage usage;
-        List<CSVRecord> dataset;
+    public static Builder builder() {
+        return new Builder();
+    }
 
-        Builder() {
-            this.usage = Usage.TRAIN;
-        }
+    public static final class Builder extends BaseBuilder<Builder> {
+
+        List<CSVRecord> dataset;
 
         protected Builder self() {
             return this;
         }
 
-        Builder optUsage(Usage usage) {
-            this.usage = usage;
-            return this;
-        }
-
         CSVDataset build() throws IOException {
-            String csvFileLocation = "src/main/resources/malicious_url_data.csv";
-            try (Reader reader = Files.newBufferedReader(Paths.get(csvFileLocation));
+            Path path = Paths.get("dataset");
+            Files.createDirectories(path);
+            Path csvFile = path.resolve("malicious_url_data.csv");
+            if (!Files.exists(csvFile)) {
+                logger.info("Downloading dataset file ...");
+                URL url =
+                        new URL(
+                                "https://raw.githubusercontent.com/incertum/cyber-matrix-ai/master/Malicious-URL-Detection-Deep-Learning/data/url_data_mega_deep_learning.csv");
+                Files.copy(url.openStream(), csvFile);
+            }
+
+            try (Reader reader = Files.newBufferedReader(csvFile);
                     CSVParser csvParser =
                             new CSVParser(
                                     reader,
@@ -139,21 +148,7 @@ public class CSVDataset extends RandomAccessDataset {
                                             .withFirstRecordAsHeader()
                                             .withIgnoreHeaderCase()
                                             .withTrim())) {
-                List<CSVRecord> csvRecords = csvParser.getRecords();
-                int index = (int) (csvRecords.size() * 0.8);
-                // split the dataset into training and testing
-                switch (usage) {
-                    case TRAIN:
-                        {
-                            dataset = csvRecords.subList(0, index);
-                            break;
-                        }
-                    case TEST:
-                        {
-                            dataset = csvRecords.subList(index, csvRecords.size());
-                            break;
-                        }
-                }
+                dataset = csvParser.getRecords();
                 return new CSVDataset(this);
             }
         }

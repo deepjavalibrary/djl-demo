@@ -27,8 +27,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class URLTranslator implements Translator<String, List<Classifications>> {
+public class URLTranslator implements Translator<String, Classifications> {
+
     private static final int FEATURE_LENGTH = 1014;
+
     private List<Character> alphabets;
     private Map<Character, Integer> alphabetsIndex;
 
@@ -69,23 +71,20 @@ public class URLTranslator implements Translator<String, List<Classifications>> 
     }
 
     /**
-     * Converts the Output NDArray (classification labels) to Classification objects for easy
+     * Converts the Output NDArray (classification labels) to Classifications object for easy
      * formatting.
      *
      * @param ctx context of the translator.
      * @param list NDlist of prediction output
-     * @return returns a list of Classification objects
+     * @return returns a Classifications objects
      */
     @Override
-    public List<Classifications> processOutput(TranslatorContext ctx, NDList list) {
+    public Classifications processOutput(TranslatorContext ctx, NDList list) {
         NDArray array = list.get(0);
-        List<Classifications> ret = new ArrayList<>(2);
         NDArray pred = array.softmax(-1);
         List<String> labels = new ArrayList<>();
         labels.add("benign");
         labels.add("malicious");
-        Classifications out = new Classifications(labels, pred);
-        ret.add(out);
-        return ret;
+        return new Classifications(labels, pred);
     }
 }

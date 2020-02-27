@@ -62,16 +62,6 @@ $ mkdir -p src/main/resources
 $ cp trained_parameters/*.params src/main/resources/
 ```
 
-Select the MXNet backend for your operating system in the ```build.gradle``` file.
-
-```groovy
-//Mac runtime
-runtime "ai.djl.mxnet:mxnet-native-mkl:1.6.0-a:osx-x86_64"
-// Linux runtime
-runtime "ai.djl.mxnet:mxnet-native-mkl:1.6.0-a:linux-x86_64"
-//Edit the Gradle file to select one
-```
-
 Run the proxy server from your terminal.
 
 ```bash
@@ -104,18 +94,6 @@ Typing the correct URL should show the correct website.
 
 To train the model, a GPU instance is recommended. Training with a CPU is very slow compared to training with a GPU.
 
-In the ```build.gradle``` file, enable the MXNet GPU runtime.
-
-```groovy
-runtime "ai.djl.mxnet:mxnet-native-cu101mkl:1.6.0-a:linux-x86_64"
-//comment out the CPU runtime
-```
-Create a ```resources``` folder and download the dataset.
-```bash
-$ mkdir -p src/main/resources
-$ wget -O src/main/resources/malicious_url_data.csv https://raw.githubusercontent.com/incertum/cyber-matrix-ai/master/Malicious-URL-Detection-Deep-Learning/data/url_data_mega_deep_learning.csv
-```
-
 Train the model.
 
 ```bash
@@ -123,18 +101,14 @@ $./gradle train
 
 > Task :train
 [main] INFO com.example.ModelTrainer - Loading Dataset
-[main] INFO com.example.ModelTrainer - Initialize Trainer
-[main] INFO com.example.ModelTrainer - Loading Dataset
-[main] INFO com.example.ModelTrainer - Initialize Trainer
-[12:45:09] src/operator/nn/./cudnn/cudnn_pooling-inl.h:375: 1D pooling is not supported by cudnn, MXNet 1D pooling is applied.
+[main] INFO ai.djl.training.listener.LoggingTrainingListener - Running Malicious URL training on: cpu().
+[main] INFO ai.djl.training.listener.LoggingTrainingListener - Load MXNet Engine Version 1.6.0 in 0.153 ms.
 [main] INFO com.example.ModelTrainer - Begin Training
-[12:45:09] src/operator/nn/./cudnn/./cudnn_algoreg-inl.h:97: Running performance tests to find the best convolution algorithm, this can take a while... (set the environment variable MXNET_CUDNN_AUTOTUNE_DEFAULT to 0 to disable)
 Training:    100% |████████████████████████████████████████| accuracy: 0.71 loss: 0.54 speed: 323.74 urls/sec
 Validating:  100% |████████████████████████████████████████|
 [main] INFO com.example.ModelTrainer - Epoch 0 finished.
 [main] INFO com.example.ModelTrainer - train accuracy: 0.7131701, train loss: 0.5386256
 [main] INFO com.example.ModelTrainer - validate accuracy: 0.89068836, validate loss: 0.30017522
-Training:     15% |███████                                 | accuracy: 0.90 loss: 0.26 speed: 383.75 urls/sec
 Training:    100% |████████████████████████████████████████| accuracy: 0.92 loss: 0.21 speed: 336.71 urls/sec
 Validating:  100% |████████████████████████████████████████|
 [main] INFO com.example.ModelTrainer - Epoch 1 finished.

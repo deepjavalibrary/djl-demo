@@ -12,7 +12,6 @@
  */
 package com.example;
 
-import ai.djl.MalformedModelException;
 import ai.djl.modality.Classifications;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -42,11 +41,12 @@ import org.slf4j.LoggerFactory;
 
 public class RequestHandler implements Runnable {
 
+    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+
     private Socket clientSocket;
     private BufferedReader proxyToClientReader;
     private BufferedWriter proxyToClientWriter;
     private final MaliciousURLModel maliciousURLModel;
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     /**
      * Creates a RequestHandler object capable of servicing HTTP/HTTPS GET requests
@@ -63,7 +63,7 @@ public class RequestHandler implements Runnable {
             proxyToClientWriter =
                     new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
     }
 
@@ -72,7 +72,6 @@ public class RequestHandler implements Runnable {
      */
     @Override
     public void run() {
-
         // Get Request from client
         String requestString;
         try {
@@ -86,26 +85,18 @@ public class RequestHandler implements Runnable {
         String[] parts = requestString.split(" ", 3);
         String requestType = parts[0];
         String urlString = parts[1];
-        if (!urlString.substring(0, 4).equals("http")) {
+        if (!urlString.toLowerCase().startsWith("http")) {
             urlString = "http://" + urlString;
         }
         // malicious url detector
-        try {
-            Classifications output;
-            synchronized (maliciousURLModel) {
-                maliciousURLModel.defineModel();
-                maliciousURLModel.loadModel();
-                output = maliciousURLModel.inference(urlString);
-                logger.info(output.toString());
-            }
-            if (output.get("malicious").getProbability() >= 0.50) {
-                logger.info("Malicious URL detected and blocked " + urlString);
-                blockedMaliciousSiteRequested();
-                return;
-            }
-        } catch (IOException | MalformedModelException e) {
-            throw new RuntimeException(e);
+        Classifications output = maliciousURLModel.inference(urlString);
+        logger.debug(output.toString());
+        if (output.get("malicious").getProbability() >= 0.50) {
+            logger.info("Malicious URL detected and blocked " + urlString);
+            blockedMaliciousSiteRequested();
+            return;
         }
+
         if (requestType.equals("CONNECT")) {
             logger.info("HTTPS Request for " + urlString + "\n");
             handleSecureRequest(urlString);
@@ -201,8 +192,7 @@ public class RequestHandler implements Runnable {
             bufferedWriter.flush();
             bufferedWriter.close();
         } catch (IOException e) {
-            logger.error("Error writing to client when requested a blocked site");
-            e.printStackTrace();
+            logger.error("Error writing to client when requested a blocked site", e);
         }
     }
 
@@ -286,7 +276,7 @@ public class RequestHandler implements Runnable {
                         responseTimeout.getStatusLine().toString() + responseHeader);
                 proxyToClientWriter.flush();
             } catch (IOException ioException) {
-                logger.error(ioException.getMessage());
+                logger.error("", e);
             }
         }
     }

@@ -12,6 +12,7 @@
  */
 package com.example;
 
+import ai.djl.MalformedModelException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -25,19 +26,15 @@ import org.slf4j.LoggerFactory;
  */
 public class FilterProxy implements Runnable {
 
-    public static void main(String[] args) {
-        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "all");
-        FilterProxy myFilterProxy = new FilterProxy(PORT_NUMBER);
-        myFilterProxy.listen();
-    }
-
     // Port number can be configured here
     private static final int PORT_NUMBER = 8080;
+    private static final Logger logger = LoggerFactory.getLogger(FilterProxy.class);
+
+    private static ArrayList<Thread> requestHandlerThreads;
+
     private ServerSocket serverSocket;
     private volatile boolean running = true;
     private MaliciousURLModel model = MaliciousURLModel.getInstance();
-    private static final Logger logger = LoggerFactory.getLogger(FilterProxy.class);
-    private static ArrayList<Thread> requestHandlerThreads;
 
     /**
      * Create the FilterProxy Server
@@ -45,7 +42,6 @@ public class FilterProxy implements Runnable {
      * @param port Port to forward proxy server requests to.
      */
     public FilterProxy(int port) {
-
         requestHandlerThreads = new ArrayList<>();
 
         // Start dynamic manager on a separate thread.
@@ -57,15 +53,22 @@ public class FilterProxy implements Runnable {
             running = true;
         } catch (IOException e) {
             logger.error(e.getMessage());
-            e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) throws IOException, MalformedModelException {
+        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "all");
+        FilterProxy myFilterProxy = new FilterProxy(PORT_NUMBER);
+        myFilterProxy.listen();
     }
 
     /**
      * Listens to port and accepts new socket connections. Creates a new thread to handle the
      * request and passes it the socket connection and continues listening.
      */
-    public void listen() {
+    public void listen() throws IOException, MalformedModelException {
+        model.defineModel();
+        model.loadModel();
 
         while (running) {
             try {
