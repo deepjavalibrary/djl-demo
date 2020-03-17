@@ -25,7 +25,7 @@ dependencies {
 }
 
 application {
-    mainClassName = System.getProperty("main", "com.example.FilterProxy")
+    mainClassName = System.getProperty("main", "com.examples.WebCam")
 }
 
 configure(this){
