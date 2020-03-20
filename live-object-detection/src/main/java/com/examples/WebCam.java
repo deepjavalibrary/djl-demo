@@ -25,6 +25,7 @@ import ai.djl.translate.TranslateException;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import javax.swing.JOptionPane;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.opencv_java;
 import org.opencv.core.Mat;
@@ -48,12 +49,28 @@ public class WebCam {
         Predictor<BufferedImage, DetectedObjects> predictor = model.newPredictor();
 
         Mat image = new Mat();
-        capture.read(image);
+        boolean captured = false;
+        for (int i = 0; i < 10; ++i) {
+            captured = capture.read(image);
+            if (captured) {
+                break;
+            }
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException ignore) {
+                // ignore
+            }
+        }
+        if (!captured) {
+            JOptionPane.showConfirmDialog(null, "Failed to capture image from WebCam.");
+        }
 
         ViewerFrame frame = new ViewerFrame(image.width(), image.height());
 
         while (capture.isOpened()) {
-            capture.read(image);
+            if (!capture.read(image)) {
+                break;
+            }
             BufferedImage img = toBufferedImage(image);
             DetectedObjects detections = predictor.predict(img);
             drawBoxImage(img, detections);
