@@ -17,12 +17,8 @@ def bridjVersion = '0.7.0'
 
 dependencies {
     implementation "ai.djl.mxnet:mxnet-model-zoo:0.3.0"
-
-    implementation "org.bytedeco.javacpp-presets:opencv:4.0.1-1.4.4"
-    implementation "org.bytedeco.javacpp-presets:opencv:4.0.1-1.4.4:macosx-x86_64"
-
-    compile "com.github.sarxos:webcam-capture:$webcamCaptureVersion"
-    compile "com.nativelibs4java:bridj:$bridjVersion"
+    implementation "com.github.sarxos:webcam-capture:${webcamCaptureVersion}"
+    implementation "com.nativelibs4java:bridj:${bridjVersion}"
 
     runtimeOnly "org.slf4j:slf4j-simple:1.7.29"
     runtimeOnly "ai.djl.mxnet:mxnet-native-auto:1.6.0"

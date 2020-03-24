@@ -23,27 +23,27 @@ import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
 import com.github.sarxos.webcam.Webcam;
-import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import javax.swing.JOptionPane;
 
 public class WebCam {
+
     public static void main(String[] args) throws IOException, ModelException, TranslateException {
         List<Webcam> webcams = Webcam.getWebcams();
 
-        Optional<Webcam> optionalWebcam = webcams.stream()
-                // Ignore any virtual cameras for now
-                .filter(webcam -> !webcam.getName().toLowerCase().contains("virtual"))
-                // Ignore any cameras that fail to open
-                .filter(Webcam::open)
-                // Pick the first camera
-                .findFirst();
+        Optional<Webcam> optionalWebcam =
+                webcams.stream()
+                        // Ignore any virtual cameras for now
+                        .filter(webcam -> !webcam.getName().toLowerCase().contains("virtual"))
+                        // Ignore any cameras that fail to open
+                        .filter(Webcam::open)
+                        // Pick the first camera
+                        .findFirst();
 
         if (!optionalWebcam.isPresent()) {
             System.out.println("No camera detected");
@@ -51,6 +51,7 @@ public class WebCam {
         }
 
         Webcam webcam = optionalWebcam.get();
+        adjustViewSize(webcam);
 
         if (!webcam.isOpen()) {
             System.out.println("Camera is not open");
@@ -64,6 +65,7 @@ public class WebCam {
 
         if (image == null) {
             JOptionPane.showConfirmDialog(null, "Failed to capture image from WebCam.");
+            return;
         }
 
         ViewerFrame frame = new ViewerFrame(image.getWidth(), image.getHeight());
@@ -106,22 +108,21 @@ public class WebCam {
         ImageVisualization.drawBoundingBoxes(img, detection);
     }
 
-    private static BufferedImage toBufferedImage(Mat mat) {
-        int width = mat.width();
-        int height = mat.height();
-        int type =
-                mat.channels() != 1 ? BufferedImage.TYPE_3BYTE_BGR : BufferedImage.TYPE_BYTE_GRAY;
-
-        if (type == BufferedImage.TYPE_3BYTE_BGR) {
-            Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2RGB);
+    private static void adjustViewSize(Webcam webcam) {
+        Dimension dimension = webcam.getViewSize();
+        double width = (int) dimension.getWidth();
+        double height = (int) dimension.getHeight();
+        if (width < 512) {
+            int newHeight = (int) (height * 512 / width);
+            dimension = new Dimension(512, newHeight);
+            webcam.close();
+            try {
+                webcam.setCustomViewSizes(dimension);
+                webcam.setViewSize(dimension);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
+            webcam.open();
         }
-
-        byte[] data = new byte[width * height * (int) mat.elemSize()];
-        mat.get(0, 0, data);
-
-        BufferedImage ret = new BufferedImage(width, height, type);
-        ret.getRaster().setDataElements(0, 0, width, height, data);
-
-        return ret;
     }
 }
