@@ -22,63 +22,61 @@ import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import javax.swing.JOptionPane;
-import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.opencv_java;
+import com.github.sarxos.webcam.Webcam;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.videoio.VideoCapture;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 public class WebCam {
-
-    static {
-        Loader.load(opencv_java.class);
-    }
-
     public static void main(String[] args) throws IOException, ModelException, TranslateException {
-        VideoCapture capture = new VideoCapture(0);
-        if (!capture.isOpened()) {
+        List<Webcam> webcams = Webcam.getWebcams();
+
+        Optional<Webcam> optionalWebcam = webcams.stream()
+                // Ignore any virtual cameras for now
+                .filter(webcam -> !webcam.getName().toLowerCase().contains("virtual"))
+                // Ignore any cameras that fail to open
+                .filter(Webcam::open)
+                // Pick the first camera
+                .findFirst();
+
+        if (!optionalWebcam.isPresent()) {
             System.out.println("No camera detected");
+            return;
+        }
+
+        Webcam webcam = optionalWebcam.get();
+
+        if (!webcam.isOpen()) {
+            System.out.println("Camera is not open");
             return;
         }
 
         ZooModel<BufferedImage, DetectedObjects> model = loadModel();
         Predictor<BufferedImage, DetectedObjects> predictor = model.newPredictor();
 
-        Mat image = new Mat();
-        boolean captured = false;
-        for (int i = 0; i < 10; ++i) {
-            captured = capture.read(image);
-            if (captured) {
-                break;
-            }
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException ignore) {
-                // ignore
-            }
-        }
-        if (!captured) {
+        BufferedImage image = webcam.getImage();
+
+        if (image == null) {
             JOptionPane.showConfirmDialog(null, "Failed to capture image from WebCam.");
         }
 
-        ViewerFrame frame = new ViewerFrame(image.width(), image.height());
+        ViewerFrame frame = new ViewerFrame(image.getWidth(), image.getHeight());
 
-        while (capture.isOpened()) {
-            if (!capture.read(image)) {
-                break;
-            }
-            BufferedImage img = toBufferedImage(image);
-            DetectedObjects detections = predictor.predict(img);
-            drawBoxImage(img, detections);
+        while (webcam.isOpen()) {
+            image = webcam.getImage();
+            DetectedObjects detections = predictor.predict(image);
+            drawBoxImage(image, detections);
 
-            frame.showImage(img);
+            frame.showImage(image);
         }
 
-        capture.release();
+        webcam.close();
 
         predictor.close();
         model.close();
