@@ -16,7 +16,7 @@ def webcamCaptureVersion = '0.3.12'
 def bridjVersion = '0.7.0'
 
 dependencies {
-    implementation "ai.djl.mxnet:mxnet-model-zoo:0.3.0"
+    implementation "ai.djl.mxnet:mxnet-model-zoo:0.4.0"
     implementation "com.github.sarxos:webcam-capture:${webcamCaptureVersion}"
     implementation "com.nativelibs4java:bridj:${bridjVersion}"
 
