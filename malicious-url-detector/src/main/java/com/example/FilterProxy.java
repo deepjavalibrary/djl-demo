@@ -49,15 +49,13 @@ public class FilterProxy implements Runnable {
 
         try {
             serverSocket = new ServerSocket(port);
-            logger.info("Waiting for request(s) on port " + serverSocket.getLocalPort());
             running = true;
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            logger.error("Failed listening on port: " + serverSocket.getLocalPort(), e);
         }
     }
 
     public static void main(String[] args) throws IOException, MalformedModelException {
-        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "all");
         FilterProxy myFilterProxy = new FilterProxy(PORT_NUMBER);
         myFilterProxy.listen();
     }
@@ -70,6 +68,7 @@ public class FilterProxy implements Runnable {
         model.defineModel();
         model.loadModel();
 
+        logger.info("Waiting for request(s) on port {}", serverSocket.getLocalPort());
         while (running) {
             try {
                 Socket socket = serverSocket.accept();
@@ -79,7 +78,7 @@ public class FilterProxy implements Runnable {
                 requestHandlerThreads.add(thread);
                 thread.start();
             } catch (IOException e) {
-                logger.info(e.getMessage());
+                logger.debug("Error reading from socket", e);
             }
         }
     }
@@ -95,8 +94,7 @@ public class FilterProxy implements Runnable {
                 t.join();
             }
         } catch (Exception e) {
-            logger.error("Exception closing proxy's server socket");
-            e.printStackTrace();
+            logger.warn("Exception closing proxy's server socket");
         }
     }
 

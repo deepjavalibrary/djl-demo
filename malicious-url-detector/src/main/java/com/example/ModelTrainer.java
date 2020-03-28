@@ -45,14 +45,7 @@ public class ModelTrainer {
         TrainingConfig config =
                 new DefaultTrainingConfig(Loss.softmaxCrossEntropyLoss())
                         .addEvaluator(new Accuracy())
-                        .setBatchSize(BATCH_SIZE)
-                        .addTrainingListeners(
-                                TrainingListener.Defaults.logging(
-                                        "Malicious URL training",
-                                        BATCH_SIZE,
-                                        (int) datasets[0].getNumIterations(),
-                                        (int) datasets[1].getNumIterations(),
-                                        null));
+                        .addTrainingListeners(TrainingListener.Defaults.logging());
 
         try (Trainer trainer = model.newTrainer(config)) {
             // initialize trainer with proper input shape

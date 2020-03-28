@@ -120,11 +120,12 @@ class MaliciousURLModel {
         Path modelPath = Paths.get(modelDir);
         Path modelFile = modelPath.resolve(modelName + "-0001.params");
         if (Files.notExists(modelFile)) {
+            Files.createDirectories(modelPath);
             logger.info("Downloading model file ...");
-            URL url =
-                    new URL(
-                            "https://djl-ai.s3.amazonaws.com/resources/demo/malicious-url-model/maliciousURLCNNModel-0001.params");
-            Files.copy(url.openStream(), modelFile);
+            String url =
+                    "https://djl-ai.s3.amazonaws.com/resources/demo/malicious-url-model/maliciousURLCNNModel-0001.params";
+            Files.copy(new URL(url).openStream(), modelFile);
+            logger.info("Model download success.");
         }
         model.load(modelPath, modelName);
     }

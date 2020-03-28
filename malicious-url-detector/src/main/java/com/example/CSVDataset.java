@@ -82,7 +82,7 @@ public class CSVDataset extends RandomAccessDataset {
 
     /** {@inheritDoc} */
     @Override
-    public long size() {
+    protected long availableSize() {
         return dataset.size();
     }
 
