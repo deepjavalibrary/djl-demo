@@ -1,0 +1,41 @@
+plugins {
+    id 'scala'
+    id 'application'
+}
+
+group "com.example"
+version "1.0-SNAPSHOT"
+
+repositories {
+    jcenter()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    implementation "org.scala-lang:scala-library:2.11.12"
+    implementation "org.apache.spark:spark-core_2.11:2.3.0"
+    implementation "ai.djl:api:0.4.0"
+    implementation "ai.djl:repository:0.4.0"
+
+    runtimeOnly "ai.djl.pytorch:pytorch-model-zoo:0.4.0"
+    runtimeOnly "ai.djl.pytorch:pytorch-native-auto:1.4.0"
+}
+
+configure(this) {
+
+    defaultTasks "jar"
+
+    apply from: file("${rootProject.projectDir}/../../tools/gradle/formatter.gradle")
+}
+
+compileScala {
+    scalaCompileOptions.setAdditionalParameters(["-target:jvm-1.8"])
+}
+
+application {
+    mainClassName = System.getProperty("main", "com.examples.Example")
+}
+
+tasks.distTar.enabled = false
