@@ -42,13 +42,10 @@ object Example {
         .build
       val model = ModelZoo.loadModel(criteria)
       val predictor = model.newPredictor()
-      val data = partition.map(streamData => {
+      partition.map(streamData => {
         val img = ImageIO.read(streamData._2.open())
         predictor.predict(img).toString
-      }).toList // toList is a workaround for lazy evaluation
-      predictor.close()
-      model.close()
-      data.toIterator
+      })
     })
     // The real execution started here
     result.saveAsTextFile("out/spark_output")
