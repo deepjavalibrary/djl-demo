@@ -1,0 +1,41 @@
+plugins {
+    id "java"
+    id "application"
+}
+
+group "com.example"
+version "1.0-SNAPSHOT"
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
+}
+
+dependencies {
+    implementation "ai.djl:api:0.5.0-SNAPSHOT"
+    implementation "ai.djl:repository:0.5.0-SNAPSHOT"
+    implementation "ai.djl.tensorflow:tensorflow-api:0.5.0-SNAPSHOT"
+    implementation "ai.djl.tensorflow:tensorflow-engine:0.5.0-SNAPSHOT"
+    implementation "ai.djl.tensorflow:tensorflow-model-zoo:0.5.0-SNAPSHOT"
+    implementation "ai.djl.tensorflow:tensorflow-native-auto:0.5.0-SNAPSHOT"
+
+    runtimeOnly "org.slf4j:slf4j-simple:1.7.29"
+
+    testImplementation "junit:junit:4.12"
+}
+
+application {
+    mainClassName = System.getProperty("main", "com.examples.Covid19Detection")
+}
+
+configure(this) {
+    defaultTasks "jar"
+
+    apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
+}
+
+tasks.distTar.enabled = false
