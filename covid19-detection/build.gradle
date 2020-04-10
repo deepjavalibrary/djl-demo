@@ -34,7 +34,8 @@ application {
 
 configure(this) {
     defaultTasks "jar"
-    tasks.distTar.enabled = false
 
     apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
 }
+
+tasks.distTar.enabled = false
