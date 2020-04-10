@@ -21,7 +21,7 @@ dependencies {
     implementation "ai.djl.tensorflow:tensorflow-api:0.5.0-SNAPSHOT"
     implementation "ai.djl.tensorflow:tensorflow-engine:0.5.0-SNAPSHOT"
     implementation "ai.djl.tensorflow:tensorflow-model-zoo:0.5.0-SNAPSHOT"
-    implementation files("libs/libtensorflow.jar")
+    implementation "ai.djl.tensorflow:tensorflow-native-auto:0.5.0-SNAPSHOT"
 
     runtimeOnly "org.slf4j:slf4j-simple:1.7.29"
 
@@ -34,6 +34,7 @@ application {
 
 configure(this) {
     defaultTasks "jar"
+    tasks.distTar.enabled = false
 
     apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
 }

@@ -21,6 +21,9 @@ import ai.djl.modality.cv.util.BufferedImageUtils;
 import ai.djl.modality.cv.util.NDImageUtils;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
+import ai.djl.repository.zoo.Criteria;
+import ai.djl.repository.zoo.ModelNotFoundException;
+import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 import ai.djl.translate.TranslatorContext;
@@ -29,25 +32,26 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Covid19Detection {
+    private static final Logger logger = LoggerFactory.getLogger(Covid19Detection.class);
 
-    @SuppressWarnings("PMD.SystemPrintln")
     public static void main(String[] args)
-            throws IOException, MalformedModelException, TranslateException {
-        String modelPath = args[0];
-        String imagePath = args[1];
-        try (Model model = Model.newInstance()) {
-            model.load(Paths.get(modelPath));
+            throws IOException, MalformedModelException, TranslateException,
+                    ModelNotFoundException {
+        String imagePath = args[0];
+        Criteria.Builder<BufferedImage, Classifications> builder =
+                Criteria.builder().setTypes(BufferedImage.class, Classifications.class);
+
+        try (Model model = ModelZoo.loadModel(builder.build())) {
             try (Predictor<BufferedImage, Classifications> predictor =
                     model.newPredictor(new MyTranslator())) {
                 Classifications result =
                         predictor.predict(BufferedImageUtils.fromFile(Paths.get(imagePath)));
-                System.out.println(
-                        "Diagnose: "
-                                + result.best().getClassName()
-                                + " , probability: "
-                                + result.best().getProbability());
+                logger.info("Diagnose:");
+                logger.info(result.toString());
             }
         }
     }
