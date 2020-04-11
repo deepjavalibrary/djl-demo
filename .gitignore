@@ -4,3 +4,13 @@ model/
 dataset/
 .gradle/
 .idea/
+
+target/
+yarn-error.log
+stats.json
+coverage
+storybook-static
+node/
+node_modules/
+dist/
+.DS_Store
