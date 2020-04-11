@@ -13,8 +13,8 @@
 
 package com.examples;
 
+import ai.djl.Application;
 import ai.djl.MalformedModelException;
-import ai.djl.Model;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.util.BufferedImageUtils;
@@ -24,6 +24,7 @@ import ai.djl.ndarray.NDList;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelNotFoundException;
 import ai.djl.repository.zoo.ModelZoo;
+import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 import ai.djl.translate.TranslatorContext;
@@ -43,11 +44,13 @@ public class Covid19Detection {
                     ModelNotFoundException {
         String imagePath = args[0];
         Criteria.Builder<BufferedImage, Classifications> builder =
-                Criteria.builder().setTypes(BufferedImage.class, Classifications.class);
+                Criteria.builder()
+                        .setTypes(BufferedImage.class, Classifications.class)
+                        .optApplication(Application.UNDEFINED)
+                        .optTranslator(new MyTranslator());
 
-        try (Model model = ModelZoo.loadModel(builder.build())) {
-            try (Predictor<BufferedImage, Classifications> predictor =
-                    model.newPredictor(new MyTranslator())) {
+        try (ZooModel<BufferedImage, Classifications> model = ModelZoo.loadModel(builder.build())) {
+            try (Predictor<BufferedImage, Classifications> predictor = model.newPredictor()) {
                 Classifications result =
                         predictor.predict(BufferedImageUtils.fromFile(Paths.get(imagePath)));
                 logger.info("Diagnose:");
