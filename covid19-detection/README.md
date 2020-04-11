@@ -31,7 +31,7 @@ download and unzip it.
 run the following command:
 
 ```
-./gradlew run -Dai.djl.default_engine=TensorFlow -Dai.djl.repository.zoo.location=/path/to/saved/model --args="/path/to/image"
+./gradlew run -Dai.djl.repository.zoo.location=/path/to/saved/model --args="/path/to/image"
 ```
 
 
