@@ -1,6 +1,6 @@
 # Covid19 Detection
 
-This is an example to demonstrate how to use [Deep Java Library](djl.ai) to detect COVID-19 based on X-ray images.
+This is an example to demonstrate how to use [Deep Java Library](http://djl.ai) to detect COVID-19 based on X-ray images.
 
 For more details, please follow this [blog post](https://www.pyimagesearch.com/2020/03/16/detecting-covid-19-in-x-ray-images-with-keras-tensorflow-and-deep-learning/).
 
@@ -31,7 +31,12 @@ download and unzip it.
 run the following command:
 
 ```
-./gradlew run -Dai.djl.default_engine=TensorFlow -Dai.djl.repository.zoo.location=/path/to/saved/model --args="/path/to/image"
+mkdir models
+cd models
+curl https://djl-tensorflow-javacpp.s3.amazonaws.com/tensorflow-models/covid-19/saved_model.zip | jar xv
+cd ..
+
+./gradlew run -Dai.djl.repository.zoo.location=models/saved_model
 ```
 
 
