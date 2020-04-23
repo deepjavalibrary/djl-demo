@@ -18,3 +18,7 @@ An example application features a web UI to track and visualize metrics such as 
 ## [Covid-19 Detection](covid19-detection/README.md)
 
 An example application detects Covid-19 based on X-ray images using an trained Keras model.
+
+## [AWS Kinesis Video Streams](aws-kinesis-video-streams/README.md)
+
+An example application that reads the output of a KVS Stream.
