@@ -4,6 +4,10 @@ model/
 dataset/
 .gradle/
 .idea/
+.classpath
+.project
+.settings
+**/bin
 
 target/
 yarn-error.log
