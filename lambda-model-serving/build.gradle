@@ -7,7 +7,6 @@ version "1.0-SNAPSHOT"
 
 repositories {
     jcenter()
-    mavenLocal()
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots/"
     }

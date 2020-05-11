@@ -22,3 +22,7 @@ An example application detects Covid-19 based on X-ray images using an trained K
 ## [AWS Kinesis Video Streams](aws-kinesis-video-streams/README.md)
 
 An example application that reads the output of a KVS Stream.
+
+## [Serverless Model Serving with AWS Lambda](lambda-model-serving/README.md)
+
+An example application that serves deep learning model with AWS Lambda.
