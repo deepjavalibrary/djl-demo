@@ -10,6 +10,7 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 
 import ai.djl.MalformedModelException;
+import ai.djl.Model;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.util.BufferedImageUtils;
@@ -20,13 +21,12 @@ import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelNotFoundException;
 import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
+import ai.djl.tensorflow.engine.LibUtils;
+import ai.djl.tensorflow.engine.TfEngine;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 import ai.djl.translate.TranslatorContext;
-
-import ai.djl.tensorflow.engine.TfModel;
-import ai.djl.repository.zoo.BaseModelLoader;
 
 @ApplicationScoped
 public class ExampleService {
@@ -35,7 +35,17 @@ public class ExampleService {
 
     public ExampleService() throws Exception {
 
+        LibUtils.loadLibrary();
+        System.out.println("Library Path: " + System.getProperty("org.bytedeco.javacpp.platform.preloadpath"));
+
+        // See if TF loaded correctly or not. If not, expect
+        // java.lang.UnsatisfiedLinkError
+        TfEngine.getInstance().debugEnvironment();
+
+        // Path to the TensorFlow Model
         System.out.println("ai.djl.repository.zoo.location=" + System.getProperty("ai.djl.repository.zoo.location"));
+
+        System.out.println(ModelZoo.listModels());
 
         Criteria<BufferedImage, Classifications> criteria = Criteria.builder()
                 .setTypes(BufferedImage.class, Classifications.class).optTranslator(new MyTranslator())
