@@ -63,7 +63,7 @@ curl http://localhost:8080/predict
 
 ```
 ./gradlew build -Dquarkus.package.type=native
-build/covid19-detection-quarkus-1.0-SNAPSHOT-runner -Dai.djl.repository.zoo.location=/Users/ermurphy/GitHub/djl-demo/covid19-detection-quarkus/models/saved_model
+build/covid19-detection-quarkus-1.0-SNAPSHOT-runner -Dai.djl.repository.zoo.location=models/saved_model
 curl http://localhost:8080/predict
 ```
 
