@@ -62,12 +62,4 @@ public class ExampleService {
             return new Classifications(CLASSES, probabilities);
         }
     }
-
-    public static void main(String[] args) {
-        try {
-            System.out.println(new ExampleService().predict());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
