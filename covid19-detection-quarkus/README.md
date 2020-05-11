@@ -51,15 +51,24 @@ You can find some X-ray images of lungs here:
 
 ## Run prediction
 
-TODO
+### JVM
+
+```
+./gradlew build
+java -Dai.djl.repository.zoo.location=models/saved_model -jar build/covid19-detection-quarkus-1.0-SNAPSHOT-runner.jar
+curl http://localhost:8080/predict
+```
+
+### Native (Not Yet Working)
+
+```
+./gradlew build -Dquarkus.package.type=native
+build/covid19-detection-quarkus-1.0-SNAPSHOT-runner -Dai.djl.repository.zoo.location=/Users/ermurphy/GitHub/djl-demo/covid19-detection-quarkus/models/saved_model
+curl http://localhost:8080/predict
+```
 
 # Additional Info
 
 ## Trained model
 
 You can find a trained model [here](https://djl-tensorflow-javacpp.s3.amazonaws.com/tensorflow-models/covid-19/saved_model.zip). It is included by default in the `/model` folder.
-
-
-
-
-build/covid19-detection-quarkus-1.0-SNAPSHOT-runner -Dai.djl.repository.zoo.location=/Users/ermurphy/GitHub/djl-demo/covid19-detection-quarkus/models/saved_model

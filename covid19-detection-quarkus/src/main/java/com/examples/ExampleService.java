@@ -20,9 +20,13 @@ import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelNotFoundException;
 import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
+import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 import ai.djl.translate.TranslatorContext;
+
+import ai.djl.tensorflow.engine.TfModel;
+import ai.djl.repository.zoo.BaseModelLoader;
 
 @ApplicationScoped
 public class ExampleService {
@@ -30,8 +34,12 @@ public class ExampleService {
     private Predictor<BufferedImage, Classifications> predictor;
 
     public ExampleService() throws Exception {
+
+        System.out.println("ai.djl.repository.zoo.location=" + System.getProperty("ai.djl.repository.zoo.location"));
+
         Criteria<BufferedImage, Classifications> criteria = Criteria.builder()
-                .setTypes(BufferedImage.class, Classifications.class).optTranslator(new MyTranslator()).build();
+                .setTypes(BufferedImage.class, Classifications.class).optTranslator(new MyTranslator())
+                .optProgress(new ProgressBar()).build();
 
         ZooModel<BufferedImage, Classifications> model = ModelZoo.loadModel(criteria);
         this.predictor = model.newPredictor();
