@@ -31,9 +31,9 @@ Above command will create:
 
 ## Invoke Lambda Function 
 ```shell script
-aws lambda invoke --function-name DJL-Lambda --payload '{"inputImageUrl":"https://djl-ai.s3.amazonaws.com/resources/images/kitten.jpg"}' output.json
+aws lambda invoke --function-name DJL-Lambda --payload '{"inputImageUrl":"https://djl-ai.s3.amazonaws.com/resources/images/kitten.jpg"}' build/output.json
 
-cat output.json
+cat build/output.json
 ```
 
 The output will be stored in output.json file:
@@ -66,6 +66,32 @@ The output will be stored in output.json file:
 Use the following command to clean up resources created in your AWS account:
 ```shell script
 ./cleanup.sh
+```
+
+## Design choices
+
+### Minimize package size
+DJL can download deep learning framework at runtime. In this demo we use the following dependency:
+``
+    runtimeOnly "ai.djl.mxnet:mxnet-native-auto:1.7.0-a"
+``
+With this auto detection dependency, the final `.zip` file is less then 3M.
+The extracted MXNet native library file will be stored in `/tmp` folder, and it's around 155M, this can be further
+reduced to less than 50M if use a custom build MXNet without MKL support.
+
+The MXNet native library is store in S3, the download latency compare to Lambda startup time is negligible.
+
+### Model loading
+DJL ModelZoo design allows you to deploy model in three ways:
+- bundle the model in .zip file
+- Load models from your model from your own model zoo
+- Load models from S3 bucket, DJL support SageMaker trained model (.tar.gz) format.
+
+In this demo, we are using DJL build-in MXNet model zoo. By default, it uses `resnet-18` model.
+You can try different pre-trained model by passing `artifactId` parameter in the request:
+
+```shell script
+aws lambda invoke --function-name DJL-Lambda --payload '{"artifactId": "squeezenet", "inputImageUrl":"https://djl-ai.s3.amazonaws.com/resources/images/kitten.jpg"}' build/output.json
 ```
 
 ## Limitations
