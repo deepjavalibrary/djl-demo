@@ -72,9 +72,9 @@ Use the following command to clean up resources created in your AWS account:
 
 ### Minimize package size
 DJL can download deep learning framework at runtime. In this demo we use the following dependency:
-``
+```
     runtimeOnly "ai.djl.mxnet:mxnet-native-auto:1.7.0-a"
-``
+```
 With this auto detection dependency, the final `.zip` file is less then 3M.
 The extracted MXNet native library file will be stored in `/tmp` folder, and it's around 155M, this can be further
 reduced to less than 50M if use a custom build MXNet without MKL support.
