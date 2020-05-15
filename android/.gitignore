@@ -1,0 +1,5 @@
+*.iml
+/local.properties
+/captures
+.externalNativeBuild
+.cxx
