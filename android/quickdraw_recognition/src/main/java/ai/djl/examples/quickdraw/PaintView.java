@@ -1,4 +1,17 @@
-package com.example.quickdraw;
+/*
+ * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
+ * with the License. A copy of the License is located at
+ *
+ * http://aws.amazon.com/apache2.0/
+ *
+ * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
+ * OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
+ */
+
+package ai.djl.examples.quickdraw;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,19 +31,19 @@ import java.util.ArrayList;
 
 import ai.djl.modality.Classifications;
 
-public class PaintView extends View {
+public final class PaintView extends View {
 
     public static int BRUSH_SIZE = 20;
     public static final int DEFAULT_PAINT_COLOR = Color.WHITE;
     public static final int DEFAULT_BG_COLOR = Color.BLACK;
     private static final float TOUCH_TOLERANCE = 4;
-    private float mX, mY;
-    private Path mPath;
-    private Paint mPaint;
+    private float x, y;
+    private Path path;
+    private Paint paint;
     private ArrayList<Path> paths = new ArrayList<>();
-    private Bitmap mBitmap;
-    private Canvas mCanvas;
-    private Paint mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+    private Bitmap bitmap;
+    private Canvas canvas;
+    private Paint bitmapPaint = new Paint(Paint.DITHER_FLAG);
     private Toast messageToast;
     private ImageView imageView;
     private Bound maxBound;
@@ -42,14 +55,14 @@ public class PaintView extends View {
 
     public PaintView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-        mPaint.setDither(true);
-        mPaint.setColor(DEFAULT_PAINT_COLOR);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeJoin(Paint.Join.ROUND);
-        mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setAlpha(0xff);
+        paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setDither(true);
+        paint.setColor(DEFAULT_PAINT_COLOR);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        paint.setAlpha(0xff);
     }
 
     public void init(DisplayMetrics metrics, ImageView imageView, java.nio.file.Path path) {
@@ -58,8 +71,8 @@ public class PaintView extends View {
         this.imageView = imageView;
 
         maxBound = new Bound();
-        mBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        mCanvas = new Canvas(mBitmap);
+        bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(bitmap);
         try {
             model = new DoodleModel(path);
         } catch (Exception e) {
@@ -77,40 +90,40 @@ public class PaintView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.save();
-        mCanvas.drawColor(DEFAULT_BG_COLOR);
+        this.canvas.drawColor(DEFAULT_BG_COLOR);
 
         for (Path path : paths) {
-            mPaint.setColor(DEFAULT_PAINT_COLOR);
-            mPaint.setStrokeWidth(BRUSH_SIZE);
-            mCanvas.drawPath(path, mPaint);
+            paint.setColor(DEFAULT_PAINT_COLOR);
+            paint.setStrokeWidth(BRUSH_SIZE);
+            this.canvas.drawPath(path, paint);
         }
-        canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
+        canvas.drawBitmap(bitmap, 0, 0, bitmapPaint);
         canvas.restore();
     }
 
     private void touchStart(float x, float y) {
-        mPath = new Path();
-        paths.add(mPath);
-        mPath.reset();
-        mPath.moveTo(x, y);
-        mX = x;
-        mY = y;
+        path = new Path();
+        paths.add(path);
+        path.reset();
+        path.moveTo(x, y);
+        this.x = x;
+        this.y = y;
     }
 
     private void touchMove(float x, float y) {
-        float dx = Math.abs(x - mX);
-        float dy = Math.abs(y - mY);
+        float dx = Math.abs(x - this.x);
+        float dy = Math.abs(y - this.y);
 
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
-            mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
-            mX = x;
-            mY = y;
+            path.quadTo(this.x, this.y, (x + this.x) / 2, (y + this.y) / 2);
+            this.x = x;
+            this.y = y;
         }
     }
 
     private void touchUp() {
-        mPath.lineTo(mX, mY);
-        maxBound.add(new Path(mPath));
+        path.lineTo(this.x, this.y);
+        maxBound.add(new Path(path));
     }
 
     public void runInference() {
@@ -120,7 +133,7 @@ public class PaintView extends View {
         int width = (int) Math.ceil(bound.width());
         int height = (int) Math.ceil(bound.height());
         // do crop
-        Bitmap bmp = Bitmap.createBitmap(mBitmap, x - 10, y - 10, width + 10, height + 10);
+        Bitmap bmp = Bitmap.createBitmap(bitmap, x - 10, y - 10, width + 10, height + 10);
         // do scaling
         bmp = Bitmap.createScaledBitmap(bmp, 64, 64, true);
         if (messageToast != null) {

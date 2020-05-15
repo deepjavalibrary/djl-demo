@@ -1,4 +1,17 @@
-package com.example.quickdraw;
+/*
+ * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
+ * with the License. A copy of the License is located at
+ *
+ * http://aws.amazon.com/apache2.0/
+ *
+ * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
+ * OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
+ */
+
+package ai.djl.examples.quickdraw;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,7 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
-public class DoodleRecognitionActivity extends AppCompatActivity {
+public class DoodleRecognitionActivity extends AppCompatActivity implements View.OnClickListener {
 
     private PaintView paintView;
 
@@ -21,7 +34,7 @@ public class DoodleRecognitionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doodle_recognition);
         Button clear = findViewById(R.id.clear);
-        clear.setOnClickListener(new ClearListener());
+        clear.setOnClickListener(this);
         paintView = findViewById(R.id.paintView);
         ImageView imageView = findViewById(R.id.doodle);
         DisplayMetrics metrics = new DisplayMetrics();
@@ -49,12 +62,9 @@ public class DoodleRecognitionActivity extends AppCompatActivity {
         }
     }
 
-    class ClearListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            paintView.clear();
-        }
+    @Override
+    public void onClick(View v) {
+        paintView.clear();
     }
 
 }
