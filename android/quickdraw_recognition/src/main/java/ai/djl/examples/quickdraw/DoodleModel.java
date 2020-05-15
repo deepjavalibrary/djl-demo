@@ -60,14 +60,14 @@ final class DoodleModel {
         }
 
         @Override
-        public Classifications processOutput(TranslatorContext ctx, NDList list) throws Exception {
+        public Classifications processOutput(TranslatorContext ctx, NDList list) {
             NDArray array = list.singletonOrThrow();
             array = array.softmax(0);
             return new Classifications(synset, array);
         }
 
         @Override
-        public NDList processInput(TranslatorContext ctx, Bitmap input) throws Exception {
+        public NDList processInput(TranslatorContext ctx, Bitmap input) {
             Image image = ImageFactory.getInstance().fromImage(input);
             NDArray array = image.toNDArray(ctx.getNDManager(), Image.Flag.GRAYSCALE);
             return new NDList(new ToTensor().transform(array));

@@ -25,6 +25,11 @@ android {
         targetCompatibility = 1.8
     }
 
+    lintOptions {
+        quiet false
+        error 'NewerVersionAvailable'
+        lintConfig file("lint.xml")
+    }
 }
 
 task downloadModel {

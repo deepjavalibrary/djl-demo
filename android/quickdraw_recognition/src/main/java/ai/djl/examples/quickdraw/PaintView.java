@@ -13,6 +13,7 @@
 
 package ai.djl.examples.quickdraw;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -27,8 +28,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import ai.djl.MalformedModelException;
 import ai.djl.modality.Classifications;
 
 public final class PaintView extends View {
@@ -75,7 +78,7 @@ public final class PaintView extends View {
         canvas = new Canvas(bitmap);
         try {
             model = new DoodleModel(path);
-        } catch (Exception e) {
+        } catch (IOException | MalformedModelException e) {
             throw new IllegalArgumentException("Model load failed", e);
         }
     }
@@ -147,6 +150,7 @@ public final class PaintView extends View {
         messageToast.show();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float x = event.getX();

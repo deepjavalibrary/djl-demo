@@ -39,10 +39,10 @@ public class DoodleRecognitionActivity extends AppCompatActivity implements View
         ImageView imageView = findViewById(R.id.doodle);
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        // TODO: this may cause ANR, fix this later
         unzipFile("models/doodle_mobilenet.pt", "doodle_mobilenet.pt");
         unzipFile("models/synset.txt", "synset.txt");
         paintView.init(metrics, imageView, getCacheDir().toPath());
-        getAssets().getLocales();
     }
 
     private void unzipFile(String source, String dest) {
