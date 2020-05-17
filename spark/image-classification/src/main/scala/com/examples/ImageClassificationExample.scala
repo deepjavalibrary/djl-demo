@@ -21,7 +21,10 @@ import ai.djl.training.util.ProgressBar
 import javax.imageio.ImageIO
 import org.apache.spark.{SparkConf, SparkContext}
 
-object Example {
+/**
+ * Example to run image classification on Spark.
+ */
+object ImageClassificationExample {
   def main(args: Array[String]) {
 
     // Spark configuration

@@ -1,8 +1,11 @@
 # DJL Spark Image Classification Example
 
 ## Introduction
-This folder contains a demo application built with Spark and DJL to run a group image classification
+This folder contains two demo application built with Spark and DJL to run a group image classification
 task.
+
+- ImageClassificationExample: The one that are ready to run for classification using ModelZoo
+- DataProcessExample: If you are new to DJL and would like to learn more on the processing logic. (PyTorch Engine only)
 
 ## Setup
 
