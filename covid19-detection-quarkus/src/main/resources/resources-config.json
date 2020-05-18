@@ -2,6 +2,12 @@
   "resources": [
     {
       "pattern": ".*\\.properties$"
+    },
+    {
+      "pattern": ".*\\.EngineProvider$"
+    },
+    {
+      "pattern": ".*\\.ZooProvider$"
     }
   ]
 }

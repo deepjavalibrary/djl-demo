@@ -6,11 +6,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ServiceLoader;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 
 import ai.djl.MalformedModelException;
-import ai.djl.Model;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.util.BufferedImageUtils;
@@ -21,12 +22,14 @@ import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelNotFoundException;
 import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
+import ai.djl.repository.zoo.ZooProvider;
 import ai.djl.tensorflow.engine.LibUtils;
 import ai.djl.tensorflow.engine.TfEngine;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 import ai.djl.translate.TranslatorContext;
+import ai.djl.util.Platform;
 
 @ApplicationScoped
 public class ExampleService {
@@ -35,17 +38,34 @@ public class ExampleService {
 
     public ExampleService() throws Exception {
 
-        LibUtils.loadLibrary();
         System.out.println("Library Path: " + System.getProperty("org.bytedeco.javacpp.platform.preloadpath"));
-
-        // See if TF loaded correctly or not. If not, expect
-        // java.lang.UnsatisfiedLinkError
-        TfEngine.getInstance().debugEnvironment();
 
         // Path to the TensorFlow Model
         System.out.println("ai.djl.repository.zoo.location=" + System.getProperty("ai.djl.repository.zoo.location"));
 
-        System.out.println(ModelZoo.listModels());
+        URL url = Thread.currentThread().getContextClassLoader().getResource("native/lib/tensorflow.properties");
+        System.out.println("URL: " + url.toURI().toString());
+        Platform platform = Platform.fromUrl(url);
+        System.out.println("Platform: " + platform.getLibraries() + " " + platform.getVersion());
+
+        LibUtils.loadLibrary();
+        // See if TF loaded correctly or not. If not, expect
+        // java.lang.UnsatisfiedLinkError
+        // TfEngine.getInstance().debugEnvironment();
+
+    }
+
+    public Classifications predict() throws MalformedURLException, IOException, ModelNotFoundException,
+            MalformedModelException, TranslateException {
+
+        // loadLibrary();
+
+        System.out.println(ModelZoo.listModels().values().toString());
+
+        ServiceLoader<ZooProvider> providers = ServiceLoader.load(ZooProvider.class);
+        for (ZooProvider provider : providers) {
+            System.out.println(provider.getName());
+        }
 
         Criteria<BufferedImage, Classifications> criteria = Criteria.builder()
                 .setTypes(BufferedImage.class, Classifications.class).optTranslator(new MyTranslator())
@@ -53,10 +73,6 @@ public class ExampleService {
 
         ZooModel<BufferedImage, Classifications> model = ModelZoo.loadModel(criteria);
         this.predictor = model.newPredictor();
-    }
-
-    public Classifications predict() throws MalformedURLException, IOException, ModelNotFoundException,
-            MalformedModelException, TranslateException {
 
         String imagePath = "https://github.com/ieee8023/covid-chestxray-dataset/blob/master/images/01E392EE-69F9-4E33-BFCE-E5C968654078.jpeg?raw=true";
         BufferedImage image = BufferedImageUtils.fromUrl(new URL(imagePath));
