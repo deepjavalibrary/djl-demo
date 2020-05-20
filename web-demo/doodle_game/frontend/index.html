@@ -1,0 +1,39 @@
+<html lang="en">
+
+  <head>
+      <meta charset="utf-8">
+      <title>
+          Doodle Draw App
+      </title>
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+      <link rel="stylesheet" href="app.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <nav class="light-blue lighten-1" role="navigation">
+      <div class="nav-wrapper container">
+        <h1 class="header center white-text">DJL Doodle Draw Demo</h1>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="section">
+          <canvas id="draw"></canvas>
+      </div>
+    </div>
+    <div class="container">
+      <div class="section">
+        <div class="row">
+          <a class="waves-effect waves-light btn" onclick="clearMe()"><i class="material-icons left">cloud</i>clear</a>
+          <h3 class="header center black-text" id="inferenceResult"></h3>
+        </div>
+      </div>
+    </div>
+    <!--JavaScript at end of body for optimized loading-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+
+</html>
