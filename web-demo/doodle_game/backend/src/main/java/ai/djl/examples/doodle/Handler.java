@@ -12,7 +12,6 @@
  */
 package ai.djl.examples.doodle;
 
-import ai.djl.Model;
 import ai.djl.ModelException;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
@@ -21,7 +20,9 @@ import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.transform.ToTensor;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
-import ai.djl.training.util.DownloadUtils;
+import ai.djl.repository.zoo.Criteria;
+import ai.djl.repository.zoo.ModelZoo;
+import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 import ai.djl.translate.TranslatorContext;
@@ -36,9 +37,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.List;
 
@@ -65,18 +63,17 @@ public class Handler implements RequestStreamHandler {
                 ImageFactory factory = ImageFactory.getInstance();
                 img = factory.fromInputStream(bis);
             }
-            Path cacheDir = Paths.get(System.getProperty("DJL_CACHE_DIR"));
-            String prefix = "https://alpha-djl-demos.s3.amazonaws.com/model/quickdraw";
-            DownloadUtils.download(
-                    prefix + "/doodle_mobilenet.pt",
-                    cacheDir.resolve("doodle_mobilenet.pt").toString());
-            DownloadUtils.download(
-                    prefix + "/synset.txt", cacheDir.resolve("synset.txt").toString());
-
-            DoodleTranslator translator = new DoodleTranslator(cacheDir);
-            Model model = Model.newInstance();
-            model.load(cacheDir.resolve("doodle_mobilenet.pt"));
-            try (Predictor<Image, Classifications> predictor = model.newPredictor(translator)) {
+            System.setProperty(
+                    "ai.djl.repository.zoo.location",
+                    "https://alpha-djl-demos.s3.amazonaws.com/model/quickdraw/doodle_mobilenet.zip");
+            Criteria<Image, Classifications> criteria =
+                    Criteria.builder()
+                            .setTypes(Image.class, Classifications.class)
+                            .optArtifactId("ai.djl.localmodelzoo:doodle_mobilenet")
+                            .optTranslator(new DoodleTranslator())
+                            .build();
+            ZooModel<Image, Classifications> model = ModelZoo.loadModel(criteria);
+            try (Predictor<Image, Classifications> predictor = model.newPredictor()) {
                 List<Classifications.Classification> result = predictor.predict(img).topK(5);
                 os.write(GSON.toJson(result).getBytes(StandardCharsets.UTF_8));
             }
@@ -90,14 +87,13 @@ public class Handler implements RequestStreamHandler {
 
     static class DoodleTranslator implements Translator<Image, Classifications> {
 
-        private final List<String> synset;
-
-        private DoodleTranslator(Path directory) throws IOException {
-            synset = Files.readAllLines(directory.resolve("synset.txt"));
-        }
+        private List<String> synset;
 
         @Override
         public Classifications processOutput(TranslatorContext ctx, NDList list) throws Exception {
+            if (synset == null) {
+                synset = ctx.getModel().getArtifact("synset.txt", Utils::readLines);
+            }
             NDArray array = list.singletonOrThrow();
             array = array.softmax(0);
             return new Classifications(synset, array);

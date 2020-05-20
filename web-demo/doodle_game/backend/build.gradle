@@ -16,7 +16,7 @@ dependencies {
     implementation "com.amazonaws:aws-lambda-java-core:1.2.1"
 
     runtimeOnly "org.slf4j:slf4j-simple:1.7.29"
-    implementation "ai.djl.pytorch:pytorch-native-cpu:1.5.0:linux-x86_64"
+    implementation "ai.djl.pytorch:pytorch-native-auto:1.5.0"
 }
 
 java {
