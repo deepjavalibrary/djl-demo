@@ -14,7 +14,7 @@ set APP_BASE_NAME=%~n0
 set APP_HOME=%DIRNAME%
 
 @rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
-set DEFAULT_JVM_OPTS="-Xmx64m"
+set DEFAULT_JVM_OPTS=
 
 @rem Find java.exe
 if defined JAVA_HOME goto findJavaFromJavaHome
@@ -64,6 +64,19 @@ set CMD_LINE_ARGS=%*
 @rem Setup the command line
 
 set CLASSPATH=%APP_HOME%\gradle\wrapper\gradle-wrapper.jar
+set DOWNLOAD_URL="https://raw.githubusercontent.com/gradle/gradle/master/gradle/wrapper/gradle-wrapper.jar"
+
+@rem Extension to allow automatically downloading the gradle-wrapper.jar
+@rem This allows using the gradle wrapper in projects that prohibit checking in binary data.
+if exist %CLASSPATH% (
+    echo Found %CLASSPATH%
+) else (
+    echo Couldn't find %CLASSPATH%, downloading it ...
+	echo Downloading from: %DOWNLOAD_URL%
+    powershell -Command "(New-Object Net.WebClient).DownloadFile('%DOWNLOAD_URL%', '%CLASSPATH%')"
+    echo Finished downloading %CLASSPATH%
+)
+@rem End of extension
 
 @rem Execute Gradle
 "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %GRADLE_OPTS% "-Dorg.gradle.appname=%APP_BASE_NAME%" -classpath "%CLASSPATH%" org.gradle.wrapper.GradleWrapperMain %CMD_LINE_ARGS%

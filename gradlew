@@ -28,7 +28,7 @@ APP_NAME="Gradle"
 APP_BASE_NAME=`basename "$0"`
 
 # Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
-DEFAULT_JVM_OPTS='"-Xmx64m"'
+DEFAULT_JVM_OPTS=""
 
 # Use the maximum available, or set MAX_FD != -1 to use that value.
 MAX_FD="maximum"
@@ -103,6 +103,35 @@ if [ "$cygwin" = "false" -a "$darwin" = "false" -a "$nonstop" = "false" ] ; then
         warn "Could not query maximum file descriptor limit: $MAX_FD_LIMIT"
     fi
 fi
+
+##########################################################################################
+# Extension to allow automatically downloading the gradle-wrapper.jar
+# This allows using the maven wrapper in projects that prohibit checking in binary data.
+##########################################################################################
+WRAPPER_JAR_PATH="$APP_HOME/gradle/wrapper/gradle-wrapper.jar"
+if [ ! -r "${WRAPPER_JAR_PATH}" ]; then
+    jarUrl="https://raw.githubusercontent.com/gradle/gradle/master/gradle/wrapper/gradle-wrapper.jar"
+    if command -v wget > /dev/null; then
+        wget -q "${jarUrl}" -O "${WRAPPER_JAR_PATH}"
+    elif command -v curl > /dev/null; then
+        curl -s -o "${WRAPPER_JAR_PATH}" "$jarUrl"
+    else
+        javaClass="$APP_HOME/gradle/wrapper/GradleWrapperDownloader.java"
+        if [ -e "$javaClass" ]; then
+            if [ ! -e "$APP_HOME/gradle/wrapper/GradleWrapperDownloader.class" ]; then
+                # Compiling the Java class
+                ("$JAVA_HOME/bin/javac" "$javaClass")
+            fi
+            if [ -e "$APP_HOME/gradle/wrapper/GradleWrapperDownloader.class" ]; then
+                ("$JAVACMD" -cp gradle/wrapper GradleWrapperDownloader "$APP_HOME")
+            fi
+        fi
+    fi
+fi
+##########################################################################################
+# End of extension
+##########################################################################################
+
 
 # For Darwin, add options to specify how the application appears in the dock
 if $darwin; then
