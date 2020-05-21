@@ -1,7 +1,7 @@
 // add touch event: http://bencentra.com/code/2014/12/05/html5-canvas-touch-events.html
 // set canvas id to variable
 var canvas = document.getElementById("draw");
-canvas.height = canvas.width;
+canvas.height = canvas.width * 0.75;
 
 // get canvas 2D context and set it to the correct size
 var ctx = canvas.getContext("2d");
@@ -9,50 +9,28 @@ ctx.fillStyle = "black";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 startUp();
 // add event listeners to specify when functions should be triggered
-canvas.addEventListener("mousemove", draw);
+canvas.addEventListener("mousemove", function (e) {
+  draw(e, true);
+});
 canvas.addEventListener("mousedown", setPosition);
 canvas.addEventListener("mouseenter", setPosition);
 canvas.addEventListener("mouseup", runInference);
 
 // Set up touch events for mobile, etc
 canvas.addEventListener("touchstart", function (e) {
+  e.preventDefault();
   var touch = e.touches[0];
-  var mouseEvent = new MouseEvent("mousedown", {
-    clientX: touch.clientX,
-    clientY: touch.clientY
-  });
-  canvas.dispatchEvent(mouseEvent);
-}, false);
+  setPosition(touch);
+});
 canvas.addEventListener("touchend", function (e) {
-  var mouseEvent = new MouseEvent("mouseup", {});
-  canvas.dispatchEvent(mouseEvent);
-}, false);
+  e.preventDefault();
+  runInference();
+});
 canvas.addEventListener("touchmove", function (e) {
+  e.preventDefault();
   var touch = e.touches[0];
-  var mouseEvent = new MouseEvent("mousemove", {
-    clientX: touch.clientX,
-    clientY: touch.clientY
-  });
-  canvas.dispatchEvent(mouseEvent);
-}, false);
-
-
-// Prevent scrolling when touching the canvas
-document.body.addEventListener("touchstart", function (e) {
-  if (e.target == canvas) {
-    e.preventDefault();
-  }
-}, false);
-document.body.addEventListener("touchend", function (e) {
-  if (e.target == canvas) {
-    e.preventDefault();
-  }
-}, false);
-document.body.addEventListener("touchmove", function (e) {
-  if (e.target == canvas) {
-    e.preventDefault();
-  }
-}, false);
+  draw(touch, false);
+});
 
 // last known position
 var pos = { x: 0, y: 0 };
@@ -73,8 +51,8 @@ function updateBox(x, y) {
   box.y2 = Math.max(box.y2, y);
 }
 
-function draw(e) {
-  if (e.buttons !== 1) return; // if mouse is pressed.....
+function draw(e, isMouse) {
+  if (isMouse && e.buttons !== 1) return; // if mouse is pressed.....
 
   ctx.beginPath(); // begin the drawing path
 
@@ -138,8 +116,7 @@ function runInference(e) {
     for (var idx = 0; idx < data.length; idx++) {
       responseString += data[idx]["className"] + ",";
     }
-    var element = document.getElementById("inferenceResult");
-    element.innerHTML = "I guess this is: " + responseString;
+    M.toast({html: responseString}, 2000);
   })
   .catch((error) => {
     console.error("Error:", error)
