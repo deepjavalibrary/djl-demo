@@ -1,6 +1,7 @@
 // https://medium.com/codingtown/xterm-js-terminal-2b19ccd2a52
 // https://medium.com/swlh/local-echo-xterm-js-5210f062377e
 var term = new Terminal();
+const consoleId = (Math.random() + 1).toString(36).substring(7);
 
 term.open(document.getElementById('terminal'));
 
@@ -49,7 +50,7 @@ function analyseResponse(data) {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: JSON.stringify({ "console_id" : "123", "command" : data})
+    body: JSON.stringify({ "console_id" : consoleId, "command" : data})
     }).then(response => response.json())
     .then(data => {
       if (data["result"].length > 0) {
