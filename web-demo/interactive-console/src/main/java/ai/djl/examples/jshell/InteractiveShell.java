@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.util.List;
 import jdk.jshell.JShell;
 import jdk.jshell.JShellException;
+import jdk.jshell.Snippet;
 import jdk.jshell.SnippetEvent;
 
 public class InteractiveShell {
@@ -51,7 +52,9 @@ public class InteractiveShell {
                     e.printStackTrace(pw);
                     sb.append(sw.getBuffer().toString());
                 } else {
-                    if (event.value() != null) {
+                    if (event.status() == Snippet.Status.REJECTED) {
+                        sb.append("JConsole rejected command");
+                    } else if (event.value() != null) {
                         sb.append(event.value());
                     }
                 }
