@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.http.HttpSession;
 import org.springframework.boot.system.ApplicationHome;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ public class ShellController {
         return "Greetings from DJL Live Console!";
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/addCommand")
     Map<String, String> addCommand(@RequestBody Map<String, String> request, HttpSession session)
             throws IOException {
