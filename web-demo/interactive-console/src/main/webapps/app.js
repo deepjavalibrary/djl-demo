@@ -44,7 +44,7 @@ function analyseResponse(data) {
     input = "";
   }
   else {
-    const Url = "http://djl-console.us-east-1.elasticbeanstalk.com/addCommand";
+    const Url = "https://noirbct7p5.execute-api.us-east-1.amazonaws.com/DJL-Console-Live";
     fetch(Url, {
     method: "POST",
     headers: {
