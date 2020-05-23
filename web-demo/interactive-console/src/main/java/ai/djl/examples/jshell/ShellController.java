@@ -8,7 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.servlet.http.HttpSession;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ShellController {
 
+    private static ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
+    private Map<String, InteractiveShell> shells;
+
     @RequestMapping("/")
     public String index() {
         return "Greetings from DJL Live Console!";
@@ -26,25 +31,38 @@ public class ShellController {
 
     @CrossOrigin(origins = "*")
     @PostMapping("/addCommand")
-    Map<String, String> addCommand(@RequestBody Map<String, String> request, HttpSession session)
-            throws IOException {
-        session.setMaxInactiveInterval(300);
+    Map<String, String> addCommand(@RequestBody Map<String, String> request) throws IOException {
         String clientConsoleId = request.get("console_id");
-        InteractiveShell shell = (InteractiveShell) session.getAttribute("shell");
-        if (shell != null) {
-            if (!clientConsoleId.equals(shell.getId())) {
-                shell.close();
-                shell = createShell(clientConsoleId);
-            }
-        } else {
-            shell = createShell(clientConsoleId);
-        }
-        session.setAttribute("shell", shell);
+        InteractiveShell shell =
+                getShells().getOrDefault(clientConsoleId, createShell(clientConsoleId));
         String command = request.get("command");
+        command = command.endsWith(";") ? command : command + ";";
         String result = shell.addCommand(command);
         Map<String, String> response = new ConcurrentHashMap<>();
         response.put("result", result);
+        shell.updateTimeStamp();
+        shells.put(clientConsoleId, shell);
         return response;
+    }
+
+    private void houseKeeping() {
+        for (String consoleId : shells.keySet()) {
+            InteractiveShell shell = shells.get(consoleId);
+            // over 5 mins
+            if (System.currentTimeMillis() - shell.getTimeStamp() > 300000) {
+                shell.close();
+                shells.remove(consoleId);
+            }
+        }
+    }
+
+    private Map<String, InteractiveShell> getShells() {
+        if (shells == null) {
+            shells = new ConcurrentHashMap<>();
+            // trigger every 1 min
+            ses.scheduleAtFixedRate(this::houseKeeping, 1, 1, TimeUnit.MINUTES);
+        }
+        return shells;
     }
 
     private InteractiveShell createShell(String consoleId) throws IOException {
