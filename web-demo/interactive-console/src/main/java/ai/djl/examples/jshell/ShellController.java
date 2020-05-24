@@ -1,9 +1,12 @@
 package ai.djl.examples.jshell;
 
+import static java.time.temporal.ChronoUnit.MINUTES;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +24,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ShellController {
 
-    private static ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
-    private Map<String, InteractiveShell> shells;
+    private static final ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
+    private static final long TIME_OUT = Duration.of(5, MINUTES).toMillis();
+    private static final Map<String, InteractiveShell> shells = new ConcurrentHashMap<>();
+
+    static {
+        ses.scheduleAtFixedRate(ShellController::houseKeeping, 1, 1, TimeUnit.MINUTES);
+    }
 
     @RequestMapping("/")
     public String index() {
@@ -31,41 +39,30 @@ public class ShellController {
 
     @CrossOrigin(origins = "*")
     @PostMapping("/addCommand")
-    Map<String, String> addCommand(@RequestBody Map<String, String> request) throws IOException {
+    Map<String, String> addCommand(@RequestBody Map<String, String> request) {
         String clientConsoleId = request.get("console_id");
-        InteractiveShell shell =
-                getShells().getOrDefault(clientConsoleId, createShell(clientConsoleId));
+        InteractiveShell shell = shells.computeIfAbsent(clientConsoleId, this::createShell);
         String command = request.get("command");
         command = command.endsWith(";") ? command : command + ";";
         String result = shell.addCommand(command);
         Map<String, String> response = new ConcurrentHashMap<>();
         response.put("result", result);
         shell.updateTimeStamp();
-        shells.put(clientConsoleId, shell);
         return response;
     }
 
-    private void houseKeeping() {
-        for (String consoleId : shells.keySet()) {
-            InteractiveShell shell = shells.get(consoleId);
+    private static void houseKeeping() {
+        for (Map.Entry<String, InteractiveShell> entry : shells.entrySet()) {
             // over 5 mins
-            if (System.currentTimeMillis() - shell.getTimeStamp() > 300000) {
+            InteractiveShell shell = entry.getValue();
+            if (System.currentTimeMillis() - shell.getTimeStamp() > TIME_OUT) {
                 shell.close();
-                shells.remove(consoleId);
+                shells.remove(entry.getKey());
             }
         }
     }
 
-    private Map<String, InteractiveShell> getShells() {
-        if (shells == null) {
-            shells = new ConcurrentHashMap<>();
-            // trigger every 1 min
-            ses.scheduleAtFixedRate(this::houseKeeping, 1, 1, TimeUnit.MINUTES);
-        }
-        return shells;
-    }
-
-    private InteractiveShell createShell(String consoleId) throws IOException {
+    private InteractiveShell createShell(String consoleId) {
         InteractiveShell shell = new InteractiveShell(consoleId);
         ApplicationHome home = new ApplicationHome(ShellController.class);
         Path targetDir = home.getDir().toPath().resolve("djl");
@@ -78,7 +75,7 @@ public class ShellController {
         return shell;
     }
 
-    private void extractJars(Path dir) throws IOException {
+    private void extractJars(Path dir) {
         List<String> names =
                 Arrays.asList(
                         "api-0.5.0.jar",
@@ -91,11 +88,15 @@ public class ShellController {
                         "log4j-to-slf4j-2.13.2.jar");
         if (!dir.toFile().exists()) {
             if (!dir.toFile().mkdirs()) {
-                throw new IOException("Cannot make directories in " + dir);
+                throw new RuntimeException("Cannot make directories in " + dir);
             }
             for (String name : names) {
                 InputStream is = ShellController.class.getResourceAsStream("/BOOT-INF/lib/" + name);
-                Files.copy(is, dir.resolve(name));
+                try {
+                    Files.copy(is, dir.resolve(name));
+                } catch (IOException e) {
+                    throw new RuntimeException("Copy to dir failed", e);
+                }
             }
         }
     }
