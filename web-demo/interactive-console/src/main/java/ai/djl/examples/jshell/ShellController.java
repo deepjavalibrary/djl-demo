@@ -24,12 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ShellController {
 
-    private static final ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
+    private static final ScheduledExecutorService SES = Executors.newScheduledThreadPool(1);
     private static final long TIME_OUT = Duration.of(5, MINUTES).toMillis();
-    private static final Map<String, InteractiveShell> shells = new ConcurrentHashMap<>();
+    private static final Map<String, InteractiveShell> SHELLS = new ConcurrentHashMap<>();
 
     static {
-        ses.scheduleAtFixedRate(ShellController::houseKeeping, 1, 1, TimeUnit.MINUTES);
+        SES.scheduleAtFixedRate(ShellController::houseKeeping, 1, 1, TimeUnit.MINUTES);
     }
 
     @RequestMapping("/")
@@ -41,7 +41,7 @@ public class ShellController {
     @PostMapping("/addCommand")
     Map<String, String> addCommand(@RequestBody Map<String, String> request) {
         String clientConsoleId = request.get("console_id");
-        InteractiveShell shell = shells.computeIfAbsent(clientConsoleId, this::createShell);
+        InteractiveShell shell = SHELLS.computeIfAbsent(clientConsoleId, this::createShell);
         String command = request.get("command");
         command = command.endsWith(";") ? command : command + ";";
         String result = shell.addCommand(command);
@@ -52,12 +52,12 @@ public class ShellController {
     }
 
     private static void houseKeeping() {
-        for (Map.Entry<String, InteractiveShell> entry : shells.entrySet()) {
+        for (Map.Entry<String, InteractiveShell> entry : SHELLS.entrySet()) {
             // over 5 mins
             InteractiveShell shell = entry.getValue();
             if (System.currentTimeMillis() - shell.getTimeStamp() > TIME_OUT) {
                 shell.close();
-                shells.remove(entry.getKey());
+                SHELLS.remove(entry.getKey());
             }
         }
     }
@@ -88,7 +88,7 @@ public class ShellController {
                         "log4j-to-slf4j-2.13.2.jar");
         if (!dir.toFile().exists()) {
             if (!dir.toFile().mkdirs()) {
-                throw new RuntimeException("Cannot make directories in " + dir);
+                throw new IllegalStateException("Cannot make directories in " + dir);
             }
             for (String name : names) {
                 InputStream is = ShellController.class.getResourceAsStream("/BOOT-INF/lib/" + name);
