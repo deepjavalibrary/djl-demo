@@ -1,14 +1,19 @@
 package ai.djl.examples.jshell;
 
+import static java.time.temporal.ChronoUnit.MINUTES;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.servlet.http.HttpSession;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +24,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ShellController {
 
+    private static final ScheduledExecutorService SES = Executors.newScheduledThreadPool(1);
+    private static final long TIME_OUT = Duration.of(5, MINUTES).toMillis();
+    private static final Map<String, InteractiveShell> SHELLS = new ConcurrentHashMap<>();
+
+    static {
+        SES.scheduleAtFixedRate(ShellController::houseKeeping, 1, 1, TimeUnit.MINUTES);
+    }
+
     @RequestMapping("/")
     public String index() {
         return "Greetings from DJL Live Console!";
@@ -26,28 +39,30 @@ public class ShellController {
 
     @CrossOrigin(origins = "*")
     @PostMapping("/addCommand")
-    Map<String, String> addCommand(@RequestBody Map<String, String> request, HttpSession session)
-            throws IOException {
-        session.setMaxInactiveInterval(300);
+    Map<String, String> addCommand(@RequestBody Map<String, String> request) {
         String clientConsoleId = request.get("console_id");
-        InteractiveShell shell = (InteractiveShell) session.getAttribute("shell");
-        if (shell != null) {
-            if (!clientConsoleId.equals(shell.getId())) {
-                shell.close();
-                shell = createShell(clientConsoleId);
-            }
-        } else {
-            shell = createShell(clientConsoleId);
-        }
-        session.setAttribute("shell", shell);
+        InteractiveShell shell = SHELLS.computeIfAbsent(clientConsoleId, this::createShell);
         String command = request.get("command");
+        command = command.endsWith(";") ? command : command + ";";
         String result = shell.addCommand(command);
         Map<String, String> response = new ConcurrentHashMap<>();
         response.put("result", result);
+        shell.updateTimeStamp();
         return response;
     }
 
-    private InteractiveShell createShell(String consoleId) throws IOException {
+    private static void houseKeeping() {
+        for (Map.Entry<String, InteractiveShell> entry : SHELLS.entrySet()) {
+            // over 5 mins
+            InteractiveShell shell = entry.getValue();
+            if (System.currentTimeMillis() - shell.getTimeStamp() > TIME_OUT) {
+                shell.close();
+                SHELLS.remove(entry.getKey());
+            }
+        }
+    }
+
+    private InteractiveShell createShell(String consoleId) {
         InteractiveShell shell = new InteractiveShell(consoleId);
         ApplicationHome home = new ApplicationHome(ShellController.class);
         Path targetDir = home.getDir().toPath().resolve("djl");
@@ -60,7 +75,7 @@ public class ShellController {
         return shell;
     }
 
-    private void extractJars(Path dir) throws IOException {
+    private void extractJars(Path dir) {
         List<String> names =
                 Arrays.asList(
                         "api-0.5.0.jar",
@@ -73,11 +88,15 @@ public class ShellController {
                         "log4j-to-slf4j-2.13.2.jar");
         if (!dir.toFile().exists()) {
             if (!dir.toFile().mkdirs()) {
-                throw new IOException("Cannot make directories in " + dir);
+                throw new IllegalStateException("Cannot make directories in " + dir);
             }
             for (String name : names) {
                 InputStream is = ShellController.class.getResourceAsStream("/BOOT-INF/lib/" + name);
-                Files.copy(is, dir.resolve(name));
+                try {
+                    Files.copy(is, dir.resolve(name));
+                } catch (IOException e) {
+                    throw new RuntimeException("Copy to dir failed", e);
+                }
             }
         }
     }
