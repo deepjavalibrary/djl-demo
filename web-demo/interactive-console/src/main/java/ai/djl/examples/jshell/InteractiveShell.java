@@ -14,10 +14,20 @@ public class InteractiveShell {
 
     private JShell js;
     private String id;
+    private long timeStamp;
 
     public InteractiveShell(String id) {
         js = JShell.create();
         this.id = id;
+        timeStamp = System.currentTimeMillis();
+    }
+
+    public long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void updateTimeStamp() {
+        this.timeStamp = System.currentTimeMillis();
     }
 
     public void addDependency(Path jarPath) {
@@ -53,8 +63,9 @@ public class InteractiveShell {
                     sb.append(sw.getBuffer().toString());
                 } else {
                     if (event.status() == Snippet.Status.REJECTED) {
-                        sb.append("JConsole rejected command");
-                    } else if (event.value() != null) {
+                        sb.append("JConsole rejected command ").append(event.toString());
+                    }
+                    if (event.value() != null) {
                         sb.append(event.value());
                     }
                 }
