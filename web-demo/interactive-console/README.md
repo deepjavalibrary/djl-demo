@@ -1,13 +1,13 @@
 # Interactive JConsole for DJL
 
 ## Introduction
-This is a demo application designed for user to use JConsole and DJL online.
+This is a demo application designed for user to use JShell and DJL online.
 Hosted by [AWS Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/),
 it contains all Java 11 feature. Try it out [here](https://aws-samples.github.io/djl-demo/web-demo/interactive-console/src/main/webapps/).
 
 ![terminal](img/terminal.gif)
 
-We did some pre-configuration for each JConsole as follows:
+We did some pre-configuration for each JShell as follows:
 
 ```
 import ai.djl.ndarray.NDManager;
