@@ -2,10 +2,10 @@
 
 ## Overview
 It's quite complicated to host a deep learning model and usually the cost is high as well.
-AWS Lambda provides a low cost and low maintenance solution. However, deploy DL models with Lambda is pretty challenging:
-- DL framework binary is big, it hard to package it into a standalone zip file for AWS Lambda.
-- Python DL framework usually contains multiple dependencies, manage dependencies is non-trivial. 
-- DL model file usually is large, packing models is difficult.
+AWS Lambda provides a low cost and low maintenance solution. However, deploying DL models with Lambda is pretty challenging:
+- DL framework binary is big, it is hard to package it into a standalone zip file for AWS Lambda.
+- Because a Python DL framework usually contains multiple dependencies, managing dependencies is non-trivial. 
+- DL model files are usually large, packing these models is difficult.
 
 In this demo, we are going to show you how [Deep Java Library (DJL)](http://djl.ai) resolve above issues.
 
@@ -83,11 +83,11 @@ The MXNet native library is store in S3, the download latency compare to Lambda 
 
 ### Model loading
 DJL ModelZoo design allows you to deploy model in three ways:
-- bundle the model in .zip file
-- Load models from your model from your own model zoo
-- Load models from S3 bucket, DJL support SageMaker trained model (.tar.gz) format.
+- Bundle the model in .zip file
+- Load models from your own model zoo
+- Load models from S3 bucket. DJL supports SageMaker trained model (.tar.gz) format.
 
-In this demo, we are using DJL build-in MXNet model zoo. By default, it uses `resnet-18` model.
+In this demo, we are using DJL built-in MXNet model zoo. By default, it uses `resnet-18` model.
 You can try different pre-trained model by passing `artifactId` parameter in the request:
 
 ```shell script
