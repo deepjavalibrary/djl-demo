@@ -4,6 +4,7 @@ var term = new Terminal();
 const consoleId = (Math.random() + 1).toString(36).substring(7);
 
 term.open(document.getElementById('terminal'));
+term.setOption('cursorBlink', true);
 
 const prefix = "djl.ai@jconsole> ";
 var input = "";
@@ -54,10 +55,6 @@ term.on("data", (data) => {
         term.write(data);
     }
   }
-});
-
-term.on("paste", (data) => {
-  input += data;
 });
 
 function rewriteInput(term, input, cursor) {
