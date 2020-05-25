@@ -71,6 +71,7 @@ public class ShellController {
         shell.addCommand("import ai.djl.ndarray.NDManager;");
         shell.addCommand("import ai.djl.ndarray.NDArray;");
         shell.addCommand("import ai.djl.ndarray.types.Shape;");
+        shell.addCommand("import ai.djl.ndarray.index.NDIndex;");
         shell.addCommand("NDManager manager = NDManager.newBaseManager();");
         return shell;
     }
