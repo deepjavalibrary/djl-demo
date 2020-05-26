@@ -15,15 +15,22 @@ Currently, implemented features:
 ### Install the Java Development Kit
 For ubuntu:
 
+```shell script
 sudo apt-get install openjdk-11-jdk-headless
-For centos
+```
+For centos:
 
+```shell script
 sudo yum install java-11-openjdk-devel
-For Mac:
+```
+For macOS:
 
+```shell script
 brew tap homebrew/cask-versions
 brew update
 brew cask install adoptopenjdk11
+```
+
 
 You can also download and install [Oracle JDK](https://www.oracle.com/technetwork/java/javase/overview/index.html)
 manually if you have trouble with the previous commands.
