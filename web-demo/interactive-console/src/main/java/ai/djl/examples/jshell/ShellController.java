@@ -1,20 +1,25 @@
+/*
+ * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
+ * with the License. A copy of the License is located at
+ *
+ * http://aws.amazon.com/apache2.0/
+ *
+ * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
+ * OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
+ */
 package ai.djl.examples.jshell;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import org.springframework.boot.system.ApplicationHome;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +46,7 @@ public class ShellController {
     @PostMapping("/addCommand")
     Map<String, String> addCommand(@RequestBody Map<String, String> request) {
         String clientConsoleId = request.get("console_id");
-        InteractiveShell shell = SHELLS.computeIfAbsent(clientConsoleId, this::createShell);
+        InteractiveShell shell = SHELLS.computeIfAbsent(clientConsoleId, id -> prepareShell());
         String command = request.get("command");
         command = command.endsWith(";") ? command : command + ";";
         String result = shell.addCommand(command);
@@ -62,43 +67,13 @@ public class ShellController {
         }
     }
 
-    private InteractiveShell createShell(String consoleId) {
-        InteractiveShell shell = new InteractiveShell(consoleId);
-        ApplicationHome home = new ApplicationHome(ShellController.class);
-        Path targetDir = home.getDir().toPath().resolve("djl");
-        extractJars(targetDir);
-        shell.addDependencyDir(targetDir);
+    private InteractiveShell prepareShell() {
+        InteractiveShell shell = ShellSpawner.createShell("pytorch");
         shell.addCommand("import ai.djl.ndarray.NDManager;");
         shell.addCommand("import ai.djl.ndarray.NDArray;");
         shell.addCommand("import ai.djl.ndarray.types.Shape;");
         shell.addCommand("import ai.djl.ndarray.index.NDIndex;");
         shell.addCommand("NDManager manager = NDManager.newBaseManager();");
         return shell;
-    }
-
-    private void extractJars(Path dir) {
-        List<String> names =
-                Arrays.asList(
-                        "api-0.5.0.jar",
-                        "gson-2.8.6.jar",
-                        "jna-5.3.0.jar",
-                        "slf4j-api-1.7.30.jar",
-                        "pytorch-engine-0.5.0.jar",
-                        "pytorch-native-auto-1.5.0.jar",
-                        "log4j-api-2.13.2.jar",
-                        "log4j-to-slf4j-2.13.2.jar");
-        if (!dir.toFile().exists()) {
-            if (!dir.toFile().mkdirs()) {
-                throw new IllegalStateException("Cannot make directories in " + dir);
-            }
-            for (String name : names) {
-                InputStream is = ShellController.class.getResourceAsStream("/BOOT-INF/lib/" + name);
-                try {
-                    Files.copy(is, dir.resolve(name));
-                } catch (IOException e) {
-                    throw new RuntimeException("Copy to dir failed", e);
-                }
-            }
-        }
     }
 }

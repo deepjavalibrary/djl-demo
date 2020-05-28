@@ -1,3 +1,16 @@
+/*
+ * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
+ * with the License. A copy of the License is located at
+ *
+ * http://aws.amazon.com/apache2.0/
+ *
+ * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
+ * OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
+ */
+
 package ai.djl.examples.jshell;
 
 import java.io.File;
@@ -9,17 +22,18 @@ import jdk.jshell.JShell;
 import jdk.jshell.JShellException;
 import jdk.jshell.Snippet;
 import jdk.jshell.SnippetEvent;
+import jdk.jshell.SourceCodeAnalysis;
 
 public class InteractiveShell {
 
     private JShell js;
-    private String id;
     private long timeStamp;
+    private SourceCodeAnalysis sca;
 
-    public InteractiveShell(String id) {
+    public InteractiveShell() {
         js = JShell.create();
-        this.id = id;
         timeStamp = System.currentTimeMillis();
+        sca = js.sourceCodeAnalysis();
     }
 
     public long getTimeStamp() {
@@ -67,6 +81,7 @@ public class InteractiveShell {
                     }
                     if (event.value() != null) {
                         sb.append(event.value());
+                        sb.append("\n");
                     }
                 }
             }
@@ -74,11 +89,22 @@ public class InteractiveShell {
         return sb.toString();
     }
 
-    public void close() {
-        js.close();
+    public String compute(String input) {
+        StringBuilder sb = new StringBuilder();
+        SourceCodeAnalysis.CompletionInfo info;
+        for (info = sca.analyzeCompletion(input);
+                info.completeness().isComplete();
+                info = sca.analyzeCompletion(info.remaining())) {
+            sb.append(addCommand(info.source()));
+        }
+
+        if (info.completeness() != SourceCodeAnalysis.Completeness.EMPTY) {
+            sb.append("Imcomplete input:").append(info.remaining().trim());
+        }
+        return sb.toString();
     }
 
-    public String getId() {
-        return id;
+    public void close() {
+        js.close();
     }
 }
