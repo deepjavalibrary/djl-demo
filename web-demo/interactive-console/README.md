@@ -1,9 +1,13 @@
-# Interactive JConsole for DJL
+# Interactive JShell and Block Runner for DJL
 
-## Introduction
 This is a demo application designed for user to use JShell and DJL online.
 Hosted by [AWS Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/),
-it contains all Java 11 feature. Try it out [here](https://aws-samples.github.io/djl-demo/web-demo/interactive-console/src/main/webapps/jshell).
+it contains all Java 11 feature. 
+Try it out:
+- [Interactive Shell](https://aws-samples.github.io/djl-demo/web-demo/interactive-console/src/main/webapps/jshell).
+- [Block Runner](https://aws-samples.github.io/djl-demo/web-demo/interactive-console/src/main/webapps/blockrunner)
+
+## JShell
 
 ![terminal](img/terminal.gif)
 
@@ -25,3 +29,11 @@ Currently, this console only offers limited operations like:
 - left and right arrow to move cursor
 - copy/paste option to paste to command line
 - clear keyword to clear the screen
+
+## Block Runner
+The backend also host a block runner which allows you to write Java like
+python script:
+
+![terminal](img/blockrunner.gif)
+
+Users can use varies of engines(MXNet, PyTorch and TensorFlow).

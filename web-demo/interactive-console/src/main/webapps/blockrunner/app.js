@@ -15,7 +15,7 @@ var result = CodeMirror.fromTextArea(document.getElementById("result"), {
 editor.setValue(input);
 
 function submitCode() {
-    var value = editor.getValue().split("\n").join("");
+    var value = editor.getValue();
     var select = document.getElementById("engine");
     var engine = select.options[select.selectedIndex].value;
     const Url = "https://olzo20ie3f.execute-api.us-east-1.amazonaws.com/DJL-Block-Runner";
