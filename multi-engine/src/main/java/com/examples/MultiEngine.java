@@ -62,72 +62,10 @@ public final class MultiEngine {
         engineInference();
     }
 
-    // Generic ModelZoo
-    private static void modelZooInference()
-            throws IOException, ModelNotFoundException, MalformedModelException,
-                    TranslateException {
-
-        Path imageFile = Paths.get("src/test/resources/segmentation.jpg");
-        Image img = ImageFactory.getInstance().fromFile(imageFile);
-
-        Criteria<Image, DetectedObjects> criteria =
-                Criteria.builder()
-                        .optApplication(Application.CV.INSTANCE_SEGMENTATION)
-                        .setTypes(Image.class, DetectedObjects.class)
-                        .optFilter("backbone", "resnet18")
-                        .optFilter("flavor", "v1b")
-                        .optFilter("dataset", "coco")
-                        .optProgress(new ProgressBar())
-                        .build();
-
-        try (ZooModel<Image, DetectedObjects> model = ModelZoo.loadModel(criteria)) {
-            try (Predictor<Image, DetectedObjects> predictor = model.newPredictor()) {
-                DetectedObjects detection = predictor.predict(img);
-                logger.info(detection.toString());
-            }
-        }
-    }
-
-    private static void loadingModelManuallyInference()
-            throws IOException, ModelNotFoundException, MalformedModelException,
-                    TranslateException {
-        String filePath = "src/test/resources/kitten.jpg";
-
-        String path_to_model_dir = "";
-
-        /** Loading the model in manually. */
-        // Example of Tensorflow Engine
-        try (Model tfModel = Model.newInstance(Device.defaultDevice(), "TensorFlow")) {
-            Path modelPath = Paths.get(path_to_model_dir);
-            tfModel.load(modelPath);
-
-            Predictor<Image, Classifications> predictor =
-                    tfModel.newPredictor(new MyTranslatorTF());
-
-            Image img = ImageFactory.getInstance().fromFile(Paths.get(filePath));
-
-            Classifications result = predictor.predict(img);
-            logger.info("Tensorflow ResNet50 result: " + result.toString());
-        }
-
-        // Example of calling MXNet Engine
-        try (Model mxModel = Model.newInstance(Device.defaultDevice(), "MXNet")) {
-
-            Path modelPath = Paths.get(path_to_model_dir);
-            mxModel.load(modelPath, "resnet18_v1");
-
-            Predictor<Image, Classifications> predictor =
-                    mxModel.newPredictor(new MyTranslatorMX());
-
-            Image img = ImageFactory.getInstance().fromFile(Paths.get(filePath));
-
-            Classifications result = predictor.predict(img);
-            logger.info("MXNet ResNet 18 result: " + result.toString());
-        }
-
-        // Example of calling Pytorch Engine
-    }
-
+    /**
+     * Method that uses Criteria to load a model from the Tensorflow, MXNet, PyTorch, Basic ModelZoo, does
+     * inference on a sample image, and logs the results.
+     */
     private static void engineInference()
             throws IOException, ModelNotFoundException, MalformedModelException,
                     TranslateException {
@@ -135,7 +73,6 @@ public final class MultiEngine {
         String filePath = "src/test/resources/kitten.jpg";
 
         /** Using Model Zoo to load in the model. */
-
         // Tensorflow Engine Model Zoo
         Map<String, String> criteria = new ConcurrentHashMap<>();
         criteria.put("layers", "50");
@@ -205,6 +142,57 @@ public final class MultiEngine {
         }
     }
 
+    private static void loadingModelManuallyInference()
+            throws IOException, ModelNotFoundException, MalformedModelException,
+                    TranslateException {
+        String filePath = "src/test/resources/kitten.jpg";
+
+        String path_to_model_dir = "<INSERT PATH TO MODEL DIR>";
+
+        /** Loading the model in manually. */
+        // Example of Tensorflow Engine
+        try (Model tfModel = Model.newInstance(Device.defaultDevice(), "TensorFlow")) {
+            Path modelPath = Paths.get(path_to_model_dir);
+            tfModel.load(modelPath);
+
+            Predictor<Image, Classifications> predictor =
+                    tfModel.newPredictor(new MyTranslatorTF());
+
+            Image img = ImageFactory.getInstance().fromFile(Paths.get(filePath));
+
+            Classifications result = predictor.predict(img);
+            logger.info("Tensorflow Manual Model Load Result: " + result.toString());
+        }
+
+        // Example of calling MXNet Engine
+        try (Model mxModel = Model.newInstance(Device.defaultDevice(), "MXNet")) {
+
+            Path modelPath = Paths.get(path_to_model_dir);
+            mxModel.load(modelPath);
+
+            Predictor<Image, Classifications> predictor =
+                    mxModel.newPredictor(new MyTranslatorMX());
+
+            Image img = ImageFactory.getInstance().fromFile(Paths.get(filePath));
+
+            Classifications result = predictor.predict(img);
+            logger.info("MXNet Manual Model Load Result: " + result.toString());
+        }
+
+        // Example of calling Pytorch Engine
+        try (Model pyModel = Model.newInstance(Device.defaultDevice(), "PyTorch")) {
+            Path modelPath = Paths.get(path_to_model_dir);
+            pyModel.load(modelPath);
+
+            Predictor<Image, Classifications> predictor =
+                    pyModel.newPredictor(new MyTranslatorPT());
+            Image img = ImageFactory.getInstance().fromFile(Paths.get(filePath));
+
+            Classifications result = predictor.predict(img);
+            logger.info("PyTorch Manual Model Load Result: " + result.toString());
+        }
+    }
+
     private static final class MyTranslatorTF
             implements Translator<Image, Classifications> {
 
@@ -235,6 +223,30 @@ public final class MultiEngine {
         private List<String> classes;
 
         public MyTranslatorMX() {
+            classes = IntStream.range(0, 10).mapToObj(String::valueOf).collect(Collectors.toList());
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public NDList processInput(TranslatorContext ctx, Image input) {
+            NDArray array = input.toNDArray(ctx.getNDManager(), Image.Flag.COLOR);
+            return new NDList(NDImageUtils.toTensor(array));
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public Classifications processOutput(TranslatorContext ctx, NDList list) {
+            NDArray probabilities = list.singletonOrThrow().softmax(0);
+            return new Classifications(classes, probabilities);
+        }
+    }
+
+    private static final class MyTranslatorPT
+            implements Translator<Image, Classifications> {
+
+        private List<String> classes;
+
+        public MyTranslatorPT() {
             classes = IntStream.range(0, 10).mapToObj(String::valueOf).collect(Collectors.toList());
         }
 
