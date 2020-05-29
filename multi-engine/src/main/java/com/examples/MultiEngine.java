@@ -73,7 +73,7 @@ public final class MultiEngine {
         String filePath = "src/test/resources/kitten.jpg";
 
         /** Using Model Zoo to load in the model. */
-        // Tensorflow Engine Model Zoo
+        // Using Criteria to load model from TfModelZoo and call it.
         Map<String, String> criteria = new ConcurrentHashMap<>();
         criteria.put("layers", "50");
         criteria.put("dataset", "imagenet");
@@ -90,7 +90,7 @@ public final class MultiEngine {
             }
         }
 
-        // MXNet Engine Model Zoo
+        // Using Criteria to load model from MXModelZoo and call it.
         criteria = new ConcurrentHashMap<>();
         criteria.put("layers", "50");
         criteria.put("flavor", "v1");
@@ -98,7 +98,6 @@ public final class MultiEngine {
 
         device = new ProgressBar();
 
-        imageFile = Paths.get(filePath);
         img = ImageFactory.getInstance().fromFile(imageFile);
 
         try (ZooModel<Image, Classifications> model =
@@ -108,14 +107,13 @@ public final class MultiEngine {
             }
         }
 
-        //PyTorch Model Zoo
+        // Using Criteria to load model from PtModelZoo and call it.
         criteria = new ConcurrentHashMap<>();
         criteria.put("layers", "50");
         criteria.put("dataset", "imagenet");
 
         device = new ProgressBar();
 
-        imageFile = Paths.get(filePath);
         img = ImageFactory.getInstance().fromFile(imageFile);
         try (ZooModel<Image, Classifications> model =
                  PtModelZoo.RESNET.loadModel(criteria, device)) {
@@ -124,14 +122,13 @@ public final class MultiEngine {
             }
         }
 
-        // Basic Model Zoo
+        // Using Criteria to load model from BasicModelZoo and call it.
         criteria = new ConcurrentHashMap<>();
         criteria.put("layers", "50");
         criteria.put("dataset", "cifar10");
 
         device = new ProgressBar();
 
-        imageFile = Paths.get(filePath);
         img = ImageFactory.getInstance().fromFile(imageFile);
 
         try (ZooModel<Image, Classifications> model =
@@ -150,7 +147,7 @@ public final class MultiEngine {
         String path_to_model_dir = "<INSERT PATH TO MODEL DIR>";
 
         /** Loading the model in manually. */
-        // Example of Tensorflow Engine
+        // Example of calling Tensorflow Engine
         try (Model tfModel = Model.newInstance(Device.defaultDevice(), "TensorFlow")) {
             Path modelPath = Paths.get(path_to_model_dir);
             tfModel.load(modelPath);
