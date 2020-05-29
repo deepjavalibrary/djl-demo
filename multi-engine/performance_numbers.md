@@ -27,4 +27,3 @@ Benchmarking Numbers for only having one engine loaded in.
 |             |             |               |                                    |            |            |               |                |
 | 1 Engine    | PyTorch     | resnet 18     | 14.90, 5000 iteration / 335509 ms. | 64.268 ms  | 73.352 ms  | 57.620 ms     | 65.733 ms      |
 | MultiEngine | PyTorch     | resnet 18     | 13.54, 5000 iteration / 369255 ms. | 71.959 ms  | 81.688 ms  | 64.580 ms     | 73.439 ms      |
-

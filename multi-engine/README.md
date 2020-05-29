@@ -65,14 +65,3 @@ run inference on it.
 
 The `loadingModelManuallyInference`is an example of loading custom model from different deep learning frameworks
 to do inference on. Change the `path_to_model_dir` variable so DJL can load the custom model in and run it.
-
-
-
-
-
-
-
-
-
-
-
