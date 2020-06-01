@@ -1,0 +1,39 @@
+plugins {
+    id "java-library"
+}
+
+group "ai.djl.examples.doodle"
+version "1.0-SNAPSHOT"
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation "ai.djl:api:0.5.0"
+    implementation "ai.djl.pytorch:pytorch-engine:0.5.0"
+
+    implementation "com.amazonaws:aws-lambda-java-core:1.2.1"
+
+    runtimeOnly "org.slf4j:slf4j-simple:1.7.29"
+    implementation "ai.djl.pytorch:pytorch-native-auto:1.5.0"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+configure(this) {
+    apply from: file("${rootProject.projectDir}/../../../tools/gradle/formatter.gradle")
+}
+
+task buildZip(type: Zip, dependsOn: jar) {
+    archiveFileName = getArchivesBaseName() + ".zip"
+    from compileJava
+    from processResources
+    into('lib') {
+        from configurations.runtimeClasspath
+    }
+}
+build.dependsOn buildZip
