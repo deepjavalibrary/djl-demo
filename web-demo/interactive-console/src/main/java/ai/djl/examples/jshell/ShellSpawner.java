@@ -45,7 +45,7 @@ public final class ShellSpawner {
     private static void extractJars(Path dir) {
         List<String> deps =
                 Arrays.asList(
-                        "api-0.5.0.jar",
+                        "api-0.6.0-SNAPSHOT.jar",
                         "gson-2.8.6.jar",
                         "jna-5.3.0.jar",
                         "slf4j-api-1.7.30.jar",
@@ -54,15 +54,15 @@ public final class ShellSpawner {
                         "javacpp-1.5.3.jar");
         List<String> engines =
                 Arrays.asList(
-                        "pytorch-engine-0.5.0.jar",
-                        "pytorch-model-zoo-0.5.0.jar",
+                        "pytorch-engine-0.6.0-SNAPSHOT.jar",
+                        "pytorch-model-zoo-0.6.0-SNAPSHOT.jar",
                         "pytorch-native-auto-1.5.0.jar",
-                        "mxnet-engine-0.5.0.jar",
-                        "mxnet-model-zoo-0.5.0.jar",
+                        "mxnet-engine-0.6.0-SNAPSHOT.jar",
+                        "mxnet-model-zoo-0.6.0-SNAPSHOT.jar",
                         "mxnet-native-auto-1.7.0-a.jar",
                         "tensorflow-api-0.5.0.jar",
-                        "tensorflow-engine-0.5.0.jar",
-                        "tensorflow-model-zoo-0.5.0.jar",
+                        "tensorflow-engine-0.6.0-SNAPSHOT.jar",
+                        "tensorflow-model-zoo-0.6.0-SNAPSHOT.jar",
                         "tensorflow-native-auto-2.1.0.jar");
         Path basicDepsDir = dir.resolve("basic");
         extractAndCopy(basicDepsDir, deps);
