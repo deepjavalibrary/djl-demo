@@ -26,3 +26,7 @@ An example application that reads the output of a KVS Stream.
 ## [Serverless Model Serving with AWS Lambda](lambda-model-serving/README.md)
 
 An example application that serves deep learning model with AWS Lambda.
+
+## [MultiEngine](multi-engine/README.md)
+
+An example application that runs MXNet, TensorFlow, Pytorch inference in one Java Process.
