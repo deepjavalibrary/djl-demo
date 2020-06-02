@@ -12,8 +12,20 @@
  */
 package ai.djl.examples.jshell;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,5 +44,67 @@ public class BlockRunnerController {
         response.put("result", result);
         shell.close();
         return response;
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping(value = "/createzip", produces = "application/zip")
+    public void zipFiles(@RequestBody Map<String, String> request, HttpServletResponse response)
+            throws IOException, URISyntaxException {
+        // setting headers
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.addHeader("Content-Disposition", "attachment; filename=\"starter.zip\"");
+        response.addHeader("Content-Type", "application/zip");
+        prepareFiles(request.get("engine"), request.get("commands"), response);
+    }
+
+    private void prepareFiles(String engine, String commands, HttpServletResponse response)
+            throws IOException, URISyntaxException {
+        ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
+        List<String> names =
+                Arrays.asList(
+                        "gradlew",
+                        "gradlew.bat",
+                        "settings.gradle",
+                        "gradle/wrapper/gradle-wrapper.properties",
+                        "gradle/wrapper/GradleWrapperDownloader.java");
+        for (String name : names) {
+            InputStream is = getClass().getClassLoader().getResourceAsStream("/starter/" + name);
+            addZipEntry(is, name, zos);
+        }
+        InputStream is =
+                getClass().getClassLoader().getResourceAsStream("/starter/" + engine + ".gradle");
+        addZipEntry(is, "build.gradle", zos);
+        String javaFileContents = naiveCommandSplitter(commands);
+        is = new ByteArrayInputStream(javaFileContents.getBytes(UTF_8));
+        addZipEntry(is, "src/main/java/ai/djl/examples/Example.java", zos);
+        zos.close();
+    }
+
+    private void addZipEntry(InputStream is, String targetLocation, ZipOutputStream zos)
+            throws IOException {
+        ZipEntry entry = new ZipEntry("djl-starter/" + targetLocation);
+        zos.putNextEntry(entry);
+        is.transferTo(zos);
+        zos.closeEntry();
+    }
+
+    private String naiveCommandSplitter(String commands) {
+        String[] splitCommands = commands.split("\n");
+        StringBuilder sb = new StringBuilder();
+        List<String> imports = new ArrayList<>();
+        List<String> scopeCommands = new ArrayList<>();
+        for (String command : splitCommands) {
+            if (command.startsWith("import ")) {
+                imports.add(command);
+            } else {
+                scopeCommands.add(command);
+            }
+        }
+        sb.append("package ai.djl.examples;\n");
+        sb.append(String.join("\n", imports));
+        sb.append("\n\npublic class Example {\n  public static void main(String[] args) {\n    ");
+        sb.append(String.join("\n    ", scopeCommands));
+        sb.append("\n  }\n}\n");
+        return sb.toString();
     }
 }
