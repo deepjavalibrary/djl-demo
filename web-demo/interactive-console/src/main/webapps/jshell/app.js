@@ -73,7 +73,7 @@ function analyseResponse(data) {
     input = "";
   }
   else {
-    const Url = "https://noirbct7p5.execute-api.us-east-1.amazonaws.com/DJL-Console-Live";
+    const Url = "https://demo.djl.ai/addCommand";
     fetch(Url, {
     method: "POST",
     headers: {
