@@ -47,6 +47,7 @@ public final class ShellSpawner {
                 Arrays.asList(
                         "api-0.6.0-SNAPSHOT.jar",
                         "gson-2.8.6.jar",
+                        "commons-compress-1.20.jar",
                         "jna-5.3.0.jar",
                         "slf4j-api-1.7.30.jar",
                         "log4j-api-2.13.2.jar",
