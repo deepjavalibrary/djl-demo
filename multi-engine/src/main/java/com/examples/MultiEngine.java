@@ -14,25 +14,24 @@
 package com.examples;
 
 import ai.djl.Application;
-import ai.djl.Device;
 import ai.djl.MalformedModelException;
-import ai.djl.Model;
+import ai.djl.ModelException;
 import ai.djl.basicmodelzoo.BasicModelZoo;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.output.DetectedObjects;
+import ai.djl.modality.cv.output.Joints;
+import ai.djl.modality.cv.output.Rectangle;
 import ai.djl.modality.cv.util.NDImageUtils;
 import ai.djl.mxnet.zoo.MxModelZoo;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
-import ai.djl.pytorch.zoo.PtModelZoo;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelNotFoundException;
 import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
-import ai.djl.tensorflow.zoo.TfModelZoo;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
@@ -40,6 +39,7 @@ import ai.djl.translate.TranslatorContext;
 import ai.djl.util.Progress;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -56,209 +56,101 @@ public final class MultiEngine {
 
     private MultiEngine() {}
 
-    public static void main(String[] args)
-            throws IOException, ModelNotFoundException, MalformedModelException,
-                    TranslateException {
-        engineInference();
-    }
-
-    /**
-     * Method that uses Criteria to load a model from the Tensorflow, MXNet, PyTorch, Basic ModelZoo, does
-     * inference on a sample image, and logs the results.
-     */
-    private static void engineInference()
-            throws IOException, ModelNotFoundException, MalformedModelException,
-                    TranslateException {
-
-        String filePath = "src/test/resources/kitten.jpg";
-
-        /** Using Model Zoo to load in the model. */
-        // Using Criteria to load model from TfModelZoo and call it.
-        Map<String, String> criteria = new ConcurrentHashMap<>();
-        criteria.put("layers", "50");
-        criteria.put("dataset", "imagenet");
-
-        Progress device = new ProgressBar();
-
-        Path imageFile = Paths.get(filePath);
+    public static void main(String[] args) throws IOException, ModelException, TranslateException {
+        Path imageFile = Paths.get("src/test/resources/pose_soccer.png");
         Image img = ImageFactory.getInstance().fromFile(imageFile);
 
-        try (ZooModel<Image, Classifications> model =
-                TfModelZoo.RESNET.loadModel(criteria, device)) {
-            try (Predictor<Image, Classifications> predictor = model.newPredictor()) {
-                logger.info("TensorFlow Resnet50: " + predictor.predict(img));
-            }
+        // First detect a person from the main image
+        Image person = detectPersonWithPyTorchModel(img);
+
+        // If no person is detected, we can't pass to next model, log and exit.
+        if (person == null) {
+            logger.warn("No person found in image.");
+            return;
         }
 
-        // Using Criteria to load model from MXModelZoo and call it.
-        criteria = new ConcurrentHashMap<>();
-        criteria.put("layers", "50");
-        criteria.put("flavor", "v1");
-        criteria.put("dataset", "cifar10");
-
-        device = new ProgressBar();
-
-        img = ImageFactory.getInstance().fromFile(imageFile);
-
-        try (ZooModel<Image, Classifications> model =
-                MxModelZoo.RESNET.loadModel(criteria, device)) {
-            try (Predictor<Image, Classifications> predictor = model.newPredictor()) {
-                logger.info("MXNet Resnet50: " + predictor.predict(img));
-            }
-        }
-
-        // Using Criteria to load model from PtModelZoo and call it.
-        criteria = new ConcurrentHashMap<>();
-        criteria.put("layers", "50");
-        criteria.put("dataset", "imagenet");
-
-        device = new ProgressBar();
-
-        img = ImageFactory.getInstance().fromFile(imageFile);
-        try (ZooModel<Image, Classifications> model =
-                 PtModelZoo.RESNET.loadModel(criteria, device)) {
-            try (Predictor<Image, Classifications> predictor = model.newPredictor()) {
-                logger.info("Pytorch ResNet50: " + predictor.predict(img));
-            }
-        }
-
-        // Using Criteria to load model from BasicModelZoo and call it.
-        criteria = new ConcurrentHashMap<>();
-        criteria.put("layers", "50");
-        criteria.put("dataset", "cifar10");
-
-        device = new ProgressBar();
-
-        img = ImageFactory.getInstance().fromFile(imageFile);
-
-        try (ZooModel<Image, Classifications> model =
-                BasicModelZoo.RESNET.loadModel(criteria, device)) {
-            try (Predictor<Image, Classifications> predictor = model.newPredictor()) {
-                logger.info("Basic Model Zoo: " + predictor.predict(img));
-            }
-        }
+        // There was a person found, we pass the image to our MxNet Model.
+        detectJointsWithMxnetModel(person);
     }
 
-    private static void loadingModelManuallyInference()
-            throws IOException, ModelNotFoundException, MalformedModelException,
+    private static Image detectPersonWithPyTorchModel(Image img)
+            throws MalformedModelException, ModelNotFoundException, IOException,
                     TranslateException {
-        String filePath = "src/test/resources/kitten.jpg";
 
-        String path_to_model_dir = "<INSERT PATH TO MODEL DIR>";
+        // Criteria object to load the model from model zoo
+        Criteria<Image, DetectedObjects> criteria =
+                Criteria.builder()
+                        .optApplication(Application.CV.OBJECT_DETECTION)
+                        .setTypes(Image.class, DetectedObjects.class)
+                        .optProgress(new ProgressBar())
+                        // We specify a resnet50 model that runs using the PyTorch engine here.
+                        .optFilter("size", "300")
+                        .optFilter("backbone", "resnet50")
+                        .optFilter("dataset", "coco")
+                        .optEngine("PyTorch")
+                        .build();
 
-        /** Loading the model in manually. */
-        // Example of calling Tensorflow Engine
-        try (Model tfModel = Model.newInstance(Device.defaultDevice(), "TensorFlow")) {
-            Path modelPath = Paths.get(path_to_model_dir);
-            tfModel.load(modelPath);
-
-            Predictor<Image, Classifications> predictor =
-                    tfModel.newPredictor(new MyTranslatorTF());
-
-            Image img = ImageFactory.getInstance().fromFile(Paths.get(filePath));
-
-            Classifications result = predictor.predict(img);
-            logger.info("Tensorflow Manual Model Load Result: " + result.toString());
+        // Inference call to detect the person form the image.
+        DetectedObjects detectedObjects;
+        try (ZooModel<Image, DetectedObjects> ssd = ModelZoo.loadModel(criteria)) {
+            try (Predictor<Image, DetectedObjects> predictor = ssd.newPredictor()) {
+                detectedObjects = predictor.predict(img);
+            }
         }
 
-        // Example of calling MXNet Engine
-        try (Model mxModel = Model.newInstance(Device.defaultDevice(), "MXNet")) {
-
-            Path modelPath = Paths.get(path_to_model_dir);
-            mxModel.load(modelPath);
-
-            Predictor<Image, Classifications> predictor =
-                    mxModel.newPredictor(new MyTranslatorMX());
-
-            Image img = ImageFactory.getInstance().fromFile(Paths.get(filePath));
-
-            Classifications result = predictor.predict(img);
-            logger.info("MXNet Manual Model Load Result: " + result.toString());
+        // Get the first resulting image of the person and return it
+        List<DetectedObjects.DetectedObject> items = detectedObjects.items();
+        for (DetectedObjects.DetectedObject item : items) {
+            if ("person".equals(item.getClassName())) {
+                Rectangle rect = item.getBoundingBox().getBounds();
+                int width = img.getWidth();
+                int height = img.getHeight();
+                return img.getSubimage(
+                        (int) (rect.getX() * width),
+                        (int) (rect.getY() * height),
+                        (int) (rect.getWidth() * width),
+                        (int) (rect.getHeight() * height));
+            }
         }
+        return null;
+    }
 
-        // Example of calling Pytorch Engine
-        try (Model pyModel = Model.newInstance(Device.defaultDevice(), "PyTorch")) {
-            Path modelPath = Paths.get(path_to_model_dir);
-            pyModel.load(modelPath);
+    private static Joints detectJointsWithMxnetModel(Image person)
+            throws MalformedModelException, ModelNotFoundException, IOException,
+                    TranslateException {
 
-            Predictor<Image, Classifications> predictor =
-                    pyModel.newPredictor(new MyTranslatorPT());
-            Image img = ImageFactory.getInstance().fromFile(Paths.get(filePath));
+        // Criteria object to load the model from model zoo
+        Criteria<Image, Joints> criteria =
+                Criteria.builder()
+                        .optApplication(Application.CV.POSE_ESTIMATION)
+                        .setTypes(Image.class, Joints.class)
+                        // We specify a resnet18_v1b model that runs using MXNet engine here.
+                        .optFilter("backbone", "resnet18")
+                        .optFilter("flavor", "v1b")
+                        .optFilter("dataset", "imagenet")
+                        .optEngine("MXNet")
+                        .build();
 
-            Classifications result = predictor.predict(img);
-            logger.info("PyTorch Manual Model Load Result: " + result.toString());
+        // Run inference on the image of a person and detect the joints
+        try (ZooModel<Image, Joints> pose = ModelZoo.loadModel(criteria)) {
+            try (Predictor<Image, Joints> predictor = pose.newPredictor()) {
+                Joints joints = predictor.predict(person);
+                saveJointsImage(person, joints);
+                return joints;
+            }
         }
     }
 
-    private static final class MyTranslatorTF
-            implements Translator<Image, Classifications> {
+    // Outputs the resulting image with the joints to build/output
+    private static void saveJointsImage(Image img, Joints joints) throws IOException {
+        Path outputDir = Paths.get("build/output");
+        Files.createDirectories(outputDir);
 
-        private List<String> classes;
+        img.drawJoints(joints);
 
-        public MyTranslatorTF() {
-            classes = IntStream.range(0, 10).mapToObj(String::valueOf).collect(Collectors.toList());
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public NDList processInput(TranslatorContext ctx, Image input) {
-            NDArray array = input.toNDArray(ctx.getNDManager(), Image.Flag.COLOR);
-            return new NDList(NDImageUtils.resize(array, 224).div(255));
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public Classifications processOutput(TranslatorContext ctx, NDList list) {
-            NDArray probabilities = list.singletonOrThrow().softmax(0);
-            return new Classifications(classes, probabilities);
-        }
-    }
-
-    private static final class MyTranslatorMX
-            implements Translator<Image, Classifications> {
-
-        private List<String> classes;
-
-        public MyTranslatorMX() {
-            classes = IntStream.range(0, 10).mapToObj(String::valueOf).collect(Collectors.toList());
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public NDList processInput(TranslatorContext ctx, Image input) {
-            NDArray array = input.toNDArray(ctx.getNDManager(), Image.Flag.COLOR);
-            return new NDList(NDImageUtils.toTensor(array));
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public Classifications processOutput(TranslatorContext ctx, NDList list) {
-            NDArray probabilities = list.singletonOrThrow().softmax(0);
-            return new Classifications(classes, probabilities);
-        }
-    }
-
-    private static final class MyTranslatorPT
-            implements Translator<Image, Classifications> {
-
-        private List<String> classes;
-
-        public MyTranslatorPT() {
-            classes = IntStream.range(0, 10).mapToObj(String::valueOf).collect(Collectors.toList());
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public NDList processInput(TranslatorContext ctx, Image input) {
-            NDArray array = input.toNDArray(ctx.getNDManager(), Image.Flag.COLOR);
-            return new NDList(NDImageUtils.toTensor(array));
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public Classifications processOutput(TranslatorContext ctx, NDList list) {
-            NDArray probabilities = list.singletonOrThrow().softmax(0);
-            return new Classifications(classes, probabilities);
-        }
+        Path imagePath = outputDir.resolve("joints.png");
+        // Must use png format because you can't save as jpg with an alpha channel
+        img.save(Files.newOutputStream(imagePath), "png");
+        logger.info("Pose image has been saved in: {}", imagePath);
     }
 }
