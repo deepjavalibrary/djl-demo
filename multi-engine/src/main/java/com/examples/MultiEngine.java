@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
  * with the License. A copy of the License is located at
@@ -16,37 +16,23 @@ package com.examples;
 import ai.djl.Application;
 import ai.djl.MalformedModelException;
 import ai.djl.ModelException;
-import ai.djl.basicmodelzoo.BasicModelZoo;
 import ai.djl.inference.Predictor;
-import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.output.DetectedObjects;
 import ai.djl.modality.cv.output.Joints;
 import ai.djl.modality.cv.output.Rectangle;
-import ai.djl.modality.cv.util.NDImageUtils;
-import ai.djl.mxnet.zoo.MxModelZoo;
-import ai.djl.ndarray.NDArray;
-import ai.djl.ndarray.NDList;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelNotFoundException;
 import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
-import ai.djl.translate.Translator;
-import ai.djl.translate.TranslatorContext;
-import ai.djl.util.Progress;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +46,7 @@ public final class MultiEngine {
         Path imageFile = Paths.get("src/test/resources/pose_soccer.png");
         Image img = ImageFactory.getInstance().fromFile(imageFile);
 
-        // First detect a person from the main image
+        // First detect a person from the main image using PyTorch engine
         Image person = detectPersonWithPyTorchModel(img);
 
         // If no person is detected, we can't pass to next model, log and exit.
@@ -70,7 +56,10 @@ public final class MultiEngine {
         }
 
         // There was a person found, we pass the image to our MxNet Model.
-        detectJointsWithMxnetModel(person);
+        Joints joints = detectJointsWithMxnetModel(person);
+
+        // Outputs the resulting image with the joints to build/output
+        saveJointsImage(person, joints);
     }
 
     private static Image detectPersonWithPyTorchModel(Image img)
@@ -87,15 +76,14 @@ public final class MultiEngine {
                         .optFilter("size", "300")
                         .optFilter("backbone", "resnet50")
                         .optFilter("dataset", "coco")
-                        .optEngine("PyTorch")
+                        .optEngine("PyTorch") // Use PyTorch engine
                         .build();
 
         // Inference call to detect the person form the image.
         DetectedObjects detectedObjects;
-        try (ZooModel<Image, DetectedObjects> ssd = ModelZoo.loadModel(criteria)) {
-            try (Predictor<Image, DetectedObjects> predictor = ssd.newPredictor()) {
-                detectedObjects = predictor.predict(img);
-            }
+        try (ZooModel<Image, DetectedObjects> ssd = ModelZoo.loadModel(criteria);
+                Predictor<Image, DetectedObjects> predictor = ssd.newPredictor()) {
+            detectedObjects = predictor.predict(img);
         }
 
         // Get the first resulting image of the person and return it
@@ -128,20 +116,16 @@ public final class MultiEngine {
                         .optFilter("backbone", "resnet18")
                         .optFilter("flavor", "v1b")
                         .optFilter("dataset", "imagenet")
-                        .optEngine("MXNet")
+                        .optEngine("MXNet") // Use MXNet engine
                         .build();
 
         // Run inference on the image of a person and detect the joints
-        try (ZooModel<Image, Joints> pose = ModelZoo.loadModel(criteria)) {
-            try (Predictor<Image, Joints> predictor = pose.newPredictor()) {
-                Joints joints = predictor.predict(person);
-                saveJointsImage(person, joints);
-                return joints;
-            }
+        try (ZooModel<Image, Joints> pose = ModelZoo.loadModel(criteria);
+                Predictor<Image, Joints> predictor = pose.newPredictor()) {
+            return predictor.predict(person);
         }
     }
 
-    // Outputs the resulting image with the joints to build/output
     private static void saveJointsImage(Image img, Joints joints) throws IOException {
         Path outputDir = Paths.get("build/output");
         Files.createDirectories(outputDir);
