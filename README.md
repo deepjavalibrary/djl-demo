@@ -29,4 +29,4 @@ An example application that serves deep learning model with AWS Lambda.
 
 ## [MultiEngine](multi-engine/README.md)
 
-An example application that runs MXNet, TensorFlow, Pytorch inference in one Java Process.
+An example application that runs multiple deep learning frameworks in one Java Process.
