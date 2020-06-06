@@ -24,7 +24,7 @@ dependencies {
 }
 
 application {
-    mainClassName = System.getProperty("main", "com.examples.Covid19Detection")
+    mainClassName = System.getProperty("main", "com.examples.PneumoniaDetection")
 }
 run {
     systemProperties System.getProperties()
