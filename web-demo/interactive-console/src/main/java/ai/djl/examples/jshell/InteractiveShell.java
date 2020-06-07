@@ -71,8 +71,8 @@ public class InteractiveShell {
             if (event.causeSnippet() == null) {
                 JShellException e = event.exception();
                 if (e != null) {
-                    final StringWriter sw = new StringWriter();
-                    final PrintWriter pw = new PrintWriter(sw, true);
+                    StringWriter sw = new StringWriter();
+                    PrintWriter pw = new PrintWriter(sw, true);
                     e.printStackTrace(pw);
                     sb.append(sw.getBuffer().toString());
                 } else {
@@ -99,7 +99,7 @@ public class InteractiveShell {
         }
 
         if (info.completeness() != SourceCodeAnalysis.Completeness.EMPTY) {
-            sb.append("Imcomplete input:").append(info.remaining().trim());
+            sb.append("Incomplete input:").append(info.remaining().trim());
         }
         return sb.toString();
     }

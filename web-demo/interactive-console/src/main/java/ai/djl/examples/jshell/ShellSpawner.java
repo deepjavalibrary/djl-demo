@@ -22,6 +22,7 @@ import java.util.List;
 import org.springframework.boot.system.ApplicationHome;
 
 public final class ShellSpawner {
+
     private ShellSpawner() {}
 
     static InteractiveShell createShell(String engine) {
@@ -77,10 +78,8 @@ public final class ShellSpawner {
                 throw new IllegalStateException("Cannot make directories in " + dir);
             }
             for (String name : names) {
-                InputStream is =
-                        ai.djl.examples.jshell.ShellSpawner.class.getResourceAsStream(
-                                "/BOOT-INF/lib/" + name);
-                try {
+                String url = "/BOOT-INF/lib/" + name;
+                try (InputStream is = ShellSpawner.class.getResourceAsStream(url)) {
                     Files.copy(is, dir.resolve(name));
                 } catch (IOException e) {
                     throw new RuntimeException("Copy to dir failed", e);

@@ -12,12 +12,10 @@
  */
 package ai.djl.examples.jshell;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,7 +47,7 @@ public class BlockRunnerController {
     @CrossOrigin(origins = "*")
     @PostMapping(value = "/createzip", produces = "application/zip")
     public void zipFiles(@RequestBody Map<String, String> request, HttpServletResponse response)
-            throws IOException, URISyntaxException {
+            throws IOException {
         // setting headers
         response.setStatus(HttpServletResponse.SC_OK);
         response.addHeader("Content-Disposition", "attachment; filename=\"starter.zip\"");
@@ -58,7 +56,7 @@ public class BlockRunnerController {
     }
 
     private void prepareFiles(String engine, String commands, HttpServletResponse response)
-            throws IOException, URISyntaxException {
+            throws IOException {
         ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
         List<String> names =
                 Arrays.asList(
@@ -68,15 +66,20 @@ public class BlockRunnerController {
                         "gradle/wrapper/gradle-wrapper.properties",
                         "gradle/wrapper/GradleWrapperDownloader.java");
         for (String name : names) {
-            InputStream is = getClass().getClassLoader().getResourceAsStream("/starter/" + name);
-            addZipEntry(is, name, zos);
+            String url = "/starter/" + name;
+            try (InputStream is = getClass().getClassLoader().getResourceAsStream(url)) {
+                addZipEntry(is, name, zos);
+            }
         }
-        InputStream is =
-                getClass().getClassLoader().getResourceAsStream("/starter/" + engine + ".gradle");
-        addZipEntry(is, "build.gradle", zos);
+        String url = "/starter/" + engine + ".gradle";
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream(url)) {
+            addZipEntry(is, "build.gradle", zos);
+        }
         String javaFileContents = naiveCommandSplitter(commands);
-        is = new ByteArrayInputStream(javaFileContents.getBytes(UTF_8));
-        addZipEntry(is, "src/main/java/ai/djl/examples/Example.java", zos);
+        byte[] buf = javaFileContents.getBytes(StandardCharsets.UTF_8);
+        try (InputStream is = new ByteArrayInputStream(buf)) {
+            addZipEntry(is, "src/main/java/ai/djl/examples/Example.java", zos);
+        }
         zos.close();
     }
 
