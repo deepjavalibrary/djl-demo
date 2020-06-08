@@ -66,7 +66,7 @@ public class PneumoniaDetection {
         try (ZooModel<BufferedImage, Classifications> model = ModelZoo.loadModel(criteria)) {
             try (Predictor<BufferedImage, Classifications> predictor = model.newPredictor()) {
                 Classifications result = predictor.predict(image);
-                logger.info("Diagnose:" + result.toString());
+                logger.info("Diagnose: {}", result);
             }
         }
     }

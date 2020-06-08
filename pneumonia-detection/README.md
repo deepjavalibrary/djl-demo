@@ -16,7 +16,8 @@ run the following command to build the project:
 
 ### Prepare images
 
-You can download some of the X-ray images for testing from [here](https://www.kaggle.com/paultimothymooney/chest-xray-pneumonia?).
+You can download some of the X-ray images for testing dataset on [kaggle](https://www.kaggle.com/paultimothymooney/chest-xray-pneumonia).
+We will use a default image for prediction if no input image is specified.
 
 ### Prepare trained model
 
