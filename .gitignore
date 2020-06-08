@@ -4,6 +4,7 @@ model/
 dataset/
 .gradle/
 .idea/
+*.iml
 
 target/
 yarn-error.log
