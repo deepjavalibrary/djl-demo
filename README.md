@@ -15,9 +15,9 @@ An example application detects live objects from web camera.
 
 An example application features a web UI to track and visualize metrics such as loss and accuracy.
 
-## [Covid-19 Detection](covid19-detection/README.md)
+## [Pneumonia Detection](pneumonia-detection/README.md)
 
-An example application detects Covid-19 based on X-ray images using a trained Keras model.
+An example application detects Pneumonia based on X-ray images using a trained Keras model.
 
 ## [AWS Kinesis Video Streams](aws-kinesis-video-streams/README.md)
 

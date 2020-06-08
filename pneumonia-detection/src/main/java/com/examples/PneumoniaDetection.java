@@ -35,9 +35,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Covid19Detection {
+public class PneumoniaDetection {
 
-    private static final Logger logger = LoggerFactory.getLogger(Covid19Detection.class);
+    private static final Logger logger = LoggerFactory.getLogger(PneumoniaDetection.class);
 
     public static void main(String[] args)
             throws IOException, MalformedModelException, TranslateException,
@@ -45,7 +45,7 @@ public class Covid19Detection {
         String imagePath;
         if (args.length == 0) {
             imagePath =
-                    "https://github.com/ieee8023/covid-chestxray-dataset/blob/master/images/01E392EE-69F9-4E33-BFCE-E5C968654078.jpeg?raw=true";
+                    "https://storage.googleapis.com/kagglesdsdata/datasets%2F17810%2F23812%2Fchest_xray%2Ftest%2FPNEUMONIA%2Fperson117_bacteria_553.jpeg?GoogleAccessId=gcp-kaggle-com@kaggle-161607.iam.gserviceaccount.com&Expires=1591659997&Signature=Wudos2zKg6DpLFfFzuIOHGE06%2BeF1atABjZjMi7Q%2Flx%2FLAy%2BEOuCkYJA0vqc6veame4r9FQMdomNWg0UIrd1A9gHSbL2%2FIXhfZMWkCavhfRtdaXsXKe1aldp1%2FracDceRu7vf4QX1ibsYVly8mbaLfjJEbdiuMsXsY3rk9CnTCbqSHDB6VcK75MexyEMMsWiHmyqjnDSiUyJ%2BPaFwZFfuNu%2B5dB%2FZoCwp%2BMmXEuLZJBX0T%2F8EU8VdKegkDfz3hRyZC31BawQFsDhUOdSdIEjvlECqJh4zA5A%2B2Gcqz9HkFFDyKzZqsefboR9tMzgsKc1QpmF55j%2BiM7Wv%2B0vHCJVcw%3D%3D";
             logger.info("Input image not specified, using image:\n\t{}", imagePath);
         } else {
             imagePath = args[0];
@@ -66,15 +66,14 @@ public class Covid19Detection {
         try (ZooModel<BufferedImage, Classifications> model = ModelZoo.loadModel(criteria)) {
             try (Predictor<BufferedImage, Classifications> predictor = model.newPredictor()) {
                 Classifications result = predictor.predict(image);
-                logger.info("Diagnose:");
-                logger.info(result.toString());
+                logger.info("Diagnose: {}", result);
             }
         }
     }
 
     private static final class MyTranslator implements Translator<BufferedImage, Classifications> {
 
-        private static final List<String> CLASSES = Arrays.asList("covid-19", "normal");
+        private static final List<String> CLASSES = Arrays.asList("Normal", "Pneumonia");
 
         @Override
         public NDList processInput(TranslatorContext ctx, BufferedImage input) {
