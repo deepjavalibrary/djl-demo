@@ -41,18 +41,18 @@ variable to control which version of Java to use.
 # How to
 
 ## Add the Deep Java Library UI dependency to your project.
-  ```
-        <dependency>
-            <groupId>ai.djl</groupId>
-            <artifactId>ui</artifactId>
-            <version>0.5.0-SNAPSHOT</version>
-        </dependency>
-  ```
+```
+<dependency>
+    <groupId>ai.djl</groupId>
+    <artifactId>ui</artifactId>
+    <version>0.6.0-SNAPSHOT</version>
+</dependency>
+```
 
 ## Add UI Training Listener in a Training Configuration.
-  ```
-       .addTrainingListeners(new UiTrainingListener())
-  ```
+```
+   .addTrainingListeners(new UiTrainingListener())
+```
 
 
 # Getting started: 30 seconds to run an example
@@ -73,6 +73,7 @@ To build, use the following command:
 * Maven build
     ```sh
     mvn package -DskipTests -f djl-ui-demo
+    ```
 
 ## Run example code
 
@@ -83,7 +84,7 @@ Run Handwritten Digit Recognition example
     mvn exec:java -Dexec.mainClass="org.example.MnistTraining" -f djl-ui-demo
     ```
   
-## Open browser
+## Open browser (Please use Safari on macOS)
 
 Open http://localhost:8080 to get:
 

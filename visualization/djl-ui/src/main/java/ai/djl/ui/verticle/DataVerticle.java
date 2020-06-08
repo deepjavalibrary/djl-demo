@@ -29,17 +29,17 @@ public class DataVerticle extends AbstractVerticle {
     private Trainer trainer;
     private int currentEpoch = 1;
     private TrainerInfo.State currentState = TrainerInfo.State.Undefined;
-    private int trainingProgress = 0;
-    private int validatingProgress = 0;
+    private int trainingProgress;
+    private int validatingProgress;
     private int batchSize = 0;
     private final Map<String, List<MetricInfo>> performance = new HashMap<>();
     private long updateInterval = 500;
     private long lastUpdate = System.currentTimeMillis();
 
     @Override
-    public void start() throws Exception {
+    public void start() {
         LOGGER.info("DataVerticle starting...");
-        vertx.eventBus().consumer(ADDRESS_TRAINER_REQUEST, event -> Try.run(() -> sendTrainer()));
+        vertx.eventBus().consumer(ADDRESS_TRAINER_REQUEST, event -> Try.run(this::sendTrainer));
     }
 
     public void setEpoch(Trainer trainer) {
@@ -101,7 +101,8 @@ public class DataVerticle extends AbstractVerticle {
                 String metricName = EvaluatorTrainingListener.metricName(e, EvaluatorTrainingListener.TRAIN_PROGRESS);
                 if (metrics.hasMetric(metricName)) {
                     List<MetricInfo> mis = getMetrics(e.getName());
-                    mis.add(MetricInfo.builder().name(e.getName()).x(mis.size()).y(metrics.latestMetric(metricName).getValue().floatValue()).build());
+                    float y = metrics.latestMetric(metricName).getValue().floatValue();
+                    mis.add(MetricInfo.builder().name(e.getName()).x(mis.size()).y(y).build());
                     setMetrics(e.getName(), mis);
                 }
             });
@@ -113,7 +114,7 @@ public class DataVerticle extends AbstractVerticle {
     }
 
     private List<MetricInfo> getMetrics(String name) {
-        return performance.containsKey(name) ? performance.get(name) : new ArrayList();
+        return performance.getOrDefault(name, new ArrayList<>());
     }
 
     private boolean isTimeToUpdate() {
@@ -121,8 +122,8 @@ public class DataVerticle extends AbstractVerticle {
     }
 
     private List<String> getDevices() {
-        return Try.of(() -> trainer.getDevices().stream().map(device -> device.toString()).collect(Collectors.toList()))
-                .getOrElse(Arrays.asList(Device.cpu().toString()));
+        return Try.of(() -> Arrays.stream(trainer.getDevices()).map(Device::toString).collect(Collectors.toList()))
+                .getOrElse(Collections.singletonList(Device.cpu().toString()));
     }
 
     private BigDecimal getSpeed() {
