@@ -40,7 +40,7 @@ object ImageClassificationExample {
         .optApplication(Application.CV.IMAGE_CLASSIFICATION)
         .setTypes(classOf[BufferedImage], classOf[Classifications])
         .optFilter("dataset", "imagenet")
-        .optFilter("layers", "18")
+        .optFilter("layers", "50")
         .optProgress(new ProgressBar)
         .build
       val model = ModelZoo.loadModel(criteria)
