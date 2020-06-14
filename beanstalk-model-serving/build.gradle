@@ -1,7 +1,7 @@
 plugins {
-	id 'org.springframework.boot' version '2.3.0.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.3.0.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
 }
 
 group = 'com.example'
@@ -9,20 +9,24 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 repositories {
-	jcenter()
-	maven {
+    jcenter()
+    maven {
         url "https://oss.sonatype.org/content/repositories/snapshots/"
     }
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	implementation "ai.djl.pytorch:pytorch-model-zoo:0.6.0-SNAPSHOT"
-	implementation "ai.djl.pytorch:pytorch-native-auto:1.5.0"
+    implementation "ai.djl.pytorch:pytorch-model-zoo:0.6.0-SNAPSHOT"
+    implementation "ai.djl.pytorch:pytorch-native-auto:1.5.0"
 }
 
 configure(this) {
-	apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
+    apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
+}
+
+task deploy(type: Exec, dependsOn: build) {
+    executable "./deploy.sh"
 }

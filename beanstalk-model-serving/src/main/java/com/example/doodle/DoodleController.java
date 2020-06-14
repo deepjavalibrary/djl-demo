@@ -54,20 +54,20 @@ public class DoodleController {
      * against a model of their choice using DJL!
      *
      * @param input the request body containing the image
-     * @return returns the top 5 probable items from the model output
+     * @return returns the top 3 probable items from the model output
      * @throws IOException if failed read HTTP request
      */
-    @PostMapping(value = "/doodle", consumes = "image/*")
+    @PostMapping(value = "/doodle")
     public String handleRequest(InputStream input) throws IOException {
         Image img = ImageFactory.getInstance().fromInputStream(input);
         try (Predictor<Image, Classifications> predictor = model.newPredictor()) {
             Classifications classifications = predictor.predict(img);
-            return GSON.toJson(classifications.topK(5));
+            return GSON.toJson(classifications.topK(3)) + System.lineSeparator();
         } catch (RuntimeException | TranslateException e) {
             logger.error("", e);
             Map<String, String> error = new ConcurrentHashMap<>();
             error.put("status", "Invoke failed: " + e.toString());
-            return GSON.toJson(error);
+            return GSON.toJson(error) + System.lineSeparator();
         }
     }
 

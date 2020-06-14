@@ -21,54 +21,31 @@ Run the following command to build the project.
 
 ```shell script
 cd beanstalk-model-serving
-./gradlew jar
+./gradlew build
 ```
 
-This will create a packaged jar file in 
+This will create a packaged jar file in
 ```
 build/libs/beanstalk-model-serving-0.0.1-SNAPSHOT.jar
 ```
 
-## Deploying
-Go to the AWS BeanStalk Console and create a new environment.
-
-Give you application a name.
-
-Set the platform to these options for this example:
-
-![Platform Select Option](https://github.com/awslabs/djl-resources/blob/master/demo/beanstalk-model-serving/images/platform.png?raw=true)
-
-When selecting your Application Code, select the choose file option and 
-upload the jar that was created in:
-```
-build/libs/beanstalk-ec2-model-serving-0.0.1-SNAPSHOT.jar
+## Run and test locally
+Use the following command to run the application locally:
+```shell script
+./gradlew bootRun
 ```
 
-Then hit the `Create Environment` button.
+The application will be listening on localhost 5000 port(Elastic Beanstalk expect port 5000),
+you can open your browser and navigate to `http://localhost:5000` to try it out.
 
-Once the environment is created, we will need to go to the configuration
+You can also you `curl` command to test the application's REST API.
+You can get a Smiley Face picture for testing:
+![Smiley Face](https://github.com/awslabs/djl-resources/raw/master/demo/beanstalk-model-serving/images/smiley.png)
 
-![Configuration Settings](https://github.com/awslabs/djl-resources/blob/master/demo/beanstalk-model-serving/images/configuration.png?raw=true)
+```shell script
+curl -O https://github.com/awslabs/djl-resources/raw/master/demo/beanstalk-model-serving/images/smiley.png
+curl -X POST -T smiley.png http://localhost:5000/doodle
 
-Under the Software Settings, we will set `SERVER_PORT` to 5000.
-
-Under the Capacity Settings, we will set the instance used to `t2.small` for a little bit more memory for our model.
-
-We can now use PostMan to do a post call.
-
-We will be submitting an encoded version of this Smiley Face picture:
-
-![Smiley Face](https://github.com/awslabs/djl-resources/blob/master/demo/beanstalk-model-serving/images/smiley.png?raw=true)
-
-Our Postman Call was using a POST call to:
-
-`DjlDemo-env.eba-tcs36mmm.us-east-1.elasticbeanstalk.com/inference`
-
-and our body contains the encoded byte array that can be found here:
-
-We get a response of:
-
-```
 [
   {
     "className": "smiley_face",
@@ -76,24 +53,34 @@ We get a response of:
   },
   {
     "className": "face",
-    "probability": 0.00480476301163435
+    "probability": 0.004804758355021477
   },
   {
     "className": "mouth",
-    "probability": 0.0015588535461574793
-  },
-  {
-    "className": "chandelier",
-    "probability": 0.0012816740199923515
-  },
-  {
-    "className": "goatee",
-    "probability": 0.0012701823143288493
+    "probability": 0.0015588520327582955
   }
 ]
 ```
 
-We can see that the smiley face is the most probable one in the image, success!
+## Deploying
+You can use the following command line to deploy to your AWS Elastic Beanstalk:
+```shell script
+./gradlew deploy
+```
 
-Now you can add your own custom models and do post calls to your endpoint
-for inference calls!
+Alternately you can create a new environment with the AWS BeanStalk Console.
+Give you application a name. Set the platform to these options for this example:
+
+![Platform Select Option](https://github.com/awslabs/djl-resources/raw/master/demo/beanstalk-model-serving/images/platform.png)
+
+When selecting your Application Code, select the "choose file" option and
+upload the jar that was created in:
+```
+build/libs/beanstalk-model-serving-0.0.1-SNAPSHOT.jar
+```
+
+Then hit the `Create Environment` button.
+
+Once the environment is created, you may want to change the instance used to `t2.small` for a little more memory for our model.
+
+Now you can classify your images using AWS Beanstalk!
