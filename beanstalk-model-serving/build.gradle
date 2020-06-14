@@ -18,12 +18,11 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation "commons-io:commons-io:2.5"
 
 	implementation "ai.djl.pytorch:pytorch-model-zoo:0.6.0-SNAPSHOT"
 	implementation "ai.djl.pytorch:pytorch-native-auto:1.5.0"
 }
 
-test {
-	useJUnitPlatform()
+configure(this) {
+	apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
 }
