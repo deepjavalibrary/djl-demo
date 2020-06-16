@@ -27,6 +27,14 @@ An example application that reads the output of a KVS Stream.
 
 An example application that serves deep learning model with AWS Lambda.
 
-## [MultiEngine](multi-engine/README.md)
+## [Model Serving on AWS Elastic Beanstalk](beanstalk-model-serving/README.md)
+
+Build a micro service to deploy on AWS Elastic Beanstalk.
+
+## [Spark Image Classification](spark/image-classification/README.md)
+
+Contains Spark image classification demos.
+
+## [Use multiple engines in single JVM](multi-engine/README.md)
 
 An example application that runs multiple deep learning frameworks in one Java Process.
