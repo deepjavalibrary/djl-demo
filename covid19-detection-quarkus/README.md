@@ -51,7 +51,15 @@ You can find some X-ray images of lungs here:
 
 ## Run prediction
 
-### JVM
+### Maven Native (Not Yet Working)
+
+```
+mvn clean install -Dai.djl.repository.zoo.location=models/saved_model -Pnative
+target/covid19-detection-quarkus-1.0.0-SNAPSHOT-runner -Dai.djl.repository.zoo.location=models/saved_model
+curl http://localhost:8080/predict
+```
+
+### Gradle JVM
 
 ```
 ./gradlew build
@@ -59,7 +67,9 @@ java -Dai.djl.repository.zoo.location=models/saved_model -jar build/covid19-dete
 curl http://localhost:8080/predict
 ```
 
-### Native (Not Yet Working)
+### Gradle Native (Not Yet Working)
+
+!!! Use Maven instead as it will give better GraalVM errors.
 
 ```
 ./gradlew build -Dquarkus.package.type=native

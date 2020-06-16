@@ -12,6 +12,8 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 
 import ai.djl.MalformedModelException;
+import ai.djl.engine.Engine;
+import ai.djl.engine.EngineProvider;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.util.BufferedImageUtils;
@@ -25,6 +27,7 @@ import ai.djl.repository.zoo.ZooModel;
 import ai.djl.repository.zoo.ZooProvider;
 import ai.djl.tensorflow.engine.LibUtils;
 import ai.djl.tensorflow.engine.TfEngine;
+import ai.djl.tensorflow.engine.TfEngineProvider;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
@@ -44,11 +47,11 @@ public class ExampleService {
         System.out.println("ai.djl.repository.zoo.location=" + System.getProperty("ai.djl.repository.zoo.location"));
 
         URL url = Thread.currentThread().getContextClassLoader().getResource("native/lib/tensorflow.properties");
-        System.out.println("URL: " + url.toURI().toString());
-        Platform platform = Platform.fromUrl(url);
-        System.out.println("Platform: " + platform.getLibraries() + " " + platform.getVersion());
+       // System.out.println("URL: " + url.toURI().toString());
+        //Platform platform = Platform.fromUrl(url);
+        //System.out.println("Platform: " + platform.getLibraries() + " " + platform.getVersion());
 
-        LibUtils.loadLibrary();
+        //LibUtils.loadLibrary();
         // See if TF loaded correctly or not. If not, expect
         // java.lang.UnsatisfiedLinkError
         // TfEngine.getInstance().debugEnvironment();
@@ -62,14 +65,24 @@ public class ExampleService {
 
         System.out.println(ModelZoo.listModels().values().toString());
 
-        ServiceLoader<ZooProvider> providers = ServiceLoader.load(ZooProvider.class);
-        for (ZooProvider provider : providers) {
-            System.out.println(provider.getName());
-        }
+        //ServiceLoader<ZooProvider> providers = ServiceLoader.load(ZooProvider.class);
+
+        //for (ZooProvider provider : providers) {
+        //    System.out.println(provider.getName() + " " + provider.getModelZoo().getModelLoaders().toString());
+        //}
+        
+        // ServiceLoader<EngineProvider> loaders = ServiceLoader.load(EngineProvider.class);
+         
+        // for (EngineProvider provider : loaders) { 
+        //     Engine engine = provider.getEngine(); 
+        //     System.out.println("Engine: " + engine.getEngineName()); 
+        // }
+
+        System.out.println("ai.djl.default_engine=" + System.getProperty("ai.djl.default_engine"));
 
         Criteria<BufferedImage, Classifications> criteria = Criteria.builder()
-                .setTypes(BufferedImage.class, Classifications.class).optTranslator(new MyTranslator())
-                .optProgress(new ProgressBar()).build();
+                .setTypes(BufferedImage.class, Classifications.class) //.optEngine(TfEngine.ENGINE_NAME)
+                .optTranslator(new MyTranslator()).optProgress(new ProgressBar()).build();
 
         ZooModel<BufferedImage, Classifications> model = ModelZoo.loadModel(criteria);
         this.predictor = model.newPredictor();
