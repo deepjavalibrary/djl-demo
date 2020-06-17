@@ -51,7 +51,9 @@ public class ExampleService {
         //Platform platform = Platform.fromUrl(url);
         //System.out.println("Platform: " + platform.getLibraries() + " " + platform.getVersion());
 
-        //LibUtils.loadLibrary();
+        
+        LibUtils.loadLibrary(); // Load library during build augmentation
+
         // See if TF loaded correctly or not. If not, expect
         // java.lang.UnsatisfiedLinkError
         // TfEngine.getInstance().debugEnvironment();
@@ -60,28 +62,45 @@ public class ExampleService {
 
     public Classifications predict() throws MalformedURLException, IOException, ModelNotFoundException,
             MalformedModelException, TranslateException {
-
-        // loadLibrary();
+/*
+        LibUtils.loadLibrary();
 
         System.out.println(ModelZoo.listModels().values().toString());
 
-        //ServiceLoader<ZooProvider> providers = ServiceLoader.load(ZooProvider.class);
+        ServiceLoader<ZooProvider> providers = ServiceLoader.load(ZooProvider.class);
 
-        //for (ZooProvider provider : providers) {
-        //    System.out.println(provider.getName() + " " + provider.getModelZoo().getModelLoaders().toString());
-        //}
+        for (ZooProvider provider : providers) {
+            System.out.println(">>>>>>>> ZooProvider: " + provider.getName() + " " + provider.getModelZoo().getModelLoaders().toString());
+        }
         
-        // ServiceLoader<EngineProvider> loaders = ServiceLoader.load(EngineProvider.class);
+         ServiceLoader<EngineProvider> loaders = ServiceLoader.load(EngineProvider.class);
          
-        // for (EngineProvider provider : loaders) { 
-        //     Engine engine = provider.getEngine(); 
-        //     System.out.println("Engine: " + engine.getEngineName()); 
-        // }
-
+         for (EngineProvider provider : loaders) { 
+             Engine engine = provider.getEngine(); 
+             System.out.println(">>>>>>>> Engine: " + engine.getEngineName()); 
+         }
+*/
         System.out.println("ai.djl.default_engine=" + System.getProperty("ai.djl.default_engine"));
 
+/*
+        Criteria<BufferedImage, Classifications> criteria =
+                Criteria.builder()
+                        .setTypes(BufferedImage.class, Classifications.class)
+                        .optTranslator(new MyTranslator())
+                        .build();
+
+        try (ZooModel<BufferedImage, Classifications> model = ModelZoo.loadModel(criteria)) {
+            try (Predictor<BufferedImage, Classifications> predictor = model.newPredictor()) {
+                String imagePath = "https://github.com/ieee8023/covid-chestxray-dataset/blob/master/images/01E392EE-69F9-4E33-BFCE-E5C968654078.jpeg?raw=true";
+                BufferedImage image = BufferedImageUtils.fromUrl(new URL(imagePath));
+                return predictor.predict(image);
+            }
+        }
+*/
+
+
         Criteria<BufferedImage, Classifications> criteria = Criteria.builder()
-                .setTypes(BufferedImage.class, Classifications.class) //.optEngine(TfEngine.ENGINE_NAME)
+                .setTypes(BufferedImage.class, Classifications.class)//.optEngine(TfEngine.ENGINE_NAME)
                 .optTranslator(new MyTranslator()).optProgress(new ProgressBar()).build();
 
         ZooModel<BufferedImage, Classifications> model = ModelZoo.loadModel(criteria);
