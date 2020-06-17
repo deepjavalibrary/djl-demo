@@ -15,15 +15,22 @@ Currently, implemented features:
 ### Install the Java Development Kit
 For ubuntu:
 
+```shell script
 sudo apt-get install openjdk-11-jdk-headless
-For centos
+```
+For centos:
 
+```shell script
 sudo yum install java-11-openjdk-devel
-For Mac:
+```
+For macOS:
 
+```shell script
 brew tap homebrew/cask-versions
 brew update
 brew cask install adoptopenjdk11
+```
+
 
 You can also download and install [Oracle JDK](https://www.oracle.com/technetwork/java/javase/overview/index.html)
 manually if you have trouble with the previous commands.
@@ -34,18 +41,18 @@ variable to control which version of Java to use.
 # How to
 
 ## Add the Deep Java Library UI dependency to your project.
-  ```
-        <dependency>
-            <groupId>ai.djl</groupId>
-            <artifactId>ui</artifactId>
-            <version>0.5.0-SNAPSHOT</version>
-        </dependency>
-  ```
+```
+<dependency>
+    <groupId>ai.djl</groupId>
+    <artifactId>ui</artifactId>
+    <version>0.6.0-SNAPSHOT</version>
+</dependency>
+```
 
 ## Add UI Training Listener in a Training Configuration.
-  ```
-       .addTrainingListeners(new UiTrainingListener())
-  ```
+```
+   .addTrainingListeners(new UiTrainingListener())
+```
 
 
 # Getting started: 30 seconds to run an example
@@ -66,6 +73,7 @@ To build, use the following command:
 * Maven build
     ```sh
     mvn package -DskipTests -f djl-ui-demo
+    ```
 
 ## Run example code
 
@@ -76,7 +84,7 @@ Run Handwritten Digit Recognition example
     mvn exec:java -Dexec.mainClass="org.example.MnistTraining" -f djl-ui-demo
     ```
   
-## Open browser
+## Open browser (Please use Safari on macOS)
 
 Open http://localhost:8080 to get:
 

@@ -1,28 +1,46 @@
 # DJL Spark Image Classification Example
 
 ## Introduction
-This folder contains a demo application built with Spark and DJL to run a group image classification
+This folder contains two demo applications built with Spark and DJL to run a group image classification
 task.
+
+- ImageClassificationExample: Ready to run for classification using built in model in ModelZoo
+- DataProcessExample: If you are new to DJL and would like to learn more on the processing logic. (PyTorch Engine only)
 
 ## Setup
 
 We provide two options to build, you can choose to build with `sbt` or `gradle`.
 
-We use PyTorch engine by default, you can switch to MXNet Engine adding these lines:
+We use PyTorch engine by default, you can switch to MXNet or TensorFlow Engine adding these lines:
 
 ### sbt
 
+#### MXNet
 ```
-libraryDependencies += "ai.djl.mxnet" % "mxnet-model-zoo" % "0.4.0"
-libraryDependencies += "ai.djl.mxnet" % "mxnet-native-auto" % "1.6.0"
+libraryDependencies += "ai.djl.mxnet" % "mxnet-model-zoo" % "0.5.0"
+libraryDependencies += "ai.djl.mxnet" % "mxnet-native-auto" % "1.7.0-a"
 ```
+
+#### TensorFlow
+```
+libraryDependencies += "ai.djl.tensorflow" % "tensorflow-model-zoo" % "0.5.0"
+libraryDependencies += "ai.djl.tensorflow" % "tensorflow-native-auto" % "2.1.0"
+```
+
 ### gradle
 
 You should add these in `dependencies`
 
+#### MXNet
 ```
-runtimeOnly "ai.djl.mxnet:mxnet-model-zoo:0.4.0"
-runtimeOnly "ai.djl.mxnet:mxnet-native-auto:1.6.0"
+runtimeOnly "ai.djl.mxnet:mxnet-model-zoo:0.5.0"
+runtimeOnly "ai.djl.mxnet:mxnet-native-auto:1.7.0-a"
+```
+
+#### TensorFlow
+```
+runtimeOnly "ai.djl.tensorflow:tensorflow-model-zoo:0.5.0"
+runtimeOnly "ai.djl.tensorflow:tensorflow-native-auto:2.1.0"
 ```
 
 Apart from that, you may also need to use `NaiveEngine` mode in MXNet for multi-thread inference.

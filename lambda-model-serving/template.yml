@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: An AWS Lambda application that calls the Lambda API.
+Resources:
+  function:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DJL-Lambda
+      CodeUri: build/distributions/lambda-model-serving.zip
+      Handler: com.examples.Handler
+      Runtime: java8
+      Description: DJL Lambda model serving
+      MemorySize: 2048
+      Timeout: 60
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambdaReadOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+      Tracing: Active

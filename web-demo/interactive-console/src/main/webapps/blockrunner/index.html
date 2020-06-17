@@ -1,0 +1,54 @@
+<!doctype html>
+  <html>
+    <head>
+      <meta charset="utf-8">
+      <title>
+        Block runner demo
+      </title>
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.54.0/codemirror.min.css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.54.0/theme/dracula.min.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+    <nav class="black" role="navigation">
+      <div class="nav-wrapper container">
+        <h1 class="header center white-text">Block runner demo</h1>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="section">
+        <textarea id="editor"></textarea>
+      </div>
+    </div>
+    <div class="container">
+      <div class="section">
+        <div class="row">
+          <div class="col s4">
+            <a class="waves-effect waves-light btn" onclick="submitCode()"><i class="material-icons left">cloud</i>run</a>
+          </div>
+          <div class="col s4">
+            <a class="waves-effect waves-light btn" onclick="getTemplate()"><i class="material-icons left">file_download</i>get Template</a>
+          </div>
+          <div class="col s4">
+            <select class="browser-default" id="engine">
+              <option value="mxnet" selected>MXNet</option>
+              <option value="pytorch">PyTorch</option>
+              <option value="tensorflow">TensorFlow</option>
+            </select>
+          </div>
+        </div>
+        <p>Output</p>
+        <textarea id="result"></textarea>
+      </div>
+    </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.54.0/codemirror.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.54.0/mode/clike/clike.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.54.0/addon/edit/matchbrackets.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+      <script src="app.js"></script>
+    </body>
+</html>

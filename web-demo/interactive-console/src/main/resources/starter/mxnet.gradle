@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+}
+
+group = 'ai.djl.examples'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    jcenter()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
+}
+
+dependencies {
+    implementation "ai.djl:api:0.6.0-SNAPSHOT"
+    runtimeOnly "ai.djl.mxnet:mxnet-model-zoo:0.6.0-SNAPSHOT"
+    runtimeOnly "ai.djl.mxnet:mxnet-native-auto:1.7.0-a"
+}
