@@ -19,15 +19,15 @@ An example application features a web UI to track and visualize metrics such as 
 
 An example application detects Pneumonia based on X-ray images using a trained Keras model.
 
-## [AWS Kinesis Video Streams](aws-kinesis-video-streams/README.md)
+## [AWS Kinesis Video Streams](aws/aws-kinesis-video-streams/README.md)
 
 An example application that reads the output of a KVS Stream.
 
-## [Serverless Model Serving with AWS Lambda](lambda-model-serving/README.md)
+## [Serverless Model Serving with AWS Lambda](aws/lambda-model-serving/README.md)
 
 An example application that serves deep learning model with AWS Lambda.
 
-## [Model Serving on AWS Elastic Beanstalk](beanstalk-model-serving/README.md)
+## [Model Serving on AWS Elastic Beanstalk](aws/beanstalk-model-serving/README.md)
 
 Build a micro service to deploy on AWS Elastic Beanstalk.
 
