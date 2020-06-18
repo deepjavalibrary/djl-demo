@@ -12,23 +12,19 @@
  */
 package com.examples;
 
-import ai.djl.MalformedModelException;
+import ai.djl.ModelException;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
-import ai.djl.modality.cv.util.BufferedImageUtils;
+import ai.djl.modality.cv.Image;
+import ai.djl.modality.cv.ImageFactory;
+import ai.djl.modality.cv.translator.ImageClassificationTranslator;
 import ai.djl.modality.cv.util.NDImageUtils;
-import ai.djl.ndarray.NDArray;
-import ai.djl.ndarray.NDList;
 import ai.djl.repository.zoo.Criteria;
-import ai.djl.repository.zoo.ModelNotFoundException;
 import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
-import ai.djl.translate.TranslatorContext;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -39,9 +35,9 @@ public class PneumoniaDetection {
 
     private static final Logger logger = LoggerFactory.getLogger(PneumoniaDetection.class);
 
-    public static void main(String[] args)
-            throws IOException, MalformedModelException, TranslateException,
-                    ModelNotFoundException {
+    private static final List<String> CLASSES = Arrays.asList("Normal", "Pneumonia");
+
+    public static void main(String[] args) throws IOException, TranslateException, ModelException {
         String imagePath;
         if (args.length == 0) {
             imagePath = "https://djl-ai.s3.amazonaws.com/resources/images/chest_xray.jpg";
@@ -49,44 +45,29 @@ public class PneumoniaDetection {
         } else {
             imagePath = args[0];
         }
-        BufferedImage image;
+        Image image;
         if (imagePath.startsWith("http")) {
-            image = BufferedImageUtils.fromUrl(new URL(imagePath));
+            image = ImageFactory.getInstance().fromUrl(imagePath);
         } else {
-            image = BufferedImageUtils.fromFile(Paths.get(imagePath));
+            image = ImageFactory.getInstance().fromFile(Paths.get(imagePath));
         }
 
-        Criteria<BufferedImage, Classifications> criteria =
+        Translator<Image, Classifications> translator =
+                ImageClassificationTranslator.builder()
+                        .addTransform(a -> NDImageUtils.resize(a, 224).div(255.0f))
+                        .optSynset(CLASSES)
+                        .build();
+        Criteria<Image, Classifications> criteria =
                 Criteria.builder()
-                        .setTypes(BufferedImage.class, Classifications.class)
-                        .optTranslator(new MyTranslator())
+                        .setTypes(Image.class, Classifications.class)
+                        .optModelName("saved_model")
+                        .optTranslator(translator)
                         .build();
 
-        try (ZooModel<BufferedImage, Classifications> model = ModelZoo.loadModel(criteria)) {
-            try (Predictor<BufferedImage, Classifications> predictor = model.newPredictor()) {
-                Classifications result = predictor.predict(image);
-                logger.info("Diagnose: {}", result);
-            }
-        }
-    }
-
-    private static final class MyTranslator implements Translator<BufferedImage, Classifications> {
-
-        private static final List<String> CLASSES = Arrays.asList("Normal", "Pneumonia");
-
-        @Override
-        public NDList processInput(TranslatorContext ctx, BufferedImage input) {
-            NDArray array =
-                    BufferedImageUtils.toNDArray(
-                            ctx.getNDManager(), input, NDImageUtils.Flag.COLOR);
-            array = NDImageUtils.resize(array, 224).div(255.0f);
-            return new NDList(array);
-        }
-
-        @Override
-        public Classifications processOutput(TranslatorContext ctx, NDList list) {
-            NDArray probabilities = list.singletonOrThrow();
-            return new Classifications(CLASSES, probabilities);
+        try (ZooModel<Image, Classifications> model = ModelZoo.loadModel(criteria);
+                Predictor<Image, Classifications> predictor = model.newPredictor()) {
+            Classifications result = predictor.predict(image);
+            logger.info("Diagnose: {}", result);
         }
     }
 }
