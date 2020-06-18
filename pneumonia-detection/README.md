@@ -21,7 +21,7 @@ We will use a default image for prediction if no input image is specified.
 
 ### Prepare trained model
 
-You can find a trained model [here](https://djl-tensorflow-javacpp.s3.amazonaws.com/tensorflow-models/chest_x_ray/saved_model.zip),
+You can find a trained model [here](https://djl-ai.s3.amazonaws.com/resources/demo/pneumonia-detection-model/saved_model.zip),
 download and unzip it.
 
 ### Run prediction
@@ -31,7 +31,7 @@ run the following command:
 ```
 mkdir models
 cd models
-curl https://djl-tensorflow-javacpp.s3.amazonaws.com/tensorflow-models/chest_x_ray/saved_model.zip | jar xv
+curl https://djl-ai.s3.amazonaws.com/resources/demo/pneumonia-detection-model/saved_model.zip | jar xv
 cd ..
 
 ./gradlew run -Dai.djl.repository.zoo.location=models/saved_model
