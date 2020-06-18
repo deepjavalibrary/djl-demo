@@ -44,8 +44,7 @@ public class PneumoniaDetection {
                     ModelNotFoundException {
         String imagePath;
         if (args.length == 0) {
-            imagePath =
-                    "https://storage.googleapis.com/kagglesdsdata/datasets%2F17810%2F23812%2Fchest_xray%2Ftest%2FPNEUMONIA%2Fperson117_bacteria_553.jpeg?GoogleAccessId=gcp-kaggle-com@kaggle-161607.iam.gserviceaccount.com&Expires=1591659997&Signature=Wudos2zKg6DpLFfFzuIOHGE06%2BeF1atABjZjMi7Q%2Flx%2FLAy%2BEOuCkYJA0vqc6veame4r9FQMdomNWg0UIrd1A9gHSbL2%2FIXhfZMWkCavhfRtdaXsXKe1aldp1%2FracDceRu7vf4QX1ibsYVly8mbaLfjJEbdiuMsXsY3rk9CnTCbqSHDB6VcK75MexyEMMsWiHmyqjnDSiUyJ%2BPaFwZFfuNu%2B5dB%2FZoCwp%2BMmXEuLZJBX0T%2F8EU8VdKegkDfz3hRyZC31BawQFsDhUOdSdIEjvlECqJh4zA5A%2B2Gcqz9HkFFDyKzZqsefboR9tMzgsKc1QpmF55j%2BiM7Wv%2B0vHCJVcw%3D%3D";
+            imagePath = "https://djl-ai.s3.amazonaws.com/resources/images/chest_xray.jpg";
             logger.info("Input image not specified, using image:\n\t{}", imagePath);
         } else {
             imagePath = args[0];
