@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "pattern": ".*\\.properties$"
+    },
+    {
+      "pattern": ".*\\.EngineProvider$"
+    },
+    {
+      "pattern": ".*\\.ZooProvider$"
+    },
+    {
+      "pattern": ".*\\.dll$"
+    },
+    {
+      "pattern": ".*\\.dylib$"
+    },
+    {
+      "pattern": ".*\\.so$"
+    }
+  ]
+}

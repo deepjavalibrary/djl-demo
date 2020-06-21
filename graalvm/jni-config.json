@@ -1,0 +1,214 @@
+[
+  {
+    "name" : "org.bytedeco.javacpp.Loader",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "org.bytedeco.javacpp.Pointer",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "org.bytedeco.javacpp.BytePointer",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "org.bytedeco.javacpp.ShortPointer",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "org.bytedeco.javacpp.IntPointer",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "org.bytedeco.javacpp.LongPointer",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "org.bytedeco.javacpp.FloatPointer",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "org.bytedeco.javacpp.DoublePointer",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "org.bytedeco.javacpp.CharPointer",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "org.bytedeco.javacpp.BooleanPointer",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "org.bytedeco.javacpp.PointerPointer",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "org.bytedeco.javacpp.BoolPointer",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "org.bytedeco.javacpp.CLongPointer",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "org.bytedeco.javacpp.SizeTPointer",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "org.bytedeco.javacpp.presets.javacpp",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true
+  },
+  {
+    "name" : "java.lang.UnsatisfiedLinkError"
+  },
+  {
+    "name" : "java.lang.String",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "org.bytedeco.javacpp.Pointer$NativeDeallocator",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "java.nio.Buffer",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "java.lang.Object",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredClasses" : true,
+    "allPublicClasses" : true
+  },
+  {
+    "name" : "java.lang.NullPointerException"
+  },
+  {
+    "name" : "java.lang.RuntimeException"
+  }
+]
