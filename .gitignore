@@ -1,17 +1,53 @@
-*.log
-build/
-model/
-dataset/
-.gradle/
-.idea/
-*.iml
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
 
+# IntelliJ
+.idea
+*.ipr
+*.iml
+*.iws
+
+# NetBeans
+nbconfiguration.xml
+
+# Visual Studio Code
+.vscode
+.factorypath
+
+# OSX
+.DS_Store
+
+# Vim
+*.swp
+*.swo
+
+# patch
+*.orig
+*.rej
+
+# Maven
 target/
-yarn-error.log
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+
+# Gradle
+.gradle
+build/
+
+*.jar
+*.log
+model/
+models/
+dataset/
+
 stats.json
 coverage
-storybook-static
+storybookstatic
 node/
 node_modules/
 dist/
-.DS_Store
