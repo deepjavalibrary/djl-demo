@@ -16,3 +16,12 @@ Model were trained with MobileNet on PyTorch and achieved 91.7% top 3 accuracy.
 This application demos how user can import PyTorch model and run inference on their device.
 
 The minimum API level for this project is 26.
+
+### Setup
+Please run this task before build:
+
+```
+./gradlew :quickdraw_recognition:downloadModel
+```
+
+It will download the pretrained model into assets.
