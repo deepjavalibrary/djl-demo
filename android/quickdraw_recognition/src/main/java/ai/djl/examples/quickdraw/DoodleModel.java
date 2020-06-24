@@ -29,6 +29,7 @@ import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.transform.ToTensor;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
+import ai.djl.translate.Batchifier;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 import ai.djl.translate.TranslatorContext;
@@ -38,8 +39,8 @@ final class DoodleModel {
     private Predictor<Bitmap, Classifications> predictor;
 
     DoodleModel(Path directory) throws IOException, MalformedModelException {
-        Model model = Model.newInstance();
-        model.load(directory, "doodle_mobilenet");
+        Model model = Model.newInstance("doodle_mobilenet");
+        model.load(directory);
         predictor = model.newPredictor(new DoodleTranslator(directory));
     }
 
@@ -71,6 +72,11 @@ final class DoodleModel {
             Image image = ImageFactory.getInstance().fromImage(input);
             NDArray array = image.toNDArray(ctx.getNDManager(), Image.Flag.GRAYSCALE);
             return new NDList(new ToTensor().transform(array));
+        }
+
+        @Override
+        public Batchifier getBatchifier() {
+            return Batchifier.STACK;
         }
     }
 }
