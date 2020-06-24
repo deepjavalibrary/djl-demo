@@ -10,7 +10,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <graalvm.version>20.1.0</graalvm.version>
-        <djl.version>0.6.0-SNAPSHOT</djl.version>
+        <djl.version>0.6.0</djl.version>
         <exec.mainClass>com.example.ImageClassification</exec.mainClass>
     </properties>
 
@@ -31,19 +31,13 @@
             <artifactId>commons-imaging</artifactId>
             <version>1.0-alpha1</version>
         </dependency>
-        <dependency>
-            <groupId>ai.djl.tensorflow</groupId>
-            <artifactId>tensorflow-engine</artifactId>
-            <version>${djl.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ai.djl.tensorflow</groupId>
-            <artifactId>tensorflow-native-auto</artifactId>
-            <version>2.1.0</version>
-        </dependency>
     </dependencies>
 
     <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://jcenter.bintray.com</url>
+        </repository>
         <repository>
             <id>sonatype-nexus-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
@@ -55,37 +49,87 @@
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </pluginRepository>
     </pluginRepositories>
-
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-            </plugin>
-            <plugin>
-                <groupId>org.graalvm.nativeimage</groupId>
-                <artifactId>native-image-maven-plugin</artifactId>
-                <version>${graalvm.version}</version>
-                <configuration>
-                    <skip>false</skip>
-                    <imageName>image-classification</imageName>
-                    <mainClass>${exec.mainClass}</mainClass>
-                    <buildArgs>--no-fallback --allow-incomplete-classpath --enable-https --verbose
-                        -H:JNIConfigurationFiles=../jni-config.json
-                        -H:ResourceConfigurationFiles=../resource-config.json
-                        -H:ReflectionConfigurationFiles=../reflect-config.json
-                        -H:+TraceClassInitialization
-                    </buildArgs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>native-image</goal>
-                        </goals>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+    <profiles>
+        <profile>
+            <id>native</id>
+            <activation>
+                <property>
+                    <name>native</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.8.0</version>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.graalvm.nativeimage</groupId>
+                        <artifactId>native-image-maven-plugin</artifactId>
+                        <version>${graalvm.version}</version>
+                        <configuration>
+                            <skip>false</skip>
+                            <imageName>image-classification</imageName>
+                            <mainClass>${exec.mainClass}</mainClass>
+                            <buildArgs>--no-fallback --allow-incomplete-classpath --enable-https --verbose
+                                -H:+TraceClassInitialization
+                            </buildArgs>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>native-image</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>tensorflow</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>javacpp</artifactId>
+                    <version>1.5.4-SNAPSHOT</version>
+                    <classifier>macosx-x86_64</classifier>
+                </dependency>
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>javacpp</artifactId>
+                    <version>1.5.4-SNAPSHOT</version>
+                </dependency>
+                <dependency>
+                    <groupId>ai.djl.tensorflow</groupId>
+                    <artifactId>tensorflow-model-zoo</artifactId>
+                    <version>${djl.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>ai.djl.tensorflow</groupId>
+                    <artifactId>tensorflow-native-auto</artifactId>
+                    <version>2.2.0</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>pytorch</id>
+            <dependencies>
+                <dependency>
+                    <groupId>ai.djl.pytorch</groupId>
+                    <artifactId>pytorch-model-zoo</artifactId>
+                    <version>${djl.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>ai.djl.pytorch</groupId>
+                    <artifactId>pytorch-native-auto</artifactId>
+                    <version>1.5.0-SNAPSHOT</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 </project>
