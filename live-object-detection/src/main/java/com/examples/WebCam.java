@@ -15,7 +15,8 @@ package com.examples;
 import ai.djl.Application;
 import ai.djl.ModelException;
 import ai.djl.inference.Predictor;
-import ai.djl.modality.cv.ImageVisualization;
+import ai.djl.modality.cv.Image;
+import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.output.DetectedObjects;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelZoo;
@@ -24,7 +25,6 @@ import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
 import com.github.sarxos.webcam.Webcam;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
@@ -34,6 +34,9 @@ import javax.swing.JOptionPane;
 public class WebCam {
 
     public static void main(String[] args) throws IOException, ModelException, TranslateException {
+        ZooModel<Image, DetectedObjects> model = loadModel();
+        Predictor<Image, DetectedObjects> predictor = model.newPredictor();
+
         List<Webcam> webcams = Webcam.getWebcams();
 
         Optional<Webcam> optionalWebcam =
@@ -57,25 +60,24 @@ public class WebCam {
             System.out.println("Camera is not open");
             return;
         }
+        BufferedImage bufferedImage = webcam.getImage();
 
-        ZooModel<BufferedImage, DetectedObjects> model = loadModel();
-        Predictor<BufferedImage, DetectedObjects> predictor = model.newPredictor();
-
-        BufferedImage image = webcam.getImage();
-
-        if (image == null) {
+        if (bufferedImage == null) {
             JOptionPane.showConfirmDialog(null, "Failed to capture image from WebCam.");
             return;
         }
 
-        ViewerFrame frame = new ViewerFrame(image.getWidth(), image.getHeight());
+        ViewerFrame frame = new ViewerFrame(bufferedImage.getWidth(), bufferedImage.getHeight());
+
+        ImageFactory factory = ImageFactory.getInstance();
 
         while (webcam.isOpen()) {
-            image = webcam.getImage();
-            DetectedObjects detections = predictor.predict(image);
-            drawBoxImage(image, detections);
+            bufferedImage = webcam.getImage();
+            Image img = factory.fromImage(bufferedImage);
+            DetectedObjects detections = predictor.predict(img);
+            img.drawBoundingBoxes(detections);
 
-            frame.showImage(image);
+            frame.showImage((BufferedImage) img.getWrappedImage());
         }
 
         webcam.close();
@@ -86,26 +88,17 @@ public class WebCam {
         System.exit(0);
     }
 
-    private static ZooModel<BufferedImage, DetectedObjects> loadModel()
-            throws IOException, ModelException {
-        Criteria<BufferedImage, DetectedObjects> criteria =
+    private static ZooModel<Image, DetectedObjects> loadModel() throws IOException, ModelException {
+        Criteria<Image, DetectedObjects> criteria =
                 Criteria.builder()
                         .optApplication(Application.CV.OBJECT_DETECTION)
-                        .setTypes(BufferedImage.class, DetectedObjects.class)
+                        .setTypes(Image.class, DetectedObjects.class)
                         .optFilter("backbone", "mobilenet1.0")
                         .optFilter("dataset", "voc")
                         .optProgress(new ProgressBar())
                         .build();
 
         return ModelZoo.loadModel(criteria);
-    }
-
-    private static void drawBoxImage(BufferedImage img, DetectedObjects detection) {
-        // Make image copy with alpha channel because original image was jpg
-        Graphics2D g = img.createGraphics();
-        g.drawImage(img, 0, 0, null);
-        g.dispose();
-        ImageVisualization.drawBoundingBoxes(img, detection);
     }
 
     private static void adjustViewSize(Webcam webcam) {
