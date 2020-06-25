@@ -19,6 +19,7 @@ import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.index.NDIndex;
 import ai.djl.ndarray.types.Shape;
+import ai.djl.translate.Batchifier;
 import ai.djl.translate.Translator;
 import ai.djl.translate.TranslatorContext;
 import java.util.ArrayList;
@@ -86,5 +87,10 @@ public class URLTranslator implements Translator<String, Classifications> {
         labels.add("benign");
         labels.add("malicious");
         return new Classifications(labels, pred);
+    }
+
+    @Override
+    public Batchifier getBatchifier() {
+        return Batchifier.STACK;
     }
 }

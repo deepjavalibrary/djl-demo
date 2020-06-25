@@ -14,17 +14,18 @@ package com.example;
 
 import ai.djl.Model;
 import ai.djl.training.DefaultTrainingConfig;
+import ai.djl.training.EasyTrain;
 import ai.djl.training.Trainer;
 import ai.djl.training.TrainingConfig;
-import ai.djl.training.dataset.Batch;
 import ai.djl.training.dataset.RandomAccessDataset;
 import ai.djl.training.evaluator.Accuracy;
 import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
-import java.io.IOException;
-import java.nio.file.Paths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.nio.file.Paths;
 
 public class ModelTrainer {
 
@@ -51,22 +52,7 @@ public class ModelTrainer {
             // initialize trainer with proper input shape
             trainer.initialize(CSVDataset.getInitializeShape());
             logger.info("Begin Training");
-
-            for (int epoch = 0; epoch < EPOCH; epoch++) {
-                for (Batch batch : trainer.iterateDataset(datasets[0])) {
-                    trainer.trainBatch(batch);
-                    trainer.step();
-                    batch.close();
-                }
-
-                for (Batch batch : trainer.iterateDataset(datasets[1])) {
-                    trainer.validateBatch(batch);
-                    batch.close();
-                }
-
-                // reset training and validation metric at end of epoch
-                trainer.endEpoch();
-            }
+            EasyTrain.fit(trainer, EPOCH, datasets[0], datasets[1]);
         }
 
         // save model
