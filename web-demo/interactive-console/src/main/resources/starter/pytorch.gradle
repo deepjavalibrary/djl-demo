@@ -8,13 +8,10 @@ sourceCompatibility = '11'
 
 repositories {
     jcenter()
-    maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots/"
-    }
 }
 
 dependencies {
-    implementation "ai.djl:api:0.6.0-SNAPSHOT"
-    runtimeOnly "ai.djl.pytorch:pytorch-model-zoo:0.6.0-SNAPSHOT"
+    implementation "ai.djl:api:0.6.0"
+    runtimeOnly "ai.djl.pytorch:pytorch-model-zoo:0.6.0"
     runtimeOnly "ai.djl.pytorch:pytorch-native-auto:1.5.0"
 }
