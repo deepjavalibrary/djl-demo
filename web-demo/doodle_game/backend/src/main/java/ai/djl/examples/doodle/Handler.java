@@ -18,14 +18,12 @@ import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.transform.ToTensor;
-import ai.djl.ndarray.NDArray;
-import ai.djl.ndarray.NDList;
+import ai.djl.modality.cv.translator.ImageClassificationTranslator;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
-import ai.djl.translate.TranslatorContext;
 import ai.djl.util.Utils;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
@@ -63,14 +61,19 @@ public class Handler implements RequestStreamHandler {
                 ImageFactory factory = ImageFactory.getInstance();
                 img = factory.fromInputStream(bis);
             }
-            System.setProperty(
-                    "ai.djl.repository.zoo.location",
-                    "https://alpha-djl-demos.s3.amazonaws.com/model/quickdraw/doodle_mobilenet.zip");
+
+            Translator<Image, Classifications> translator =
+                    ImageClassificationTranslator.builder()
+                            .addTransform(new ToTensor())
+                            .optFlag(Image.Flag.GRAYSCALE)
+                            .optApplySoftmax(true)
+                            .build();
             Criteria<Image, Classifications> criteria =
                     Criteria.builder()
                             .setTypes(Image.class, Classifications.class)
-                            .optArtifactId("ai.djl.localmodelzoo:doodle_mobilenet")
-                            .optTranslator(new DoodleTranslator())
+                            .optModelUrls(
+                                    "https://alpha-djl-demos.s3.amazonaws.com/model/quickdraw/doodle_mobilenet.zip")
+                            .optTranslator(translator)
                             .build();
             ZooModel<Image, Classifications> model = ModelZoo.loadModel(criteria);
             try (Predictor<Image, Classifications> predictor = model.newPredictor()) {
@@ -82,28 +85,6 @@ public class Handler implements RequestStreamHandler {
             logger.log(e.toString());
             String msg = "{\"status\": \"invoke failed: " + e.toString() + "\"}";
             os.write(msg.getBytes(StandardCharsets.UTF_8));
-        }
-    }
-
-    static class DoodleTranslator implements Translator<Image, Classifications> {
-
-        private List<String> synset;
-
-        @Override
-        public Classifications processOutput(TranslatorContext ctx, NDList list) throws Exception {
-            if (synset == null) {
-                synset = ctx.getModel().getArtifact("synset.txt", Utils::readLines);
-            }
-            NDArray array = list.singletonOrThrow();
-            array = array.softmax(0);
-            return new Classifications(synset, array);
-        }
-
-        @Override
-        public NDList processInput(TranslatorContext ctx, Image input) throws Exception {
-            NDArray img = input.toNDArray(ctx.getNDManager(), Image.Flag.GRAYSCALE);
-            img = new ToTensor().transform(img);
-            return new NDList(img);
         }
     }
 }
