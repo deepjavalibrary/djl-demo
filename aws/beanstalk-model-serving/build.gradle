@@ -19,12 +19,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    implementation "ai.djl.pytorch:pytorch-model-zoo:0.6.0-SNAPSHOT"
+    implementation "ai.djl.pytorch:pytorch-model-zoo:0.6.0"
     implementation "ai.djl.pytorch:pytorch-native-auto:1.5.0"
 }
 
 configure(this) {
-    apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
+    apply from: file("${rootProject.projectDir}/../../tools/gradle/formatter.gradle")
 }
 
 task deploy(type: Exec, dependsOn: build) {

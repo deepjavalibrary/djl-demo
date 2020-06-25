@@ -43,7 +43,7 @@ You can get a Smiley Face picture for testing:
 ![Smiley Face](https://github.com/awslabs/djl-resources/raw/master/demo/beanstalk-model-serving/images/smiley.png)
 
 ```shell script
-curl -O https://github.com/awslabs/djl-resources/raw/master/demo/beanstalk-model-serving/images/smiley.png
+curl -O https://raw.githubusercontent.com/awslabs/djl-resources/master/demo/beanstalk-model-serving/images/smiley.png
 curl -X POST -T smiley.png http://localhost:5000/doodle
 
 [
