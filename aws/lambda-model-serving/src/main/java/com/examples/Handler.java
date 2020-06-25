@@ -15,7 +15,8 @@ package com.examples;
 import ai.djl.ModelException;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
-import ai.djl.modality.cv.util.BufferedImageUtils;
+import ai.djl.modality.cv.Image;
+import ai.djl.modality.cv.ImageFactory;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
@@ -26,7 +27,6 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -53,15 +53,15 @@ public class Handler implements RequestStreamHandler {
             String url = request.getInputImageUrl();
             String artifactId = request.getArtifactId();
             Map<String, String> filters = request.getFilters();
-            Criteria<BufferedImage, Classifications> criteria =
+            Criteria<Image, Classifications> criteria =
                     Criteria.builder()
-                            .setTypes(BufferedImage.class, Classifications.class)
+                            .setTypes(Image.class, Classifications.class)
                             .optArtifactId(artifactId)
                             .optFilters(filters)
                             .build();
-            try (ZooModel<BufferedImage, Classifications> model = ModelZoo.loadModel(criteria);
-                    Predictor<BufferedImage, Classifications> predictor = model.newPredictor()) {
-                BufferedImage image = BufferedImageUtils.fromUrl(url);
+            try (ZooModel<Image, Classifications> model = ModelZoo.loadModel(criteria);
+                    Predictor<Image, Classifications> predictor = model.newPredictor()) {
+                Image image = ImageFactory.getInstance().fromUrl(url);
                 List<Classifications.Classification> result = predictor.predict(image).topK(5);
                 os.write(GSON.toJson(result).getBytes(StandardCharsets.UTF_8));
             }

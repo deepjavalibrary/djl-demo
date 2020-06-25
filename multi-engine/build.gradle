@@ -20,9 +20,9 @@ repositories {
 
 dependencies {
     implementation "org.apache.logging.log4j:log4j-slf4j-impl:2.12.1"
-    implementation "ai.djl.pytorch:pytorch-model-zoo:0.6.0-SNAPSHOT"
+    implementation "ai.djl.pytorch:pytorch-model-zoo:0.6.0"
     implementation "ai.djl.pytorch:pytorch-native-auto:1.5.0"
-    implementation "ai.djl.mxnet:mxnet-model-zoo:0.6.0-SNAPSHOT"
+    implementation "ai.djl.mxnet:mxnet-model-zoo:0.6.0"
     implementation "ai.djl.mxnet:mxnet-native-auto:1.7.0-a"
 }
 
