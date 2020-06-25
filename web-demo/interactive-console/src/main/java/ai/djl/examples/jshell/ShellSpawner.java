@@ -53,6 +53,7 @@ public final class ShellSpawner {
                         "slf4j-api-1.7.30.jar",
                         "log4j-api-2.13.2.jar",
                         "log4j-to-slf4j-2.13.2.jar",
+                        "protobuf-java-3.8.0.jar",
                         "javacpp-1.5.3.jar");
         List<String> engines =
                 Arrays.asList(
@@ -62,10 +63,10 @@ public final class ShellSpawner {
                         "mxnet-engine-0.6.0.jar",
                         "mxnet-model-zoo-0.6.0.jar",
                         "mxnet-native-auto-1.7.0-a.jar",
-                        "tensorflow-api-0.5.0.jar",
+                        "tensorflow-api-0.6.0.jar",
                         "tensorflow-engine-0.6.0.jar",
                         "tensorflow-model-zoo-0.6.0.jar",
-                        "tensorflow-native-auto-2.1.0.jar");
+                        "tensorflow-native-auto-2.2.0.jar");
         Path basicDepsDir = dir.resolve("basic");
         extractAndCopy(basicDepsDir, deps);
         Path engineDir = dir.resolve("engines");
