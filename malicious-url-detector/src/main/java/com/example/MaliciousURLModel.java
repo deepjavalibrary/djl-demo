@@ -107,7 +107,7 @@ class MaliciousURLModel {
                 .add(Dropout.builder().optProbability(dropoutProbability).build())
                 .add(Linear.builder().setOutChannels(2).build());
 
-        model = Model.newInstance();
+        model = Model.newInstance(modelName);
         model.setBlock(block);
     }
 
