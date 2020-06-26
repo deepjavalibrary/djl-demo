@@ -12,13 +12,11 @@
  */
 package com.examples
 
-import java.awt.image.BufferedImage
-
-import ai.djl.Application
 import ai.djl.modality.Classifications
+import ai.djl.modality.cv.transform.{Resize, ToTensor}
+import ai.djl.modality.cv.translator.ImageClassificationTranslator
+import ai.djl.modality.cv.{Image, ImageFactory}
 import ai.djl.repository.zoo.{Criteria, ModelZoo}
-import ai.djl.training.util.ProgressBar
-import javax.imageio.ImageIO
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
@@ -35,18 +33,23 @@ object ImageClassificationExample {
 
     val partitions = sc.binaryFiles("images/*")
     // Start assign work for each worker node
-    val result = partitions.mapPartitions( partition => {
+    val result = partitions.mapPartitions(partition => {
+      val modelUrl = "https://alpha-djl-demos.s3.amazonaws.com/model/djl-blockrunner/pytorch_resnet18.zip?model_name=traced_resnet18"
+      // switch to MXNet and TF by uncomment one of the two lines
+      // val modelUrl = "https://alpha-djl-demos.s3.amazonaws.com/model/djl-blockrunner/mxnet_resnet18.zip?model_name=resnet18_v1"
+      // val modelUrl = "https://alpha-djl-demos.s3.amazonaws.com/model/djl-blockrunner/tensorflow_MobileNet.zip"
       val criteria = Criteria.builder
-        .optApplication(Application.CV.IMAGE_CLASSIFICATION)
-        .setTypes(classOf[BufferedImage], classOf[Classifications])
-        .optFilter("dataset", "imagenet")
-        .optFilter("layers", "50")
-        .optProgress(new ProgressBar)
+        .setTypes(classOf[Image], classOf[Classifications])
+        .optModelUrls(modelUrl)
+        .optTranslator(ImageClassificationTranslator
+          .builder.addTransform(new Resize(224, 224))
+          .addTransform(new ToTensor)
+          .optApplySoftmax(true).build)
         .build
       val model = ModelZoo.loadModel(criteria)
       val predictor = model.newPredictor()
       partition.map(streamData => {
-        val img = ImageIO.read(streamData._2.open())
+        val img = ImageFactory.getInstance().fromInputStream(streamData._2.open())
         predictor.predict(img).toString
       })
     })

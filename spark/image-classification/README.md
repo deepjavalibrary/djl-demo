@@ -17,14 +17,14 @@ We use PyTorch engine by default, you can switch to MXNet or TensorFlow Engine a
 
 #### MXNet
 ```
-libraryDependencies += "ai.djl.mxnet" % "mxnet-model-zoo" % "0.5.0"
+libraryDependencies += "ai.djl.mxnet" % "mxnet-model-zoo" % "0.6.0"
 libraryDependencies += "ai.djl.mxnet" % "mxnet-native-auto" % "1.7.0-a"
 ```
 
 #### TensorFlow
 ```
-libraryDependencies += "ai.djl.tensorflow" % "tensorflow-model-zoo" % "0.5.0"
-libraryDependencies += "ai.djl.tensorflow" % "tensorflow-native-auto" % "2.1.0"
+libraryDependencies += "ai.djl.tensorflow" % "tensorflow-model-zoo" % "0.6.0"
+libraryDependencies += "ai.djl.tensorflow" % "tensorflow-native-auto" % "2.2.0"
 ```
 
 ### gradle
@@ -33,14 +33,14 @@ You should add these in `dependencies`
 
 #### MXNet
 ```
-runtimeOnly "ai.djl.mxnet:mxnet-model-zoo:0.5.0"
+runtimeOnly "ai.djl.mxnet:mxnet-model-zoo:0.6.0"
 runtimeOnly "ai.djl.mxnet:mxnet-native-auto:1.7.0-a"
 ```
 
 #### TensorFlow
 ```
-runtimeOnly "ai.djl.tensorflow:tensorflow-model-zoo:0.5.0"
-runtimeOnly "ai.djl.tensorflow:tensorflow-native-auto:2.1.0"
+runtimeOnly "ai.djl.tensorflow:tensorflow-model-zoo:0.6.0"
+runtimeOnly "ai.djl.tensorflow:tensorflow-native-auto:2.2.0"
 ```
 
 Apart from that, you may also need to use `NaiveEngine` mode in MXNet for multi-thread inference.
