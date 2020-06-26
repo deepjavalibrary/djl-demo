@@ -15,6 +15,7 @@ package com.examples
 import ai.djl.ndarray.types.{DataType, Shape}
 import ai.djl.ndarray.{NDArrays, NDList}
 import ai.djl.repository.zoo.{Criteria, ModelZoo, ZooModel}
+import ai.djl.training.util.ProgressBar
 import ai.djl.translate.{Batchifier, Translator, TranslatorContext}
 import org.apache.spark.{SparkConf, SparkContext}
 
@@ -34,6 +35,7 @@ object DataProcessExample {
       .setTypes(classOf[Array[Int]], classOf[String])
       .optModelUrls(modelUrl)
       .optTranslator(new MyTranslator)
+      .optProgress(new ProgressBar)
       .build()
     // load torchscript traced model
     ModelZoo.loadModel(criteria)
