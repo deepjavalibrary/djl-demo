@@ -12,13 +12,9 @@
  */
 package com.examples
 
-import java.nio.file.Paths
-
-import ai.djl.Model
-import ai.djl.ndarray.{NDArrays, NDList}
 import ai.djl.ndarray.types.{DataType, Shape}
-import ai.djl.training.util.DownloadUtils
-import ai.djl.training.util.ProgressBar
+import ai.djl.ndarray.{NDArrays, NDList}
+import ai.djl.repository.zoo.{Criteria, ModelZoo, ZooModel}
 import ai.djl.translate.{Batchifier, Translator, TranslatorContext}
 import org.apache.spark.{SparkConf, SparkContext}
 
@@ -27,20 +23,20 @@ import org.apache.spark.{SparkConf, SparkContext}
  */
 object DataProcessExample {
 
-  private lazy val model: Model = loadModel()
+  private lazy val model = loadModel()
 
-  def downloadModel(): Unit = {
-    DownloadUtils.download("https://djl-ai.s3.amazonaws.com/mlrepo/model/cv/image_classification/ai/djl/pytorch/resnet/0.0.1/traced_resnet18.pt.gz",
-      "out/resnet18.pt", new ProgressBar())
-  }
-
-  def loadModel(): Model = {
-    downloadModel()
-    // initialize engine
-    val model = Model.newInstance()
+  def loadModel(): ZooModel[Array[Int], String] = {
+    val modelUrl = "https://alpha-djl-demos.s3.amazonaws.com/model/djl-blockrunner/pytorch_resnet18.zip?model_name=traced_resnet18"
+    // switch to MXNet and TF by uncomment one of the two lines
+    // val modelUrl = "https://alpha-djl-demos.s3.amazonaws.com/model/djl-blockrunner/mxnet_resnet18.zip?model_name=resnet18_v1"
+    // val modelUrl = "https://alpha-djl-demos.s3.amazonaws.com/model/djl-blockrunner/tensorflow_MobileNet.zip"
+    val criteria = Criteria.builder
+      .setTypes(classOf[Array[Int]], classOf[String])
+      .optModelUrls(modelUrl)
+      .optTranslator(new MyTranslator)
+      .build()
     // load torchscript traced model
-    model.load(Paths.get("out/resnet18.pt"))
-    model
+    ModelZoo.loadModel(criteria)
   }
 
   // Translator: a class used to do preprocessing and post processing
@@ -69,6 +65,8 @@ object DataProcessExample {
       val result = list.singletonOrThrow()
       "This is the output"
     }
+
+    override def getBatchifier: Batchifier = Batchifier.STACK
   }
 
   def main(args: Array[String]) {
@@ -81,9 +79,9 @@ object DataProcessExample {
 
     val partitions = sc.binaryFiles("images/*")
     // Start assign work for each worker node
-    val result = partitions.mapPartitions( partition => {
+    val result = partitions.mapPartitions(partition => {
       // We need to make sure predictor are spawned on a executor basis to save memory
-      val predictor = model.newPredictor(new MyTranslator)
+      val predictor = model.newPredictor()
       partition.map(streamData => {
         val data = Array(1, 2, 3)
         predictor.predict(data)
