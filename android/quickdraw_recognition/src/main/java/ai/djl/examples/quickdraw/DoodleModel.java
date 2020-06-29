@@ -13,52 +13,44 @@
 
 package ai.djl.examples.quickdraw;
 
-import android.graphics.Bitmap;
-
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
-import ai.djl.MalformedModelException;
 import ai.djl.Model;
-import ai.djl.inference.Predictor;
+import ai.djl.ModelException;
 import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.Image;
-import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.transform.ToTensor;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
+import ai.djl.ndarray.NDManager;
+import ai.djl.repository.zoo.Criteria;
+import ai.djl.repository.zoo.ModelZoo;
+import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.Batchifier;
-import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 import ai.djl.translate.TranslatorContext;
+import ai.djl.util.Utils;
 
 final class DoodleModel {
 
-    private Predictor<Bitmap, Classifications> predictor;
-
-    DoodleModel(Path directory) throws IOException, MalformedModelException {
-        Model model = Model.newInstance("doodle_mobilenet");
-        model.load(directory);
-        predictor = model.newPredictor(new DoodleTranslator(directory));
+    private DoodleModel() {
     }
 
-    Classifications predict(Bitmap bitmap) {
-        try {
-            return predictor.predict(bitmap);
-        } catch (TranslateException e) {
-           throw new IllegalStateException("Failed translation", e);
-        }
+    public static ZooModel<Image, Classifications> loadModel() throws ModelException, IOException {
+        DoodleTranslator translator = new DoodleTranslator();
+        Criteria<Image, Classifications> criteria =
+                Criteria.builder()
+                        .setTypes(Image.class, Classifications.class)
+                        .optModelUrls("https://djl-ai.s3.amazonaws.com/resources/demo/pytorch/doodle_mobilenet.zip")
+                        .optTranslator(translator)
+                        .build();
+        return ModelZoo.loadModel(criteria);
     }
 
-    private static class DoodleTranslator implements Translator<Bitmap, Classifications> {
+    private static class DoodleTranslator implements Translator<Image, Classifications> {
 
         private List<String> synset;
-
-        private DoodleTranslator(Path directory) throws IOException {
-            synset = Files.readAllLines(directory.resolve("synset.txt"));
-        }
 
         @Override
         public Classifications processOutput(TranslatorContext ctx, NDList list) {
@@ -68,10 +60,16 @@ final class DoodleModel {
         }
 
         @Override
-        public NDList processInput(TranslatorContext ctx, Bitmap input) {
-            Image image = ImageFactory.getInstance().fromImage(input);
+        public NDList processInput(TranslatorContext ctx, Image image) {
             NDArray array = image.toNDArray(ctx.getNDManager(), Image.Flag.GRAYSCALE);
             return new NDList(new ToTensor().transform(array));
+        }
+
+        @Override
+        public void prepare(NDManager manager, Model model) throws IOException {
+            if (synset == null) {
+                synset = model.getArtifact("synset.txt", Utils::readLines);
+            }
         }
 
         @Override
