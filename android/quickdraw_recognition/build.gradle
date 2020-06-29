@@ -32,21 +32,6 @@ android {
     }
 }
 
-task downloadModel {
-    doLast {
-        def url = "https://alpha-djl-demos.s3.amazonaws.com/model/quickdraw"
-        def files = ["doodle_mobilenet.pt", "synset.txt"]
-        files.each{ entry ->
-            project.logger.lifecycle("Downloading ${url}/${entry}")
-            def file = new File("${project.projectDir}/src/main/assets/models/${entry}")
-            file.getParentFile().mkdirs()
-            new URL("${url}/${entry}").withInputStream { i -> file.withOutputStream { it << i } }
-        }
-    }
-}
-
-assemble.dependsOn downloadModel
-
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

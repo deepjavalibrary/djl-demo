@@ -21,36 +21,46 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-import ai.djl.MalformedModelException;
+import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
+import ai.djl.modality.cv.Image;
+import ai.djl.modality.cv.ImageFactory;
+import ai.djl.translate.TranslateException;
 
 public final class PaintView extends View {
 
-    public static int BRUSH_SIZE = 20;
-    public static final int DEFAULT_PAINT_COLOR = Color.WHITE;
-    public static final int DEFAULT_BG_COLOR = Color.BLACK;
+    private static final int BRUSH_SIZE = 20;
+    private static final int DEFAULT_PAINT_COLOR = Color.WHITE;
+    private static final int DEFAULT_BG_COLOR = Color.BLACK;
+
     private static final float TOUCH_TOLERANCE = 4;
-    private float x, y;
+    private static final ColorDrawable BACKGROUND = new ColorDrawable(Color.BLACK);
+
+    private float x;
+    private float y;
     private Path path;
     private Paint paint;
     private ArrayList<Path> paths = new ArrayList<>();
     private Bitmap bitmap;
     private Canvas canvas;
     private Paint bitmapPaint = new Paint(Paint.DITHER_FLAG);
-    private Toast messageToast;
     private ImageView imageView;
+    private TextView textView;
     private Bound maxBound;
-    private DoodleModel model;
+    private ImageFactory factory;
+    private Predictor<Image, Classifications> predictor;
 
     public PaintView(Context context) {
         this(context, null);
@@ -58,6 +68,7 @@ public final class PaintView extends View {
 
     public PaintView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        factory = ImageFactory.getInstance();
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setDither(true);
@@ -68,25 +79,32 @@ public final class PaintView extends View {
         paint.setAlpha(0xff);
     }
 
-    public void init(DisplayMetrics metrics, ImageView imageView, java.nio.file.Path path) {
+    @Override
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        int width = getMeasuredWidth();
+        int height = getMeasuredHeight();
+        int size = Math.min(width, height);
+        setMeasuredDimension(size, size);
+    }
+
+    public void init(DisplayMetrics metrics, ImageView imageView, TextView textView, Predictor<Image, Classifications> predictor) {
+        this.imageView = imageView;
+        this.textView = textView;
+        this.predictor = predictor;
         int width = metrics.widthPixels;
         int height = Math.min(width, metrics.heightPixels);
-        this.imageView = imageView;
 
         maxBound = new Bound();
         bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(bitmap);
-        try {
-            model = new DoodleModel(path);
-        } catch (IOException | MalformedModelException e) {
-            throw new IllegalArgumentException("Model load failed", e);
-        }
     }
 
     public void clear() {
         paths.clear();
         maxBound = new Bound();
-        imageView.invalidate();
+        imageView.setImageDrawable(BACKGROUND);
         invalidate();
     }
 
@@ -139,15 +157,20 @@ public final class PaintView extends View {
         Bitmap bmp = Bitmap.createBitmap(bitmap, x - 10, y - 10, width + 10, height + 10);
         // do scaling
         bmp = Bitmap.createScaledBitmap(bmp, 64, 64, true);
-        if (messageToast != null) {
-            messageToast.cancel();
-        }
-        Classifications classifications = model.predict(bmp);
-        Bitmap present = Bitmap.createScaledBitmap(bmp, imageView.getWidth(), imageView.getHeight(), true);
-        imageView.setImageBitmap(present);
+        try {
+            Classifications classifications = predictor.predict(factory.fromImage(bmp));
+            Bitmap present = Bitmap.createScaledBitmap(bmp, imageView.getWidth(), imageView.getHeight(), true);
+            imageView.setImageBitmap(present);
 
-        messageToast = Toast.makeText(getContext(), classifications.toString(), Toast.LENGTH_SHORT);
-        messageToast.show();
+            List<Classifications.Classification> list = classifications.topK(3);
+            StringBuilder sb = new StringBuilder();
+            for (Classifications.Classification classification : list) {
+                sb.append(classification.toString()).append("\n");
+            }
+            textView.setText(sb.toString());
+        } catch (TranslateException e) {
+            Log.e("DoodleDraw", null, e);
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -156,16 +179,16 @@ public final class PaintView extends View {
         float x = event.getX();
         float y = event.getY();
 
-        switch(event.getAction()) {
-            case MotionEvent.ACTION_DOWN :
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
                 touchStart(x, y);
                 invalidate();
                 break;
-            case MotionEvent.ACTION_MOVE :
+            case MotionEvent.ACTION_MOVE:
                 touchMove(x, y);
                 invalidate();
                 break;
-            case MotionEvent.ACTION_UP :
+            case MotionEvent.ACTION_UP:
                 touchUp();
                 runInference();
                 invalidate();
