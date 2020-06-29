@@ -72,7 +72,7 @@ public class Handler implements RequestStreamHandler {
                     Criteria.builder()
                             .setTypes(Image.class, Classifications.class)
                             .optModelUrls(
-                                    "https://alpha-djl-demos.s3.amazonaws.com/model/quickdraw/doodle_mobilenet.zip")
+                                    "https://djl-ai.s3.amazonaws.com/resources/demo/pytorch/doodle_mobilenet.zip")
                             .optTranslator(translator)
                             .build();
             ZooModel<Image, Classifications> model = ModelZoo.loadModel(criteria);

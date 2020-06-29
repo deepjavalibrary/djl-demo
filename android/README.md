@@ -18,10 +18,10 @@ This application demos how user can import PyTorch model and run inference on th
 The minimum API level for this project is 26.
 
 ### Setup
-Please run this task before build:
-
+Use the following command to install this app on your Android phone:
 ```
-./gradlew :quickdraw_recognition:downloadModel
+cd quickdraw_recognition
+./gradlew iD
 ```
 
-It will download the pretrained model into assets.
+It will install the application your Android phone.
