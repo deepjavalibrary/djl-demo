@@ -15,6 +15,7 @@ package ai.djl.examples.quickdraw;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -23,6 +24,7 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -30,7 +32,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.core.content.FileProvider;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,13 +60,15 @@ public final class PaintView extends View {
     private float x;
     private float y;
     private Path path;
-    private Paint paint;
     private ArrayList<Path> paths = new ArrayList<>();
     private Bitmap bitmap;
     private Canvas canvas;
+    private Paint paint;
     private Paint bitmapPaint = new Paint(Paint.DITHER_FLAG);
+    private Paint textPaint;
     private ImageView imageView;
     private TextView textView;
+    private int textSize;
     private Bound maxBound;
     private ImageFactory factory;
     private Predictor<Image, Classifications> predictor;
@@ -78,6 +88,11 @@ public final class PaintView extends View {
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setAlpha(0xff);
+        textSize = context.getResources().getDimensionPixelSize(R.dimen.text_size);
+        textPaint = new Paint();
+        textPaint.setColor(Color.WHITE);
+        textPaint.setAntiAlias(true);
+        textPaint.setTextSize(textSize);
     }
 
     public void init(DisplayMetrics metrics, ImageView imageView, TextView textView, Predictor<Image, Classifications> predictor) {
@@ -97,6 +112,51 @@ public final class PaintView extends View {
         maxBound = new Bound();
         imageView.setImageDrawable(BACKGROUND);
         invalidate();
+    }
+
+    public void share() {
+        Context context = getContext();
+        String result = textView.getText().toString();
+        if (result.isEmpty()) {
+            Toast.makeText(context, "Please draw something first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String[] lines = result.split("\n");
+
+        int width = getWidth();
+        int height = getHeight();
+        int newHeight = height + 6 * textSize;
+        Bitmap newBitmap = Bitmap.createBitmap(width, newHeight, Bitmap.Config.ARGB_8888);
+        Canvas newCanvas = new Canvas(newBitmap);
+        newCanvas.drawColor(Color.BLACK);
+        newCanvas.drawBitmap(bitmap, 0, 0, null);
+        textPaint.setTextAlign(Paint.Align.LEFT);
+        int position = height;
+        for (String line : lines) {
+            newCanvas.drawText(line, textSize, position, textPaint);
+            position += textSize;
+        }
+        textPaint.setTextAlign(Paint.Align.RIGHT);
+        newCanvas.drawText("Powered by DJL (https://djl.ai)", width - textSize, position, textPaint);
+
+        File cachePath = new File(context.getCacheDir(), "images");
+        cachePath.mkdirs();
+        try (FileOutputStream is = new FileOutputStream(cachePath + "/image.png")) {
+            newBitmap.compress(Bitmap.CompressFormat.PNG, 100, is);
+        } catch (IOException e) {
+            Log.e("DoodleDraw", null, e);
+        }
+        File imagePath = new File(context.getCacheDir(), "images");
+        File newFile = new File(imagePath, "image.png");
+        Uri contentUri = FileProvider.getUriForFile(context, "ai.djl.examples.quickdraw.fileprovider", newFile);
+        if (contentUri != null) {
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            shareIntent.setDataAndType(contentUri, context.getContentResolver().getType(contentUri));
+            shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+            context.startActivity(Intent.createChooser(shareIntent, "Choose an app"));
+        }
     }
 
     @Override
@@ -158,7 +218,10 @@ public final class PaintView extends View {
             List<Classifications.Classification> list = classifications.topK(3);
             StringBuilder sb = new StringBuilder();
             for (Classifications.Classification classification : list) {
-                sb.append(classification.toString()).append("\n");
+                sb.append(classification.getClassName())
+                        .append(": ")
+                        .append(String.format("%.2f%%", 100 * classification.getProbability()))
+                        .append("\n");
             }
             textView.setText(sb.toString());
         } catch (TranslateException e) {

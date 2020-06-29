@@ -62,6 +62,8 @@ public class DoodleDrawActivity extends AppCompatActivity implements View.OnClic
 
         Button clear = findViewById(R.id.clear);
         clear.setOnClickListener(this);
+        Button share = findViewById(R.id.share);
+        share.setOnClickListener(this);
 
         new UnpackTask().execute();
     }
@@ -79,8 +81,13 @@ public class DoodleDrawActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        textView.setText("");
-        paintView.clear();
+        int viewId = v.getId();
+        if (viewId == R.id.clear) {
+            textView.setText("");
+            paintView.clear();
+        } else if (viewId == R.id.share) {
+            paintView.share();
+        }
     }
 
     @SuppressLint("StaticFieldLeak")
