@@ -20,6 +20,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
@@ -79,16 +80,6 @@ public final class PaintView extends View {
         paint.setAlpha(0xff);
     }
 
-    @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        int width = getMeasuredWidth();
-        int height = getMeasuredHeight();
-        int size = Math.min(width, height);
-        setMeasuredDimension(size, size);
-    }
-
     public void init(DisplayMetrics metrics, ImageView imageView, TextView textView, Predictor<Image, Classifications> predictor) {
         this.imageView = imageView;
         this.textView = textView;
@@ -132,6 +123,9 @@ public final class PaintView extends View {
     }
 
     private void touchMove(float x, float y) {
+        if (x < 0 || x > getWidth() || y < 0 || y > getHeight()) {
+            return;
+        }
         float dx = Math.abs(x - this.x);
         float dy = Math.abs(y - this.y);
 
@@ -149,18 +143,22 @@ public final class PaintView extends View {
 
     public void runInference() {
         RectF bound = maxBound.getBound();
-        int x = (int) Math.floor(bound.left);
-        int y = (int) Math.floor(bound.top);
+        int x = (int) bound.left;
+        int y = (int) bound.top;
         int width = (int) Math.ceil(bound.width());
         int height = (int) Math.ceil(bound.height());
-        // do crop
-        Bitmap bmp = Bitmap.createBitmap(bitmap, x - 10, y - 10, width + 10, height + 10);
+        Bitmap bmp = Bitmap.createBitmap(width + 20, height + 20, bitmap.getConfig());
+        Canvas canvas = new Canvas(bmp);
+        canvas.drawColor(Color.BLACK);
+        canvas.drawBitmap(bitmap,
+                new Rect(x, y, (int) Math.ceil(bound.right), (int) Math.ceil(bound.bottom)),
+                new Rect(10, 10, width, height),
+                null);
         // do scaling
-        bmp = Bitmap.createScaledBitmap(bmp, 64, 64, true);
+        Bitmap bmp64 = Bitmap.createScaledBitmap(bmp, 64, 64, true);
         try {
-            Classifications classifications = predictor.predict(factory.fromImage(bmp));
-            Bitmap present = Bitmap.createScaledBitmap(bmp, imageView.getWidth(), imageView.getHeight(), true);
-            imageView.setImageBitmap(present);
+            Classifications classifications = predictor.predict(factory.fromImage(bmp64));
+            imageView.setImageBitmap(bmp);
 
             List<Classifications.Classification> list = classifications.topK(3);
             StringBuilder sb = new StringBuilder();
