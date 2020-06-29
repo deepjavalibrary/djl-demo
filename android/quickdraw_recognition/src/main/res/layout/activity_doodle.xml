@@ -13,7 +13,7 @@
         android:layout_centerInParent="true"
         android:gravity="center" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,35 +21,22 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <ai.djl.examples.quickdraw.PaintView
-            android:id="@+id/paintView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/msgText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/border"
-            android:padding="3dp"
-            android:lines="3"
-            android:text="" />
-
         <RelativeLayout
+            android:id="@+id/bottom"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="166dp"
+            android:layout_alignParentBottom="true">
 
             <ImageView
                 android:id="@+id/doodle"
-                android:layout_width="151dp"
+                android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_alignParentEnd="true"
-                android:layout_centerInParent="true"
-                android:layout_marginEnd="20dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="16dp"
                 android:contentDescription="@string/preview"
-                android:src="@android:color/black" />
+                android:src="@android:color/black"
+                android:scaleType="fitXY"/>
 
             <Button
                 android:id="@+id/clear"
@@ -61,5 +48,24 @@
                 android:text="@string/clear"
                 tools:ignore="RelativeOverlap" />
         </RelativeLayout>
-    </LinearLayout>
+
+        <TextView
+            android:id="@+id/msgText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/bottom"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/border"
+            android:lines="3"
+            android:padding="3dp"
+            android:text="" />
+
+        <ai.djl.examples.quickdraw.PaintView
+            android:id="@+id/paintView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/msgText"
+            android:layout_alignParentTop="true" />
+
+    </RelativeLayout>
 </RelativeLayout>
