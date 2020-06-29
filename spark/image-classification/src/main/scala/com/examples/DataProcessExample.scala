@@ -27,10 +27,10 @@ object DataProcessExample {
   private lazy val model = loadModel()
 
   def loadModel(): ZooModel[Array[Int], String] = {
-    val modelUrl = "https://alpha-djl-demos.s3.amazonaws.com/model/djl-blockrunner/pytorch_resnet18.zip?model_name=traced_resnet18"
+    val modelUrl = "https://djl-ai.s3.amazonaws.com/resources/demo/pytorch/traced_resnet18.zip"
     // switch to MXNet and TF by uncomment one of the two lines
-    // val modelUrl = "https://alpha-djl-demos.s3.amazonaws.com/model/djl-blockrunner/mxnet_resnet18.zip?model_name=resnet18_v1"
-    // val modelUrl = "https://alpha-djl-demos.s3.amazonaws.com/model/djl-blockrunner/tensorflow_MobileNet.zip"
+    // val modelUrl = "https://djl-ai.s3.amazonaws.com/resources/demo/mxnet/resnet18_v1.zip"
+    // val modelUrl = "https://djl-ai.s3.amazonaws.com/resources/demo/tensorflow/tensorflow_MobileNet.zip"
     val criteria = Criteria.builder
       .setTypes(classOf[Array[Int]], classOf[String])
       .optModelUrls(modelUrl)

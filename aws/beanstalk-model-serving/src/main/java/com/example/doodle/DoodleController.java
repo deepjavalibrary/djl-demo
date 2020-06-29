@@ -45,7 +45,7 @@ public class DoodleController {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String MODEL_URL =
-            "https://alpha-djl-demos.s3.amazonaws.com/model/quickdraw/doodle_mobilenet.zip";
+            "https://djl-ai.s3.amazonaws.com/resources/demo/pytorch/doodle_mobilenet.zip";
 
     @Autowired ZooModel<Image, Classifications> model;
 
