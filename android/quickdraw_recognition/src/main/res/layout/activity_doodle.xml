@@ -35,16 +35,26 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginTop="16dp"
                 android:contentDescription="@string/preview"
-                android:src="@android:color/black"
-                android:scaleType="fitXY"/>
+                android:scaleType="fitXY"
+                android:src="@android:color/black" />
+
+            <Button
+                android:id="@+id/share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="20dp"
+                android:text="@string/share"
+                tools:ignore="RelativeOverlap" />
 
             <Button
                 android:id="@+id/clear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="20dp"
+                android:layout_above="@+id/share"
+                android:layout_alignStart="@+id/share"
+                android:layout_alignEnd="@+id/share"
                 android:text="@string/clear"
                 tools:ignore="RelativeOverlap" />
         </RelativeLayout>
