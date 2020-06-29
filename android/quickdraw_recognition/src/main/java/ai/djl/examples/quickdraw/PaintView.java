@@ -147,13 +147,8 @@ public final class PaintView extends View {
         int y = (int) bound.top;
         int width = (int) Math.ceil(bound.width());
         int height = (int) Math.ceil(bound.height());
-        Bitmap bmp = Bitmap.createBitmap(width + 20, height + 20, bitmap.getConfig());
-        Canvas canvas = new Canvas(bmp);
-        canvas.drawColor(Color.BLACK);
-        canvas.drawBitmap(bitmap,
-                new Rect(x, y, (int) Math.ceil(bound.right), (int) Math.ceil(bound.bottom)),
-                new Rect(10, 10, width, height),
-                null);
+        // do crop
+        Bitmap bmp = Bitmap.createBitmap(bitmap, x, y, width, height);
         // do scaling
         Bitmap bmp64 = Bitmap.createScaledBitmap(bmp, 64, 64, true);
         try {
