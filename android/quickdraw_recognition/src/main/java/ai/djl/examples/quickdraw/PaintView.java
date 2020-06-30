@@ -21,7 +21,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -201,6 +200,7 @@ public final class PaintView extends View {
         maxBound.add(new Path(path));
     }
 
+    @SuppressLint("DefaultLocale")
     public void runInference() {
         RectF bound = maxBound.getBound();
         int x = (int) bound.left;
