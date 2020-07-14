@@ -35,8 +35,12 @@ public class Inference {
         Path modelDir = Paths.get("models");
 
         // the path of image to classify
-        // 0-boots; 1-sandals; 2-shoes; 3-slippers
-        String imageFilePath = "images/Sandals/110101.32.jpg";
+        String imageFilePath;
+        if (args.length == 0) {
+            imageFilePath = "ut-zap50k-images-square/Sandals/110101.32.jpg";
+        } else {
+            imageFilePath = args[0];
+        }
 
         // Load the image file from the path
         Image img = ImageFactory.getInstance().fromFile(Paths.get(imageFilePath));

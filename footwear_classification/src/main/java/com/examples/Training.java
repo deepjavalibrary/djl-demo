@@ -18,7 +18,6 @@ import ai.djl.metric.Metrics;
 import ai.djl.modality.cv.transform.Resize;
 import ai.djl.modality.cv.transform.ToTensor;
 import ai.djl.ndarray.types.Shape;
-import ai.djl.repository.Repository;
 import ai.djl.training.DefaultTrainingConfig;
 import ai.djl.training.EasyTrain;
 import ai.djl.training.Trainer;
@@ -28,7 +27,6 @@ import ai.djl.training.dataset.RandomAccessDataset;
 import ai.djl.training.evaluator.Accuracy;
 import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
-import ai.djl.translate.Pipeline;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,14 +43,14 @@ public final class Training {
     private static final int BATCH_SIZE = 32;
 
     // the number of passes over the complete dataset
-    private static final int EPOCHS = 10;
+    private static final int EPOCHS = 2;
 
     public static void main(String[] args) throws IOException {
         // the location to save the model
         Path modelDir = Paths.get("models");
 
         // create ImageFolder dataset from directory
-        ImageFolder dataset = initDataset("images");
+        ImageFolder dataset = initDataset("ut-zap50k-images-square");
         // Split the dataset set into training dataset and validate dataset
         RandomAccessDataset[] datasets = dataset.randomSplit(8, 2);
 
@@ -98,12 +96,10 @@ public final class Training {
         ImageFolder dataset =
                 ImageFolder.builder()
                         // retrieve the data
-                        .setRepository(Repository.newInstance("footwear", Paths.get(datasetRoot)))
-                        .optPipeline(
-                                // create preprocess pipeline
-                                new Pipeline()
-                                        .add(new Resize(Models.IMAGE_WIDTH, Models.IMAGE_HEIGHT))
-                                        .add(new ToTensor()))
+                        .setRepositoryPath(Paths.get(datasetRoot))
+                        .optMaxDepth(10)
+                        .addTransform(new Resize(Models.IMAGE_WIDTH, Models.IMAGE_HEIGHT))
+                        .addTransform(new ToTensor())
                         // random sampling; don't process the data in order
                         .setSampling(BATCH_SIZE, true)
                         .build();

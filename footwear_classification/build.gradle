@@ -1,6 +1,5 @@
 plugins {
     id "java"
-    id "application"
 }
 
 group "com.example"
@@ -10,26 +9,34 @@ sourceCompatibility = 1.8
 
 repositories {
     jcenter()
+    mavenLocal()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
 }
 
 dependencies {
-    implementation "ai.djl:model-zoo:0.6.0"
-    implementation "ai.djl:basicdataset:0.6.0"
+    implementation platform("ai.djl:bom:0.7.0-SNAPSHOT")
+    implementation "ai.djl:model-zoo"
+    implementation "ai.djl:basicdataset"
     implementation "org.slf4j:slf4j-simple:1.7.30"
-    runtimeOnly "ai.djl.mxnet:mxnet-engine:0.6.0"
-    runtimeOnly "ai.djl.mxnet:mxnet-native-auto:1.7.0-a"
+    runtimeOnly "ai.djl.mxnet:mxnet-engine"
+    runtimeOnly "ai.djl.mxnet:mxnet-native-auto"
 }
 
-application {
-    mainClassName = System.getProperty("main", "com.examples.Training")
-}
-
-run {
+task training(type: JavaExec) {
     systemProperties System.getProperties()
     systemProperties.remove("user.dir")
-    systemProperty("file.encoding", "UTF-8")
+    classpath = sourceSets.main.runtimeClasspath
+    main = "com.examples.Training"
 }
-tasks.distTar.enabled = false
+
+task inference(type: JavaExec) {
+    systemProperties System.getProperties()
+    systemProperties.remove("user.dir")
+    classpath = sourceSets.main.runtimeClasspath
+    main = "com.examples.Inference"
+}
 
 configure(this) {
     apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
