@@ -37,7 +37,7 @@ public class Inference {
         // the path of image to classify
         String imageFilePath;
         if (args.length == 0) {
-            imageFilePath = "ut-zap50k-images-square/Sandals/110101.32.jpg";
+            imageFilePath = "ut-zap50k-images-square/Sandals/Heel/Annie/7350693.3.jpg";
         } else {
             imageFilePath = args[0];
         }
