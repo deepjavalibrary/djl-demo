@@ -38,3 +38,7 @@ Contains Spark image classification demos.
 ## [Use multiple engines in single JVM](multi-engine/README.md)
 
 An example application that runs multiple deep learning frameworks in one Java Process.
+
+## [DJL Component in Apache Camel](camel-djl/README.md)
+
+An example application that demonstrates simple HTTP-service to classify images using Zoo Model.
