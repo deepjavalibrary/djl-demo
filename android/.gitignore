@@ -1,6 +1,8 @@
 *.iml
 /local.properties
 /captures
+keystore
 .externalNativeBuild
 .cxx
 quickdraw_recognition/src/main/assets/
+quickdraw_recognition/release/
