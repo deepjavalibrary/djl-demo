@@ -68,7 +68,7 @@
                             <imageName>image-classification</imageName>
                             <mainClass>${exec.mainClass}</mainClass>
                             <buildArgs>--no-fallback --allow-incomplete-classpath --enable-https --verbose
-                                -H:+TraceClassInitialization
+                                -H:+TraceClassInitialization --report-unsupported-elements-at-runtime
                             </buildArgs>
                         </configuration>
                         <executions>
