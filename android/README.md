@@ -19,9 +19,15 @@ The minimum API level for this project is 26.
 
 ### Setup
 Use the following command to install this app on your Android phone:
+
 ```
 cd quickdraw_recognition
+
+# for Linux/macOS
 ./gradlew iD
+
+# for Windows
+..\gradlew iD
 ```
 
 It will install the application your Android phone.

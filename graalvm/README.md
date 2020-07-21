@@ -12,19 +12,22 @@ This is an example to demonstrate how to use Deep Java Library to run a TensorFl
 Follows the [GraalVM installation instruction](https://www.graalvm.org/getting-started/#install-graalvm) to set up
 GraalVM on your system. Make sure the `native-image` tool also gets installed:
 - Configure $GRAALVM_HOME and $JAVA_HOME environment variable to the location you installed
-    ```shell script
+
+    ```shell
     # for example:
     export $GRAALVM_HOME=/path/to/graalvm/
     export $JAVA_HOME=$GRAALVM_HOME
     ```
 - [native-image](https://www.graalvm.org/getting-started/#native-images) is installed
-    ```shell script
+
+    ```shell
     $GRAAL_HOME/bin/gu install native-image
     ```
 
 ## Build and run the application
 Run the following command to build the project and run:
-```shell script
+
+```shell
 # set environment variable to suppress TensorFlow logging:
 export TF_CPP_MIN_LOG_LEVEL=1
 
@@ -43,15 +46,20 @@ export TF_CPP_MIN_LOG_LEVEL=1
 ## Build native image
 
 Run the following command to build the native executable for this project:
-```shell script
+
+```shell
+# build native iamge with TensorFlow engine
 ./mvnw clean package -Pnative -Ptensorflow
+
+# build native iamge with PyTorch engine
+./mvnw clean package -Pnative -Ppytorch
 ```
 
 You will find a native executable file generated: `target/image-classification`
 
 # Run application
 
-```shell script
+```shell
 # set environment variable to suppress TensorFlow logging:
 export TF_CPP_MIN_LOG_LEVEL=1
 target/image-classification
