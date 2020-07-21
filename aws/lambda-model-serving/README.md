@@ -19,9 +19,15 @@ probabilities using a pre-trained MXNet model.
 
 ## Build and deploy to AWS
 Run the following command to deploy to AWS:
+
 ```shell script
 cd lambda-model-serving
+
+# for Linux/macOS:
 ./gradlew deploy
+
+# for Windows:
+..\..\gradlew deploy
 ```
 
 Above command will create:
@@ -64,7 +70,7 @@ The output will be stored in output.json file:
 
 ## Clean up
 Use the following command to clean up resources created in your AWS account:
-```shell script
+```shell
 ./cleanup.sh
 ```
 

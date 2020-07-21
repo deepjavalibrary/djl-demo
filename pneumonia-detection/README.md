@@ -26,7 +26,7 @@ download and unzip it.
 
 ### Run prediction
 
-run the following command:
+run the following command for linux/macOS:
 
 ```
 mkdir models
@@ -35,6 +35,17 @@ curl https://djl-ai.s3.amazonaws.com/resources/demo/pneumonia-detection-model/sa
 cd ..
 
 ./gradlew run -Dai.djl.repository.zoo.location=models/saved_model
+```
+
+run the following command for Windows:
+
+```
+mkdir models
+cd models
+curl https://djl-ai.s3.amazonaws.com/resources/demo/pneumonia-detection-model/saved_model.zip | jar xv
+cd ..
+
+..\gradlew run -Dai.djl.repository.zoo.location=models/saved_model
 ```
 
 

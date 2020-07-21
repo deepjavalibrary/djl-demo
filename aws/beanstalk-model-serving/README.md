@@ -19,9 +19,14 @@ Have something like Postman to make the call to your endpoint.
 ## Setup
 Run the following command to build the project.
 
-```shell script
+```shell
 cd beanstalk-model-serving
+
+# for Linux/macOS:
 ./gradlew build
+
+# for Windows:
+..\..\gradlew build
 ```
 
 This will create a packaged jar file in
@@ -31,8 +36,13 @@ build/libs/beanstalk-model-serving-0.0.1-SNAPSHOT.jar
 
 ## Run and test locally
 Use the following command to run the application locally:
-```shell script
+
+```shell
+# for Linux/macOS:
 ./gradlew bootRun
+
+# for Windows:
+..\..\gradlew bootRun
 ```
 
 The application will be listening on localhost 5000 port(Elastic Beanstalk expect port 5000),
@@ -42,7 +52,7 @@ You can also you `curl` command to test the application's REST API.
 You can get a Smiley Face picture for testing:
 ![Smiley Face](https://github.com/awslabs/djl-resources/raw/master/demo/beanstalk-model-serving/images/smiley.png)
 
-```shell script
+```shell
 curl -O https://raw.githubusercontent.com/awslabs/djl-resources/master/demo/beanstalk-model-serving/images/smiley.png
 curl -X POST -T smiley.png http://localhost:5000/doodle
 
@@ -64,8 +74,13 @@ curl -X POST -T smiley.png http://localhost:5000/doodle
 
 ## Deploying
 You can use the following command line to deploy to your AWS Elastic Beanstalk:
-```shell script
+
+```shell
+# for Linux/macOS:
 ./gradlew deploy
+
+# for Windows:
+..\..\gradlew deploy
 ```
 
 Alternately you can create a new environment with the AWS BeanStalk Console.
@@ -75,6 +90,7 @@ Give you application a name. Set the platform to these options for this example:
 
 When selecting your Application Code, select the "choose file" option and
 upload the jar that was created in:
+
 ```
 build/libs/beanstalk-model-serving-0.0.1-SNAPSHOT.jar
 ```

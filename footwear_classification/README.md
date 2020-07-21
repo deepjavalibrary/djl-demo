@@ -47,9 +47,15 @@ the `ImageFolder`:
 ## Train the footwear classification model
 
 By running this command will train this model for 2 epochs.
+
 ```shell
 cd footwear_classification
+
+# for Linux/macOS
 ./gradlew training
+
+# for Windows:
+..\..\gradlew training
 ```
 
 The output should look something like this:
@@ -80,7 +86,11 @@ The model will be stored in the  `models` folder.
 Once you trained your model, you can use following command to run footwear classification:
 
 ```shell
+# for Linux/macOS:
 ./gradlew inference
+
+# for Windows:
+..\gradlew infrerence
 
 [
         class: "Sandals", probability: 0.68156
@@ -92,7 +102,11 @@ Once you trained your model, you can use following command to run footwear class
 
 You can pass different image files to be classified:
 ```shell
+# for Linux/macOS:
 ./gradlew inference --args="ut-zap50k-images-square/Boots/Ankle/Reef/8031227.20.jpg"
+
+# for Windows:
+..\gradlew inference --args="ut-zap50k-images-square/Boots/Ankle/Reef/8031227.20.jpg"
 
 [
         class: "Boots", probability: 0.78546

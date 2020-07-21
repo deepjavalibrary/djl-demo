@@ -19,15 +19,24 @@ Go into the multi-engine directory and run the following command to build the pr
 
 ```
 cd multi-engine
+
+# for Linux/macOS:
 ./gradlew build
+
+# for Windows:
+..\gradlew build
 ```
 
 ## Run the MultiEngine Program
 
 Run the following command to run the project:
 
-```shell script
+```shell
+# for Linux/macOS:
 ./gradlew run
+
+# for Windows:
+..\gradlew build
 ```
 
 This will take the original image:

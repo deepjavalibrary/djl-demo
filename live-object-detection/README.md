@@ -15,5 +15,5 @@ cd live-object-detection
 ./gradlew run
 
 # Windows command prompty:
-gradlew run
+..\gradlew run
 ```
