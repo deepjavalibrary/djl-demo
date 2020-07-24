@@ -1,0 +1,64 @@
+site_name: DJL-demo
+repo_name: aws-samples/djl-demo
+repo_url: https://github.com/aws-samples/djl-demo
+use_directory_urls: false
+markdown_extensions:
+  - codehilite
+  - toc:
+      permalink: true
+theme:
+  name: material
+  logo: https://raw.githubusercontent.com/awslabs/djl/master/website/img/DJL.svg
+  favicon: https://github.com/awslabs/djl/blob/master/website/img/favicon.png?raw=true
+  features:
+    - tabs
+  palette:
+    primary: light-blue
+    accent: light-blue
+google_analytics:
+  - UA-159559852-2
+  - auto
+extra:
+  social:
+    - icon: fontawesome/brands/github-alt
+      link: https://github.com/aws-samples/djl-demo
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/deepjavalibrary
+    - icon: fontawesome/brands/slack
+      link: https://deepjavalibrary.slack.com/
+    - icon: fontawesome/brands/zhihu
+      link: https://zhuanlan.zhihu.com/c_1255493231133417472
+docs_dir: '../'
+plugins:
+  - search
+  - mknotebooks
+  - exclude:
+      regex:
+        - '.*((.+-runner)|DS_Store|MF|analysis|ap_|apk|bat|bin|cache|class|classpath|cmd|csv|dat|(dat.*)|dex|dumpstream|editorconfig|eslintrc|flat|gitignore|gradle|html|idx|iml|index|jar|java|jks|lock|lst|mapping|name|pack|params|pb|prefs|prettierignore|prettierrc|pro|project|properties|pt|sample|sbt|scala|ser|sh|snap|so|ts|tsx|txt|xml)$'
+
+nav:
+  - HOME: 'README.md'
+  - AWS:
+      - AWS-kinesis-video-streams: 'aws/aws-kinesis-video-streams/README.md'
+      - Model Serving on AWS BeanStalk EC2: 'aws/beanstalk-model-serving/README.md'
+      - Serverless Model Serving with DJL: 'aws/lambda-model-serving/README.md'
+  - EcoSystem:
+      - Java Integrations:
+          - DJL Component in Apache Camel: 'camel-djl/README.md'
+          - Run TensorFlow model on GraalVM: 'graalvm/README.md'
+          - Spark Image Classification: 'spark/image-classification/README.md'
+          - Quarkus + DJL Demo: 'quarkus/README.md'
+  - Applications:
+      - Footwear Classification: 'footwear_classification/README.md'
+      - Live Object Detection: 'live-object-detection/README.md'
+      - Pneumonia Detection: 'pneumonia-detection/README.md'
+      - MultiEngine on DJL: 'multi-engine/README.md'
+      - Visualizing Training with DJL: 'visualization/README.md'
+      - Interactive JShell and Block Runner for DJL: 'web-demo/interactive-console/README.md'
+  - Extensions:
+      - Visualizing Training with DJL: 'visualization/README.md'
+      - Interactive JShell and Block Runner for DJL: 'web-demo/interactive-console/README.md'
+
+  
+  
+  
