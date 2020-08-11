@@ -42,6 +42,7 @@ nav:
       - AWS-kinesis-video-streams: 'aws/aws-kinesis-video-streams/README.md'
       - Model Serving on AWS BeanStalk EC2: 'aws/beanstalk-model-serving/README.md'
       - Serverless Model Serving with DJL: 'aws/lambda-model-serving/README.md'
+      - Distributed inference with AWS EMR: 'aws/emr-distributed-inference/README.md'
   - EcoSystem:
       - Java Integrations:
           - DJL Component in Apache Camel: 'camel-djl/README.md'
