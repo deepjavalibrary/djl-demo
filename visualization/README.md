@@ -13,19 +13,20 @@ Currently, implemented features:
 * You should be familiar with the API documentation in the DJL [Javadoc](https://javadoc.djl.ai/api/0.4.0/index.html).
 
 ### Install the Java Development Kit
+
 For ubuntu:
 
-```shell script
+```bash
 sudo apt-get install openjdk-11-jdk-headless
 ```
 For centos:
 
-```shell script
+```bash
 sudo yum install java-11-openjdk-devel
 ```
 For macOS:
 
-```shell script
+```bash
 brew tap homebrew/cask-versions
 brew update
 brew cask install adoptopenjdk11
@@ -41,6 +42,7 @@ variable to control which version of Java to use.
 # How to
 
 ## Add the Deep Java Library UI dependency to your project.
+
 ```
 <dependency>
     <groupId>ai.djl</groupId>
@@ -50,6 +52,7 @@ variable to control which version of Java to use.
 ```
 
 ## Add UI Training Listener in a Training Configuration.
+
 ```
    .addTrainingListeners(new UiTrainingListener())
 ```
