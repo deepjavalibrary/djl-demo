@@ -10,7 +10,7 @@ on:
   repository_dispatch:
     types: [nightly-build]
   schedule:
-    - cron:  '0 10 * * *'
+    - cron:  '0 9 * * 1'
 
 jobs:
   documentation:
@@ -37,3 +37,5 @@ jobs:
       - name: Copy files to S3 with the AWS CLI
         run: |
           aws s3 sync site s3://djl-ai/documentation/demo/nightly --delete
+          aws cloudfront create-invalidation --distribution-id EBIOCWZO8BY7D --paths /
+
