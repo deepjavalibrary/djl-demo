@@ -35,7 +35,7 @@ Try to type in anything from your text server:
 
 ```
 $ nc -l 9000
-Hello
+I love you!
 ```
 
 result shows on Flink application:
@@ -45,8 +45,7 @@ Loading:     100% |████████████████████�
 [Flat Map (10/12)] INFO ai.djl.pytorch.engine.PtEngine - Number of inter-op threads is 6
 [Flat Map (10/12)] INFO ai.djl.pytorch.engine.PtEngine - Number of intra-op threads is 1
 [
-        class: "Negative", probability: 0.92125
-        class: "Positive", probability: 0.07874
+        class: "Positive", probability: 0.99870
+        class: "Negative", probability: 0.00129
 ]
-
 ```

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
  * with the License. A copy of the License is located at
@@ -68,7 +68,7 @@ public class SentimentAnalysis {
         // get input data by connecting to the socket
         DataStream<String> text = env.socketTextStream(hostname, port, "\n");
 
-        // parse the data, group it, window it, and aggregate the counts
+        // Run inference with Flink streaming
         DataStream<Classifications> classifications = text.flatMap(new SAFlatMap());
 
         // print the results with a single thread, rather than in parallel
@@ -76,6 +76,9 @@ public class SentimentAnalysis {
         env.execute("SentimentAnalysis");
     }
 
+    /**
+     * Sentiment Analysis {@link FlatMapFunction} implementation.
+     */
     public static class SAFlatMap implements FlatMapFunction<String, Classifications> {
 
         private static Predictor<String, Classifications> predictor;
