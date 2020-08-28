@@ -55,7 +55,7 @@ Remember to specify:
 
 #### Using Flink runner
 ```bash
-mvn compile  exec:java -Dexec.mainClass=ctr_prediction.CtrPrediction -Dai.djl.repository.zoo.location=./deepfm -Dexec.args="--runner=FlinkRunne --inputFile=./ctr/test.csv" -Pflink-runner
+mvn compile  exec:java -Dexec.mainClass=ctr_prediction.CtrPrediction -Dai.djl.repository.zoo.location=./deepfm -Dexec.args="--runner=FlinkRunner--inputFile=./ctr/test.csv" -Pflink-runner
 ```
 
 

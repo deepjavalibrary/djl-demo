@@ -243,22 +243,6 @@
           <version>${jackson.version}</version>
           <scope>runtime</scope>
         </dependency>
-        <!-- [BEAM-3519] GCP IO exposes netty on its API surface, causing conflicts with runners -->
-        <dependency>
-          <groupId>org.apache.beam</groupId>
-          <artifactId>beam-sdks-java-io-google-cloud-platform</artifactId>
-          <version>${beam.version}</version>
-          <exclusions>
-            <exclusion>
-              <groupId>io.grpc</groupId>
-              <artifactId>grpc-netty</artifactId>
-            </exclusion>
-            <exclusion>
-              <groupId>io.netty</groupId>
-              <artifactId>netty-handler</artifactId>
-            </exclusion>
-          </exclusions>
-        </dependency>
       </dependencies>
     </profile>
     <profile>
@@ -320,6 +304,7 @@
       <version>${beam.version}</version>
     </dependency>
 
+    <!-- Adds a dependency on Deep Java Library. -->
     <dependency>
       <groupId>ai.djl</groupId>
       <artifactId>api</artifactId>
@@ -344,124 +329,16 @@
       <version>0.7.0-SNAPSHOT</version>
     </dependency>
 
-    <!-- Adds a dependency on the Beam Google Cloud Platform IO module. -->
-    <dependency>
-      <groupId>org.apache.beam</groupId>
-      <artifactId>beam-sdks-java-io-google-cloud-platform</artifactId>
-      <version>${beam.version}</version>
-    </dependency>
-
-    <!-- Dependencies below this line are specific dependencies needed by the examples code. -->
-    <dependency>
-      <groupId>com.google.api-client</groupId>
-      <artifactId>google-api-client</artifactId>
-      <version>${google-api-client.version}</version>
-      <exclusions>
-        <!-- Exclude an old version of guava that is being pulled
-             in by a transitive dependency of google-api-client -->
-        <exclusion>
-          <groupId>com.google.guava</groupId>
-          <artifactId>guava-jdk5</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>com.google.apis</groupId>
-      <artifactId>google-api-services-bigquery</artifactId>
-      <version>${bigquery.version}</version>
-      <exclusions>
-        <!-- Exclude an old version of guava that is being pulled
-             in by a transitive dependency of google-api-client -->
-        <exclusion>
-          <groupId>com.google.guava</groupId>
-          <artifactId>guava-jdk5</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>com.google.http-client</groupId>
-      <artifactId>google-http-client</artifactId>
-      <version>${google-http-client.version}</version>
-      <exclusions>
-        <!-- Exclude an old version of guava that is being pulled
-             in by a transitive dependency of google-api-client -->
-        <exclusion>
-          <groupId>com.google.guava</groupId>
-          <artifactId>guava-jdk5</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>com.google.apis</groupId>
-      <artifactId>google-api-services-pubsub</artifactId>
-      <version>${pubsub.version}</version>
-      <exclusions>
-        <!-- Exclude an old version of guava that is being pulled
-             in by a transitive dependency of google-api-client -->
-        <exclusion>
-          <groupId>com.google.guava</groupId>
-          <artifactId>guava-jdk5</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
     <dependency>
       <groupId>joda-time</groupId>
       <artifactId>joda-time</artifactId>
       <version>${joda.version}</version>
     </dependency>
 
-    <!-- Add slf4j API frontend binding with JUL backend -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>${slf4j.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
-      <version>${slf4j.version}</version>
-      <!-- When loaded at runtime this will wire up slf4j to the JUL backend -->
-      <scope>runtime</scope>
-    </dependency>
-
-    <!-- Hamcrest and JUnit are required dependencies of PAssert,
-         which is used in the main code of DebuggingWordCount example. -->
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-core</artifactId>
-      <version>${hamcrest.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-library</artifactId>
-      <version>${hamcrest.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-    </dependency>
-
-    <!-- The DirectRunner is needed for unit tests. -->
-    <dependency>
-      <groupId>org.apache.beam</groupId>
-      <artifactId>beam-runners-direct-java</artifactId>
-      <version>${beam.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>${mockito.version}</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>
