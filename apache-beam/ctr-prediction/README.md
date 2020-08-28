@@ -17,7 +17,7 @@ We have prepared a trained model [here](https://djl-ai.s3.amazonaws.com/resource
 
 ## Deploy using Apache Beam and DJL
 
-###1. Prepare model
+### 1. Prepare model
 
 Download the above [trained model](https://djl-ai.s3.amazonaws.com/resources/demo/mxnet/deepfm.zip) and unzip it, or train your own model.
 The model folder will contain the following files:
@@ -27,7 +27,7 @@ deepfm
 ├── deepfm-symbol.json
 └── feature_map.json 
 ```
-###2. Download test data
+### 2. Download test data
 You can download the sample dataset provided by the book from [here](http://d2l-data.s3-accelerate.amazonaws.com/ctr.zip).
 Unzip it and you will have the following files:
 ```bash
@@ -36,7 +36,7 @@ ctr
 └── train.csv
 ```
 
-###3. Run inference using Apache Beam
+### 3. Run inference using Apache Beam
 You can run inference using different runners supported by Apache Beam. Refer to Apache Beam [Documentation](https://beam.apache.org/get-started/beam-overview/) for more runners.
 
 Here we will show you local runner, Flink runner, and Spark runner:
