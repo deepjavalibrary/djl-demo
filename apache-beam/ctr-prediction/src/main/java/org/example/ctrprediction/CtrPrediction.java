@@ -13,13 +13,12 @@
 package org.example.ctrprediction;
 
 
-import ai.djl.MalformedModelException;
+import ai.djl.ModelException;
 import ai.djl.inference.Predictor;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
 import ai.djl.repository.zoo.Criteria;
-import ai.djl.repository.zoo.ModelNotFoundException;
 import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.Batchifier;
@@ -52,7 +51,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class CtrPrediction {
 
-    public static void main(String[] args) throws MalformedModelException, ModelNotFoundException, IOException {
+    public static void main(String[] args) throws ModelException, IOException {
         // creates pipeline from arguments
         CtrOptions options =
                 PipelineOptionsFactory.fromArgs(args).withValidation().as(CtrOptions.class);
@@ -71,21 +70,7 @@ public class CtrPrediction {
         PCollection<String> preprocess = addIds.apply("Preprocess", ParDo.of(new FeatureMap()));
 
         // run inference using Deep Java Library
-
-        Criteria<String, String> criteria = Criteria.builder()
-                .setTypes(String.class, String.class)
-                .optTranslator(new CtrTranslator())
-                .optEngine("MXNet")
-                .build();
-        ZooModel<String, String> model = ModelZoo.loadModel(criteria);
-        Predictor<String, String> predictor = model.newPredictor();
-
-        PCollection<String> ctr = preprocess.apply("Inference", ParDo.of(new DoFn<String, String>() {
-            @ProcessElement
-            public void processElement(ProcessContext c) throws TranslateException, MalformedModelException, ModelNotFoundException, IOException {
-                c.output(c.element().split("\t")[0] + "\t" + predictor.predict(c.element()));
-            }
-        }));
+        PCollection<String> ctr = preprocess.apply("Inference", ParDo.of(new Inference()));
 
         ctr.apply(TextIO.write().to(options.getOutput()));
         p.run().waitUntilFinish();
@@ -101,6 +86,27 @@ public class CtrPrediction {
             e.printStackTrace();
         }
         return featureMap;
+    }
+
+    public interface CtrOptions extends PipelineOptions {
+
+        /**
+         * By default, this example reads from a public dataset containing the Ads data record
+         */
+        @Description("Path of the file to read from")
+        @Default.String("./ctr/test.csv")
+        String getInputFile();
+
+        void setInputFile(String value);
+
+        /**
+         * Set this required option to specify where to write the output.
+         */
+        @Description("Path of the file to write to")
+        @Default.String("ctr")
+        String getOutput();
+
+        void setOutput(String value);
     }
 
     static class FeatureMap extends DoFn<String, String> {
@@ -120,6 +126,29 @@ public class CtrPrediction {
                 }
                 receiver.output(String.join("\t", features));
             }
+        }
+    }
+
+    static class Inference extends DoFn<String, String> {
+        static Predictor<String, String> predictor;
+
+        static Predictor<String, String> getOrCreatePredictor() throws ModelException, IOException {
+            if (predictor == null) {
+                Criteria<String, String> criteria = Criteria.builder()
+                        .setTypes(String.class, String.class)
+                        .optTranslator(new CtrTranslator())
+                        .optEngine("MXNet")
+                        .build();
+                ZooModel<String, String> model = ModelZoo.loadModel(criteria);
+                predictor = model.newPredictor();
+            }
+            return predictor;
+        }
+
+        @ProcessElement
+        public void processElement(@Element String element, OutputReceiver<String> receiver)
+                throws TranslateException, ModelException, IOException {
+            receiver.output(element.split("\t")[0] + "\t" + getOrCreatePredictor().predict(element));
         }
     }
 
@@ -146,27 +175,6 @@ public class CtrPrediction {
         public Batchifier getBatchifier() {
             return Batchifier.STACK;
         }
-    }
-
-    public interface CtrOptions extends PipelineOptions {
-
-        /**
-         * By default, this example reads from a public dataset containing the Ads data record
-         */
-        @Description("Path of the file to read from")
-        @Default.String("./ctr/test.csv")
-        String getInputFile();
-
-        void setInputFile(String value);
-
-        /**
-         * Set this required option to specify where to write the output.
-         */
-        @Description("Path of the file to write to")
-        @Default.String("ctr")
-        String getOutput();
-
-        void setOutput(String value);
     }
 
 }
