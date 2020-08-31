@@ -48,6 +48,8 @@ nav:
           - DJL Component in Apache Camel: 'camel-djl/README.md'
           - Run TensorFlow model on GraalVM: 'graalvm/README.md'
           - Spark Image Classification: 'spark/image-classification/README.md'
+          - Apache Beam: 'apache-beam/ctr-prediction/README.md'
+          - Apache Flink: 'flink/sentiment-analysis/README.md'
           - Quarkus + DJL Demo: 'quarkus/README.md'
   - Applications:
       - Footwear Classification: 'footwear_classification/README.md'
