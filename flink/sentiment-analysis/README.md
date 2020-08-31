@@ -2,7 +2,7 @@
 
 ![](img/flink.gif)
 
-This project runs a Sentiment Analysis application with Apache Flink Stream API.
+This project runs a Sentiment Analysis application with [Apache Flink](https://flink.apache.org/) Stream API.
 
 You can interactively type in sentences to simulate stream data,
 and Flink will process and show the result in the terminal.

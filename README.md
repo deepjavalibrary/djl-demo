@@ -35,6 +35,14 @@ Build a micro service to deploy on AWS Elastic Beanstalk.
 
 Contains Spark image classification demos.
 
+## [Apache Beam CTR Prediction](apache-beam/ctr-prediction/README.md)
+
+An example application using [Apache Beam](https://beam.apache.org/) to predict the click-through rate for online advertisements.
+
+## [Apache Flink Sentiment Analysis](flink/sentiment-analysis/README.md)
+
+An example using [Apache Flink](https://flink.apache.org/) to run sentiment analysis.
+
 ## [Use multiple engines in single JVM](multi-engine/README.md)
 
 An example application that runs multiple deep learning frameworks in one Java Process.
