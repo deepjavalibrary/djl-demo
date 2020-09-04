@@ -11,7 +11,8 @@ repositories {
 }
 
 dependencies {
-    implementation "ai.djl:api:0.6.0"
-    runtimeOnly "ai.djl.tensorflow:tensorflow-model-zoo:0.6.0"
-    runtimeOnly "ai.djl.tensorflow:tensorflow-native-auto:2.1.0"
+    implementation platform("ai.djl:bom:0.7.0")
+    implementation "ai.djl:api"
+    runtimeOnly "ai.djl.tensorflow:tensorflow-model-zoo"
+    runtimeOnly "ai.djl.tensorflow:tensorflow-native-auto"
 }

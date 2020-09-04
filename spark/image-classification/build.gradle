@@ -14,19 +14,13 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
+    implementation platform("ai.djl:bom:0.7.0")
     implementation "org.scala-lang:scala-library:2.11.12"
     implementation "org.apache.spark:spark-core_2.11:2.3.0"
-    implementation "ai.djl:api:0.6.0"
+    implementation "ai.djl:api"
 
-    runtimeOnly "ai.djl.pytorch:pytorch-model-zoo:0.6.0"
-    runtimeOnly "ai.djl.pytorch:pytorch-native-auto:1.5.0"
-}
-
-configure(this) {
-
-    defaultTasks "jar"
-
-    apply from: file("${rootProject.projectDir}/../../tools/gradle/formatter.gradle")
+    runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
+    runtimeOnly "ai.djl.pytorch:pytorch-native-auto"
 }
 
 compileScala {
@@ -34,7 +28,7 @@ compileScala {
 }
 
 application {
-    mainClassName = System.getProperty("main", "com.examples.Example")
+    mainClassName = System.getProperty("main", "com.examples.ImageClassificationExample")
 }
 
 tasks.distTar.enabled = false

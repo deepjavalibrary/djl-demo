@@ -20,7 +20,7 @@ import ai.djl.ndarray.types.Shape;
 import ai.djl.nn.Activation;
 import ai.djl.nn.Blocks;
 import ai.djl.nn.SequentialBlock;
-import ai.djl.nn.convolutional.Conv1D;
+import ai.djl.nn.convolutional.Conv1d;
 import ai.djl.nn.core.Linear;
 import ai.djl.nn.norm.Dropout;
 import ai.djl.nn.pooling.Pool;
@@ -63,49 +63,49 @@ class MaliciousURLModel {
         float dropoutProbability = (float) 0.5;
         int fullyConnected = 1024;
         int numberOfFilters = 256;
-        block.add(Conv1D.builder().setKernel(new Shape(7)).setNumFilters(numberOfFilters).build())
+        block.add(Conv1d.builder().setKernelShape(new Shape(7)).setFilters(numberOfFilters).build())
                 .add(Activation.reluBlock())
-                .add(Pool.maxPool1DBlock(new Shape(3), new Shape(3), new Shape(0)))
+                .add(Pool.maxPool1dBlock(new Shape(3), new Shape(3), new Shape(0)))
                 .add(
-                        Conv1D.builder()
-                                .setKernel(new Shape(7))
-                                .setNumFilters(numberOfFilters)
+                        Conv1d.builder()
+                                .setKernelShape(new Shape(7))
+                                .setFilters(numberOfFilters)
                                 .build())
                 .add(Activation.reluBlock())
-                .add(Pool.maxPool1DBlock(new Shape(3), new Shape(3), new Shape(0)))
+                .add(Pool.maxPool1dBlock(new Shape(3), new Shape(3), new Shape(0)))
                 .add(
-                        Conv1D.builder()
-                                .setKernel(new Shape(3))
-                                .setNumFilters(numberOfFilters)
+                        Conv1d.builder()
+                                .setKernelShape(new Shape(3))
+                                .setFilters(numberOfFilters)
                                 .build())
                 .add(Activation.reluBlock())
                 .add(
-                        Conv1D.builder()
-                                .setKernel(new Shape(3))
-                                .setNumFilters(numberOfFilters)
+                        Conv1d.builder()
+                                .setKernelShape(new Shape(3))
+                                .setFilters(numberOfFilters)
                                 .build())
                 .add(Activation::relu)
                 .add(
-                        Conv1D.builder()
-                                .setKernel(new Shape(3))
-                                .setNumFilters(numberOfFilters)
+                        Conv1d.builder()
+                                .setKernelShape(new Shape(3))
+                                .setFilters(numberOfFilters)
                                 .build())
                 .add(Activation::relu)
                 .add(
-                        Conv1D.builder()
-                                .setKernel(new Shape(3))
-                                .setNumFilters(numberOfFilters)
+                        Conv1d.builder()
+                                .setKernelShape(new Shape(3))
+                                .setFilters(numberOfFilters)
                                 .build())
                 .add(Activation.reluBlock())
-                .add(Pool.maxPool1DBlock(new Shape(3), new Shape(3), new Shape(0)))
+                .add(Pool.maxPool1dBlock(new Shape(3), new Shape(3), new Shape(0)))
                 .add(Blocks.batchFlattenBlock())
-                .add(Linear.builder().setOutChannels(fullyConnected).build())
+                .add(Linear.builder().setUnits(fullyConnected).build())
                 .add(Activation.reluBlock())
-                .add(Dropout.builder().optProbability(dropoutProbability).build())
-                .add(Linear.builder().setOutChannels(fullyConnected).build())
+                .add(Dropout.builder().optRate(dropoutProbability).build())
+                .add(Linear.builder().setUnits(fullyConnected).build())
                 .add(Activation::relu)
-                .add(Dropout.builder().optProbability(dropoutProbability).build())
-                .add(Linear.builder().setOutChannels(2).build());
+                .add(Dropout.builder().optRate(dropoutProbability).build())
+                .add(Linear.builder().setUnits(2).build());
 
         model = Model.newInstance(modelName);
         model.setBlock(block);

@@ -10,10 +10,21 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <graalvm.version>20.1.0</graalvm.version>
-        <djl.version>0.7.0-SNAPSHOT</djl.version>
+        <djl.version>0.7.0</djl.version>
         <exec.mainClass>com.example.ImageClassification</exec.mainClass>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>ai.djl</groupId>
+                <artifactId>bom</artifactId>
+                <version>${djl.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.graalvm.sdk</groupId>
@@ -103,12 +114,10 @@
                 <dependency>
                     <groupId>ai.djl.tensorflow</groupId>
                     <artifactId>tensorflow-model-zoo</artifactId>
-                    <version>${djl.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>ai.djl.tensorflow</groupId>
                     <artifactId>tensorflow-native-auto</artifactId>
-                    <version>2.2.0</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -118,12 +127,10 @@
                 <dependency>
                     <groupId>ai.djl.pytorch</groupId>
                     <artifactId>pytorch-model-zoo</artifactId>
-                    <version>${djl.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>ai.djl.pytorch</groupId>
                     <artifactId>pytorch-native-auto</artifactId>
-                    <version>1.5.0-SNAPSHOT</version>
                 </dependency>
             </dependencies>
         </profile>

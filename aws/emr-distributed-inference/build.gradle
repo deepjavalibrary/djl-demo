@@ -17,15 +17,17 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
+    implementation platform("ai.djl:bom:0.7.0")
+    implementation "ai.djl:api"
+
     implementation "org.scala-lang:scala-library:2.11.12"
     implementation "org.apache.spark:spark-core_2.11:2.4.5"
     implementation "org.apache.spark:spark-sql_2.11:2.4.5"
-    implementation "ai.djl:api:0.6.0"
 
-    runtimeOnly "ai.djl.aws:aws-ai:0.6.0"
+    runtimeOnly "ai.djl.aws:aws-ai"
+    runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
+    runtimeOnly "ai.djl.pytorch:pytorch-native-cpu::linux-x86_64"
     runtimeOnly "org.slf4j:slf4j-simple:1.7.30"
-    runtimeOnly "ai.djl.pytorch:pytorch-model-zoo:0.6.0"
-    runtimeOnly "ai.djl.pytorch:pytorch-native-cpu:1.5.0:linux-x86_64"
 }
 
 configure(this) {

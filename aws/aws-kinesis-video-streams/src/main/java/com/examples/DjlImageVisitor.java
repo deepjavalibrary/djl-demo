@@ -1,13 +1,13 @@
 package com.examples;
 
-import ai.djl.MalformedModelException;
+import ai.djl.ModelException;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications.Classification;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.output.DetectedObjects;
-import ai.djl.mxnet.zoo.MxModelZoo;
-import ai.djl.repository.zoo.ModelNotFoundException;
+import ai.djl.repository.zoo.Criteria;
+import ai.djl.repository.zoo.ModelZoo;
 import com.amazonaws.kinesisvideo.parser.mkv.Frame;
 import com.amazonaws.kinesisvideo.parser.mkv.FrameProcessException;
 import com.amazonaws.kinesisvideo.parser.utilities.FragmentMetadata;
@@ -27,8 +27,13 @@ public class DjlImageVisitor extends H264FrameDecoder {
     int counter;
     private ImageFactory factory;
 
-    public DjlImageVisitor() throws IOException, ModelNotFoundException, MalformedModelException {
-        predictor = MxModelZoo.SSD.loadModel().newPredictor();
+    public DjlImageVisitor() throws IOException, ModelException {
+        Criteria<Image, DetectedObjects> criteria =
+                Criteria.builder()
+                        .setTypes(Image.class, DetectedObjects.class)
+                        .optArtifactId("ai.djl.mxnet:ssd")
+                        .build();
+        predictor = ModelZoo.loadModel(criteria).newPredictor();
         counter = 0;
         factory = ImageFactory.getInstance();
     }
