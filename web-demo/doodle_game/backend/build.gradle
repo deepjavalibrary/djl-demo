@@ -10,13 +10,13 @@ repositories {
 }
 
 dependencies {
-    implementation "ai.djl:api:0.6.0"
-    implementation "ai.djl.pytorch:pytorch-engine:0.6.0"
-
+    implementation platform("ai.djl:bom:0.7.0")
+    implementation "ai.djl:api"
+    implementation "ai.djl.pytorch:pytorch-engine"
+    implementation "ai.djl.pytorch:pytorch-native-auto"
     implementation "com.amazonaws:aws-lambda-java-core:1.2.1"
 
     runtimeOnly "org.slf4j:slf4j-simple:1.7.29"
-    implementation "ai.djl.pytorch:pytorch-native-auto:1.5.0"
 }
 
 java {

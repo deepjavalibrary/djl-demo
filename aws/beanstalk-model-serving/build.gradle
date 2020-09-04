@@ -16,11 +16,12 @@ repositories {
 }
 
 dependencies {
+    implementation platform("ai.djl:bom:0.7.0")
+    implementation "ai.djl.pytorch:pytorch-model-zoo"
+    implementation "ai.djl.pytorch:pytorch-native-auto"
+
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-
-    implementation "ai.djl.pytorch:pytorch-model-zoo:0.6.0"
-    implementation "ai.djl.pytorch:pytorch-native-auto:1.5.0"
 }
 
 configure(this) {

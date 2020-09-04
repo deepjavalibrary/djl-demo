@@ -3,12 +3,6 @@ plugins {
     id "application"
 }
 
-repositories {
-    maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots/"
-    }
-}
-
 group "com.example"
 version "1.0-SNAPSHOT"
 
@@ -19,11 +13,15 @@ repositories {
 }
 
 dependencies {
-    implementation "org.apache.logging.log4j:log4j-slf4j-impl:2.12.1"
-    implementation "ai.djl.pytorch:pytorch-model-zoo:0.6.0"
-    implementation "ai.djl.pytorch:pytorch-native-auto:1.5.0"
-    implementation "ai.djl.mxnet:mxnet-model-zoo:0.6.0"
-    implementation "ai.djl.mxnet:mxnet-native-auto:1.7.0-a"
+    implementation platform("ai.djl:bom:0.7.0")
+    implementation "ai.djl:api"
+
+    runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
+    runtimeOnly "ai.djl.pytorch:pytorch-native-auto"
+    runtimeOnly "ai.djl.mxnet:mxnet-model-zoo"
+    runtimeOnly "ai.djl.mxnet:mxnet-native-auto"
+
+    runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.12.1"
 }
 
 application {

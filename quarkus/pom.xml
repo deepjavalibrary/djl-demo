@@ -17,7 +17,7 @@
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
         <quarkus.platform.version>1.5.2.Final</quarkus.platform.version>
-        <djl.version>0.7.0-SNAPSHOT</djl.version>
+        <djl.version>0.7.0</djl.version>
         <surefire-plugin.version>2.22.1</surefire-plugin.version>
     </properties>
 
@@ -30,6 +30,13 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>ai.djl</groupId>
+                <artifactId>bom</artifactId>
+                <version>${djl.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>${quarkus.platform.group-id}</groupId>
                 <artifactId>${quarkus.platform.artifact-id}</artifactId>
@@ -144,17 +151,14 @@
                 <dependency>
                     <groupId>ai.djl.pytorch</groupId>
                     <artifactId>pytorch-model-zoo</artifactId>
-                    <version>${djl.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>ai.djl.pytorch</groupId>
                     <artifactId>pytorch-engine</artifactId>
-                    <version>${djl.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>ai.djl.pytorch</groupId>
                     <artifactId>pytorch-native-auto</artifactId>
-                    <version>1.5.0-SNAPSHOT</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -164,7 +168,7 @@
                 <dependency>
                     <groupId>org.bytedeco</groupId>
                     <artifactId>javacpp</artifactId>
-                    <!-- Seems only 1.5.4 works with GraalVM -->
+                    <!-- Only 1.5.4 works with GraalVM -->
                     <version>1.5.4-SNAPSHOT</version>
                 </dependency>
                 <dependency>
@@ -182,17 +186,14 @@
                 <dependency>
                     <groupId>ai.djl.tensorflow</groupId>
                     <artifactId>tensorflow-engine</artifactId>
-                    <version>${djl.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>ai.djl.tensorflow</groupId>
                     <artifactId>tensorflow-model-zoo</artifactId>
-                    <version>${djl.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>ai.djl.tensorflow</groupId>
                     <artifactId>tensorflow-native-auto</artifactId>
-                    <version>2.2.0</version>
                 </dependency>
             </dependencies>
         </profile>

@@ -27,6 +27,8 @@ import ai.djl.training.dataset.RandomAccessDataset;
 import ai.djl.training.evaluator.Accuracy;
 import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
+import ai.djl.translate.TranslateException;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,7 +47,7 @@ public final class Training {
     // the number of passes over the complete dataset
     private static final int EPOCHS = 2;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, TranslateException {
         // the location to save the model
         Path modelDir = Paths.get("models");
 
@@ -92,7 +94,7 @@ public final class Training {
         }
     }
 
-    private static ImageFolder initDataset(String datasetRoot) throws IOException {
+    private static ImageFolder initDataset(String datasetRoot) throws IOException, TranslateException {
         ImageFolder dataset =
                 ImageFolder.builder()
                         // retrieve the data

@@ -21,6 +21,7 @@ import ai.djl.ndarray.index.NDIndex;
 import ai.djl.ndarray.types.Shape;
 import ai.djl.training.dataset.RandomAccessDataset;
 import ai.djl.training.dataset.Record;
+import ai.djl.util.Progress;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URL;
@@ -118,6 +119,9 @@ public class CSVDataset extends RandomAccessDataset {
     public static Builder builder() {
         return new Builder();
     }
+
+    @Override
+    public void prepare(Progress progress) {}
 
     public static final class Builder extends BaseBuilder<Builder> {
 

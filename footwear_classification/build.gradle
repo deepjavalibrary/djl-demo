@@ -9,14 +9,10 @@ sourceCompatibility = 1.8
 
 repositories {
     jcenter()
-    mavenLocal()
-    maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots/"
-    }
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.7.0-SNAPSHOT")
+    implementation platform("ai.djl:bom:0.7.0")
     implementation "ai.djl:model-zoo"
     implementation "ai.djl:basicdataset"
     implementation "org.slf4j:slf4j-simple:1.7.30"

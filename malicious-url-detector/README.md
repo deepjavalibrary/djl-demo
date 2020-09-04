@@ -54,24 +54,19 @@ The general model structure is based on the [Character level CNNs paper's](https
 
 This demo contains a simple proxy server that can work with browsers to detect malicious URLs. This demo acts as a filter for malicious URLs. It works with both HTTP and HTTPs requests.
 
-To run the example, copy the pre-trained parameters file under the [parameters directory](trained_parameters) to the ``` src/main/resources``` directory.
-
-```bash
-# Copy pre-trained parameters for inference
-$ mkdir -p src/main/resources
-$ cp trained_parameters/*.params src/main/resources/
-```
-
 Run the proxy server from your terminal.
 
 ```bash
 $ ./gradlew run
 ```
+
 This command starts the server, listening at port 8080.
+
 ```bash
 > Task :run
 [main] INFO com.example.FilterProxy - Waiting for request(s) on port 8080
 ```
+
 In your browser settings (firefox, for example), set the proxy settings to 127.0.0.1:8080.
 
 ![Proxy Settings Firefox](docs/proxy_firefox.png)
@@ -81,6 +76,7 @@ Now you can try to navigate to a mispelled amazon.com URL in the browser navigat
 ![Oops Malicious URL](docs/wrong_url_firefox.png)
 
 The proxy server prints the following on the terminal screen.
+
 ```bash
 > Task :run
 [main] INFO com.example.FilterProxy - Waiting for client on port 8080..
@@ -141,7 +137,7 @@ Validating:  100% |████████████████████�
 [main] INFO com.example.ModelTrainer - validate accuracy: 0.9198193, validate loss: 0.2653344       
 ```
 
-To run inference again, copy the ```.params``` file to the ```src\main\resources\``` folder.
+To run inference again, copy the ```.params``` file to the ```model``` folder.
 
 ## More Reading
 

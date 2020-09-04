@@ -21,11 +21,11 @@ import ai.djl.training.dataset.RandomAccessDataset;
 import ai.djl.training.evaluator.Accuracy;
 import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import ai.djl.translate.TranslateException;
 import java.io.IOException;
 import java.nio.file.Paths;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ModelTrainer {
 
@@ -34,7 +34,7 @@ public class ModelTrainer {
     private static final int BATCH_SIZE = 128;
     private static final int EPOCH = 7;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, TranslateException {
         MaliciousURLModel maliciousURLModel = MaliciousURLModel.getInstance();
         maliciousURLModel.defineModel();
         Model model = maliciousURLModel.getModel();
