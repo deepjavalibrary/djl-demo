@@ -1,0 +1,81 @@
+plugins {
+    id 'application'
+}
+
+def djlVersion = getEnv("DJL_VERSION", "0.7.0")
+def engine = getEnv("DJL_ENGINE", "mxnet-native-auto")
+def os = getOsName()
+
+dependencies {
+    implementation platform("ai.djl:bom:${djlVersion}")
+    implementation "ai.djl:basicdataset"
+    implementation "ai.djl:model-zoo"
+    implementation "ai.djl:basicdataset"
+    implementation "ai.djl:model-zoo"
+    // implementation "ai.djl:serving"
+
+    implementation "ai.djl.aws:aws-ai"
+    implementation "ai.djl.fasttext:fasttext-engine"
+    implementation "ai.djl.hadoop:hadoop"
+    implementation "ai.djl.sentencepiece:sentencepiece"
+
+    implementation "commons-cli:commons-cli:${commons_cli_version}"
+    implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_slf4j_version}"
+
+    if (engine.startsWith("pytorch")) {
+        implementation ("ai.djl.pytorch:pytorch-model-zoo") {
+            exclude group: "ai.djl.pytorch", module: "pytorch-engine"
+        }
+        if (engine.contains("-auto")) {
+            implementation "ai.djl.pytorch:pytorch-engine"
+            implementation "ai.djl.pytorch:pytorch-native-auto"
+        } else if (engine.contains("-precxx11")) {
+            implementation "ai.djl.pytorch:pytorch-engine-precxx11"
+            implementation "ai.djl.pytorch:pytorch-native-cpu-precxx11::${os}-x86_64"
+        } else {
+            implementation "ai.djl.pytorch:pytorch-engine"
+            implementation "ai.djl.pytorch:${engine}::${os}-x86_64"
+        }
+    } else if (engine.startsWith("tensorflow")) {
+        implementation "ai.djl.tensorflow:tensorflow-model-zoo"
+        implementation "ai.djl.tensorflow:tensorflow-native-auto"
+    } else {
+        implementation "ai.djl.mxnet:mxnet-model-zoo"
+        if (engine.contains("-auto")) {
+            implementation "ai.djl.mxnet:mxnet-native-auto"
+        } else {
+            implementation "ai.djl.mxnet:${engine}::${os}-x86_64"
+        }
+        // implementation "ai.djl.onnxruntime:onnxruntime-engine"
+    }
+}
+
+application {
+    mainClassName = System.getProperty("main", "ai.djl.canary.CanaryTest")
+}
+
+run {
+    environment("TF_CPP_MIN_LOG_LEVEL", "1") // turn off TensorFlow print out
+    systemProperties System.getProperties()
+    systemProperties.remove("user.dir")
+    systemProperty("file.encoding", "UTF-8")
+}
+tasks.distTar.enabled = false
+
+static def getOsName() {
+    String osName = System.getProperty("os.name")
+    if (osName.startsWith("Win")) {
+        return "win"
+    } else if (osName.startsWith("Mac")) {
+        return "osx"
+    } else if (osName.startsWith("Linux")) {
+        return "linux"
+    } else {
+        throw new GradleException("Unsupported os: " + osName)
+    }
+}
+
+static def getEnv(String key, String defaultValue) {
+    String value = System.getenv(key)
+    return value == null ? defaultValue : value
+}

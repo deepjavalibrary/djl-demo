@@ -1,0 +1,38 @@
+def stagingRepo = System.getenv("DJL_STAGING")
+
+allprojects {
+    group 'ai.djl'
+    version = "0.1"
+
+    repositories {
+        jcenter()
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+        maven {
+            url "https://oss.sonatype.org/service/local/repositories/${stagingRepo}/content/"
+        }
+    }
+
+    apply plugin: 'idea'
+    idea {
+        module {
+            outputDir = file('build/classes/java/main')
+            testOutputDir = file('build/classes/java/test')
+            // inheritOutputDirs = true
+        }
+    }
+}
+
+def javaProjects() {
+    return subprojects.findAll()
+}
+
+configure(javaProjects()) {
+    apply plugin: 'java'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    compileJava.options.encoding = "UTF-8"
+
+    apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
+}

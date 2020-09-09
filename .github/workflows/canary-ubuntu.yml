@@ -1,0 +1,36 @@
+name: Canary-Ubuntu
+
+on:
+  schedule:
+    - cron:  '0 10 * * *'
+  workflow_dispatch:
+
+jobs:
+  canary-test-ubuntu:
+    # if: github.repository == 'aws-samples/djl-demo'
+    runs-on: [ubuntu-16.04, ubuntu-18.04]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Set AWS region
+        run: echo "::set-env name=AWS-REGION::us-east-1"
+      - name: Test MXNet
+        run: |
+          cd canary
+          ./gradlew clean run
+          rm -rf ~/.mxnet ~/.djl.ai
+          DJL_ENGINE=mxnet-native-mkl ./gradlew clean run
+          rm -rf ~/.mxnet ~/.djl.ai
+      - name: Test PyTorch
+        run: |
+          cd canary
+          DJL_ENGINE=pytorch-native-auto ./gradlew clean run
+          rm -rf ~/.pytorch ~/.djl.ai
+          DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
+          rm -rf ~/.pytorch ~/.djl.ai
+      - name: Test TensorFlow
+        run: |
+          DJL_ENGINE=tensorflow-native-auto ./gradlew clean run
