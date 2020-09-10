@@ -1,0 +1,43 @@
+name: Canary-Windows
+
+on:
+  schedule:
+    - cron:  '0 14 * * *'
+  workflow_dispatch:
+
+jobs:
+  canary-test-windows:
+    if: github.repository == 'aws-samples/djl-demo'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2016, windows-2019]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Set AWS_REGION
+        run: echo '::set-env name=AWS_REGION::us-east-1'
+      - name: Test MXNet
+        shell: cmd
+        run: |
+          cd canary
+          gradlew clean run
+          rm.exe -Rf "%HOME%\.mxnet" "%HOME%\.djl.ai"
+          set DJL_ENGINE=mxnet-native-mkl&& gradlew clean run
+          rm.exe -Rf "%HOME%\.mxnet" "%HOME%\.djl.ai"
+      - name: Test PyTorch
+        shell: cmd
+        run: |
+          cd canary
+          set DJL_ENGINE=pytorch-native-auto&& gradlew clean run
+          rm.exe -Rf "%HOME%\.pytorch" "%HOME%\.djl.ai"
+          set DJL_ENGINE=pytorch-native-mkl&& gradlew clean run
+          rm.exe -Rf "%HOME%\.pytorch" "%HOME%\.djl.ai"
+      - name: Test TensorFlow
+        shell: cmd
+        run: |
+          cd canary
+          set DJL_ENGINE=DJL_ENGINE=tensorflow-native-auto&& gradlew clean run
