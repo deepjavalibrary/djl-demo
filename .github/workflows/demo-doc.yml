@@ -1,4 +1,4 @@
-name: nightly build
+name: demo documentation build
 
 on:
   schedule:
@@ -28,7 +28,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
       - name: Copy files to S3 with the AWS CLI
-        run: |
-          aws s3 sync site s3://djl-ai/documentation/demo/nightly --delete
-          aws cloudfront create-invalidation --distribution-id EBIOCWZO8BY7D --paths /
-
+        run: aws s3 sync site s3://djl-ai/documentation/demo/nightly --delete
+      - name: Create Invalidation on CloudFront
+        run: aws cloudfront create-invalidation --distribution-id EBIOCWZO8BY7D --paths /
