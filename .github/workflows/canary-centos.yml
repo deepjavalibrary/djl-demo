@@ -9,10 +9,7 @@ jobs:
   canary-test-centos:
     if: github.repository == 'aws-samples/djl-demo'
     runs-on: ubuntu-latest
-    container: ${{ matrix.images }}
-    strategy:
-      matrix:
-        images: ["centos:7"]
+    container: centos:7
     steps:
       - uses: actions/checkout@v1
       - name: Set up JDK 1.8
@@ -22,19 +19,20 @@ jobs:
       - name: Set AWS_REGION
         run: echo '::set-env name=AWS_REGION::us-east-1'
       - name: Test MXNet
+        working-directory: canary
         run: |
-          cd canary
           ./gradlew clean run
           rm -rf ~/.mxnet ~/.djl.ai
           DJL_ENGINE=mxnet-native-mkl ./gradlew clean run
           rm -rf ~/.mxnet ~/.djl.ai
       - name: Test PyTorch
+        working-directory: canary
         run: |
-          cd canary
           DJL_ENGINE=pytorch-native-cpu-precxx11 ./gradlew clean run
           rm -rf ~/.pytorch ~/.djl.ai
       - name: Test TensorFlow
+        working-directory: canary
         run: |
-          cd canary
           DJL_ENGINE=tensorflow-native-auto ./gradlew clean run
-
+          rm -rf ~/.tensorflow ~/.djl.ai
+          DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
