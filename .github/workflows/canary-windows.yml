@@ -8,10 +8,7 @@ on:
 jobs:
   canary-test-windows:
     if: github.repository == 'aws-samples/djl-demo'
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-2016, windows-2019]
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v1
       - name: Set up JDK 1.8
@@ -21,23 +18,19 @@ jobs:
       - name: Set AWS_REGION
         run: echo '::set-env name=AWS_REGION::us-east-1'
       - name: Test MXNet
-        shell: cmd
+        working-directory: canary
         run: |
-          cd canary
-          gradlew clean run
-          rm.exe -Rf "%HOME%\.mxnet" "%HOME%\.djl.ai"
-          set DJL_ENGINE=mxnet-native-mkl&& gradlew clean run
-          rm.exe -Rf "%HOME%\.mxnet" "%HOME%\.djl.ai"
+          cmd /c ".\gradlew.bat clean run"
+          cmd /c "rd /s /q %userprofile%\.djl.ai"
+          # cmd /c "set DJL_ENGINE=mxnet-native-mkl&& .\gradlew.bat clean run"
+          # cmd /c "rd /s /q %userprofile%\.djl.ai"
       - name: Test PyTorch
-        shell: cmd
+        working-directory: canary
         run: |
-          cd canary
-          set DJL_ENGINE=pytorch-native-auto&& gradlew clean run
-          rm.exe -Rf "%HOME%\.pytorch" "%HOME%\.djl.ai"
-          set DJL_ENGINE=pytorch-native-mkl&& gradlew clean run
-          rm.exe -Rf "%HOME%\.pytorch" "%HOME%\.djl.ai"
+          cmd /c "set DJL_ENGINE=pytorch-native-auto&& .\gradlew.bat clean run"
+          cmd /c "rd /s /q %userprofile%\.djl.ai"
+          cmd /c "set DJL_ENGINE=pytorch-native-cpu&& .\gradlew.bat clean run"
       - name: Test TensorFlow
-        shell: cmd
+        working-directory: canary
         run: |
-          cd canary
-          set DJL_ENGINE=DJL_ENGINE=tensorflow-native-auto&& gradlew clean run
+          cmd /c "set DJL_ENGINE=tensorflow-native-auto&& .\gradlew.bat clean run"
