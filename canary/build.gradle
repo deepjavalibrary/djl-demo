@@ -6,19 +6,25 @@ plugins {
 group "com.example"
 version "1.0-SNAPSHOT"
 
-sourceCompatibility = 1.8
+def djlVersion = getEnv("DJL_VERSION", "0.8.0")
+def engine = getEnv("DJL_ENGINE", "mxnet-native-auto")
+def os = getOsName()
+def stagingRepo = getEnv("DJL_STAGING", null)
 
 repositories {
     jcenter()
+    maven {
+        url "https://oss.sonatype.org/service/local/repositories/${stagingRepo}/content/"
+    }
 }
+
 
 configure(this) {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
     apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
 }
-
-def djlVersion = getEnv("DJL_VERSION", "0.7.0")
-def engine = getEnv("DJL_ENGINE", "mxnet-native-auto")
-def os = getOsName()
 
 dependencies {
     implementation platform("ai.djl:bom:${djlVersion}")
@@ -37,22 +43,21 @@ dependencies {
     implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_slf4j_version}"
 
     if (engine.startsWith("pytorch")) {
-        implementation ("ai.djl.pytorch:pytorch-model-zoo") {
-            exclude group: "ai.djl.pytorch", module: "pytorch-engine"
-        }
+        implementation "ai.djl.pytorch:pytorch-model-zoo"
         if (engine.contains("-auto")) {
-            implementation "ai.djl.pytorch:pytorch-engine"
             implementation "ai.djl.pytorch:pytorch-native-auto"
         } else if (engine.contains("-precxx11")) {
-            implementation "ai.djl.pytorch:pytorch-engine-precxx11"
             implementation "ai.djl.pytorch:pytorch-native-cpu-precxx11::${os}-x86_64"
         } else {
-            implementation "ai.djl.pytorch:pytorch-engine"
             implementation "ai.djl.pytorch:${engine}::${os}-x86_64"
         }
     } else if (engine.startsWith("tensorflow")) {
         implementation "ai.djl.tensorflow:tensorflow-model-zoo"
-        implementation "ai.djl.tensorflow:tensorflow-native-auto"
+        if (engine.contains("-auto")) {
+            implementation "ai.djl.tensorflow:tensorflow-native-auto"
+        } else {
+            implementation "ai.djl.tensorflow:${engine}::${os}-x86_64"
+        }
     } else {
         implementation "ai.djl.mxnet:mxnet-model-zoo"
         if (engine.contains("-auto")) {
