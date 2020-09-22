@@ -6,8 +6,6 @@ plugins {
 group "com.example"
 version "1.0-SNAPSHOT"
 
-sourceCompatibility = 1.8
-
 repositories {
     jcenter()
 }
@@ -31,7 +29,8 @@ application {
 }
 
 configure(this) {
-    defaultTasks "jar"
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 
     apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
 }

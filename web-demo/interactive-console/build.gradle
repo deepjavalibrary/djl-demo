@@ -6,13 +6,15 @@ plugins {
 
 group = 'ai.djl.examples'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
 
 repositories {
 	jcenter()
 }
 
 configure(this) {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
 	apply from: file("${rootProject.projectDir}/../../tools/gradle/formatter.gradle")
 }
 
