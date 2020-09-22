@@ -10,7 +10,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <graalvm.version>20.1.0</graalvm.version>
-        <djl.version>0.7.0</djl.version>
+        <djl.version>0.8.0</djl.version>
         <exec.mainClass>com.example.ImageClassification</exec.mainClass>
     </properties>
 
@@ -103,13 +103,13 @@
                 <dependency>
                     <groupId>org.bytedeco</groupId>
                     <artifactId>javacpp</artifactId>
-                    <version>1.5.4-SNAPSHOT</version>
+                    <version>1.5.4</version>
                     <classifier>macosx-x86_64</classifier>
                 </dependency>
                 <dependency>
                     <groupId>org.bytedeco</groupId>
                     <artifactId>javacpp</artifactId>
-                    <version>1.5.4-SNAPSHOT</version>
+                    <version>1.5.4</version>
                 </dependency>
                 <dependency>
                     <groupId>ai.djl.tensorflow</groupId>

@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.7.0")
+    implementation platform("ai.djl:bom:0.8.0")
     implementation "ai.djl:api"
 
     implementation "org.scala-lang:scala-library:2.11.12"

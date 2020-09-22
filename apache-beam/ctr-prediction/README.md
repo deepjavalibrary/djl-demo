@@ -48,18 +48,21 @@ Remember to specify:
 
 
 #### Using local runner
+
 ```bash
- mvn compile  exec:java -Dexec.mainClass=org.example.ctrprediction.CtrPrediction -Dai.djl.repository.zoo.location=./deepfm -Dexec.args="--inputFile=./ctr/test.csv" -Pdirect-runner
+mvn compile exec:java -Dexec.mainClass=org.example.ctrprediction.CtrPrediction -Dai.djl.repository.zoo.location=./deepfm -Dexec.args="--inputFile=./ctr/test.csv" -Pdirect-runner
 ```
 
 
 #### Using Flink runner
+
 ```bash
-mvn compile  exec:java -Dexec.mainClass=org.example.ctrprediction.CtrPrediction -Dai.djl.repository.zoo.location=./deepfm -Dexec.args="--runner=FlinkRunner--inputFile=./ctr/test.csv" -Pflink-runner
+mvn compile exec:java -Dexec.mainClass=org.example.ctrprediction.CtrPrediction -Dai.djl.repository.zoo.location=./deepfm -Dexec.args="--runner=FlinkRunner--inputFile=./ctr/test.csv" -Pflink-runner
 ```
 
 
 #### Using Spark runner
+
 ```bash
 mvn compile  exec:java -Dexec.mainClass=org.example.ctrprediction.CtrPrediction -Dai.djl.repository.zoo.location=./deepfm -Dexec.args="--runner=SparkRunner --inputFile=./ctr/test.csv" -Pspark-runner
 ```
@@ -67,6 +70,7 @@ mvn compile  exec:java -Dexec.mainClass=org.example.ctrprediction.CtrPrediction 
 
 You can find the results in "ctr-*" files.
 First column is record ids, and second column is predicted ctr.
+
 ```bash
 d3bb711c-fe45-4cf9-a73e-70ff0bb2bee3	1.0
 bc48f39c-e779-47dc-9924-5100ebca8b5e	0.99999917
