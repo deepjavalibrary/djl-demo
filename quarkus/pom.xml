@@ -17,7 +17,7 @@
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
         <quarkus.platform.version>1.5.2.Final</quarkus.platform.version>
-        <djl.version>0.7.0</djl.version>
+        <djl.version>0.8.0</djl.version>
         <surefire-plugin.version>2.22.1</surefire-plugin.version>
     </properties>
 
@@ -169,12 +169,12 @@
                     <groupId>org.bytedeco</groupId>
                     <artifactId>javacpp</artifactId>
                     <!-- Only 1.5.4 works with GraalVM -->
-                    <version>1.5.4-SNAPSHOT</version>
+                    <version>1.5.4</version>
                 </dependency>
                 <dependency>
                     <groupId>org.bytedeco</groupId>
                     <artifactId>javacpp</artifactId>
-                    <version>1.5.4-SNAPSHOT</version>
+                    <version>1.5.4</version>
                     <classifier>macosx-x86_64</classifier>
                 </dependency>
                 <dependency>

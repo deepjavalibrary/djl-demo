@@ -39,7 +39,6 @@ import org.apache.beam.sdk.values.PCollection;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -51,7 +50,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class CtrPrediction {
 
-    public static void main(String[] args) throws ModelException, IOException {
+    public static void main(String[] args) {
         // creates pipeline from arguments
         CtrOptions options =
                 PipelineOptionsFactory.fromArgs(args).withValidation().as(CtrOptions.class);

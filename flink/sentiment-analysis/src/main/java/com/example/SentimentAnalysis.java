@@ -76,9 +76,7 @@ public class SentimentAnalysis {
         env.execute("SentimentAnalysis");
     }
 
-    /**
-     * Sentiment Analysis {@link FlatMapFunction} implementation.
-     */
+    /** Sentiment Analysis {@link FlatMapFunction} implementation. */
     public static class SAFlatMap implements FlatMapFunction<String, Classifications> {
 
         private static Predictor<String, Classifications> predictor;
