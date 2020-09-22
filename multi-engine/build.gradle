@@ -6,8 +6,6 @@ plugins {
 group "com.example"
 version "1.0-SNAPSHOT"
 
-sourceCompatibility = 1.8
-
 repositories {
     jcenter()
 }
@@ -27,6 +25,7 @@ dependencies {
 application {
     mainClassName = System.getProperty("main", "com.examples.MultiEngine")
 }
+
 run {
     systemProperties System.getProperties()
     systemProperties.remove("user.dir")
@@ -35,5 +34,8 @@ run {
 tasks.distTar.enabled = false
 
 configure(this) {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
     apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
 }

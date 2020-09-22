@@ -19,12 +19,10 @@ dependencies {
     runtimeOnly "org.slf4j:slf4j-simple:1.7.29"
 }
 
-java {
+configure(this) {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
-}
 
-configure(this) {
     apply from: file("${rootProject.projectDir}/../../../tools/gradle/formatter.gradle")
 }
 

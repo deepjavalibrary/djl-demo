@@ -8,13 +8,9 @@ plugins {
 group "com.example"
 version "1.0-SNAPSHOT"
 
-
 repositories {
     jcenter()
 }
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
 dependencies {
     implementation platform("ai.djl:bom:0.7.0")
@@ -39,6 +35,9 @@ compileScala {
 }
 
 application {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
     mainClassName = System.getProperty("main", "com.examples.DataProcessExample")
 }
 

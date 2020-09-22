@@ -12,10 +12,9 @@ repositories {
     jcenter()
 }
 
-
 dependencies {
     implementation 'org.apache.flink:flink-streaming-java_2.11:1.11.1'
-    implementation "ai.djl:api:0.7.0-SNAPSHOT"
+    implementation "ai.djl:api:0.7.0"
     implementation "org.slf4j:slf4j-simple:1.7.30"
 
     runtimeOnly 'org.apache.flink:flink-clients_2.11:1.11.1'
@@ -27,10 +26,9 @@ application {
     mainClassName = System.getProperty("main", "com.example.SentimentAnalysis")
 }
 
-
 configure(this) {
-
-    defaultTasks "jar"
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 
     apply from: file("${rootProject.projectDir}/../../tools/gradle/formatter.gradle")
 }
