@@ -31,8 +31,8 @@ Run the following command to build the project and run:
 # set environment variable to suppress TensorFlow logging:
 export TF_CPP_MIN_LOG_LEVEL=1
 
-./mvnw clean package
-./mvnw exec:java
+./mvnw clean
+./mvnw package exec:java
 
 [
 	class: "n04254680 soccer ball", probability: 0.92693

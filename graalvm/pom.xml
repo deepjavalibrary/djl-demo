@@ -1,7 +1,7 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.example</groupId>
-    <artifactId>djl-native</artifactId>
+    <artifactId>graalvm</artifactId>
     <version>0.1-SNAPSHOT</version>
     <properties>
         <maven.compiler.parameters>true</maven.compiler.parameters>
