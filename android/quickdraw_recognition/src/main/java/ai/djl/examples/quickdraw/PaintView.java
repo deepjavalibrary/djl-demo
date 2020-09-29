@@ -207,6 +207,10 @@ public final class PaintView extends View {
         int y = (int) bound.top;
         int width = (int) Math.ceil(bound.width());
         int height = (int) Math.ceil(bound.height());
+        //width must be >0
+        if (width <=0) return;
+        //y+height must be <= bitmap.height()
+        if (y+height>bitmap.getHeight()) return;
         // do crop
         Bitmap bmp = Bitmap.createBitmap(bitmap, x, y, width, height);
         // do scaling
