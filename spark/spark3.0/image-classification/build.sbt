@@ -16,3 +16,6 @@ libraryDependencies += "ai.djl" % "api" % "0.8.0"
 
 libraryDependencies += "ai.djl.pytorch" % "pytorch-model-zoo" % "0.8.0"
 libraryDependencies += "ai.djl.pytorch" % "pytorch-native-auto" % "1.6.0"
+
+// libraryDependencies += "ai.djl.tensorflow" % "tensorflow-model-zoo" % "0.8.0"
+// libraryDependencies += "ai.djl.tensorflow" % "tensorflow-native-auto" % "2.3.0"
