@@ -1,0 +1,35 @@
+plugins {
+    id 'scala'
+    id 'application'
+}
+
+group "com.example"
+version "1.0-SNAPSHOT"
+
+repositories {
+    jcenter()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    implementation platform("ai.djl:bom:0.8.0")
+    implementation "org.apache.spark:spark-sql_2.12:3.0.1"
+    implementation "org.apache.spark:spark-mllib_2.12:3.0.1"
+    implementation "ai.djl:api"
+
+
+    runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
+    runtimeOnly "ai.djl.pytorch:pytorch-native-auto"
+}
+
+compileScala {
+    scalaCompileOptions.setAdditionalParameters(["-target:jvm-1.8"])
+}
+
+application {
+    mainClassName = System.getProperty("main", "com.examples.ImageClassificationExample")
+}
+
+tasks.distTar.enabled = false
