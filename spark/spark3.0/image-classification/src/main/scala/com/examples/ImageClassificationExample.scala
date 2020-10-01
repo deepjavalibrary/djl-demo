@@ -97,7 +97,6 @@ object ImageClassificationExample {
         predictor.predict(row).toString
       })
     })(Encoders.STRING)
-
     println(result.collect().mkString("\n"))
   }
 }

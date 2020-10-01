@@ -10,9 +10,6 @@ repositories {
     jcenter()
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 dependencies {
     implementation platform("ai.djl:bom:0.8.0")
     implementation "org.apache.spark:spark-sql_2.12:3.0.1"

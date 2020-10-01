@@ -42,11 +42,11 @@ runtimeOnly "ai.djl.tensorflow:tensorflow-model-zoo:0.8.0"
 runtimeOnly "ai.djl.tensorflow:tensorflow-native-auto:2.3.0"
 ```
 
-Apart from that, you may also need to use `NaiveEngine` mode in MXNet for multi-thread inference.
+Apart from that, you may also need to use `NaiveEngine` mode in MXNet for multi-thread inference. You can also add `OMP_NUM_THREAD` environment variable to have the best performance optimization.
 Please add this line in your `SparkConf`
-
 ```
 .setExecutorEnv("MXNET_ENGINE_TYPE", "NaiveEngine")
+.setExecutorEnv("OMP_NUM_THREAD", 1)
 ```
 
 ## Run the example
