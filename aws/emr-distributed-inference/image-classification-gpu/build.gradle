@@ -1,0 +1,51 @@
+plugins {
+    id 'scala'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
+    id 'java'
+}
+
+group "com.example"
+version "1.0-SNAPSHOT"
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation platform("ai.djl:bom:0.8.0")
+    implementation "org.apache.spark:spark-sql_2.12:3.0.0"
+    implementation "org.apache.spark:spark-mllib_2.12:3.0.0"
+    implementation "ai.djl:api"
+
+
+    runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
+    runtimeOnly "ai.djl.pytorch:pytorch-native-cu101::linux-x86_64"
+    runtimeOnly "org.slf4j:slf4j-simple:1.7.30"
+}
+
+configure(this) {
+    defaultTasks "jar"
+}
+
+compileScala {
+    scalaCompileOptions.setAdditionalParameters(["-target:jvm-1.8"])
+}
+
+application {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    mainClassName = System.getProperty("main", "com.examples.ImageClassificationExample")
+}
+
+shadowJar {
+    zip64 true
+    mergeServiceFiles()
+    exclude "META-INF/*.SF"
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    exclude "LICENSE*"
+}
+
+tasks.distTar.enabled = false
