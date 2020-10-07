@@ -19,7 +19,7 @@ import io.quarkus.runtime.annotations.Recorder;
 @Recorder
 public class DjlPredictorRecorder {
 
-    public RuntimeValue<Predictor<?, ?>> initializePredictor(DjlModelConfiguration configuration)
+    public RuntimeValue<ZooModel<?, ?>> initializePredictor(DjlModelConfiguration configuration)
             throws ClassNotFoundException, MalformedModelException, ModelNotFoundException, IOException {
         Class<?> inCls = Class.forName(configuration.inputClass);
         Class<?> outCls = Class.forName(configuration.outputClass);
@@ -34,13 +34,12 @@ public class DjlPredictorRecorder {
         configuration.modelName.ifPresent(criteria::optModelName);
 
         ZooModel<?, ?> model = ModelZoo.loadModel(criteria.build());
-        Predictor<?, ?> predictor = model.newPredictor();
-        return new RuntimeValue<>(predictor);
+        return new RuntimeValue<>(model);
     }
 
     public void configureDjlPredictorProducer(BeanContainer beanContainer,
-            RuntimeValue<Predictor<?, ?>> predictorHolder) {
+            RuntimeValue<ZooModel<?, ?>> modelHolder) {
         DjlPredictorProducer predictorProducer = beanContainer.instance(DjlPredictorProducer.class);
-        predictorProducer.initialize(predictorHolder.getValue());
+        predictorProducer.initialize(modelHolder.getValue());
     }
 }

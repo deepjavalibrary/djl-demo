@@ -1,9 +1,9 @@
 package ai.djl.quarkus.deployment;
 
+import ai.djl.repository.zoo.ZooModel;
 import java.io.IOException;
 
 import ai.djl.MalformedModelException;
-import ai.djl.inference.Predictor;
 import ai.djl.repository.zoo.ModelNotFoundException;
 import io.quarkus.arc.deployment.BeanContainerBuildItem;
 import io.quarkus.deployment.annotations.BuildStep;
@@ -28,11 +28,11 @@ class DjlPredictorProcessor {
 
     @BuildStep
     @Record(ExecutionTime.STATIC_INIT)
-    DjlPredictorBuildItem createPredictor(DjlPredictorRecorder recorder, BeanContainerBuildItem beanContainerBuildItem,
+    DjlModelBuildItem createModel(DjlPredictorRecorder recorder, BeanContainerBuildItem beanContainerBuildItem,
             DjlModelConfiguration configuration)
             throws ClassNotFoundException, MalformedModelException, ModelNotFoundException, IOException {
-        RuntimeValue<Predictor<?, ?>> predictorHolder = recorder.initializePredictor(configuration);
-        recorder.configureDjlPredictorProducer(beanContainerBuildItem.getValue(), predictorHolder);
-        return new DjlPredictorBuildItem(predictorHolder);
+        RuntimeValue<ZooModel<?, ?>> modelHolder = recorder.initializePredictor(configuration);
+        recorder.configureDjlPredictorProducer(beanContainerBuildItem.getValue(), modelHolder);
+        return new DjlModelBuildItem(modelHolder);
     }
 }

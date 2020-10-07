@@ -1,9 +1,9 @@
 package ai.djl.quarkus.runtime;
 
 import ai.djl.inference.Predictor;
+import ai.djl.repository.zoo.ZooModel;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
-import javax.inject.Singleton;
 
 /**
  * An injectable dependency that creates a {@link Predictor} using the model described in the
@@ -12,15 +12,14 @@ import javax.inject.Singleton;
 @ApplicationScoped
 public class DjlPredictorProducer {
 
-    private volatile Predictor<?, ?> predictor;
+    private volatile ZooModel<?, ?> model;
 
-    void initialize(Predictor<?, ?> predictor) {
-        this.predictor = predictor;
+    void initialize(ZooModel<?, ?> model) {
+        this.model = model;
     }
 
-    @Singleton
     @Produces
     public Predictor<?, ?> predictor() {
-        return predictor;
+        return model.newPredictor();
     }
 }
