@@ -15,7 +15,7 @@ in the dependency to match with.
 
 ### Standalone
 
-This application require Java 8+ to execute.
+This application requires Java 8+ to execute.
 
 #### Switch to CUDA 10.1
 
