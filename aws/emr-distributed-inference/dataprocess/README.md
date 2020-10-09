@@ -32,7 +32,7 @@ You will also need to specify the key name that bring you the access to the EC2 
 aws emr create-cluster \
     --name "Spark cluster" \
     --release-label emr-5.30.1 \
-    --applications Name=Spark \
+    --applications Name=Hadoop Name=Spark \
     --ec2-attributes KeyName=myKey \
     --instance-type c5.2xlarge \
     --instance-count 3 \

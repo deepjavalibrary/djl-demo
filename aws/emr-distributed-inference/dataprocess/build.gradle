@@ -16,7 +16,6 @@ dependencies {
     implementation platform("ai.djl:bom:0.8.0")
     implementation "ai.djl:api"
 
-    implementation "org.scala-lang:scala-library:2.11.12"
     implementation "org.apache.spark:spark-core_2.11:2.4.5"
     implementation "org.apache.spark:spark-sql_2.11:2.4.5"
 
