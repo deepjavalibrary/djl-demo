@@ -13,7 +13,7 @@
 package com.examples
 
 import java.net.URL
-import java.nio.file.{Files, Path}
+import java.nio.file.Files
 import java.util
 
 import ai.djl.{Device, Model}
@@ -25,6 +25,8 @@ import ai.djl.repository.zoo.{Criteria, ModelZoo, ZooModel}
 import ai.djl.training.util.{DownloadUtils, ProgressBar}
 import ai.djl.translate.{Batchifier, Pipeline, Translator, TranslatorContext}
 import ai.djl.util.{Utils, ZipUtils}
+import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.{SparkConf, TaskContext}
 import org.apache.spark.ml.image.ImageSchema
 import org.apache.spark.sql.functions.col
@@ -83,15 +85,23 @@ object ImageClassificationExample {
 
   def downloadImages(outputPath : Path) : String = {
     val url = "https://alpha-djl-demos.s3.amazonaws.com/spark-demo/images.zip"
-    DownloadUtils.download(new URL(url), outputPath.resolve("images.zip"), new ProgressBar())
-    ZipUtils.unzip(Files.newInputStream(outputPath.resolve("images.zip")), outputPath)
-    outputPath.toAbsolutePath.toString
+    val tempPath = Files.createTempDirectory("images")
+    DownloadUtils.download(new URL(url), tempPath.resolve("images.zip"), new ProgressBar())
+    ZipUtils.unzip(Files.newInputStream(tempPath.resolve("images.zip")), tempPath)
+    // upload to hadoop
+    println("Upload images to HDFS...")
+    val hadoopConf = new Configuration()
+    val hdfs = FileSystem.get(hadoopConf)
+    val srcPath = new Path(tempPath.toAbsolutePath.toString)
+    hdfs.copyFromLocalFile(srcPath, outputPath)
+    outputPath.toString
   }
 
   def main(args: Array[String]) {
 
     // download images
-    val imagePath = downloadImages(Files.createTempDirectory("images"))
+    val imagePath = downloadImages(new Path("hdfs:///images"))
+
     // Spark configuration
     val spark = SparkSession.builder()
       .appName("Image Classification")
@@ -101,7 +111,6 @@ object ImageClassificationExample {
     spark.conf.getAll.foreach(pair => println(pair._1 + ":" + pair._2))
 
     val df = spark.read.format("image").option("dropInvalid", true).load(imagePath)
-    println(df.select("image.origin", "image.width", "image.height").show(truncate=false))
 
     val result = df.select(col("image.*")).mapPartitions(partition => {
       val context = TaskContext.get()
