@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: '3.x'
       - name: install Python Dependencies
-        run: pip3 install mkdocs mkdocs-exclude mknotebooks mkdocs-material jupyter Pygments
+        run: pip3 install mkdocs mkdocs-exclude mkdocs-material Pygments
       - name: clone DJL repo to access the DJL parent dir
         run: git clone https://github.com/aws-samples/djl-demo djl_demo_tmp
       - name: build docs

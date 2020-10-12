@@ -11,7 +11,7 @@ theme:
   logo: https://raw.githubusercontent.com/awslabs/djl/master/website/img/DJL.svg
   favicon: https://github.com/awslabs/djl/blob/master/website/img/favicon.png?raw=true
   features:
-    - tabs
+    - navigation.tabs
   palette:
     primary: light-blue
     accent: light-blue
@@ -31,10 +31,9 @@ extra:
 docs_dir: '../'
 plugins:
   - search
-  - mknotebooks
   - exclude:
       regex:
-        - '.*((.+-runner)|DS_Store|MF|analysis|ap_|apk|bat|bin|cache|class|classpath|cmd|csv|dat|(dat.*)|dex|dumpstream|editorconfig|eslintrc|flat|gitignore|gradle|html|idx|iml|index|jar|java|jks|lock|lst|mapping|name|pack|params|pb|prefs|prettierignore|prettierrc|pro|project|properties|pt|sample|sbt|scala|ser|sh|snap|so|ts|tsx|txt|xml)$'
+        - '.*((.+-runner)|DS_Store|MF|analysis|ap_|apk|bat|bin|cache|class|classpath|cmd|csv|dex|dumpstream|editorconfig|eslintrc|flat|gitignore|gradle|html|idx|iml|index|jar|java|jks|lock|lst|mapping|name|pack|params|pb|prefs|prettierignore|prettierrc|pro|project|properties|pt|sample|sbt|scala|ser|sh|snap|so|ts|tsx|txt|xml)$'
 
 nav:
   - HOME: 'README.md'
@@ -42,7 +41,9 @@ nav:
       - AWS-kinesis-video-streams: 'aws/aws-kinesis-video-streams/README.md'
       - Model Serving on AWS BeanStalk EC2: 'aws/beanstalk-model-serving/README.md'
       - Serverless Model Serving with DJL: 'aws/lambda-model-serving/README.md'
-      - Distributed inference with AWS EMR: 'aws/emr-distributed-inference/README.md'
+      - Distributed inference with AWS EMR: 'aws/emr-distributed-inference/dataprocess/README.md'
+  - Android:
+      - Doodledraw Applications with Android: 'android/README.md'
   - EcoSystem:
       - Java Integrations:
           - DJL Component in Apache Camel: 'camel-djl/README.md'
@@ -50,7 +51,7 @@ nav:
           - Spark Image Classification: 'spark/image-classification/README.md'
           - Apache Beam: 'apache-beam/ctr-prediction/README.md'
           - Apache Flink: 'flink/sentiment-analysis/README.md'
-          - Quarkus + DJL Demo: 'quarkus/README.md'
+          - Quarkus + DJL Demo: 'quarkus/example/README.md'
   - Applications:
       - Footwear Classification: 'footwear_classification/README.md'
       - Live Object Detection: 'live-object-detection/README.md'
@@ -58,6 +59,7 @@ nav:
       - MultiEngine on DJL: 'multi-engine/README.md'
       - Visualizing Training with DJL: 'visualization/README.md'
       - Interactive JShell and Block Runner for DJL: 'web-demo/interactive-console/README.md'
+      - Malicious URL Detection: 'malicious-url-detector/README.md'
   - Extensions:
       - Visualizing Training with DJL: 'visualization/README.md'
       - Interactive JShell and Block Runner for DJL: 'web-demo/interactive-console/README.md'

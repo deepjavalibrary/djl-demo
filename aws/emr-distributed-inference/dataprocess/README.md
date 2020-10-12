@@ -95,4 +95,4 @@ aws s3 rb --force s3://your-bucket-name
 
 
 ## Learn more about DJL usage for Spark
-For more information about an actual DJL image classification example on Apache Spark, please find [here](../../spark/image-classification/README.md).
+For more information about an actual DJL image classification example on Apache Spark, please find [here](../../../spark/image-classification/README.md).
