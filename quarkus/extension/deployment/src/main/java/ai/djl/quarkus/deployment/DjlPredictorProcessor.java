@@ -1,6 +1,10 @@
 package ai.djl.quarkus.deployment;
 
 import ai.djl.repository.zoo.ZooModel;
+import io.quarkus.deployment.annotations.BuildProducer;
+import io.quarkus.deployment.builditem.nativeimage.NativeImageResourceBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.RuntimeInitializedClassBuildItem;
 import java.io.IOException;
 
 import ai.djl.MalformedModelException;
@@ -27,7 +31,25 @@ class DjlPredictorProcessor {
     }
 
     @BuildStep
-    @Record(ExecutionTime.STATIC_INIT)
+    NativeImageResourceBuildItem nativeImageResourceBuildItem() {
+        return new NativeImageResourceBuildItem("META-INF/extra.properties");
+    }
+
+    @BuildStep
+    void runtimeInit(BuildProducer<RuntimeInitializedClassBuildItem> runtimeInit) {
+        for(String runtimeClass : RuntimeClasses.RUNTIME_CLASSES) {
+            runtimeInit.produce(new RuntimeInitializedClassBuildItem(runtimeClass));
+        }
+    }
+
+    @BuildStep
+    void modelReflectionInit(BuildProducer<ReflectiveClassBuildItem> reflections, DjlModelConfiguration modelConfig) {
+        reflections.produce(new ReflectiveClassBuildItem(true, true, modelConfig.inputClass));
+        reflections.produce(new ReflectiveClassBuildItem(true, true, modelConfig.outputClass));
+    }
+
+    @BuildStep
+    @Record(ExecutionTime.RUNTIME_INIT)
     DjlModelBuildItem createModel(DjlPredictorRecorder recorder, BeanContainerBuildItem beanContainerBuildItem,
             DjlModelConfiguration configuration)
             throws ClassNotFoundException, MalformedModelException, ModelNotFoundException, IOException {

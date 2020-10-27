@@ -10,7 +10,7 @@ import io.quarkus.runtime.annotations.ConfigRoot;
 /**
  * Quarkus Configuration to describe a {@link ai.djl.Model}.
  */
-@ConfigRoot(phase = ConfigPhase.BUILD_TIME)
+@ConfigRoot(phase = ConfigPhase.BUILD_AND_RUN_TIME_FIXED)
 public class DjlModelConfiguration {
 
     /**

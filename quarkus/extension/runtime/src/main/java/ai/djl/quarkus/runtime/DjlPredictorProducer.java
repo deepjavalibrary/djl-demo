@@ -2,7 +2,9 @@ package ai.djl.quarkus.runtime;
 
 import ai.djl.inference.Predictor;
 import ai.djl.repository.zoo.ZooModel;
+import ai.djl.translate.Translator;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 
 /**
@@ -16,6 +18,11 @@ public class DjlPredictorProducer {
 
     void initialize(ZooModel<?, ?> model) {
         this.model = model;
+    }
+
+    @Produces
+    public ZooModel<?, ?> model() {
+        return model;
     }
 
     @Produces
