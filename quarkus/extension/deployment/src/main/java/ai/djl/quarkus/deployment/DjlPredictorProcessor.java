@@ -5,6 +5,7 @@ import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.builditem.nativeimage.NativeImageResourceBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.RuntimeInitializedClassBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.RuntimeInitializedPackageBuildItem;
 import java.io.IOException;
 
 import ai.djl.MalformedModelException;
@@ -31,28 +32,30 @@ class DjlPredictorProcessor {
     }
 
     @BuildStep
-    NativeImageResourceBuildItem nativeImageResourceBuildItem() {
-        return new NativeImageResourceBuildItem("META-INF/extra.properties");
+    void runtimeInit(BuildProducer<RuntimeInitializedClassBuildItem> runtimeClasses,
+        BuildProducer<RuntimeInitializedPackageBuildItem> runtimePackages) {
+
+        runtimeClasses.produce(new RuntimeInitializedClassBuildItem("io.netty.internal.tcnative.SSL"));
+
+        runtimePackages.produce(new RuntimeInitializedPackageBuildItem("ai.djl"));
+        runtimePackages.produce(new RuntimeInitializedPackageBuildItem("org.bytedeco"));
+        runtimePackages.produce(new RuntimeInitializedPackageBuildItem("org.tensorflow"));
+        runtimePackages.produce(new RuntimeInitializedPackageBuildItem("com.google.protobuf"));
     }
 
     @BuildStep
-    void runtimeInit(BuildProducer<RuntimeInitializedClassBuildItem> runtimeInit) {
-        for(String runtimeClass : RuntimeClasses.RUNTIME_CLASSES) {
-            runtimeInit.produce(new RuntimeInitializedClassBuildItem(runtimeClass));
-        }
-    }
-
-    @BuildStep
-    void modelReflectionInit(BuildProducer<ReflectiveClassBuildItem> reflections, DjlModelConfiguration modelConfig) {
+    void modelReflectionInit(BuildProducer<ReflectiveClassBuildItem> reflections,
+        DjlModelConfiguration modelConfig) {
         reflections.produce(new ReflectiveClassBuildItem(true, true, modelConfig.inputClass));
         reflections.produce(new ReflectiveClassBuildItem(true, true, modelConfig.outputClass));
     }
 
     @BuildStep
     @Record(ExecutionTime.RUNTIME_INIT)
-    DjlModelBuildItem createModel(DjlPredictorRecorder recorder, BeanContainerBuildItem beanContainerBuildItem,
-            DjlModelConfiguration configuration)
-            throws ClassNotFoundException, MalformedModelException, ModelNotFoundException, IOException {
+    DjlModelBuildItem createModel(DjlPredictorRecorder recorder,
+        BeanContainerBuildItem beanContainerBuildItem,
+        DjlModelConfiguration configuration)
+        throws ClassNotFoundException, MalformedModelException, ModelNotFoundException, IOException {
         RuntimeValue<ZooModel<?, ?>> modelHolder = recorder.initializePredictor(configuration);
         recorder.configureDjlPredictorProducer(beanContainerBuildItem.getValue(), modelHolder);
         return new DjlModelBuildItem(modelHolder);
