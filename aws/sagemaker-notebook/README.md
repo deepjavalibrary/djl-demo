@@ -11,6 +11,7 @@ We will use [IJava](https://github.com/SpencerPark/IJava) Kernel for Java API. Y
 ```bash
 curl -L https://github.com/SpencerPark/IJava/releases/download/v1.3.0/ijava-1.3.0.zip -o ijava-kernel.zip &> /dev/null
 unzip -q ijava-kernel.zip -d ijava-kernel && cd ijava-kernel && python3 install.py --sys-prefix &> /dev/null
+jupyter kernelspec list
 ```
 
 Wait for approximately 20 second and refresh the JupyterLab. You will see the Java kernel available on the right-hand side.
@@ -28,7 +29,8 @@ We need to install the [Almond](https://almond.sh/)(Scala Jupyter Kernel). You c
 
 ```bash
 curl -Lo coursier https://git.io/coursier-cli && chmod +x coursier
-./coursier launch --fork almond --scala 2.12 -- --install && rm -f coursier
+./coursier launch --fork almond --scala 2.12.10 -- --install && rm -f coursier
+jupyter kernelspec list
 ```
 
 Wait for approximately 20 second and refresh the JupyterLab. You will see the Scala kernel available on the right-hand side.
@@ -46,13 +48,10 @@ mv spark-3.0.0-bin-hadoop2.7/ spark
 If you need GPU support for Spark, you can run the following command to set it up:
 
 ```bash
-mkdir /opt/sparkRapidsPlugin
-pushd /opt/sparkRapidsPlugin || exit
 curl -O https://raw.githubusercontent.com/apache/spark/master/examples/src/main/scripts/getGpusResources.sh
 chmod 777 getGpusResources.sh
-popd || exit
 cp spark/conf/spark-env.sh.template spark/conf/spark-env.sh
-echo 'SPARK_WORKER_OPTS="-Dspark.worker.resource.gpu.amount=1 -Dspark.worker.resource.gpu.discoveryScript=/opt/sparkRapidsPlugin/getGpusResources.sh"' >> spark/conf/spark-env.sh
+echo 'SPARK_WORKER_OPTS="-Dspark.worker.resource.gpu.amount=1 -Dspark.worker.resource.gpu.discoveryScript=/home/ec2-user/getGpusResources.sh"' >> spark/conf/spark-env.sh
 ```
 
 We can start our standalone cluster by doing the followings:
