@@ -35,39 +35,10 @@ jupyter kernelspec list
 
 Wait for approximately 20 second and refresh the JupyterLab. You will see the Scala kernel available on the right-hand side.
 
-### Install Spark (Optional)
+Now you can try with our Scala Notebooks provided by DJL:
 
-Some applications require you to have standalone setup for Spark. You can use the following command in terminal to install Spark:
+- [DJL Spark application](https://github.com/aws-samples/djl-demo/tree/master/spark/notebook/Image_Classification_Spark.ipynb)
 
-```bash
-curl -O https://archive.apache.org/dist/spark/spark-3.0.0/spark-3.0.0-bin-hadoop2.7.tgz
-tar zxvf spark-3.0.0-bin-hadoop2.7.tgz
-mv spark-3.0.0-bin-hadoop2.7/ spark
-```
+## Use GPU on Notebook
 
-If you need GPU support for Spark, you can run the following command to set it up:
-
-```bash
-curl -O https://raw.githubusercontent.com/apache/spark/master/examples/src/main/scripts/getGpusResources.sh
-chmod 777 getGpusResources.sh
-cp spark/conf/spark-env.sh.template spark/conf/spark-env.sh
-echo 'SPARK_WORKER_OPTS="-Dspark.worker.resource.gpu.amount=1 -Dspark.worker.resource.gpu.discoveryScript=/home/ec2-user/getGpusResources.sh"' >> spark/conf/spark-env.sh
-```
-
-We can start our standalone cluster by doing the followings:
-
-```bash
-export SPARK_MASTER_HOST=localhost
-export SPARK_WORKER_INSTANCES=1
-./spark/sbin/start-master.sh
-./spark/sbin/start-slave.sh spark://localhost:7077
-```
-
-If there is anytime you need to restart your cluster with different setup, you can stop them and reuse the above script to start again.
-
-```bash
-./spark/sbin/stop-master.sh
-./spark/sbin/stop-slave.sh
-```
-
-
+Currently DJL offering several GPU computing platforms. Please go do our main [docsite](http://docs.djl.ai/) to check CUDA support for different DL engines. To switch between different CUDA version in SageMaker Notebook through opening a terminal and follow [this instruction](https://docs.aws.amazon.com/dlami/latest/devguide/tutorial-base.html).
