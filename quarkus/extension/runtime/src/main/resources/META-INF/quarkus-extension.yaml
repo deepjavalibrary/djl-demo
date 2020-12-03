@@ -1,0 +1,9 @@
+---
+name: "DJL client"
+metadata:
+  keywords:
+  - "deep learning"
+  guide: "https://quarkus.io/guides/djl"
+  categories:
+  - "data"
+  status: "preview"
