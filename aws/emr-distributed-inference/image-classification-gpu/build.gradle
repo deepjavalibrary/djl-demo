@@ -16,12 +16,12 @@ configurations {
 
 dependencies {
     implementation platform("ai.djl:bom:0.8.0")
-    implementation "org.apache.spark:spark-sql_2.12:3.0.0"
-    implementation "org.apache.spark:spark-mllib_2.12:3.0.0"
+    implementation "org.apache.spark:spark-sql_2.12:3.0.1"
+    implementation "org.apache.spark:spark-mllib_2.12:3.0.1"
     implementation "org.apache.hadoop:hadoop-hdfs:2.7.4"
     // exclude system provided dependencies to avoid version mismatch
-    exclusion "org.apache.spark:spark-sql_2.12:3.0.0"
-    exclusion "org.apache.spark:spark-mllib_2.12:3.0.0"
+    exclusion "org.apache.spark:spark-sql_2.12:3.0.1"
+    exclusion "org.apache.spark:spark-mllib_2.12:3.0.1"
     exclusion "org.apache.hadoop:hadoop-hdfs:2.7.4"
     implementation "ai.djl:api"
 
