@@ -1,0 +1,8 @@
+[
+  {
+    "Classification":"spark",
+    "Properties":{
+      "enableSparkRapids":"true"
+    }
+  }
+]
