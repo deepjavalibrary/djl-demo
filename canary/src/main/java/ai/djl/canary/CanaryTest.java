@@ -72,11 +72,11 @@ public final class CanaryTest {
                 "https://github.com/awslabs/djl/raw/master/examples/src/test/resources/dog_bike_car.jpg";
         Image img = ImageFactory.getInstance().fromUrl(url);
         String backbone = "resnet50";
-        Map<String, Object> options = null;
+        Map<String, String> options = null;
         if ("TensorFlow".equals(Engine.getInstance().getEngineName())) {
             backbone = "mobilenet_v2";
             options = new ConcurrentHashMap<>();
-            options.put("Tags", new String[] {});
+            options.put("Tags", "");
         }
 
         Criteria<Image, DetectedObjects> criteria =

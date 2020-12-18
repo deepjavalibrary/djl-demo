@@ -21,17 +21,19 @@ jobs:
         run: |
           cd canary
           ./gradlew clean run
-          rm -rf ~/.mxnet ~/.djl.ai
+          rm -rf ~/.djl.ai
           DJL_ENGINE=mxnet-native-mkl ./gradlew clean run
-          rm -rf ~/.mxnet ~/.djl.ai
+          rm -rf ~/.djl.ai
       - name: Test PyTorch
         run: |
           cd canary
           DJL_ENGINE=pytorch-native-auto ./gradlew clean run
-          rm -rf ~/.pytorch ~/.djl.ai
+          rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
-          rm -rf ~/.pytorch ~/.djl.ai
+          rm -rf ~/.djl.ai
       - name: Test TensorFlow
         run: |
           cd canary
           DJL_ENGINE=tensorflow-native-auto ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
