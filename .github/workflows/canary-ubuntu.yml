@@ -24,19 +24,19 @@ jobs:
         working-directory: canary
         run: |
           ./gradlew clean run
-          rm -rf ~/.mxnet ~/.djl.ai
+          rm -rf ~/.djl.ai
           DJL_ENGINE=mxnet-native-mkl ./gradlew clean run
-          rm -rf ~/.mxnet ~/.djl.ai
+          rm -rf ~/.djl.ai
       - name: Test PyTorch
         working-directory: canary
         run: |
           DJL_ENGINE=pytorch-native-auto ./gradlew clean run
-          rm -rf ~/.pytorch ~/.djl.ai
+          rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
-          rm -rf ~/.pytorch ~/.djl.ai
+          rm -rf ~/.djl.ai
       - name: Test TensorFlow
         working-directory: canary
         run: |
           DJL_ENGINE=tensorflow-native-auto ./gradlew clean run
-          rm -rf ~/.tensorflow ~/.djl.ai
+          rm -rf ~/.djl.ai
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
