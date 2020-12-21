@@ -14,7 +14,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    implementation platform("ai.djl:bom:0.8.0")
+    implementation platform("ai.djl:bom:0.9.0")
     implementation "org.scala-lang:scala-library:2.11.12"
     implementation "org.apache.spark:spark-core_2.11:2.3.0"
     implementation "ai.djl:api"

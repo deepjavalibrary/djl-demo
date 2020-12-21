@@ -8,14 +8,22 @@ version "1.0-SNAPSHOT"
 
 repositories {
     jcenter()
+    maven {
+        url = "http://oss.sonatype.org/content/repositories/snapshots"
+    }
+    maven {
+        url = "http://maven.ecs.soton.ac.uk/content/repositories/thirdparty"
+    }
 }
 
-def webcamCaptureVersion = '0.3.12'
-def bridjVersion = '0.7.0'
+def webcamCaptureVersion = '0.3.13-SNAPSHOT'
+def bridjVersion = '0.7-20140918-3'
 
 dependencies {
     implementation "ai.djl.mxnet:mxnet-model-zoo:0.6.0"
-    implementation "com.github.sarxos:webcam-capture:${webcamCaptureVersion}"
+    implementation ("com.github.sarxos:webcam-capture:${webcamCaptureVersion}") {
+        exclude group: "com.nativelibs4java", module: "bridj"
+    }
     implementation "com.nativelibs4java:bridj:${bridjVersion}"
 
     runtimeOnly "org.slf4j:slf4j-simple:1.7.29"
