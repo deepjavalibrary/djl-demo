@@ -13,7 +13,7 @@
     <name>Quarkus - DJL - Deployment</name>
 
     <properties>
-        <djl.version>0.8.0</djl.version>
+        <djl.version>0.9.0</djl.version>
     </properties>
 
     <dependencies>
