@@ -18,6 +18,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - name: Install libgomp
+        run: |
+          yum -y install libgomp
       - name: Test MXNet
         working-directory: canary
         run: |
@@ -36,3 +39,9 @@ jobs:
           DJL_ENGINE=tensorflow-native-auto ./gradlew clean run
           rm -rf ~/.djl.ai
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
+          rm -rf ~/.djl.ai
+      # DLR doesn't support centos 7  
+      - name: Test OnnxRuntime
+        working-directory: canary
+        run: |
+          DJL_ENGINE=onnxruntime ./gradlew clean run

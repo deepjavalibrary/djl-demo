@@ -20,6 +20,10 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - name: Install libgomp
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgomp1
       - name: Test MXNet
         working-directory: canary
         run: |
@@ -40,3 +44,15 @@ jobs:
           DJL_ENGINE=tensorflow-native-auto ./gradlew clean run
           rm -rf ~/.djl.ai
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
+          rm -rf ~/.djl.ai
+      - name: Test DLR
+        working-directory: canary
+        run: |
+          DJL_ENGINE=dlr-native-auto ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=dlr-native-cpu ./gradlew clean run
+          rm -rf ~/.djl.ai
+      - name: Test OnnxRuntime
+        working-directory: canary
+        run: |
+          DJL_ENGINE=onnxruntime ./gradlew clean run

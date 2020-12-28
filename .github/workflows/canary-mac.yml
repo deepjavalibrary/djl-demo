@@ -37,3 +37,15 @@ jobs:
           DJL_ENGINE=tensorflow-native-auto ./gradlew clean run
           rm -rf ~/.djl.ai
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
+          rm -rf ~/.djl.ai
+      - name: Test DLR
+        working-directory: canary
+        run: |
+          DJL_ENGINE=dlr-native-auto ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=dlr-native-cpu ./gradlew clean run
+          rm -rf ~/.djl.ai
+      - name: Test OnnxRuntime
+        working-directory: canary
+        run: |
+          DJL_ENGINE=onnxruntime ./gradlew clean run
