@@ -17,12 +17,18 @@ import ai.djl.Device;
 import ai.djl.ModelException;
 import ai.djl.engine.Engine;
 import ai.djl.inference.Predictor;
+import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.output.DetectedObjects;
+import ai.djl.modality.cv.transform.Resize;
+import ai.djl.modality.cv.transform.ToTensor;
+import ai.djl.modality.cv.translator.ImageClassificationTranslator;
+import ai.djl.onnxruntime.zoo.tabular.randomforest.IrisFlower;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
+import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
 import ai.djl.util.cuda.CudaUtils;
 import java.io.IOException;
@@ -46,8 +52,7 @@ public final class CanaryTest {
 
         logger.info("");
         logger.info("----------Default Engine----------");
-        Engine engine = Engine.getInstance();
-        engine.debugEnvironment();
+        Engine.debugEnvironment();
 
         logger.info("");
         logger.info("----------Device information----------");
@@ -62,14 +67,23 @@ public final class CanaryTest {
         logger.info("Default Device: {}", Device.defaultDevice());
 
         String djlEngine = System.getenv("DJL_ENGINE");
-        if (djlEngine != null && djlEngine.contains("-native-cu") && deviceCount == 0) {
+        if (djlEngine == null) {
+            djlEngine = "mxnet-native-auto";
+        }
+
+        if (djlEngine.contains("-native-cu") && deviceCount == 0) {
             throw new AssertionError("Expecting load engine on GPU.");
+        } else if (djlEngine.startsWith("onnxruntime")) {
+            testOnnxRuntime();
+            return;
+        } else if (djlEngine.startsWith("dlr")) {
+            testDlr();
+            return;
         }
 
         logger.info("");
         logger.info("----------Test inference----------");
-        String url =
-                "https://github.com/awslabs/djl/raw/master/examples/src/test/resources/dog_bike_car.jpg";
+        String url = "https://resources.djl.ai/images/dog_bike_car.jpg";
         Image img = ImageFactory.getInstance().fromUrl(url);
         String backbone = "resnet50";
         Map<String, String> options = null;
@@ -92,6 +106,54 @@ public final class CanaryTest {
                 DetectedObjects detection = predictor.predict(img);
                 logger.info("{}", detection);
             }
+        }
+    }
+
+    private static void testOnnxRuntime() throws ModelException, IOException, TranslateException {
+        Criteria<IrisFlower, Classifications> criteria =
+                Criteria.builder()
+                        .setTypes(IrisFlower.class, Classifications.class)
+                        .optEngine("OnnxRuntime") // use OnnxRuntime engine
+                        .build();
+
+        IrisFlower virginica = new IrisFlower(1.0f, 2.0f, 3.0f, 4.0f);
+        try (ZooModel<IrisFlower, Classifications> model = ModelZoo.loadModel(criteria);
+                Predictor<IrisFlower, Classifications> predictor = model.newPredictor()) {
+            Classifications classifications = predictor.predict(virginica);
+            logger.info("{}", classifications);
+        }
+    }
+
+    private static void testDlr() throws ModelException, IOException, TranslateException {
+        String os;
+        if (System.getProperty("os.name").toLowerCase().startsWith("mac")) {
+            os = "osx";
+        } else if (System.getProperty("os.name").toLowerCase().startsWith("linux")) {
+            os = "linux";
+        } else {
+            throw new AssertionError("DLR only work on mac and Linux.");
+        }
+        ImageClassificationTranslator translator =
+                ImageClassificationTranslator.builder()
+                        .addTransform(new Resize(224, 224))
+                        .addTransform(new ToTensor())
+                        .build();
+        Criteria<Image, Classifications> criteria =
+                Criteria.builder()
+                        .setTypes(Image.class, Classifications.class)
+                        .optApplication(Application.CV.IMAGE_CLASSIFICATION)
+                        .optFilter("layers", "50")
+                        .optFilter("os", os)
+                        .optTranslator(translator)
+                        .optEngine("DLR")
+                        .optProgress(new ProgressBar())
+                        .build();
+        String url = "https://resources.djl.ai/images/kitten.jpg";
+        Image image = ImageFactory.getInstance().fromUrl(url);
+        try (ZooModel<Image, Classifications> model = ModelZoo.loadModel(criteria);
+                Predictor<Image, Classifications> predictor = model.newPredictor()) {
+            Classifications classifications = predictor.predict(image);
+            logger.info("{}", classifications);
         }
     }
 }

@@ -18,7 +18,6 @@ repositories {
     }
 }
 
-
 configure(this) {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -32,7 +31,11 @@ dependencies {
     implementation "ai.djl:model-zoo"
     implementation "ai.djl:basicdataset"
     implementation "ai.djl:model-zoo"
-    // implementation "ai.djl:serving"
+    implementation("ai.djl:serving") {
+        // avoid include mxnet engine at runtime
+        exclude group: "ai.djl.mxnet", module: "mxnet-engine"
+        exclude group: "ai.djl.mxnet", module: "mxnet-native-auto"
+    }
 
     implementation "ai.djl.aws:aws-ai"
     implementation "ai.djl.fasttext:fasttext-engine"
@@ -41,6 +44,8 @@ dependencies {
 
     implementation "commons-cli:commons-cli:${commons_cli_version}"
     implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_slf4j_version}"
+
+    implementation "ai.djl.onnxruntime:onnxruntime-engine"
 
     if (engine.startsWith("pytorch")) {
         implementation "ai.djl.pytorch:pytorch-model-zoo"
@@ -58,6 +63,28 @@ dependencies {
         } else {
             implementation "ai.djl.tensorflow:${engine}::${os}-x86_64"
         }
+    } else if (engine.startsWith("onnxruntime")) {
+        implementation "ai.djl.mxnet:mxnet-engine"
+        implementation "ai.djl.mxnet:mxnet-native-auto"
+    } else if (engine.startsWith("paddlepaddle")) {
+        implementation "ai.djl.paddlepaddle:paddlepaddle-engine"
+        if (engine.contains("-auto")) {
+            implementation "ai.djl.paddlepaddle:paddlepaddle-native-auto"
+        } else {
+            implementation "ai.djl.paddlepaddle:${engine}::${os}-x86_64"
+        }
+        implementation "ai.djl.mxnet:mxnet-engine"
+        implementation "ai.djl.mxnet:mxnet-native-auto"
+    } else if (engine.startsWith("dlr")) {
+        implementation "ai.djl.dlr:dlr-engine"
+        if (engine.contains("-auto")) {
+            implementation "ai.djl.dlr:dlr-native-auto"
+        } else {
+            // TODO: remove version after DJL 0.10.0
+            implementation "ai.djl.dlr:${engine}:1.6.0:${os}-x86_64"
+        }
+        implementation "ai.djl.mxnet:mxnet-engine"
+        implementation "ai.djl.mxnet:mxnet-native-auto"
     } else {
         implementation "ai.djl.mxnet:mxnet-model-zoo"
         if (engine.contains("-auto")) {
@@ -65,7 +92,6 @@ dependencies {
         } else {
             implementation "ai.djl.mxnet:${engine}::${os}-x86_64"
         }
-        // implementation "ai.djl.onnxruntime:onnxruntime-engine"
     }
 }
 
@@ -78,6 +104,7 @@ run {
     systemProperties System.getProperties()
     systemProperties.remove("user.dir")
     systemProperty("file.encoding", "UTF-8")
+    systemProperty("disableProgressBar", "true")
 }
 tasks.distTar.enabled = false
 

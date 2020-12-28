@@ -36,3 +36,8 @@ jobs:
           cmd /c "set DJL_ENGINE=tensorflow-native-auto&& .\gradlew.bat clean run"
           cmd /c "rd /s /q %userprofile%\.djl.ai"
           cmd /c "set DJL_ENGINE=tensorflow-native-cpu&& .\gradlew.bat clean run"
+          cmd /c "rd /s /q %userprofile%\.djl.ai"
+      - name: Test OnnxRuntime
+        working-directory: canary
+        run: |
+          cmd /c "set DJL_ENGINE=onnxruntime&& .\gradlew.bat clean run"
