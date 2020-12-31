@@ -16,6 +16,8 @@ import ai.djl.Application;
 import ai.djl.Device;
 import ai.djl.ModelException;
 import ai.djl.engine.Engine;
+import ai.djl.fasttext.FtModel;
+import ai.djl.fasttext.zoo.FtModelZoo;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.Image;
@@ -28,10 +30,16 @@ import ai.djl.onnxruntime.zoo.tabular.randomforest.IrisFlower;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
+import ai.djl.sentencepiece.SpTokenizer;
+import ai.djl.training.util.DownloadUtils;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
 import ai.djl.util.cuda.CudaUtils;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
@@ -78,6 +86,10 @@ public final class CanaryTest {
             return;
         } else if (djlEngine.startsWith("dlr")) {
             testDlr();
+
+            // similar to DLR, fastText and SentencePiece only support Mac and Ubuntu 16.04+
+            testFastText();
+            testSentencePiece();
             return;
         }
 
@@ -154,6 +166,41 @@ public final class CanaryTest {
                 Predictor<Image, Classifications> predictor = model.newPredictor()) {
             Classifications classifications = predictor.predict(image);
             logger.info("{}", classifications);
+        }
+    }
+
+    public static void testFastText() throws IOException, ModelException {
+        if (System.getProperty("os.name").startsWith("Win")) {
+            throw new AssertionError("fastText doesn't support Windows.");
+        }
+
+        logger.info("----------Test fastText ----------");
+        try (ZooModel<String, Classifications> model =
+                FtModelZoo.COOKING_STACKEXCHANGE.loadModel()) {
+            FtModel ftModel = (FtModel) model.getWrappedModel();
+            Classifications classifications =
+                    ftModel.classify("Which baking dish is best to bake a banana bread ?", 8);
+            logger.info("{}", classifications);
+        }
+    }
+
+    public static void testSentencePiece() throws IOException, ModelException {
+        if (System.getProperty("os.name").startsWith("Win")) {
+            throw new AssertionError("SentencePiece doesn't support Windows.");
+        }
+
+        logger.info("----------Test SentencePiece ----------");
+        Path modelFile = Paths.get("build/test/models/sententpiece_test_model.model");
+        if (Files.notExists(modelFile)) {
+            DownloadUtils.download(
+                    "https://resources.djl.ai/test-models/sententpiece_test_model.model",
+                    "build/test/models/sententpiece_test_model.model");
+        }
+        Path modelPath = Paths.get("build/test/models/sententpiece_test_model.model");
+        try (SpTokenizer tokenizer = new SpTokenizer(modelPath)) {
+            String original = "Hello World";
+            List<String> tokens = tokenizer.tokenize(original);
+            logger.info("{}", String.join(",", tokens));
         }
     }
 }
