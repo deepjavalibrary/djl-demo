@@ -33,7 +33,7 @@ aws emr create-cluster \
     --instance-type g3s.xlarge \
     --instance-count 3 \
     --use-default-roles \
-    --configurations https://raw.githubusercontent.com/aws-samples/djl-demo/emr/aws/emr-distributed-inference/image-classification-gpu/configurations.json
+    --configurations https://raw.githubusercontent.com/aws-samples/djl-demo/master/aws/emr-distributed-inference/image-classification-gpu/configurations.json
 ```
 
 This process may take a while (approx 10 min - 15 min) to get cluster fully ready.
