@@ -82,7 +82,7 @@
     "react-axe": "^3.4.1",
     "react-router-dom": "^5.0.1",
     "react-router-last-location": "^2.0.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "vertx3-eventbus-client": "^3.9.0"
   }
 }
