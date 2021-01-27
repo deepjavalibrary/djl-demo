@@ -33,7 +33,9 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.Collector;
 
 /**
- * Implements a streaming version of the sentiment analysis program.
+ * Implements a streaming version of the sentence encoder program.
+ * Using TensorFlow model from TFHub: https://tfhub.dev/google/universal-sentence-encoder/4
+ * Accepts a String input and returns a float array as its embedding.
  *
  * <p>This program connects to a server socket and reads strings from the socket. The easiest way to
  * try this out is to open a text server (at port 12345) using the <i>netcat</i> tool via

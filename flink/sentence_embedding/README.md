@@ -1,12 +1,12 @@
-# Sentiment Analysis using Apache Flink
+# Sentence Encoding using Apache Flink
 
-![](img/flink.gif)
 
-This project runs a Sentiment Analysis application with [Apache Flink](https://flink.apache.org/) Stream API.
+This project runs a Sentence Encoding application with [Apache Flink](https://flink.apache.org/) Stream API.
 
 You can interactively type in sentences to simulate stream data,
 and Flink will process and show the result in the terminal.
 
+The model is from TFHub [Universal Sentence Encoder](https://tfhub.dev/google/universal-sentence-encoder/4).
 ## Step to run
 
 Firstly you need to create a simple text server by doing the following in the terminal:
@@ -35,17 +35,12 @@ Try to type in anything from your text server:
 
 ```
 $ nc -l 9000
-I love you!
+The quick brown fox jumps over the lazy dog.
 ```
 
 result shows on Flink application:
 
 ```
 Loading:     100% |████████████████████████████████████████|
-[Flat Map (10/12)] INFO ai.djl.pytorch.engine.PtEngine - Number of inter-op threads is 6
-[Flat Map (10/12)] INFO ai.djl.pytorch.engine.PtEngine - Number of intra-op threads is 1
-[
-        class: "Positive", probability: 0.99870
-        class: "Negative", probability: 0.00129
-]
+[-0.031330183, -0.06338634, -0.016074996, -0.010348981, -0.046500977, 0.03723154, 0.0059158537, ...]
 ```
