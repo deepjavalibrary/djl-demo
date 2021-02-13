@@ -58,4 +58,6 @@ jobs:
       - name: Test TFLite
         working-directory: canary
         run: |
-          DJL_ENGINE=tflite ./gradlew clean run
+          DJL_ENGINE=tflite-native-auto ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=tflite-native-cpu ./gradlew clean run
