@@ -4,6 +4,11 @@ on:
   schedule:
     - cron:  '0 16 * * *'
   workflow_dispatch:
+    inputs:
+      repo-id:
+        description: 'staging repository id to test'
+        required: true
+        default: 'null'
 
 jobs:
   canary-test-centos:
@@ -11,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AWS_REGION: us-east-1
+      DJL_STAGING: ${{github.event.inputs.repo-id}}
     container: centos:7
     steps:
       - uses: actions/checkout@v1
