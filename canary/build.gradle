@@ -6,7 +6,7 @@ plugins {
 group "com.example"
 version "1.0-SNAPSHOT"
 
-def djlVersion = getEnv("DJL_VERSION", "0.9.0")
+def djlVersion = getEnv("DJL_VERSION", "0.10.0-SNAPSHOT")
 def engine = getEnv("DJL_ENGINE", "mxnet-native-auto")
 def os = getOsName()
 def stagingRepo = getEnv("DJL_STAGING", null)
@@ -15,6 +15,9 @@ repositories {
     jcenter()
     maven {
         url "https://oss.sonatype.org/service/local/repositories/${stagingRepo}/content/"
+    }
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
     }
 }
 
@@ -85,6 +88,9 @@ dependencies {
         }
         implementation "ai.djl.mxnet:mxnet-engine"
         implementation "ai.djl.mxnet:mxnet-native-auto"
+    } else if (engine.startsWith("tflite")) {
+        implementation "ai.djl.tflite:tflite-engine:0.10.0-SNAPSHOT"
+        implementation "ai.djl.tflite:tflite-native-auto:2.4.1"
     } else {
         implementation "ai.djl.mxnet:mxnet-model-zoo"
         if (engine.contains("-auto")) {
