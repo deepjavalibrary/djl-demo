@@ -84,6 +84,9 @@ public final class CanaryTest {
         } else if (djlEngine.startsWith("onnxruntime")) {
             testOnnxRuntime();
             return;
+        } else if (djlEngine.startsWith("tflite")) {
+            testTflite();
+            return;
         } else if (djlEngine.startsWith("dlr")) {
             testDlr();
 
@@ -201,6 +204,33 @@ public final class CanaryTest {
             String original = "Hello World";
             List<String> tokens = tokenizer.tokenize(original);
             logger.info("{}", String.join(",", tokens));
+        }
+    }
+
+    private static void testTflite() throws ModelException, IOException, TranslateException {
+        String os;
+        if (System.getProperty("os.name").toLowerCase().startsWith("mac")) {
+            os = "osx";
+        } else if (System.getProperty("os.name").toLowerCase().startsWith("linux")) {
+            os = "linux";
+        } else {
+            throw new AssertionError("DLR only work on mac and Linux.");
+        }
+        Criteria<Image, Classifications> criteria =
+                Criteria.builder()
+                        .setTypes(Image.class, Classifications.class)
+                        .optEngine("TFLite")
+                        .optFilter("dataset", "aiyDish")
+                        .build();
+        ZooModel<Image, Classifications> model = ModelZoo.loadModel(criteria);
+        Predictor<Image, Classifications> predictor = model.newPredictor();
+
+        Image image =
+                ImageFactory.getInstance()
+                        .fromUrl("https://resources.djl.ai/images/sachertorte.jpg");
+        Classifications prediction = predictor.predict(image);
+        if (!"Sachertorte".equals(prediction.best().getClassName())) {
+            throw new AssertionError("Wrong prediction result");
         }
     }
 }

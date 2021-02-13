@@ -4,6 +4,11 @@ on:
   schedule:
     - cron:  '0 12 * * *'
   workflow_dispatch:
+    inputs:
+      repo-id:
+        description: 'staging repository id to test'
+        required: true
+        default: ''
 
 jobs:
   canary-test-mac:
@@ -11,6 +16,7 @@ jobs:
     runs-on: macos-latest
     env:
       AWS_REGION: us-east-1
+      DJL_STAGING: ${{github.event.inputs.repo-id}}
     steps:
       - uses: actions/checkout@v1
       - name: Set up JDK 1.8
@@ -49,3 +55,7 @@ jobs:
         working-directory: canary
         run: |
           DJL_ENGINE=onnxruntime ./gradlew clean run
+      - name: Test TFLite
+        working-directory: canary
+        run: |
+          DJL_ENGINE=tflite ./gradlew clean run
