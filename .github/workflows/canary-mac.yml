@@ -12,7 +12,6 @@ on:
 
 jobs:
   canary-test-mac:
-    if: github.repository == 'aws-samples/djl-demo'
     runs-on: macos-latest
     env:
       AWS_REGION: us-east-1

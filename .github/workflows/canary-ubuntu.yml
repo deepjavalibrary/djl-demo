@@ -12,7 +12,6 @@ on:
 
 jobs:
   canary-test-ubuntu:
-    if: github.repository == 'aws-samples/djl-demo'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
