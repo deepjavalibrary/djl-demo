@@ -90,7 +90,11 @@ dependencies {
         implementation "ai.djl.mxnet:mxnet-native-auto"
     } else if (engine.startsWith("tflite")) {
         implementation "ai.djl.tflite:tflite-engine:0.10.0-SNAPSHOT"
-        implementation "ai.djl.tflite:tflite-native-auto:2.4.1"
+        if (engine.contains("-auto")) {
+            implementation "ai.djl.tflite:${engine}:2.4.1"
+        } else {
+            implementation "ai.djl.tflite:${engine}:2.4.1:${os}-x86_64"
+        }
     } else {
         implementation "ai.djl.mxnet:mxnet-model-zoo"
         if (engine.contains("-auto")) {
