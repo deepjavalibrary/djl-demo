@@ -8,10 +8,11 @@ on:
       repo-id:
         description: 'staging repository id to test'
         required: true
-        default: 'null'
+        default: ''
 
 jobs:
   canary-test-mac:
+    if: github.repository == 'aws-samples/djl-demo'
     runs-on: macos-latest
     env:
       AWS_REGION: us-east-1

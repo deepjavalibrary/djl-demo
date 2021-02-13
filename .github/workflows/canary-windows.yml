@@ -8,7 +8,7 @@ on:
       repo-id:
         description: 'staging repository id to test'
         required: true
-        default: 'null'
+        default: ''
 
 jobs:
   canary-test-windows:
