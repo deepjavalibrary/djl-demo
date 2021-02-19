@@ -3,6 +3,12 @@ name: Canary-Ubuntu
 on:
   schedule:
     - cron:  '0 10 * * *'
+  push:
+    paths:
+      - "canary/**"
+  pull_request:
+    paths:
+      - "canary/**"
   workflow_dispatch:
     inputs:
       repo-id:
@@ -68,3 +74,9 @@ jobs:
           DJL_ENGINE=tflite-native-auto ./gradlew clean run
           rm -rf ~/.djl.ai
           DJL_ENGINE=tflite-native-cpu ./gradlew clean run
+      - name: Test PaddlePaddle
+        working-directory: canary
+        run: |
+          DJL_ENGINE=paddlepaddle-native-auto ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=paddlepaddle-native-cpu ./gradlew clean run

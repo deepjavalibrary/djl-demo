@@ -94,6 +94,9 @@ public final class CanaryTest {
             testFastText();
             testSentencePiece();
             return;
+        } else if (djlEngine.startsWith("paddle")) {
+            testPaddle();
+            return;
         }
 
         logger.info("");
@@ -187,7 +190,7 @@ public final class CanaryTest {
         }
     }
 
-    public static void testSentencePiece() throws IOException, ModelException {
+    public static void testSentencePiece() throws IOException {
         if (System.getProperty("os.name").startsWith("Win")) {
             throw new AssertionError("SentencePiece doesn't support Windows.");
         }
@@ -205,6 +208,26 @@ public final class CanaryTest {
             List<String> tokens = tokenizer.tokenize(original);
             logger.info("{}", String.join(",", tokens));
         }
+    }
+
+    public static void testPaddle() throws IOException, ModelException, TranslateException {
+        logger.info("----------Test PaddlePaddle ----------");
+        Criteria<Image, DetectedObjects> criteria =
+                Criteria.builder()
+                        .setTypes(Image.class, DetectedObjects.class)
+                        .optApplication(Application.CV.OBJECT_DETECTION)
+                        .optEngine("PaddlePaddle")
+                        .optArtifactId("face_detection")
+                        .optFilter("flavor", "server")
+                        .build();
+
+        String url =
+                "https://raw.githubusercontent.com/PaddlePaddle/PaddleHub/release/v1.5/demo/mask_detection/python/images/mask.jpg";
+        ZooModel<Image, DetectedObjects> model = ModelZoo.loadModel(criteria);
+        Predictor<Image, DetectedObjects> predictor = model.newPredictor();
+        Image img = ImageFactory.getInstance().fromUrl(url);
+        DetectedObjects objs = predictor.predict(img);
+        logger.info(objs.toString());
     }
 
     private static void testTflite() throws ModelException, IOException, TranslateException {
