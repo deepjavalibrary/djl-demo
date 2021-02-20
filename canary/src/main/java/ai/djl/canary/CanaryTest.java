@@ -223,11 +223,16 @@ public final class CanaryTest {
 
         String url =
                 "https://raw.githubusercontent.com/PaddlePaddle/PaddleHub/release/v1.5/demo/mask_detection/python/images/mask.jpg";
-        ZooModel<Image, DetectedObjects> model = ModelZoo.loadModel(criteria);
-        Predictor<Image, DetectedObjects> predictor = model.newPredictor();
-        Image img = ImageFactory.getInstance().fromUrl(url);
-        DetectedObjects objs = predictor.predict(img);
-        logger.info(objs.toString());
+        try (ZooModel<Image, DetectedObjects> model = ModelZoo.loadModel(criteria);
+                Predictor<Image, DetectedObjects> predictor = model.newPredictor()) {
+            Image img = ImageFactory.getInstance().fromUrl(url);
+            DetectedObjects objs = predictor.predict(img);
+            logger.info(objs.toString());
+            if (objs.getNumberOfObjects() != 3) {
+                throw new AssertionError(
+                        "Required output numbers three, actual " + objs.getNumberOfObjects());
+            }
+        }
     }
 
     private static void testTflite() throws ModelException, IOException, TranslateException {
