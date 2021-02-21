@@ -3,6 +3,12 @@ name: Canary-CentOS
 on:
   schedule:
     - cron:  '0 16 * * *'
+  push:
+    paths:
+      - "canary/**"
+  pull_request:
+    paths:
+      - "canary/**"
   workflow_dispatch:
     inputs:
       repo-id:

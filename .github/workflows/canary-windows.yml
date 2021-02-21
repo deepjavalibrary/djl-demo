@@ -3,6 +3,12 @@ name: Canary-Windows
 on:
   schedule:
     - cron:  '0 14 * * *'
+  push:
+    paths:
+      - "canary/**"
+  pull_request:
+    paths:
+      - "canary/**"
   workflow_dispatch:
     inputs:
       repo-id:
@@ -47,3 +53,9 @@ jobs:
         working-directory: canary
         run: |
           cmd /c "set DJL_ENGINE=onnxruntime&& .\gradlew.bat clean run"
+      - name: Test PaddlePaddle
+        working-directory: canary
+        run: |
+          cmd /c "set DJL_ENGINE=paddlepaddle-native-auto&& .\gradlew.bat clean run"
+          cmd /c "rd /s /q %userprofile%\.djl.ai"
+          cmd /c "set DJL_ENGINE=paddlepaddle-native-cpu&& .\gradlew.bat clean run"

@@ -70,14 +70,14 @@ dependencies {
         implementation "ai.djl.mxnet:mxnet-engine"
         implementation "ai.djl.mxnet:mxnet-native-auto"
     } else if (engine.startsWith("paddlepaddle")) {
-        implementation "ai.djl.paddlepaddle:paddlepaddle-engine"
+        implementation "ai.djl.paddlepaddle:paddlepaddle-model-zoo"
         if (engine.contains("-auto")) {
             implementation "ai.djl.paddlepaddle:paddlepaddle-native-auto"
         } else {
             implementation "ai.djl.paddlepaddle:${engine}::${os}-x86_64"
         }
-        implementation "ai.djl.mxnet:mxnet-engine"
-        implementation "ai.djl.mxnet:mxnet-native-auto"
+        implementation "ai.djl.pytorch:pytorch-engine"
+        implementation "ai.djl.pytorch:pytorch-native-auto"
     } else if (engine.startsWith("dlr")) {
         implementation "ai.djl.dlr:dlr-engine"
         if (engine.contains("-auto")) {
