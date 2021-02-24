@@ -12,7 +12,7 @@ on:
       djl-version:
         description: 'djl version to test'
         required: true
-        default: ''
+        default: '0.10.0-SNAPSHOT'
 
 jobs:
   canary-test-centos:
