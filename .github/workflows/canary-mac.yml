@@ -9,6 +9,10 @@ on:
         description: 'staging repository id to test'
         required: true
         default: ''
+      djl-version:
+        description: 'djl version to test'
+        required: true
+        default: ''
 
 jobs:
   canary-test-mac:
@@ -17,6 +21,7 @@ jobs:
     env:
       AWS_REGION: us-east-1
       DJL_STAGING: ${{github.event.inputs.repo-id}}
+      DJL_VERSION: ${{github.event.inputs.djl-version}}
     steps:
       - uses: actions/checkout@v1
       - name: Set up JDK 1.8
