@@ -13,8 +13,12 @@ on:
     inputs:
       repo-id:
         description: 'staging repository id to test'
-        required: true
+        required: false
         default: ''
+      djl-version:
+        description: 'djl version to test'
+        required: false
+        default: '0.10.0-SNAPSHOT'
 
 jobs:
   canary-test-centos:
@@ -23,6 +27,7 @@ jobs:
     env:
       AWS_REGION: us-east-1
       DJL_STAGING: ${{github.event.inputs.repo-id}}
+      DJL_VERSION: ${{github.event.inputs.djl-version}}
     container: centos:7
     steps:
       - uses: actions/checkout@v1

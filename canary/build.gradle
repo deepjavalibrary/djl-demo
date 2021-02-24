@@ -89,7 +89,7 @@ dependencies {
         implementation "ai.djl.mxnet:mxnet-engine"
         implementation "ai.djl.mxnet:mxnet-native-auto"
     } else if (engine.startsWith("tflite")) {
-        implementation "ai.djl.tflite:tflite-engine:0.10.0-SNAPSHOT"
+        implementation "ai.djl.tflite:tflite-engine"
         if (engine.contains("-auto")) {
             implementation "ai.djl.tflite:${engine}:2.4.1"
         } else {
