@@ -58,6 +58,7 @@ public class ConsumerLoop implements Runnable {
                     data.put("partition", record.partition());
                     data.put("offset", record.offset());
                     data.put("value", record.value());
+                    // make prediction on text data
                     Classifications result = predictor.predict(record.value());
                     data.put("prediction", result.toString());
                     System.out.println("content: " + data.get("value"));

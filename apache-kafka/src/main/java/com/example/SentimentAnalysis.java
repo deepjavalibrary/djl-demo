@@ -34,19 +34,23 @@ public class SentimentAnalysis {
 
     public static void main(String[] args)
             throws MalformedModelException, ModelNotFoundException, IOException {
-        Predictor<String, Classifications> predictor;
+        // Loading Model from DJL Model Zoo
+        // Specify criteria to find target model
         Criteria<String, Classifications> criteria =
                 Criteria.builder()
                         .optApplication(Application.NLP.SENTIMENT_ANALYSIS)
                         .setTypes(String.class, Classifications.class)
                         .build();
+        // Load model
         ZooModel<String, Classifications> model = ModelZoo.loadModel(criteria);
-        predictor = model.newPredictor();
+        // Create predictor
+        Predictor<String, Classifications> predictor = model.newPredictor();
 
         int numConsumers = 3;
         List<String> topics = Arrays.asList(TOPIC);
         ExecutorService executor = Executors.newFixedThreadPool(numConsumers);
 
+        // setup consumer
         final List<ConsumerLoop> consumers = new ArrayList<>();
         for (int i = 0; i < numConsumers; i++) {
             ConsumerLoop consumer = new ConsumerLoop(i, topics, predictor);
