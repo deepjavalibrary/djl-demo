@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.9.0")
+    implementation platform("ai.djl:bom:0.10.0")
     implementation "ai.djl:model-zoo"
     implementation "ai.djl:basicdataset"
     implementation "org.slf4j:slf4j-simple:1.7.30"

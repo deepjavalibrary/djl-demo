@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.9.0")
+    implementation platform("ai.djl:bom:0.10.0")
     implementation "ai.djl:api"
 
     runtimeOnly "ai.djl.tensorflow:tensorflow-engine"
