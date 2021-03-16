@@ -57,15 +57,15 @@ public final class ShellSpawner {
                         "javacpp-1.5.4.jar");
         List<String> engines =
                 Arrays.asList(
-                        "pytorch-engine-0.9.0.jar",
-                        "pytorch-model-zoo-0.9.0.jar",
+                        "pytorch-engine-0.10.0.jar",
+                        "pytorch-model-zoo-0.10.0.jar",
                         "pytorch-native-auto-1.7.1.jar",
-                        "mxnet-engine-0.9.0.jar",
-                        "mxnet-model-zoo-0.9.0.jar",
+                        "mxnet-engine-0.10.0.jar",
+                        "mxnet-model-zoo-0.10.0.jar",
                         "mxnet-native-auto-1.7.0-backport.jar",
-                        "tensorflow-api-0.9.0.jar",
-                        "tensorflow-engine-0.9.0.jar",
-                        "tensorflow-model-zoo-0.9.0.jar",
+                        "tensorflow-api-0.10.0.jar",
+                        "tensorflow-engine-0.10.0.jar",
+                        "tensorflow-model-zoo-0.10.0.jar",
                         "tensorflow-native-auto-2.3.1.jar");
         Path basicDepsDir = dir.resolve("basic");
         extractAndCopy(basicDepsDir, deps);
