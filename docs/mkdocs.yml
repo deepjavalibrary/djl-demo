@@ -44,7 +44,7 @@ nav:
       - Distributed inference with AWS EMR: 'aws/emr-distributed-inference/dataprocess/README.md'
       - Start with SageMaker: 'aws/sagemaker/README.md'
   - Android:
-      - Doodledraw Applications with Android: 'android/README.md'
+      - Doodledraw Applications with Android: 'android/pytorch_android/README.md'
   - EcoSystem:
       - Java Integrations:
           - DJL Component in Apache Camel: 'camel-djl/README.md'
