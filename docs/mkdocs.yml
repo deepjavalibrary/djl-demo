@@ -33,7 +33,7 @@ plugins:
   - search
   - exclude:
       regex:
-        - '.*((.+-runner)|DS_Store|MF|analysis|ap_|apk|bat|bin|cache|class|classpath|cmd|csv|dex|dumpstream|editorconfig|eslintrc|flat|gitignore|gradle|html|idx|iml|index|jar|java|jks|lock|lst|mapping|name|pack|params|pb|prefs|prettierignore|prettierrc|pro|project|properties|pt|sample|sbt|scala|ser|sh|snap|so|ts|tsx|txt|xml)$'
+        - '.*((.+-runner)|DS_Store|MF|analysis|ap_|apk|bat|bin|cache|class|classpath|cmd|csv|dex|dumpstream|editorconfig|eslintrc|flat|gitignore|gradle|gradlew|html|idx|iml|index|jar|java|jks|lock|lst|mapping|name|pack|params|pb|prefs|prettierignore|prettierrc|pro|project|properties|pt|sample|sbt|scala|ser|sh|snap|so|ts|tsx|txt|xml)$'
 
 nav:
   - HOME: 'README.md'
@@ -44,7 +44,7 @@ nav:
       - Distributed inference with AWS EMR: 'aws/emr-distributed-inference/dataprocess/README.md'
       - Start with SageMaker: 'aws/sagemaker/README.md'
   - Android:
-      - Doodledraw Applications with Android: 'android/README.md'
+      - Doodledraw Applications with Android: 'android/pytorch_android/README.md'
   - EcoSystem:
       - Java Integrations:
           - DJL Component in Apache Camel: 'camel-djl/README.md'
