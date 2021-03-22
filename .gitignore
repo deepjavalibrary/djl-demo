@@ -38,6 +38,7 @@ release.properties
 # Gradle
 .gradle
 build/
+out/
 
 *.jar
 *.log
