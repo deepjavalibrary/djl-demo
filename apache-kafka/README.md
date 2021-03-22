@@ -4,7 +4,7 @@ This an example to show case how to deploy a deep learning model in [Apache  Kaf
 
 We will use DJL's built-in sentiment analysis model based on PyTorch to run analysis on twitter data.
 There is a [sample data](data.txt) extracted from the [Kaggle Twitter Sentiment Analysis Dataset](https://www.kaggle.com/kazanova/sentiment140).
-This demo will make predictions on whether the twit is positive or negative.
+This demo will make predictions on whether the tweet is positive or negative.
 
 
 ## Pre-requisite
@@ -17,16 +17,25 @@ This demo will make predictions on whether the twit is positive or negative.
 #### 1. start zookeeper:
 
 `zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties`
+
 #### 2. start kafka server:
 
 `kafka-server-start  /usr/local/etc/kafka/server.properties`
+
 #### 3. create test topic
 
 `kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic twitter-data`
-#### 4. pipe twitter data into producer
+
+#### 4. download data
+
+`wget https://resources.djl.ai/demo/kafka/data.txt`
+
+#### 5. pipe twitter data into producer
 
 `kafka-console-producer --broker-list localhost:9092 --topic twitter-data < data.txt`
-#### 5. run prediction inside consumer
+
+#### 6. run prediction inside consumer
+
 `./gradlew run`
 
 ### sample output
