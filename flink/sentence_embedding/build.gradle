@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
     implementation 'org.apache.flink:flink-streaming-java_2.11:1.11.1'
-    implementation platform("ai.djl:bom:0.9.0")
+    implementation platform("ai.djl:bom:0.10.0")
     implementation "ai.djl:api"
     implementation "org.slf4j:slf4j-simple:1.7.30"
 
