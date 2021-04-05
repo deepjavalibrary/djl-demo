@@ -13,7 +13,7 @@
 package com.examples;
 
 import ai.djl.Model;
-import ai.djl.basicdataset.ImageFolder;
+import ai.djl.basicdataset.cv.classification.ImageFolder;
 import ai.djl.metric.Metrics;
 import ai.djl.modality.cv.transform.Resize;
 import ai.djl.modality.cv.transform.ToTensor;
@@ -28,7 +28,6 @@ import ai.djl.training.evaluator.Accuracy;
 import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
 import ai.djl.translate.TranslateException;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -94,7 +93,8 @@ public final class Training {
         }
     }
 
-    private static ImageFolder initDataset(String datasetRoot) throws IOException, TranslateException {
+    private static ImageFolder initDataset(String datasetRoot)
+            throws IOException, TranslateException {
         ImageFolder dataset =
                 ImageFolder.builder()
                         // retrieve the data
