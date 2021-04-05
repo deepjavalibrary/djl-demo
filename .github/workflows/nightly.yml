@@ -71,6 +71,6 @@ jobs:
       - name: Compile Web Demo
         working-directory: web-demo
         run: |
-          cd doodle_game && ./gradlew build && cd ..
+          cd doodle_game/backend && ./gradlew build && cd ../../
           cd interactive-console && ./gradlew build
 
