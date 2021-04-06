@@ -31,7 +31,7 @@ An example application that serves deep learning model with AWS Lambda.
 
 Build a micro service to deploy on AWS Elastic Beanstalk.
 
-## [Spark Image Classification](spark/image-classification/README.md)
+## [Spark Image Classification](apache-spark/image-classification/README.md)
 
 Contains Spark image classification demos.
 
@@ -39,7 +39,7 @@ Contains Spark image classification demos.
 
 An example application using [Apache Beam](https://beam.apache.org/) to predict the click-through rate for online advertisements.
 
-## [Apache Flink Sentiment Analysis](flink/sentiment-analysis/README.md)
+## [Apache Flink Sentiment Analysis](apache-flink/sentiment-analysis/README.md)
 
 An example using [Apache Flink](https://flink.apache.org/) to run sentiment analysis.
 
