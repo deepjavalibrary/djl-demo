@@ -1,5 +1,7 @@
 # Deep Java Library examples
 
+[![DJL Demo Nightly test](https://github.com/aws-samples/djl-demo/actions/workflows/nightly.yml/badge.svg)](https://github.com/aws-samples/djl-demo/actions/workflows/nightly.yml)
+
 The repository contains the source code of the examples for [Deep Java Library](http://djl.ai) (DJL) - an
 framework-agnostic Java API for deep learning.
 
