@@ -1,3 +1,15 @@
+/*
+ * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
+ * with the License. A copy of the License is located at
+ *
+ * http://aws.amazon.com/apache2.0/
+ *
+ * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
+ * OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
+ */
 package org.example.training.listener;
 
 import ai.djl.training.Trainer;
@@ -10,16 +22,17 @@ import org.example.training.verticle.WebVerticle;
 
 public class UiTrainingListener  implements TrainingListener {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(UiTrainingListener.class.getCanonicalName());
+    private static final Logger logger = LoggerFactory.getLogger(UiTrainingListener.class.getCanonicalName());
 
-    private final Vertx vertx = Vertx.vertx();
-    private final DataVerticle dataVerticle = new DataVerticle();
-    private final WebVerticle webVerticle = new WebVerticle();
+    private Vertx vertx;
+    private DataVerticle dataVerticle;
 
     public UiTrainingListener() {
-        LOGGER.info("UiTrainingListener starting...");
+        logger.info("UiTrainingListener starting...");
+        vertx = Vertx.vertx();
+        dataVerticle = new DataVerticle();
         vertx.deployVerticle(dataVerticle);
-        vertx.deployVerticle(webVerticle);
+        vertx.deployVerticle(new WebVerticle());
     }
 
     @Override
@@ -39,13 +52,12 @@ public class UiTrainingListener  implements TrainingListener {
 
     @Override
     public void onTrainingBegin(Trainer trainer) {
-        LOGGER.info("onTrainingBegin ...");
-//        dataVerticle.setTrainer(trainer, numEpochs);
+        logger.info("onTrainingBegin ...");
     }
 
     @Override
     public void onTrainingEnd(Trainer trainer) {
-        LOGGER.info("onTrainingEnd ...");
+        logger.info("onTrainingEnd ...");
         vertx.close();
     }
 }

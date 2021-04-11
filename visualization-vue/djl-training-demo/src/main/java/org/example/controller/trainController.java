@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
  * with the License. A copy of the License is located at
@@ -22,7 +22,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/train")
 public class trainController {
-	private Logger logger = LoggerFactory.getLogger(trainController.class);
+
+	private static final Logger logger = LoggerFactory.getLogger(trainController.class);
 
 	@Autowired
 	private TrainService trainService;

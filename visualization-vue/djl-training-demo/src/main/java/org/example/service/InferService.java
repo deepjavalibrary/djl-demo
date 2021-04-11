@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
  * with the License. A copy of the License is located at
@@ -12,15 +12,18 @@
  */
 package org.example.service;
 
+import ai.djl.ModelException;
 import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
+import ai.djl.translate.TranslateException;
 import org.example.inference.ImageClassification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -30,32 +33,18 @@ import java.io.InputStream;
 @Service
 public class InferService {
 
-    private Logger logger = LoggerFactory.getLogger(InferService.class);
-    
-	@Value("${model.mnist}")
-	private String mnistModelPath;
+    @Value("${model.mnist}")
+    private String mnistModelPath;
 
-	public String getImageInfo(InputStream inputStream) {
-		try {
-			Image img = ImageFactory.getInstance().fromInputStream(inputStream);
-			Classifications classifications = ImageClassification.predict(img);
-			return classifications.toString();
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	public String getImageInfoForUrl(String imageUrl) {
-		try {
-			Image img = ImageFactory.getInstance().fromUrl(imageUrl);
-			Classifications classifications = ImageClassification.predict(img);
-			return classifications.toString();
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			e.printStackTrace();
-			return null;
-		}
-	}
+    public String getImageInfo(InputStream inputStream) throws IOException, ModelException, TranslateException {
+        Image img = ImageFactory.getInstance().fromInputStream(inputStream);
+        Classifications classifications = ImageClassification.predict(img);
+        return classifications.toString();
+    }
+
+    public String getImageInfoForUrl(String imageUrl) throws IOException, ModelException, TranslateException {
+        Image img = ImageFactory.getInstance().fromUrl(imageUrl);
+        Classifications classifications = ImageClassification.predict(img);
+        return classifications.toString();
+    }
 }

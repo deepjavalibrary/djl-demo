@@ -62,7 +62,7 @@ export default {
   data() {
     return {
       form: {
-        url: 'https://djl-model.oss-cn-hongkong.aliyuncs.com/0.png',
+        url: 'https://resources.djl.ai/images/0.png',
         result1: '',
         result2: '',
         base64Img: ''

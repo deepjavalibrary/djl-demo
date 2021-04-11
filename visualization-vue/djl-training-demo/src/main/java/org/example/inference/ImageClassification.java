@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
  * with the License. A copy of the License is located at
@@ -18,15 +18,14 @@ import ai.djl.basicmodelzoo.basic.Mlp;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.Image;
-import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.transform.ToTensor;
 import ai.djl.modality.cv.translator.ImageClassificationTranslator;
+import ai.djl.training.util.DownloadUtils;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -42,25 +41,22 @@ import java.util.stream.IntStream;
  */
 public final class ImageClassification {
 
-    private static final Logger logger = LoggerFactory.getLogger(ImageClassification.class);
-
-    private ImageClassification() {}
-
-    public static void main(String[] args) throws IOException, ModelException, TranslateException {
-        Path imageFile = Paths.get("src/test/resources/0.png");
-        Image img = ImageFactory.getInstance().fromFile(imageFile);
-        Classifications classifications = ImageClassification.predict(img);
-        System.out.println(classifications);
-//        logger.info("{}", classifications);
+    private ImageClassification() {
     }
 
     public static Classifications predict(Image img) throws IOException, ModelException, TranslateException {
         String modelName = "mlp";
         try (Model model = Model.newInstance(modelName)) {
-            model.setBlock(new Mlp(28 * 28, 10, new int[] {128, 64}));
+            model.setBlock(new Mlp(28 * 28, 10, new int[]{128, 64}));
 
             // Assume you have run TrainMnist.java example, and saved model in build/model folder.
             Path modelDir = Paths.get("model/mnist");
+            Files.createDirectories(modelDir);
+            Path mlp = modelDir.resolve("mlp-0000.params");
+            if (!Files.exists(mlp)) {
+                String url = "https://mlrepo.djl.ai/model/cv/image_classification/ai/djl/zoo/mlp/0.0.3/mlp-0000.params.gz";
+                DownloadUtils.download(url, "model/mnist/mlp-0000.params");
+            }
             model.load(modelDir);
 
             List<String> classes =

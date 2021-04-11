@@ -45,9 +45,13 @@ variable to control which version of Java to use.
 
 This component supports building with npm. To build, use the following command:  
 (Refer to reference info, if you encounter any issue.)
+
 ```bash
 # clone the project
 git clone https://github.com/aws-samples/djl-demo.git
+
+# Install npm if you didn't have npm installed
+brew install npm
 
 # enter the project directory
 cd djl-demo/visualization-vue/djl-training-ui
@@ -67,16 +71,15 @@ To build, use the following command:
 
 ```bash
 # enter the project directory
-cd djl-demo/visualization-vue
+cd djl-demo/visualization-vue/djl-training-demo/
 
 # Maven build
-mvn package -DskipTests -f djl-training-demo
-
-# enter the jar directory
-cd djl-training-demo/target
+./mvnw package -DskipTests
 
 # Run example code
-java -jar djl-training-demo/target/djl-training-demo-0.0.1-SNAPSHOT.jar
+java -jar target/djl-training-demo-0.0.1-SNAPSHOT.jar
+# or
+mvnw spring-boot:run
 ```
 
 ## Open browser
@@ -92,13 +95,16 @@ Open http://localhost:8090 to get:
   
 ## Reference information
 #### 1. Check node.js and npm version:
+
 ```bash
 node -v
 v14.16.0
 npm -v
 7.8.0
 ```
+
 #### 2. Install latest node.js and npm:
+
 ```bash
 #Clean cache
 sudo npm cache clean -f
@@ -112,6 +118,7 @@ sudo npm install npm@latest -g
 #### 3. If you're getting this error on Mac OSX:
 "Package pangocairo was not found in the pkg-config search path."  
 Ensure to run:
+
 ```bash
 brew install pkg-config
 brew intall cairo

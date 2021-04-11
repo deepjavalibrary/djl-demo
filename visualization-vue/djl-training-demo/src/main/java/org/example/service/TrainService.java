@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * `Copyright 2021 Amazon.com`, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
  * with the License. A copy of the License is located at
@@ -32,12 +32,11 @@ import java.io.InputStream;
 public class TrainService {
 
     private Logger logger = LoggerFactory.getLogger(TrainService.class);
-    
+
 	@Value("${model.mnist}")
 	private String mnistModelPath;
 
 	public void train(String id) throws Exception {
-
 		MnistTraining.train(mnistModelPath);
 	}
 }
