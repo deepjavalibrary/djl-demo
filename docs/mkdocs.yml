@@ -8,8 +8,8 @@ markdown_extensions:
       permalink: true
 theme:
   name: material
-  logo: https://raw.githubusercontent.com/awslabs/djl/master/website/img/DJL.svg
-  favicon: https://github.com/awslabs/djl/blob/master/website/img/favicon.png?raw=true
+  logo: https://raw.githubusercontent.com/deepjavalibrary/djl/master/website/img/DJL.svg
+  favicon: https://github.com/deepjavalibrary/djl/blob/master/website/img/favicon.png?raw=true
   features:
     - navigation.tabs
   palette:
@@ -65,6 +65,6 @@ nav:
       - Visualizing Training with DJL: 'visualization/README.md'
       - Interactive JShell and Block Runner for DJL: 'web-demo/interactive-console/README.md'
 
-  
-  
-  
+
+
+

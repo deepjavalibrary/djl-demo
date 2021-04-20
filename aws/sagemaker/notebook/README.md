@@ -18,7 +18,7 @@ Wait for approximately 20 second and refresh the JupyterLab. You will see the Ja
 
 Now, you can try with different Notebooks provided by DJL:
 
-- [DJL Jupyter Notebooks](https://github.com/awslabs/djl/tree/master/jupyter)
+- [DJL Jupyter Notebooks](https://github.com/deepjavalibrary/djl/tree/master/jupyter)
 - [Dive into Deep Learning (DJL edition)](https://github.com/aws-samples/d2l-java)
 
 ## Setup Scala

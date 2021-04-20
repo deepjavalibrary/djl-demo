@@ -19,7 +19,7 @@ The default training runs for 7 epochs. Pre-set training configurations are disc
 
 ## Training configuration
 
-Deep Java Library (DJL) provides a [TrainingConfig](https://github.com/awslabs/djl) class to define hyperparameters for training. Hyperparameters, including learning rate and optimizer, are provided to the Trainer object using the TrainingConfig class.
+Deep Java Library (DJL) provides a [TrainingConfig](https://github.com/deepjavalibrary/djl) class to define hyperparameters for training. Hyperparameters, including learning rate and optimizer, are provided to the Trainer object using the TrainingConfig class.
 
 For example, this trainingConfiguration is used to initialize the Trainer object, which in turn initializes the parameters of the model.
 ```java
