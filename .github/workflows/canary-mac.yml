@@ -18,7 +18,7 @@ on:
       djl-version:
         description: 'djl version to test'
         required: false
-        default: '0.10.0'
+        default: '0.11.0'
 
 jobs:
   canary-test-mac:
@@ -78,4 +78,9 @@ jobs:
           DJL_ENGINE=paddlepaddle-native-auto ./gradlew clean run
           rm -rf ~/.djl.ai
           DJL_ENGINE=paddlepaddle-native-cpu ./gradlew clean run
+          rm -rf ~/.djl.ai
+      - name: Test Xgboost
+        working-directory: canary
+        run: |
+          DJL_ENGINE=xgboost ./gradlew clean run
 

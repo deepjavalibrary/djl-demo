@@ -6,9 +6,9 @@ plugins {
 group "com.example"
 version "1.0-SNAPSHOT"
 
-def djlVersion = getEnv("DJL_VERSION", "0.10.0")
-if(djlVersion == "") {
-    djlVersion = "0.10.0"
+def djlVersion = getEnv("DJL_VERSION", "0.11.0")
+if (djlVersion == "") {
+    djlVersion = "0.11.0"
 }
 def engine = getEnv("DJL_ENGINE", "mxnet-native-auto")
 def os = getOsName()
@@ -16,12 +16,13 @@ def stagingRepo = getEnv("DJL_STAGING", null)
 
 repositories {
     jcenter()
+    mavenLocal()
     maven {
         url "https://oss.sonatype.org/service/local/repositories/${stagingRepo}/content/"
     }
     maven {
-         url 'https://oss.sonatype.org/content/repositories/snapshots/'
-     }
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
 }
 
 configure(this) {
@@ -38,9 +39,18 @@ dependencies {
     implementation "ai.djl:basicdataset"
     implementation "ai.djl:model-zoo"
     implementation("ai.djl:serving") {
-        // avoid include mxnet engine at runtime
+        // avoid include engines at runtime
+        exclude group: "ai.djl.mxnet", module: "mxnet-model-zoo"
         exclude group: "ai.djl.mxnet", module: "mxnet-engine"
         exclude group: "ai.djl.mxnet", module: "mxnet-native-auto"
+
+        exclude group: "ai.djl.pytorch", module: "pytorch-model-zoo"
+        exclude group: "ai.djl.pytorch", module: "pytorch-engine"
+        exclude group: "ai.djl.pytorch", module: "pytorch-native-auto"
+
+        exclude group: "ai.djl.tensorflow", module: "tensorflow-model-zoo"
+        exclude group: "ai.djl.tensorflow", module: "tensorflow-engine"
+        exclude group: "ai.djl.tensorflow", module: "tensorflow-native-auto"
     }
 
     implementation "ai.djl.aws:aws-ai"
@@ -70,8 +80,8 @@ dependencies {
             implementation "ai.djl.tensorflow:${engine}::${os}-x86_64"
         }
     } else if (engine.startsWith("onnxruntime")) {
-        implementation "ai.djl.mxnet:mxnet-engine"
-        implementation "ai.djl.mxnet:mxnet-native-auto"
+        implementation "ai.djl.pytorch:pytorch-engine"
+        implementation "ai.djl.pytorch:pytorch-native-auto"
     } else if (engine.startsWith("paddlepaddle")) {
         implementation "ai.djl.paddlepaddle:paddlepaddle-model-zoo"
         if (engine.contains("-auto")) {
@@ -88,8 +98,8 @@ dependencies {
         } else {
             implementation "ai.djl.dlr:${engine}::${os}-x86_64"
         }
-        implementation "ai.djl.mxnet:mxnet-engine"
-        implementation "ai.djl.mxnet:mxnet-native-auto"
+        implementation "ai.djl.pytorch:pytorch-engine"
+        implementation "ai.djl.pytorch:pytorch-native-auto"
     } else if (engine.startsWith("tflite")) {
         implementation "ai.djl.tflite:tflite-engine"
         if (engine.contains("-auto")) {
@@ -97,6 +107,8 @@ dependencies {
         } else {
             implementation "ai.djl.tflite:${engine}::${os}-x86_64"
         }
+    } else if (engine.startsWith("xgboost")) {
+        implementation "ai.djl.ml.xgboost:xgboost"
     } else {
         implementation "ai.djl.mxnet:mxnet-model-zoo"
         if (engine.contains("-auto")) {

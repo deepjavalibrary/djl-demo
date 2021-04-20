@@ -18,7 +18,7 @@ on:
       djl-version:
         description: 'djl version to test'
         required: false
-        default: '0.10.0'
+        default: '0.11.0'
 
 jobs:
   canary-test-windows:
@@ -64,3 +64,7 @@ jobs:
           cmd /c "set DJL_ENGINE=paddlepaddle-native-auto&& .\gradlew.bat clean run"
           cmd /c "rd /s /q %userprofile%\.djl.ai"
           cmd /c "set DJL_ENGINE=paddlepaddle-native-cpu&& .\gradlew.bat clean run"
+          cmd /c "rd /s /q %userprofile%\.djl.ai"
+      # DLR doesn't support Windows
+      # TFLite doesn't support Windows
+      # Xgboost doesn't support Windows
