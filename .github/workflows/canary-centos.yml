@@ -22,7 +22,7 @@ on:
 
 jobs:
   canary-test-centos:
-    if: github.repository == 'aws-samples/djl-demo'
+    if: github.repository == 'deepjavalibrary/djl-demo'
     runs-on: ubuntu-latest
     env:
       AWS_REGION: us-east-1
@@ -57,7 +57,7 @@ jobs:
           rm -rf ~/.djl.ai
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
           rm -rf ~/.djl.ai
-      # DLR doesn't support centos 7  
+      # DLR doesn't support centos 7
       - name: Test OnnxRuntime
         working-directory: canary
         run: |

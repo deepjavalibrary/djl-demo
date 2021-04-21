@@ -1,6 +1,6 @@
 site_name: DJL-demo
-repo_name: aws-samples/djl-demo
-repo_url: https://github.com/aws-samples/djl-demo
+repo_name: deepjavalibrary/djl-demo
+repo_url: https://github.com/deepjavalibrary/djl-demo
 use_directory_urls: false
 markdown_extensions:
   - codehilite
@@ -21,7 +21,7 @@ google_analytics:
 extra:
   social:
     - icon: fontawesome/brands/github-alt
-      link: https://github.com/aws-samples/djl-demo
+      link: https://github.com/deepjavalibrary/djl-demo
     - icon: fontawesome/brands/twitter
       link: https://twitter.com/deepjavalibrary
     - icon: fontawesome/brands/slack

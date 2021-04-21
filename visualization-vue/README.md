@@ -48,7 +48,7 @@ This component supports building with npm. To build, use the following command:
 
 ```bash
 # clone the project
-git clone https://github.com/aws-samples/djl-demo.git
+git clone https://github.com/deepjavalibrary/djl-demo.git
 
 # Install npm if you didn't have npm installed
 brew install npm
