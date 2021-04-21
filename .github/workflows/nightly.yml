@@ -8,7 +8,7 @@ on:
 
 jobs:
   compile-test:
-    if: github.repository == 'aws-samples/djl-demo'
+    if: github.repository == 'deepjavalibrary/djl-demo'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -64,11 +64,11 @@ jobs:
           cd example && ./mvnw package && cd ..
           cd extension && mvn package install && cd ..
           cd extension-example && ./mvnw package
-      - name: Compile Apache Spark
-        working-directory: apache-spark
-        run: |
-          cd image-classification && ./gradlew run && cd ..
-          cd spark3.0/image-classification && ./gradlew run
+#      - name: Compile Apache Spark
+#        working-directory: apache-spark
+#        run: |
+#          cd image-classification && ./gradlew run && cd ..
+#          cd spark3.0/image-classification && ./gradlew run
       - name: Compile Web Demo
         working-directory: web-demo
         run: |

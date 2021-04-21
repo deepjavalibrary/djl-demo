@@ -22,7 +22,7 @@ on:
 
 jobs:
   canary-test-windows:
-    if: github.repository == 'aws-samples/djl-demo'
+    if: github.repository == 'deepjavalibrary/djl-demo'
     runs-on: windows-latest
     env:
       AWS_REGION: us-east-1

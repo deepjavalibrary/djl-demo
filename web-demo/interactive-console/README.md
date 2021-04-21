@@ -4,8 +4,8 @@ This is a demo application designed for user to use JShell and DJL online.
 Hosted by [AWS Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/),
 it contains all Java 11 feature. 
 Try it out:
-- [Interactive Shell](https://aws-samples.github.io/djl-demo/web-demo/interactive-console/src/main/webapps/jshell).
-- [Block Runner](https://aws-samples.github.io/djl-demo/web-demo/interactive-console/src/main/webapps/blockrunner)
+- [Interactive Shell](https://deepjavalibrary.github.io/djl-demo/web-demo/interactive-console/src/main/webapps/jshell).
+- [Block Runner](https://deepjavalibrary.github.io/djl-demo/web-demo/interactive-console/src/main/webapps/blockrunner)
 
 ## JShell
 

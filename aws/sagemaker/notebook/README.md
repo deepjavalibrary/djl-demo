@@ -19,7 +19,7 @@ Wait for approximately 20 second and refresh the JupyterLab. You will see the Ja
 Now, you can try with different Notebooks provided by DJL:
 
 - [DJL Jupyter Notebooks](https://github.com/deepjavalibrary/djl/tree/master/jupyter)
-- [Dive into Deep Learning (DJL edition)](https://github.com/aws-samples/d2l-java)
+- [Dive into Deep Learning (DJL edition)](https://github.com/deepjavalibrary/d2l-java)
 
 ## Setup Scala
 
@@ -37,7 +37,7 @@ Wait for approximately 20 second and refresh the JupyterLab. You will see the Sc
 
 Now you can try with our Scala Notebooks provided by DJL:
 
-- [DJL Spark application](https://github.com/aws-samples/djl-demo/tree/master/spark/notebook/Image_Classification_Spark.ipynb)
+- [DJL Spark application](https://github.com/deepjavalibrary/djl-demo/tree/master/spark/notebook/Image_Classification_Spark.ipynb)
 
 ## Use GPU on Notebook
 
