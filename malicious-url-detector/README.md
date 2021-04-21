@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This repository contains a Demo application built using [Deep Java Library(DJL)](https://github.com/awslabs/djl). The application detects malicious urls based on a trained [Character Level CNN model](https://arxiv.org/abs/1509.01626).
+This repository contains a Demo application built using [Deep Java Library(DJL)](https://github.com/deepjavalibrary/djl). The application detects malicious urls based on a trained [Character Level CNN model](https://arxiv.org/abs/1509.01626).
 
 It uses a third-party dataset that is a amalgamation of the following malicious URL databases.
 

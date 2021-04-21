@@ -52,5 +52,5 @@ cd ..
 ## Reference:
 
 1. [Detecting Pneumonia based on chest X-ray images using Depthwise Convolution](https://www.kaggle.com/aakashnain/beating-everything-with-depthwise-convolution)
-2. [DJL TensorFlow Engine](https://github.com/awslabs/djl/tree/master/tensorflow/tensorflow-engine)
-3. [DJL TensorFlow Documentation](https://github.com/awslabs/djl/tree/master/docs/tensorflow)
+2. [DJL TensorFlow Engine](https://github.com/deepjavalibrary/djl/tree/master/tensorflow/tensorflow-engine)
+3. [DJL TensorFlow Documentation](https://github.com/deepjavalibrary/djl/tree/master/docs/tensorflow)

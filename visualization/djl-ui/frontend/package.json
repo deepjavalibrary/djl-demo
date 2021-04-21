@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Deep Java Library UI",
   "main": "server.js",
-  "repository": "https://github.com/awslabs/djl/.git",
+  "repository": "https://github.com/deepjavalibrary/djl/.git",
   "license": "MIT",
   "private": true,
   "scripts": {

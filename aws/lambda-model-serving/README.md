@@ -15,7 +15,7 @@ probabilities using a pre-trained MXNet model.
 ## Preparation
 - [You need to install aws cli on your system](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
 - [Configure your aws cli with credential and region](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html#cli-quick-configuration)
-- [Setup Java environment](https://github.com/awslabs/djl/blob/master/docs/development/setup.md#install-the-java-development-kit)
+- [Setup Java environment](https://github.com/deepjavalibrary/djl/blob/master/docs/development/setup.md#install-the-java-development-kit)
 
 ## Build and deploy to AWS
 Run the following command to deploy to AWS:
