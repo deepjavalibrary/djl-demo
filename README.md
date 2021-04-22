@@ -13,7 +13,7 @@ An example application detects malicious urls based on a trained Character Level
 
 An example application detects live objects from web camera.
 
-## [Visualizing Training with DJL](visualization/README.md)
+## [Visualizing Training with DJL](visualization-vue/README.md)
 
 An example application features a web UI to track and visualize metrics such as loss and accuracy.
 
