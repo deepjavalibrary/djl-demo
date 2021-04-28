@@ -50,7 +50,7 @@ you can open your browser and navigate to `http://localhost:5000` to try it out.
 
 You can also you `curl` command to test the application's REST API.
 You can get a Smiley Face picture for testing:
-![Smiley Face](https://github.com/deepjavalibrary/djl-resources/raw/master/demo/beanstalk-model-serving/images/smiley.png)
+![Smiley Face](https://resources.djl.ai/demo/beanstalk-model-serving/images/smiley.png)
 
 ```shell
 curl -O https://raw.githubusercontent.com/deepjavalibrary/djl-resources/master/demo/beanstalk-model-serving/images/smiley.png
@@ -86,7 +86,7 @@ You can use the following command line to deploy to your AWS Elastic Beanstalk:
 Alternately you can create a new environment with the AWS BeanStalk Console.
 Give you application a name. Set the platform to these options for this example:
 
-![Platform Select Option](https://github.com/deepjavalibrary/djl-resources/raw/master/demo/beanstalk-model-serving/images/platform.png)
+![Platform Select Option](https://resources.djl.ai/demo/beanstalk-model-serving/images/platform.png)
 
 When selecting your Application Code, select the "choose file" option and
 upload the jar that was created in:
