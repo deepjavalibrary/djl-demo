@@ -14,6 +14,7 @@ package ai.djl.canary;
 
 import ai.djl.Application;
 import ai.djl.Device;
+import ai.djl.Model;
 import ai.djl.ModelException;
 import ai.djl.engine.Engine;
 import ai.djl.fasttext.FtModel;
@@ -26,19 +27,25 @@ import ai.djl.modality.cv.output.DetectedObjects;
 import ai.djl.modality.cv.transform.Resize;
 import ai.djl.modality.cv.transform.ToTensor;
 import ai.djl.modality.cv.translator.ImageClassificationTranslator;
-import ai.djl.onnxruntime.zoo.tabular.randomforest.IrisFlower;
+import ai.djl.ndarray.NDArray;
+import ai.djl.ndarray.NDList;
+import ai.djl.ndarray.NDManager;
+import ai.djl.ndarray.types.Shape;
+import ai.djl.onnxruntime.zoo.tabular.softmax_regression.IrisFlower;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.sentencepiece.SpTokenizer;
 import ai.djl.training.util.DownloadUtils;
 import ai.djl.training.util.ProgressBar;
+import ai.djl.translate.NoopTranslator;
 import ai.djl.translate.TranslateException;
 import ai.djl.util.cuda.CudaUtils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -83,6 +90,9 @@ public final class CanaryTest {
             throw new AssertionError("Expecting load engine on GPU.");
         } else if (djlEngine.startsWith("onnxruntime")) {
             testOnnxRuntime();
+            return;
+        } else if (djlEngine.startsWith("xgboost")) {
+            testXgboost();
             return;
         } else if (djlEngine.startsWith("tflite")) {
             testTflite();
@@ -228,21 +238,12 @@ public final class CanaryTest {
             Image img = ImageFactory.getInstance().fromUrl(url);
             DetectedObjects objs = predictor.predict(img);
             logger.info(objs.toString());
-            if (objs.getNumberOfObjects() != 3) {
-                throw new AssertionError(
-                        "Required output numbers three, actual " + objs.getNumberOfObjects());
-            }
         }
     }
 
     private static void testTflite() throws ModelException, IOException, TranslateException {
-        String os;
-        if (System.getProperty("os.name").toLowerCase().startsWith("mac")) {
-            os = "osx";
-        } else if (System.getProperty("os.name").toLowerCase().startsWith("linux")) {
-            os = "linux";
-        } else {
-            throw new AssertionError("DLR only work on mac and Linux.");
+        if (System.getProperty("os.name").startsWith("Win")) {
+            throw new AssertionError("TFLite only work on macOS and Linux.");
         }
         Criteria<Image, Classifications> criteria =
                 Criteria.builder()
@@ -250,15 +251,39 @@ public final class CanaryTest {
                         .optEngine("TFLite")
                         .optFilter("dataset", "aiyDish")
                         .build();
-        ZooModel<Image, Classifications> model = ModelZoo.loadModel(criteria);
-        Predictor<Image, Classifications> predictor = model.newPredictor();
+        try (ZooModel<Image, Classifications> model = ModelZoo.loadModel(criteria);
+                Predictor<Image, Classifications> predictor = model.newPredictor()) {
+            Image image =
+                    ImageFactory.getInstance()
+                            .fromUrl("https://resources.djl.ai/images/sachertorte.jpg");
+            Classifications prediction = predictor.predict(image);
+            logger.info(prediction.toString());
+            if (!"Sachertorte".equals(prediction.best().getClassName())) {
+                throw new AssertionError("Wrong prediction result");
+            }
+        }
+    }
 
-        Image image =
-                ImageFactory.getInstance()
-                        .fromUrl("https://resources.djl.ai/images/sachertorte.jpg");
-        Classifications prediction = predictor.predict(image);
-        if (!"Sachertorte".equals(prediction.best().getClassName())) {
-            throw new AssertionError("Wrong prediction result");
+    private static void testXgboost() throws ModelException, IOException, TranslateException {
+        if (System.getProperty("os.name").startsWith("Win")) {
+            throw new AssertionError("Xgboost only work on macOS and Linux.");
+        }
+        Path modelDir = Paths.get("build/model");
+        DownloadUtils.download(
+                "https://resources.djl.ai/test-models/xgboost/regression.json",
+                modelDir.resolve("regression.json").toString());
+        try (Model model = Model.newInstance("XGBoost")) {
+            model.load(Paths.get("build/model"), "regression");
+            Predictor<NDList, NDList> predictor = model.newPredictor(new NoopTranslator());
+            try (NDManager manager = NDManager.newBaseManager()) {
+                NDArray array = manager.ones(new Shape(10, 13));
+                NDList output = predictor.predict(new NDList(array));
+                float[] result = output.singletonOrThrow().toFloatArray();
+                logger.info(Arrays.toString(result));
+                if (result.length != 10) {
+                    throw new AssertionError("Wrong prediction result");
+                }
+            }
         }
     }
 }

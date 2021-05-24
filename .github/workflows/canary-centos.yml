@@ -18,7 +18,7 @@ on:
       djl-version:
         description: 'djl version to test'
         required: false
-        default: '0.10.0'
+        default: '0.11.0'
 
 jobs:
   canary-test-centos:
@@ -38,13 +38,6 @@ jobs:
       - name: Install libgomp
         run: |
           yum -y install libgomp
-      - name: Test MXNet
-        working-directory: canary
-        run: |
-          ./gradlew clean run
-          rm -rf ~/.djl.ai
-          DJL_ENGINE=mxnet-native-mkl ./gradlew clean run
-          rm -rf ~/.djl.ai
       - name: Test PyTorch
         working-directory: canary
         run: |
@@ -57,8 +50,11 @@ jobs:
           rm -rf ~/.djl.ai
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
           rm -rf ~/.djl.ai
-      # DLR doesn't support centos 7
-      - name: Test OnnxRuntime
+      - name: Test Xgboost
         working-directory: canary
         run: |
-          DJL_ENGINE=onnxruntime ./gradlew clean run
+          DJL_ENGINE=xgboost ./gradlew clean run
+      # MXNet 1.8.0 doesn't centos 7
+      # DLR doesn't support centos 7
+      # PaddlePaddle doesn't support centos 7
+      # TFLite doesn't support centos 7
