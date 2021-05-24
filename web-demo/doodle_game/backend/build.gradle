@@ -6,7 +6,7 @@ group "ai.djl.examples.doodle"
 version "1.0-SNAPSHOT"
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {

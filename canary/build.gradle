@@ -15,7 +15,7 @@ def os = getOsName()
 def stagingRepo = getEnv("DJL_STAGING", null)
 
 repositories {
-    jcenter()
+    mavenCentral()
     mavenLocal()
     maven {
         url "https://oss.sonatype.org/service/local/repositories/${stagingRepo}/content/"
