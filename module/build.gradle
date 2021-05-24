@@ -9,7 +9,7 @@ version "1.0-SNAPSHOT"
 def djlVersion = "0.10.0"
 
 repositories {
-    jcenter()
+    mavenCentral()
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots/"
     }

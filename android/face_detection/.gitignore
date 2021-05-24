@@ -1,0 +1,6 @@
+*.iml
+local.properties
+captures
+keystore
+.externalNativeBuild
+.cxx
