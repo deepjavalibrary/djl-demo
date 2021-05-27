@@ -9,10 +9,10 @@ version "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
     maven {
-        url = "http://oss.sonatype.org/content/repositories/snapshots"
+        url = "https://oss.sonatype.org/content/repositories/snapshots"
     }
     maven {
-        url = "http://maven.ecs.soton.ac.uk/content/repositories/thirdparty"
+        url = "https://maven.ecs.soton.ac.uk/content/repositories/thirdparty"
     }
 }
 
