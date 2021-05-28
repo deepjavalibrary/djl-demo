@@ -1,4 +1,4 @@
-## Running DJL with AWS Inferentia
+## Low cost inference with AWS Inferentia
 
 [AWS Inferentia](https://aws.amazon.com/machine-learning/inferentia/) is a high performance machine
 learning inference chip, custom designed by AWS. Amazon EC2 Inf1 instances are powered by AWS
@@ -30,6 +30,14 @@ source myenv/bin/activate
 pip install -U pip
 pip install torch-neuron 'neuron-cc[tensorflow]' --extra-index-url=https://pip.repos.neuron.amazonaws.com
 pip install torchvision==0.8.2
+```
+
+After installing the Inferentia neuron SDK, you will find `libneuron_op.so` is installed in
+`myenv/venv/lib/python3.6/site-packages/torch_neuron/lib` folder.
+You need configuration environment variable to enable Inferentia for DJL:
+
+```
+export PYTORCH_EXTRA_LIBRARY_PATH=~/myenv/venv/lib/python3.6/site-packages/torch_neuron/lib/libneuron_op.so
 ```
 
 ## Compile your model into Neuron traced model
