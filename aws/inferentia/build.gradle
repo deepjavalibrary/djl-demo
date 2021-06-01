@@ -8,13 +8,16 @@ version = '0.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.10.0")
+    implementation platform("ai.djl:bom:0.12.0-SNAPSHOT")
     implementation "ai.djl:api"
 
-    runtimeOnly "ai.djl.pytorch:pytorch-engine:"
+    runtimeOnly "ai.djl.pytorch:pytorch-engine"
     runtimeOnly "ai.djl.pytorch:pytorch-native-cpu-precxx11::linux-x86_64"
     runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.13.3"
 }
