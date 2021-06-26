@@ -36,7 +36,7 @@ After installing the Inferentia neuron SDK, you will find `libneuron_op.so` is i
 You need configuration environment variable to enable Inferentia for DJL:
 
 ```
-export PYTORCH_EXTRA_LIBRARY_PATH=$(python -m site | grep $VIRTUAL_ENV | awk -F"'" '{print $2}')
+export PYTORCH_EXTRA_LIBRARY_PATH=$(python -m site | grep $VIRTUAL_ENV | awk -F"'" '{print $2}')/torch_neuron/lib/libneuron_op.so
 ```
 
 ## Compile your model into Neuron traced model
