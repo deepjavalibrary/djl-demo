@@ -18,7 +18,6 @@ import ai.djl.Model;
 import ai.djl.ModelException;
 import ai.djl.engine.Engine;
 import ai.djl.fasttext.FtModel;
-import ai.djl.fasttext.zoo.FtModelZoo;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.Image;
@@ -191,8 +190,13 @@ public final class CanaryTest {
         }
 
         logger.info("----------Test fastText ----------");
-        try (ZooModel<String, Classifications> model =
-                FtModelZoo.COOKING_STACKEXCHANGE.loadModel()) {
+        Criteria<String, Classifications> criteria =
+                Criteria.builder()
+                        .setTypes(String.class, Classifications.class)
+                        .optArtifactId("ai.djl.fasttext:cooking_stackexchange")
+                        .build();
+
+        try (ZooModel<String, Classifications> model = criteria.loadModel()) {
             FtModel ftModel = (FtModel) model.getWrappedModel();
             Classifications classifications =
                     ftModel.classify("Which baking dish is best to bake a banana bread ?", 8);

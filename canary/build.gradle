@@ -6,9 +6,9 @@ plugins {
 group "com.example"
 version "1.0-SNAPSHOT"
 
-def djlVersion = getEnv("DJL_VERSION", "0.11.0")
+def djlVersion = getEnv("DJL_VERSION", "0.12.0")
 if (djlVersion == "") {
-    djlVersion = "0.11.0"
+    djlVersion = "0.12.0-SNAPSHOT"
 }
 def engine = getEnv("DJL_ENGINE", "mxnet-native-auto")
 def os = getOsName()
