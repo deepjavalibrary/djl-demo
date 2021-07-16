@@ -28,7 +28,7 @@ jobs:
       AWS_REGION: us-east-1
       DJL_STAGING: ${{github.event.inputs.repo-id}}
       DJL_VERSION: ${{github.event.inputs.djl-version}}
-    container: centos:7
+    container: amazonlinux:2
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8
@@ -41,7 +41,9 @@ jobs:
       - name: Test PyTorch
         working-directory: canary
         run: |
-          DJL_ENGINE=pytorch-native-cpu-precxx11 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-auto ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
           rm -rf ~/.djl.ai
       - name: Test TensorFlow
         working-directory: canary
@@ -50,11 +52,34 @@ jobs:
           rm -rf ~/.djl.ai
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
           rm -rf ~/.djl.ai
+      - name: Test DLR
+        working-directory: canary
+        run: |
+          DJL_ENGINE=dlr-native-auto ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=dlr-native-cpu ./gradlew clean run
+          rm -rf ~/.djl.ai
+      - name: Test OnnxRuntime
+        working-directory: canary
+        run: |
+          DJL_ENGINE=onnxruntime ./gradlew clean run
+      - name: Test TFLite
+        working-directory: canary
+        run: |
+          DJL_ENGINE=tflite-native-auto ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=tflite-native-cpu ./gradlew clean run
+          rm -rf ~/.djl.ai
+      - name: Test PaddlePaddle
+        working-directory: canary
+        run: |
+          DJL_ENGINE=paddlepaddle-native-auto ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=paddlepaddle-native-cpu ./gradlew clean run
+          rm -rf ~/.djl.ai
       - name: Test Xgboost
         working-directory: canary
         run: |
           DJL_ENGINE=xgboost ./gradlew clean run
-      # MXNet 1.8.0 doesn't support centos 7
-      # DLR doesn't support centos 7
-      # PaddlePaddle doesn't support centos 7
-      # TFLite doesn't support centos 7
+
+      # MXNet 1.8.0 doesn't support AL2
