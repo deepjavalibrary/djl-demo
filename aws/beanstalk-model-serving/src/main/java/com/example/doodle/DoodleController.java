@@ -20,7 +20,6 @@ import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.transform.ToTensor;
 import ai.djl.modality.cv.translator.ImageClassificationTranslator;
 import ai.djl.repository.zoo.Criteria;
-import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.Pipeline;
 import ai.djl.translate.TranslateException;
@@ -66,7 +65,7 @@ public class DoodleController {
         } catch (RuntimeException | TranslateException e) {
             logger.error("", e);
             Map<String, String> error = new ConcurrentHashMap<>();
-            error.put("status", "Invoke failed: " + e.toString());
+            error.put("status", "Invoke failed: " + e);
             return GSON.toJson(error) + System.lineSeparator();
         }
     }
@@ -85,6 +84,6 @@ public class DoodleController {
                         .optModelUrls(MODEL_URL)
                         .optTranslator(translator)
                         .build();
-        return ModelZoo.loadModel(criteria);
+        return criteria.loadModel();
     }
 }

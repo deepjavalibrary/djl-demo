@@ -81,7 +81,7 @@ public class Benchmark {
                         .build();
 
         Metrics metrics = new Metrics();
-        try (ZooModel<NDList, NDList> model = ModelZoo.loadModel(criteria)) {
+        try (ZooModel<NDList, NDList> model = criteria.loadModel()) {
             singleThreadInference(model, null, 1); // warm up
             if (numOfThreads == 1) {
                 singleThreadInference(model, metrics, iterations);

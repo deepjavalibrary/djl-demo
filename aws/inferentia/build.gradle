@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.12.0-SNAPSHOT")
+    implementation platform("ai.djl:bom:0.12.0")
     implementation "ai.djl:api"
 
     runtimeOnly "ai.djl.pytorch:pytorch-engine"
@@ -30,7 +30,7 @@ configure(this) {
 }
 
 application {
-    mainClassName = System.getProperty("main", "com.example.inferentia.InferentiaDemo")
+    getMainClass().set(System.getProperty("main", "com.example.inferentia.InferentiaDemo"))
 }
 
 task benchmark(type: JavaExec) {

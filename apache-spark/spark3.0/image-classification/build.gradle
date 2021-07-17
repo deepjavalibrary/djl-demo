@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.10.0")
+    implementation platform("ai.djl:bom:0.12.0")
     implementation "org.apache.spark:spark-sql_2.12:3.0.1"
     implementation "org.apache.spark:spark-mllib_2.12:3.0.1"
     implementation "ai.djl:api"
@@ -26,7 +26,7 @@ compileScala {
 }
 
 application {
-    mainClassName = System.getProperty("main", "com.examples.ImageClassificationExample")
+    getMainClass().set(System.getProperty("main", "com.examples.ImageClassificationExample"))
 }
 
 tasks.distTar.enabled = false

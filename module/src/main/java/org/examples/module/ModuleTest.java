@@ -20,7 +20,6 @@ import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.output.DetectedObjects;
 import ai.djl.repository.zoo.Criteria;
-import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.TranslateException;
 import org.slf4j.Logger;
@@ -58,7 +57,7 @@ public final class ModuleTest {
                         .optOptions(options)
                         .build();
 
-        try (ZooModel<Image, DetectedObjects> model = ModelZoo.loadModel(criteria)) {
+        try (ZooModel<Image, DetectedObjects> model = criteria.loadModel()) {
             try (Predictor<Image, DetectedObjects> predictor = model.newPredictor()) {
                 DetectedObjects detection = predictor.predict(img);
                 logger.info("{}", detection);

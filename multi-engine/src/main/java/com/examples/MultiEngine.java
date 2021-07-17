@@ -24,7 +24,6 @@ import ai.djl.modality.cv.output.Joints;
 import ai.djl.modality.cv.output.Rectangle;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelNotFoundException;
-import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
@@ -81,7 +80,7 @@ public final class MultiEngine {
 
         // Inference call to detect the person form the image.
         DetectedObjects detectedObjects;
-        try (ZooModel<Image, DetectedObjects> ssd = ModelZoo.loadModel(criteria);
+        try (ZooModel<Image, DetectedObjects> ssd = criteria.loadModel();
                 Predictor<Image, DetectedObjects> predictor = ssd.newPredictor()) {
             detectedObjects = predictor.predict(img);
         }
@@ -120,7 +119,7 @@ public final class MultiEngine {
                         .build();
 
         // Run inference on the image of a person and detect the joints
-        try (ZooModel<Image, Joints> pose = ModelZoo.loadModel(criteria);
+        try (ZooModel<Image, Joints> pose = criteria.loadModel();
                 Predictor<Image, Joints> predictor = pose.newPredictor()) {
             return predictor.predict(person);
         }

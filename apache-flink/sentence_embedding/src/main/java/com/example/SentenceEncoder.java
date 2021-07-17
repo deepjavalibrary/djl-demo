@@ -18,7 +18,6 @@ import ai.djl.inference.Predictor;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
 import ai.djl.repository.zoo.Criteria;
-import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.Batchifier;
@@ -46,7 +45,6 @@ import org.apache.flink.util.Collector;
  *
  * <p>and run this example with the hostname and the port as arguments.
  */
-@SuppressWarnings("serial")
 public class SentenceEncoder {
 
     public static void main(String[] args) throws Exception {
@@ -102,7 +100,7 @@ public class SentenceEncoder {
                                 .optTranslator(new MyTranslator())
                                 .optProgress(new ProgressBar())
                                 .build();
-                ZooModel<String, float[]> model = ModelZoo.loadModel(criteria);
+                ZooModel<String, float[]> model = criteria.loadModel();
                 predictor = model.newPredictor();
             }
             return predictor;

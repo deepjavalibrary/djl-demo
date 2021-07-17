@@ -17,7 +17,6 @@ import ai.djl.ModelException;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
 import ai.djl.repository.zoo.Criteria;
-import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.util.ProgressBar;
 import java.io.IOException;
@@ -39,7 +38,6 @@ import org.apache.flink.util.Collector;
  *
  * and run this example with the hostname and the port as arguments.
  */
-@SuppressWarnings("serial")
 public class SentimentAnalysis {
 
     public static void main(String[] args) throws Exception {
@@ -90,7 +88,7 @@ public class SentimentAnalysis {
                                 .setTypes(String.class, Classifications.class)
                                 .optProgress(new ProgressBar())
                                 .build();
-                ZooModel<String, Classifications> model = ModelZoo.loadModel(criteria);
+                ZooModel<String, Classifications> model = criteria.loadModel();
                 predictor = model.newPredictor();
             }
             return predictor;

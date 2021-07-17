@@ -18,7 +18,6 @@ import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
 import ai.djl.repository.zoo.Criteria;
-import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.TranslateException;
 import ai.djl.util.Utils;
@@ -59,7 +58,7 @@ public class Handler implements RequestStreamHandler {
                             .optArtifactId(artifactId)
                             .optFilters(filters)
                             .build();
-            try (ZooModel<Image, Classifications> model = ModelZoo.loadModel(criteria);
+            try (ZooModel<Image, Classifications> model = criteria.loadModel();
                     Predictor<Image, Classifications> predictor = model.newPredictor()) {
                 Image image = ImageFactory.getInstance().fromUrl(url);
                 List<Classifications.Classification> result = predictor.predict(image).topK(5);

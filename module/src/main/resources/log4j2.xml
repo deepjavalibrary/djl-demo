@@ -10,7 +10,7 @@
     <Root level="info" additivity="false">
       <AppenderRef ref="console"/>
     </Root>
-    <Logger name="ai.djl" level="${sys:ai.djl.logging.level:-debug}" additivity="false">
+    <Logger name="ai.djl" level="${sys:ai.djl.logging.level:-info}" additivity="false">
       <AppenderRef ref="console"/>
     </Logger>
   </Loggers>

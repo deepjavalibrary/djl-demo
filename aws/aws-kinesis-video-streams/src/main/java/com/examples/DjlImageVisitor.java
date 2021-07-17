@@ -7,7 +7,6 @@ import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.output.DetectedObjects;
 import ai.djl.repository.zoo.Criteria;
-import ai.djl.repository.zoo.ModelZoo;
 import com.amazonaws.kinesisvideo.parser.mkv.Frame;
 import com.amazonaws.kinesisvideo.parser.mkv.FrameProcessException;
 import com.amazonaws.kinesisvideo.parser.utilities.FragmentMetadata;
@@ -33,7 +32,7 @@ public class DjlImageVisitor extends H264FrameDecoder {
                         .setTypes(Image.class, DetectedObjects.class)
                         .optArtifactId("ai.djl.mxnet:ssd")
                         .build();
-        predictor = ModelZoo.loadModel(criteria).newPredictor();
+        predictor = criteria.loadModel().newPredictor();
         counter = 0;
         factory = ImageFactory.getInstance();
     }

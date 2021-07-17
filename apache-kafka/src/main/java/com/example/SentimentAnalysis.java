@@ -22,7 +22,7 @@ import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -42,12 +42,12 @@ public class SentimentAnalysis {
                         .setTypes(String.class, Classifications.class)
                         .build();
         // Load model
-        ZooModel<String, Classifications> model = ModelZoo.loadModel(criteria);
+        ZooModel<String, Classifications> model = criteria.loadModel();
         // Create predictor
         Predictor<String, Classifications> predictor = model.newPredictor();
 
         int numConsumers = 3;
-        List<String> topics = Arrays.asList(TOPIC);
+        List<String> topics = Collections.singletonList(TOPIC);
         ExecutorService executor = Executors.newFixedThreadPool(numConsumers);
 
         // setup consumer
@@ -60,19 +60,16 @@ public class SentimentAnalysis {
 
         Runtime.getRuntime()
                 .addShutdownHook(
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                for (ConsumerLoop consumer : consumers) {
-                                    consumer.shutdown();
-                                }
-                                executor.shutdown();
-                                try {
-                                    executor.awaitTermination(5000, TimeUnit.MILLISECONDS);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
+                        new Thread(() -> {
+                            for (ConsumerLoop consumer : consumers) {
+                                consumer.shutdown();
                             }
-                        });
+                            executor.shutdown();
+                            try {
+                                executor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }));
     }
 }

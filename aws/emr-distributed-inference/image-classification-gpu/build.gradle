@@ -15,7 +15,7 @@ configurations {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.10.0")
+    implementation platform("ai.djl:bom:0.12.0")
     implementation "org.apache.spark:spark-sql_2.12:3.0.1"
     implementation "org.apache.spark:spark-mllib_2.12:3.0.1"
     implementation "org.apache.hadoop:hadoop-hdfs:2.7.4"
@@ -27,7 +27,7 @@ dependencies {
 
 
     runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
-    runtimeOnly "ai.djl.pytorch:pytorch-native-cu101::linux-x86_64"
+    runtimeOnly "ai.djl.pytorch:pytorch-native-cu102::linux-x86_64"
     runtimeOnly "org.slf4j:slf4j-simple:1.7.30"
 }
 

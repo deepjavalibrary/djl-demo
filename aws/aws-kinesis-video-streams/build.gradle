@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.10.0")
+    implementation platform("ai.djl:bom:0.12.0")
     implementation "ai.djl:api"
     implementation "commons-cli:commons-cli:1.4"
     implementation "software.amazon.awssdk:kinesisvideo:2.10.75"
@@ -25,7 +25,7 @@ dependencies {
 }
 
 application {
-    mainClassName = System.getProperty("main", "org.example.App")
+    getMainClass().set(System.getProperty("main", "org.example.App"))
 }
 
 run {

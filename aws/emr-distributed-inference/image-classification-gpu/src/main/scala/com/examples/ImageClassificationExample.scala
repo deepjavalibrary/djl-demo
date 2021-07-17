@@ -21,7 +21,7 @@ import ai.djl.modality.Classifications
 import ai.djl.modality.cv.transform.{Resize, ToTensor}
 import ai.djl.ndarray.types.{DataType, Shape}
 import ai.djl.ndarray.{NDList, NDManager}
-import ai.djl.repository.zoo.{Criteria, ModelZoo, ZooModel}
+import ai.djl.repository.zoo.{Criteria, ZooModel}
 import ai.djl.training.util.{DownloadUtils, ProgressBar}
 import ai.djl.translate.{Batchifier, Pipeline, Translator, TranslatorContext}
 import ai.djl.util.{Utils, ZipUtils}
@@ -47,7 +47,7 @@ object ImageClassificationExample {
       .optProgress(new ProgressBar)
       .optDevice(device)
       .build()
-    ModelZoo.loadModel(criteria)
+    criteria.loadModel()
   }
 
   // Translator: a class used to do preprocessing and post processing

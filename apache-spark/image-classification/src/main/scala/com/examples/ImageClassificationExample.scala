@@ -15,7 +15,7 @@ package com.examples
 import ai.djl.Application
 import ai.djl.modality.Classifications
 import ai.djl.modality.cv.{Image, ImageFactory}
-import ai.djl.repository.zoo.{Criteria, ModelZoo}
+import ai.djl.repository.zoo.Criteria
 import ai.djl.training.util.ProgressBar
 import org.apache.spark.{SparkConf, SparkContext}
 
@@ -41,7 +41,7 @@ object ImageClassificationExample {
         .optFilter("layers", "50")
         .optProgress(new ProgressBar)
         .build
-      val model = ModelZoo.loadModel(criteria)
+      val model = criteria.loadModel()
       val predictor = model.newPredictor()
       partition.map(streamData => {
         val img = ImageFactory.getInstance().fromInputStream(streamData._2.open())

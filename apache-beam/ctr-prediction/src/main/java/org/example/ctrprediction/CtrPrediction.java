@@ -19,7 +19,6 @@ import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
 import ai.djl.repository.zoo.Criteria;
-import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.Batchifier;
 import ai.djl.translate.TranslateException;
@@ -138,7 +137,7 @@ public class CtrPrediction {
                         .optTranslator(new CtrTranslator())
                         .optEngine("MXNet")
                         .build();
-                ZooModel<String, String> model = ModelZoo.loadModel(criteria);
+                ZooModel<String, String> model = criteria.loadModel();
                 predictor = model.newPredictor();
             }
             return predictor;

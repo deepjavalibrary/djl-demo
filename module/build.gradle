@@ -6,7 +6,7 @@ plugins {
 group "org.examples"
 version "1.0-SNAPSHOT"
 
-def djlVersion = "0.10.0"
+def djlVersion = "0.12.0"
 
 repositories {
     mavenCentral()
@@ -57,7 +57,7 @@ dependencies {
 
 application {
     mainModule = "org.examples.module"
-    mainClassName = System.getProperty("main", "org.examples.module.ModuleTest")
+    getMainClass().set(System.getProperty("main", "org.examples.module.ModuleTest"))
 }
 
 run {
