@@ -32,7 +32,7 @@ jobs:
     steps:
       - name: Install Environment
         run: |
-          yum -y install libgomp git
+          yum -y groupinstall "Development Tools"
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
