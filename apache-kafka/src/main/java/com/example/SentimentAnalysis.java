@@ -18,7 +18,6 @@ import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelNotFoundException;
-import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,16 +59,17 @@ public class SentimentAnalysis {
 
         Runtime.getRuntime()
                 .addShutdownHook(
-                        new Thread(() -> {
-                            for (ConsumerLoop consumer : consumers) {
-                                consumer.shutdown();
-                            }
-                            executor.shutdown();
-                            try {
-                                executor.awaitTermination(5000, TimeUnit.MILLISECONDS);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }));
+                        new Thread(
+                                () -> {
+                                    for (ConsumerLoop consumer : consumers) {
+                                        consumer.shutdown();
+                                    }
+                                    executor.shutdown();
+                                    try {
+                                        executor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                }));
     }
 }
