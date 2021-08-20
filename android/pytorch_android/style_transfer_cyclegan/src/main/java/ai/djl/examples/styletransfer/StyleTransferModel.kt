@@ -35,7 +35,7 @@ class StyleTransferModel(artist: Styler.Artist) {
     private fun loadModel(artist: Styler.Artist): ZooModel<Image, Image> {
         val artistName = artist.toString().lowercase()
         val modelUrl =
-            "https://djl-misc.s3.amazonaws.com/test/models/cyclegan/style_${artistName}.zip"
+            "https://mlrepo.djl.ai/model/cv/image_generation/ai/djl/pytorch/cyclegan/0.0.1/style_${artistName}.zip"
 
         val criteria = Criteria.builder()
             .setTypes(Image::class.java, Image::class.java)
@@ -57,6 +57,7 @@ class StyleTransferModel(artist: Styler.Artist) {
     }
 
     internal inner class StyleTransferTranslator : Translator<Image?, Image> {
+
         override fun processInput(ctx: TranslatorContext, input: Image?): NDList {
             val image = switchFormat(input?.toNDArray(ctx.ndManager)).expandDims(0)
             return NDList(image.toType(DataType.FLOAT32, false))
