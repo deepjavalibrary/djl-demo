@@ -1,2 +1,3 @@
 rootProject.name='android'
 include ':quickdraw_recognition'
+include ':style_transfer_cyclegan'
