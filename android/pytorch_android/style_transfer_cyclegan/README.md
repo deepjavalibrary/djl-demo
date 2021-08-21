@@ -12,7 +12,7 @@ artists are:
 
 Cezanne          |  Monet            | Ukiyoe        |  Vangogh
 :--------------:|:-----------------:|:----------------:|:--------------:
-![](https://resources.djl.ai/images/cyclegan/cezanne.jpg) | ![](https://resources.djl.ai/images/cyclegan/monet.jpg) | ![](https://resources.djl.ai/images/cyclegan/ukiyoe.jpg) | ![](https://resources.djl.ai/images/cyclegan/vangogh.jpg)
+![](https://resources.djl.ai/images/cyclegan/cezanne.jpg?) | ![](https://resources.djl.ai/images/cyclegan/monet.jpg?) | ![](https://resources.djl.ai/images/cyclegan/ukiyoe.jpg?) | ![](https://resources.djl.ai/images/cyclegan/vangogh.jpg?)
 
 The minimum API level for this project is 26.
 
