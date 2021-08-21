@@ -10,7 +10,7 @@ artists are:
 - Vangogh
 
 
-Cezanne          |  Monet            | Ukiyoe        |  Vangogh
+Cezanne          | Monet&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Ukiyoe&nbsp;&nbsp;&nbsp;&nbsp; |  Vangogh
 :--------------:|:-----------------:|:----------------:|:--------------:
 ![](https://resources.djl.ai/images/cyclegan/cezanne.jpg?) | ![](https://resources.djl.ai/images/cyclegan/monet.jpg?) | ![](https://resources.djl.ai/images/cyclegan/ukiyoe.jpg?) | ![](https://resources.djl.ai/images/cyclegan/vangogh.jpg?)
 
