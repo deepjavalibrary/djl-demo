@@ -44,7 +44,7 @@ aws emr create-cluster \
 - Search "EMR" in AWS Console 
 - Click "Create Cluster"
 - Select "Spark" in the "Software configuration"
-- Pick an instance for Spark, we recommend to have an instance with 4GB memory as a minimum.
+- Pick an instance for Spark, we recommend have an instance with 4 GB memory as a minimum.
 - Click "Create Cluster"
 
 ![emr image](img/configure%20emr.gif)
@@ -95,4 +95,4 @@ aws s3 rb --force s3://your-bucket-name
 
 
 ## Learn more about DJL usage for Spark
-For more information about an actual DJL image classification example on Apache Spark, please find [here](../../../spark/image-classification/README.md).
+For more information about an actual DJL image classification example on Apache Spark, please find [here](../../../apache-spark/image-classification/README.md).
