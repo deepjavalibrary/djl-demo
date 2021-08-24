@@ -3,7 +3,7 @@
 This an example to show case how to deploy a deep learning model in [Apache  Kafka](http://kafka.apache.org/).
 
 We will use DJL's built-in sentiment analysis model based on PyTorch to run analysis on twitter data.
-There is a [sample data](data.txt) extracted from the [Kaggle Twitter Sentiment Analysis Dataset](https://www.kaggle.com/kazanova/sentiment140).
+There is a `data.txt` extracted from the [Kaggle Twitter Sentiment Analysis Dataset](https://www.kaggle.com/kazanova/sentiment140).
 This demo will make predictions on whether the tweet is positive or negative.
 
 
