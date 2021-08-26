@@ -12,9 +12,9 @@
  */
 package ai.djl.examples.styletransfer
 
-import ai.djl.android.core.BitmapImageFactory
 import ai.djl.inference.Predictor
 import ai.djl.modality.cv.Image
+import ai.djl.modality.cv.ImageFactory
 import ai.djl.ndarray.NDArray
 import ai.djl.ndarray.NDArrays
 import ai.djl.ndarray.NDList
@@ -65,7 +65,7 @@ class StyleTransferModel(artist: Styler.Artist) {
 
         override fun processOutput(ctx: TranslatorContext, list: NDList): Image {
             val output = list[0].addi(1).muli(128).toType(DataType.UINT8, false)
-            return BitmapImageFactory.getInstance().fromNDArray(output.squeeze())
+            return ImageFactory.getInstance().fromNDArray(output.squeeze())
         }
 
         private fun switchFormat(array: NDArray?): NDArray {
