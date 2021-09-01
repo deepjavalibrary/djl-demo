@@ -71,21 +71,19 @@ public final class CanaryTest {
         logger.info("");
         logger.info("----------Device information----------");
         int gpuCount = CudaUtils.getGpuCount();
-        int deviceCount = Device.getGpuCount();
         logger.info("GPU Count: {}", gpuCount);
         if (gpuCount > 0) {
             logger.info("CUDA: {}", CudaUtils.getCudaVersionString());
             logger.info("ARCH: {}", CudaUtils.getComputeCapability(0));
         }
-        logger.info("Engine visible GPU: {}", deviceCount);
-        logger.info("Default Device: {}", Device.defaultDevice());
 
         String djlEngine = System.getenv("DJL_ENGINE");
         if (djlEngine == null) {
             djlEngine = "mxnet-native-auto";
         }
 
-        if (djlEngine.contains("-native-cu") && deviceCount == 0) {
+        Device device = NDManager.newBaseManager().getDevice();
+        if (djlEngine.contains("-native-cu") && !Device.Type.GPU.equals(device.getDeviceType())) {
             throw new AssertionError("Expecting load engine on GPU.");
         } else if (djlEngine.startsWith("onnxruntime")) {
             testOnnxRuntime();
