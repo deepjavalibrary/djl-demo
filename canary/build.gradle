@@ -38,20 +38,6 @@ dependencies {
     implementation "ai.djl:model-zoo"
     implementation "ai.djl:basicdataset"
     implementation "ai.djl:model-zoo"
-    implementation("ai.djl:serving") {
-        // avoid include engines at runtime
-        exclude group: "ai.djl.mxnet", module: "mxnet-model-zoo"
-        exclude group: "ai.djl.mxnet", module: "mxnet-engine"
-        exclude group: "ai.djl.mxnet", module: "mxnet-native-auto"
-
-        exclude group: "ai.djl.pytorch", module: "pytorch-model-zoo"
-        exclude group: "ai.djl.pytorch", module: "pytorch-engine"
-        exclude group: "ai.djl.pytorch", module: "pytorch-native-auto"
-
-        exclude group: "ai.djl.tensorflow", module: "tensorflow-model-zoo"
-        exclude group: "ai.djl.tensorflow", module: "tensorflow-engine"
-        exclude group: "ai.djl.tensorflow", module: "tensorflow-native-auto"
-    }
 
     implementation "ai.djl.aws:aws-ai"
     implementation "ai.djl.fasttext:fasttext-engine"
