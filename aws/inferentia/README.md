@@ -41,8 +41,7 @@ export PYTORCH_EXTRA_LIBRARY_PATH=$(python -m site | grep $VIRTUAL_ENV | awk -F"
 
 ## Compile your model into Neuron traced model
 
-Use the following python script to trace a PyTorch resnet50 model. The script can be found
-[trace.py](trace.py) in the repo as well:  
+Use the following python script to trace a PyTorch resnet50 model. The script can also be found in the repo at [trace.py](https://github.com/deepjavalibrary/djl-demo/blob/master/aws/inferentia/trace.py).
 
 ```
 import torch

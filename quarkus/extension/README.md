@@ -1,4 +1,4 @@
-# DJL Quarkus Extension
+# DJL Extension for Quarkus
 
 This is an extension for [quarkus](https://quarkus.io/) to better integrate DJL into quarkus applications.
 
