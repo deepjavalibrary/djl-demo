@@ -20,6 +20,8 @@ import ai.djl.engine.Engine;
 import ai.djl.fasttext.FtModel;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
+import ai.djl.modality.Input;
+import ai.djl.modality.Output;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.output.DetectedObjects;
@@ -30,7 +32,6 @@ import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
 import ai.djl.ndarray.types.Shape;
-import ai.djl.onnxruntime.zoo.tabular.softmax_regression.IrisFlower;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
@@ -41,6 +42,7 @@ import ai.djl.translate.NoopTranslator;
 import ai.djl.translate.TranslateException;
 import ai.djl.util.cuda.CudaUtils;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -83,8 +85,11 @@ public final class CanaryTest {
         }
 
         Device device = NDManager.newBaseManager().getDevice();
-        if (djlEngine.contains("-native-cu") && !Device.Type.GPU.equals(device.getDeviceType())) {
+        if (djlEngine.contains("-native-cu") && !device.isGpu()) {
             throw new AssertionError("Expecting load engine on GPU.");
+        } else if (djlEngine.startsWith("tensorrt")) {
+            testTensorRT();
+            return;
         } else if (djlEngine.startsWith("onnxruntime")) {
             testOnnxRuntime();
             return;
@@ -93,6 +98,9 @@ public final class CanaryTest {
             return;
         } else if (djlEngine.startsWith("tflite")) {
             testTflite();
+            return;
+        } else if (djlEngine.startsWith("python")) {
+            testPython();
             return;
         } else if (djlEngine.startsWith("dlr")) {
             testDlr();
@@ -134,17 +142,40 @@ public final class CanaryTest {
         }
     }
 
-    private static void testOnnxRuntime() throws ModelException, IOException, TranslateException {
-        Criteria<IrisFlower, Classifications> criteria =
+    private static void testTensorRT() throws ModelException, IOException, TranslateException {
+        if (!System.getProperty("os.name").startsWith("Linux") || !CudaUtils.hasCuda()) {
+            throw new AssertionError("TensorRT only work on Linux GPU instance.");
+        }
+        Criteria<Image, Classifications> criteria =
                 Criteria.builder()
-                        .setTypes(IrisFlower.class, Classifications.class)
-                        .optEngine("OnnxRuntime") // use OnnxRuntime engine
+                        .setTypes(Image.class, Classifications.class)
+                        .optEngine("TensorRT") // use OnnxRuntime engine
+                        .optModelUrls(
+                                "https://mlrepo.djl.ai/model/cv/image_classification/ai/djl/onnxruntime/resnet/0.0.1/resnet18_v1-7.tar.gz")
                         .build();
 
-        IrisFlower virginica = new IrisFlower(1.0f, 2.0f, 3.0f, 4.0f);
-        try (ZooModel<IrisFlower, Classifications> model = ModelZoo.loadModel(criteria);
-                Predictor<IrisFlower, Classifications> predictor = model.newPredictor()) {
-            Classifications classifications = predictor.predict(virginica);
+        String url = "https://resources.djl.ai/images/kitten.jpg";
+        Image image = ImageFactory.getInstance().fromUrl(url);
+        try (ZooModel<Image, Classifications> model = ModelZoo.loadModel(criteria);
+                Predictor<Image, Classifications> predictor = model.newPredictor()) {
+            Classifications classifications = predictor.predict(image);
+            logger.info("{}", classifications);
+        }
+    }
+
+    private static void testOnnxRuntime() throws ModelException, IOException, TranslateException {
+        Criteria<Image, Classifications> criteria =
+                Criteria.builder()
+                        .setTypes(Image.class, Classifications.class)
+                        .optEngine("OnnxRuntime") // use OnnxRuntime engine
+                        .optModelUrls("djl://ai.djl.onnxruntime/resnet/0.0.1/resnet18_v1-7")
+                        .build();
+
+        String url = "https://resources.djl.ai/images/kitten.jpg";
+        Image image = ImageFactory.getInstance().fromUrl(url);
+        try (ZooModel<Image, Classifications> model = ModelZoo.loadModel(criteria);
+                Predictor<Image, Classifications> predictor = model.newPredictor()) {
+            Classifications classifications = predictor.predict(image);
             logger.info("{}", classifications);
         }
     }
@@ -263,6 +294,27 @@ public final class CanaryTest {
             if (!"Sachertorte".equals(prediction.best().getClassName())) {
                 throw new AssertionError("Wrong prediction result");
             }
+        }
+    }
+
+    private static void testPython() throws ModelException, IOException, TranslateException {
+        Criteria<Input, Output> criteria =
+                Criteria.builder()
+                        .setTypes(Input.class, Output.class)
+                        .optModelUrls(
+                                "https://mlrepo.djl.ai/model/cv/image_classification/ai/djl/python/resnet/0.0.1/pytorch.tar.gz")
+                        .optEngine("Python")
+                        .build();
+        Path file = Paths.get("build/test/kitten.jpg");
+        DownloadUtils.download(new URL("https://resources.djl.ai/images/kitten.jpg"), file, null);
+        try (ZooModel<Input, Output> model = criteria.loadModel();
+                Predictor<Input, Output> predictor = model.newPredictor()) {
+            Input input = new Input();
+            input.add("data", Files.readAllBytes(file));
+            input.addProperty("Content-Type", "image/jpeg");
+            Output output = predictor.predict(input);
+            String classification = output.getData().getAsString();
+            logger.info(classification);
         }
     }
 
