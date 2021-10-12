@@ -112,7 +112,7 @@ dependencies {
 }
 
 application {
-    getMainClass().set(System.getProperty("main", "ai.djl.canary.CanaryTest"))
+    mainClass = System.getProperty("main", "ai.djl.canary.CanaryTest")
 }
 
 run {

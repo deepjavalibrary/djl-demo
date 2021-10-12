@@ -88,7 +88,7 @@ public final class CanaryTest {
         if (djlEngine.contains("-native-cu") && !device.isGpu()) {
             throw new AssertionError("Expecting load engine on GPU.");
         } else if (djlEngine.startsWith("tensorrt")) {
-            testTensorRT();
+            testTensorrt();
             return;
         } else if (djlEngine.startsWith("onnxruntime")) {
             testOnnxRuntime();
@@ -142,14 +142,14 @@ public final class CanaryTest {
         }
     }
 
-    private static void testTensorRT() throws ModelException, IOException, TranslateException {
+    private static void testTensorrt() throws ModelException, IOException, TranslateException {
         if (!System.getProperty("os.name").startsWith("Linux") || !CudaUtils.hasCuda()) {
             throw new AssertionError("TensorRT only work on Linux GPU instance.");
         }
         Criteria<Image, Classifications> criteria =
                 Criteria.builder()
                         .setTypes(Image.class, Classifications.class)
-                        .optEngine("TensorRT") // use OnnxRuntime engine
+                        .optEngine("TensorRT") // use TensorRT engine
                         .optModelUrls(
                                 "https://mlrepo.djl.ai/model/cv/image_classification/ai/djl/onnxruntime/resnet/0.0.1/resnet18_v1-7.tar.gz")
                         .build();
