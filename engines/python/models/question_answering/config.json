@@ -1,0 +1,5 @@
+{
+  "model_name": "distilbert-base-cased-distilled-squad",
+  "do_lower_case": true,
+  "max_length": "128"
+}
