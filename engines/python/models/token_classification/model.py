@@ -54,6 +54,7 @@ class TokenClassification(object):
         self.model = AutoModelForTokenClassification.from_pretrained(self.model_name, config=config)
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, do_lower_case=self.do_lower_case)
         self.model.to(self.device).eval()
+        self.initialized = True
 
     def inference(self, inputs: Input):
         try:
