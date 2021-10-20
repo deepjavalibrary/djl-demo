@@ -40,10 +40,17 @@ release.properties
 build/
 out/
 
+__pycache__/
+
+*.gz
 *.jar
+*.zip
+*.tar
+*.pt
+*.h5
+*.params
 *.log
 model/
-models/
 dataset/
 
 stats.json

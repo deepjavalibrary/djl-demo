@@ -1,0 +1,6 @@
+{
+  "model_name": "bert-base-uncased",
+  "do_lower_case": true,
+  "num_labels": "9",
+  "max_length": "150"
+}
