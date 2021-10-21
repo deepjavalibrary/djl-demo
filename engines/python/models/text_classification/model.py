@@ -37,7 +37,7 @@ class TextClassification(object):
         self.initialized = False
 
     def initialize(self, properties: dict):
-        with open("config.json") as f:
+        with open("settings.json") as f:
             settings = json.load(f)
 
         with open("labels.json") as f:
@@ -50,7 +50,7 @@ class TextClassification(object):
         self.num_labels = int(settings["num_labels"])
         self.max_length = int(settings["max_length"])
         self.do_lower_case = settings["do_lower_case"]
-        config = AutoConfig.from_pretrained(self.model_name, num_labels=self.num_labels, torchscript=False)
+        config = AutoConfig.from_pretrained(self.model_name, num_labels=self.num_labels)
         self.model = AutoModelForSequenceClassification.from_pretrained(self.model_name, config=config)
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, do_lower_case=self.do_lower_case)
         self.model.to(self.device).eval()

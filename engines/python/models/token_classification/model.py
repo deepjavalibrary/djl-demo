@@ -37,7 +37,7 @@ class TokenClassification(object):
         self.initialized = False
 
     def initialize(self, properties: dict):
-        with open("config.json") as f:
+        with open("settings.json") as f:
             settings = json.load(f)
 
         with open("labels.json") as f:
@@ -50,7 +50,7 @@ class TokenClassification(object):
         self.num_labels = int(settings["num_labels"])
         self.max_length = int(settings["max_length"])
         self.do_lower_case = settings["do_lower_case"]
-        config = AutoConfig.from_pretrained(self.model_name, torchscript=False)
+        config = AutoConfig.from_pretrained(self.model_name)
         self.model = AutoModelForTokenClassification.from_pretrained(self.model_name, config=config)
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, do_lower_case=self.do_lower_case)
         self.model.to(self.device).eval()

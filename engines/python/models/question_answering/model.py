@@ -17,10 +17,7 @@ import logging
 import torch
 from djl_python import Input
 from djl_python import Output
-from transformers import (
-    AutoTokenizer,
-    AutoModelForQuestionAnswering,
-    AutoConfig)
+from transformers import AutoTokenizer, AutoModelForQuestionAnswering
 
 
 class QuestionAnswering(object):
@@ -35,7 +32,7 @@ class QuestionAnswering(object):
         self.initialized = False
 
     def initialize(self, properties: dict):
-        with open("config.json") as f:
+        with open("settings.json") as f:
             settings = json.load(f)
 
         device_id = properties.get("device_id")
@@ -44,8 +41,7 @@ class QuestionAnswering(object):
         self.model_name = settings["model_name"]
         self.max_length = int(settings["max_length"])
         self.do_lower_case = settings["do_lower_case"]
-        config = AutoConfig.from_pretrained(self.model_name, torchscript=False)
-        self.model = AutoModelForQuestionAnswering.from_pretrained(self.model_name, config=config)
+        self.model = AutoModelForQuestionAnswering.from_pretrained(self.model_name)
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, do_lower_case=self.do_lower_case)
         self.model.to(self.device).eval()
         self.initialized = True
