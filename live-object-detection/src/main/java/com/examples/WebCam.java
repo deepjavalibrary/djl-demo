@@ -19,17 +19,16 @@ import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.output.DetectedObjects;
 import ai.djl.repository.zoo.Criteria;
-import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
-import com.github.sarxos.webcam.Webcam;
-import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 import javax.swing.JOptionPane;
+import nu.pattern.OpenCV;
+import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.videoio.VideoCapture;
 
 public class WebCam {
 
@@ -37,50 +36,45 @@ public class WebCam {
         ZooModel<Image, DetectedObjects> model = loadModel();
         Predictor<Image, DetectedObjects> predictor = model.newPredictor();
 
-        List<Webcam> webcams = Webcam.getWebcams();
-
-        Optional<Webcam> optionalWebcam =
-                webcams.stream()
-                        // Ignore any virtual cameras for now
-                        .filter(webcam -> !webcam.getName().toLowerCase().contains("virtual"))
-                        // Ignore any cameras that fail to open
-                        .filter(Webcam::open)
-                        // Pick the first camera
-                        .findFirst();
-
-        if (!optionalWebcam.isPresent()) {
+        OpenCV.loadShared();
+        VideoCapture capture = new VideoCapture(0);
+        if (!capture.isOpened()) {
             System.out.println("No camera detected");
             return;
         }
 
-        Webcam webcam = optionalWebcam.get();
-        adjustViewSize(webcam);
-
-        if (!webcam.isOpen()) {
-            System.out.println("Camera is not open");
-            return;
+        Mat image = new Mat();
+        boolean captured = false;
+        for (int i = 0; i < 10; ++i) {
+            captured = capture.read(image);
+            if (captured) {
+                break;
+            }
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException ignore) {
+                // ignore
+            }
         }
-        BufferedImage bufferedImage = webcam.getImage();
-
-        if (bufferedImage == null) {
+        if (!captured) {
             JOptionPane.showConfirmDialog(null, "Failed to capture image from WebCam.");
-            return;
         }
 
-        ViewerFrame frame = new ViewerFrame(bufferedImage.getWidth(), bufferedImage.getHeight());
-
+        ViewerFrame frame = new ViewerFrame(image.width(), image.height());
         ImageFactory factory = ImageFactory.getInstance();
 
-        while (webcam.isOpen()) {
-            bufferedImage = webcam.getImage();
-            Image img = factory.fromImage(bufferedImage);
+        while (capture.isOpened()) {
+            if (!capture.read(image)) {
+                break;
+            }
+            Image img = factory.fromImage(toBufferedImage(image));
             DetectedObjects detections = predictor.predict(img);
             img.drawBoundingBoxes(detections);
 
             frame.showImage((BufferedImage) img.getWrappedImage());
         }
 
-        webcam.close();
+        capture.release();
 
         predictor.close();
         model.close();
@@ -98,24 +92,25 @@ public class WebCam {
                         .optProgress(new ProgressBar())
                         .build();
 
-        return ModelZoo.loadModel(criteria);
+        return criteria.loadModel();
     }
 
-    private static void adjustViewSize(Webcam webcam) {
-        Dimension dimension = webcam.getViewSize();
-        double width = (int) dimension.getWidth();
-        double height = (int) dimension.getHeight();
-        if (width < 512) {
-            int newHeight = (int) (height * 512 / width);
-            dimension = new Dimension(512, newHeight);
-            webcam.close();
-            try {
-                webcam.setCustomViewSizes(dimension);
-                webcam.setViewSize(dimension);
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-            }
-            webcam.open();
+    private static BufferedImage toBufferedImage(Mat mat) {
+        int width = mat.width();
+        int height = mat.height();
+        int type =
+                mat.channels() != 1 ? BufferedImage.TYPE_3BYTE_BGR : BufferedImage.TYPE_BYTE_GRAY;
+
+        if (type == BufferedImage.TYPE_3BYTE_BGR) {
+            Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2RGB);
         }
+
+        byte[] data = new byte[width * height * (int) mat.elemSize()];
+        mat.get(0, 0, data);
+
+        BufferedImage ret = new BufferedImage(width, height, type);
+        ret.getRaster().setDataElements(0, 0, width, height, data);
+
+        return ret;
     }
 }

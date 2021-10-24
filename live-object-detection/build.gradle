@@ -11,29 +11,19 @@ repositories {
     maven {
         url = "https://oss.sonatype.org/content/repositories/snapshots"
     }
-    maven {
-        url = "https://maven.ecs.soton.ac.uk/content/repositories/thirdparty"
-    }
 }
 
-def webcamCaptureVersion = '0.3.13-SNAPSHOT'
-def bridjVersion = '0.7-20140918-3'
-
 dependencies {
-    implementation "ai.djl.mxnet:mxnet-model-zoo:0.6.0"
-    implementation ("com.github.sarxos:webcam-capture:${webcamCaptureVersion}") {
-        exclude group: "com.nativelibs4java", module: "bridj"
-    }
-    implementation "com.nativelibs4java:bridj:${bridjVersion}"
+    implementation platform("ai.djl:bom:0.13.0")
+    implementation "ai.djl.mxnet:mxnet-model-zoo"
+    implementation "org.openpnp:opencv:4.5.1-2"
 
-    runtimeOnly "org.slf4j:slf4j-simple:1.7.29"
-    runtimeOnly "ai.djl.mxnet:mxnet-native-auto:1.7.0-a"
-
-    testImplementation "junit:junit:4.12"
+    runtimeOnly 'org.slf4j:slf4j-simple:1.7.32'
+    runtimeOnly "ai.djl.mxnet:mxnet-native-auto"
 }
 
 application {
-    mainClassName = System.getProperty("main", "com.examples.WebCam")
+    mainClass = System.getProperty("main", "com.examples.WebCam")
 }
 
 configure(this) {
