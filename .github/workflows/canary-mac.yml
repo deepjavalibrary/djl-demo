@@ -18,7 +18,7 @@ on:
       djl-version:
         description: 'djl version to test'
         required: false
-        default: '0.12.0'
+        default: '0.13.0'
 
 jobs:
   canary-test-mac:
