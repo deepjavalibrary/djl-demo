@@ -39,20 +39,6 @@ pip install -U pip
 pip install torchvision torch-neuron==1.9.1.2.0.318.0 'neuron-cc[tensorflow]==1.7.3.0' --extra-index-url=https://pip.repos.neuron.amazonaws.com
 ```
 
-After installing the Inferentia neuron SDK, you will find `libtorchneuron.so` is installed in
-`myenv/lib/python3.6/site-packages/torch_neuron/lib` folder.
-You need configuration environment variable to enable Inferentia for DJL:
-
-```
-export PYTORCH_EXTRA_LIBRARY_PATH=$(python -m site | grep $VIRTUAL_ENV | awk -F"'" '{print $2}')/torch_neuron/lib/libtorchneuron.so
-```
-
-`libtorchneuron.so` depends on some shared library in its folder, you also need to specify `LD_LIBRARY_PATH` to make it work:
-
-```
-export LD_LIBRARY_PATH=$LD_LIBRARYPATH:$(python -m site | grep $VIRTUAL_ENV | awk -F"'" '{print $2}')/torch_neuron/lib/
-```
-
 ## Compile your model into Neuron traced model
 
 Use the following command to trace a Huggingface questing answering model. The script can be found in the repo at [trace.py](trace.py).
@@ -80,6 +66,20 @@ git clone https://github.com/deepjavalibrary/djl-serving.git
 **djl-serving** allows you run Huggingface model in both Java and Python engine.
 
 ### Run java engine
+
+After installing the Inferentia neuron SDK, you will find `libtorchneuron.so` is installed in
+`myenv/lib/python3.6/site-packages/torch_neuron/lib` folder.
+You need configuration environment variable to enable Inferentia for DJL:
+
+```
+export PYTORCH_EXTRA_LIBRARY_PATH=$(python -m site | grep $VIRTUAL_ENV | awk -F"'" '{print $2}')/torch_neuron/lib/libtorchneuron.so
+```
+
+`libtorchneuron.so` depends on some shared library in its folder, you also need to specify `LD_LIBRARY_PATH` to make it work:
+
+```
+export LD_LIBRARY_PATH=$LD_LIBRARYPATH:$(python -m site | grep $VIRTUAL_ENV | awk -F"'" '{print $2}')/torch_neuron/lib/
+```
 
 Neuron SDK requires precxx11 version of PyTorch native library, you need set the
 following environment variable to instruct DJL load precxx11 PyTorch native library:
@@ -149,15 +149,18 @@ ab -c 8 -n 8000 -k -p qa_payload.json \
 
 ## Performance
 
-By default, **djl-serving** only load the model on single NeuronCore (assume the model compiled for one NeuronCore).
-To run the inference on multiple NeuronCore, use the following command to start **djl-serving**:
+By default, **djl-serving** will assume the model compiled for one NeuronCore. When you specify "*" in `-m`
+command line parameter, DJL will automatically detect the number of NeuronCores available in the system
+and load the model on each NeuronCore.
+
+You can control number of NeuronCores to use for the model, use the following command to start **djl-serving**:
 
 ```
 # java engine
-./gradlew :serving:run --args="-m bert_qa::PyTorch:nc0;nc1;nc2;nc3=file:$HOME/source/djl-demo/huggingface/inferentia/question_answering"
+./gradlew :serving:run --args="-m bert_qa::PyTorch:nc0;nc1=file:$HOME/source/djl-demo/huggingface/inferentia/question_answering"
 
 # python engine
-./gradlew :serving:run --args="-m bert_qa::Python:nc0;nc1;nc2;nc3=file:$HOME/source/djl-demo/huggingface/inferentia/question_answering"
+./gradlew :serving:run --args="-m bert_qa::Python:n2,nc3=file:$HOME/source/djl-demo/huggingface/inferentia/question_answering"
 ```
 
 If your model is traced with 2 NeuronCores, you can use the following command:
