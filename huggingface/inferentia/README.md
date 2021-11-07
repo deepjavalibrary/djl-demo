@@ -6,6 +6,7 @@ Inferentia chips, which provides you with the lowest cost per inference in the c
 the barriers for everyday developers to use machine learning (ML) at scale.
 
 In the demo, you will learn how to deploy PyTorch model with **djl-serving** on Amazon EC2 Inf1 instances.
+You can follow [this instruction](deploy_on_sagemaker.md) if you want to deploy your model on AWS SageMaker.
 
 ## Setup environment
 
@@ -42,7 +43,7 @@ pip install torchvision torch-neuron==1.9.1.2.0.318.0 'neuron-cc[tensorflow]==1.
 ## Compile your model into Neuron traced model
 
 Use the following command to trace a Huggingface questing answering model. The script can be found in the repo at [trace.py](trace.py).
-You can also download a traced model from: https://resources.djl.ai/test-models/pytorch/bert_qa-inf1.tar.gz
+You can also download a traced model from: https://resources.djl.ai/test-models/pytorch/bert_qa_inf1.tar.gz
 
 You can find more details on [Neuron tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/index.html). 
 
@@ -111,7 +112,7 @@ cd djl-serving/serving
 ### Run Python engine
 
 **djl-serving**'s Python engine is compatible with [TorchServe](https://github.com/pytorch/serve) `.mar` file.
-You can deploy TorchServe `.mar` directly in *djl-serving*.
+You can deploy TorchServe `.mar` directly in **djl-serving**.
 
 **djl-serving** Python model's script format is similar to TorchServe, but simpler.
 See [DJL Python engine](https://github.com/deepjavalibrary/djl-serving/tree/master/engines/python) for how to
