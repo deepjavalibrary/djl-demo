@@ -8,13 +8,17 @@ the barriers for everyday developers to use machine learning (ML) at scale.
 In the demo, you will learn how to deploy PyTorch model with **djl-serving** on Amazon EC2 Inf1 instances.
 You can follow [this instruction](deploy_on_sagemaker.md) if you want to deploy your model on AWS SageMaker.
 
+Instructions in this page only apply to setting up Neuron components on Linux host running Ubuntu AMI.
+For an example of how to install Neuron components in a container, see [Docker environment setup](https://github.com/deepjavalibrary/djl-serving/tree/master/serving/docker)
+documentation for more details.
+
 ## Setup environment
 
 ### Launch Inf1 EC2 instance
 
 Please launch Inf1 instance by following the [Install Neuron Instructions](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/pytorch-setup/pytorch-install.html#install-neuron-pytorch)
 
-This demo tested on Neuron SDK 1.16.0 and PyTorch 1.9.1 on Ubuntu DLAMI.
+This demo tested on Neuron SDK 1.16.1 and PyTorch 1.9.1 on Ubuntu DLAMI.
 Please make sure you have Neuron Runtime 2.x installed:
 
 ```
@@ -56,10 +60,9 @@ Execute above command, now you have a Neuron traced model `model.pt` ready for i
 
 ## Install djl-serving
 
-This demo requires **djl-serving** 0.14.0 (not release yet). You need to run **djl-serving** from source.
-
 ```
-git clone https://github.com/deepjavalibrary/djl-serving.git
+curl -O https://publish.djl.ai/djl-serving/djl-serving_0.14.0-1_all.deb
+sudo dpkg -i djl-serving_0.14.0-1_all.deb
 ```
 
 ## Deploy question answering model with DJL
@@ -104,9 +107,7 @@ max_length=128
 **Note:** `padding=true` is required for using neuron sdk, since neuron traced model using a fixed input shape.
 
 ```
-cd djl-serving/serving
-
-./gradlew :serving:run --args="-m bert_qa::PyTorch:*=file:$HOME/source/djl-demo/huggingface/inferentia/question_answering"
+djl-serving -m "bert_qa::PyTorch:*=file:$HOME/source/djl-demo/huggingface/inferentia/question_answering"
 ```
 
 ### Run Python engine
@@ -119,9 +120,7 @@ See [DJL Python engine](https://github.com/deepjavalibrary/djl-serving/tree/mast
 write DJL Python model.
 
 ```
-cd djl-serving/serving
-
-./gradlew :serving:run --args="-m bert_qa::Python:*=file:$HOME/source/djl-demo/huggingface/inferentia/question_answering"
+djl-serving -m "bert_qa::Python:*=file:$HOME/source/djl-demo/huggingface/inferentia/question_answering"
 ```
 
 ## Run inference
@@ -158,20 +157,20 @@ You can control number of NeuronCores to use for the model, use the following co
 
 ```
 # java engine
-./gradlew :serving:run --args="-m bert_qa::PyTorch:nc0;nc1=file:$HOME/source/djl-demo/huggingface/inferentia/question_answering"
+djl-serving -m "bert_qa::PyTorch:nc0;nc1=file:$HOME/source/djl-demo/huggingface/inferentia/question_answering"
 
 # python engine
-./gradlew :serving:run --args="-m bert_qa::Python:n2,nc3=file:$HOME/source/djl-demo/huggingface/inferentia/question_answering"
+djl-serving -m "bert_qa::Python:n2,nc3=file:$HOME/source/djl-demo/huggingface/inferentia/question_answering"
 ```
 
 If your model is traced with 2 NeuronCores, you can use the following command:
 
 ```
 # java engine
-./gradlew :serving:run --args="-m bert_qa::PyTorch:nc0-1;nc2-3=file:$HOME/source/djl-demo/huggingface/inferentia/question_answering"
+djl-serving -m "bert_qa::PyTorch:nc0-1;nc2-3=file:$HOME/source/djl-demo/huggingface/inferentia/question_answering"
 
 # python engine
-./gradlew :serving:run --args="-m bert_qa::Python:nc0-1;nc2-3=file:$HOME/source/djl-demo/huggingface/inferentia/question_answering"
+djl-serving -m "bert_qa::Python:nc0-1;nc2-3=file:$HOME/source/djl-demo/huggingface/inferentia/question_answering"
 ```
 
 
