@@ -37,7 +37,7 @@ python3 -m venv myenv
 
 source myenv/bin/activate
 pip install -U pip
-pip install torchvision torch-neuron==1.9.1.2.0.318.0 'neuron-cc[tensorflow]==1.7.3.0' --extra-index-url=https://pip.repos.neuron.amazonaws.com
+pip install torchvision torch-neuron==1.9.1.2.0.392.0 'neuron-cc[tensorflow]==1.7.3.0' --extra-index-url=https://pip.repos.neuron.amazonaws.com
 ```
 
 ## Compile your model into Neuron traced model
