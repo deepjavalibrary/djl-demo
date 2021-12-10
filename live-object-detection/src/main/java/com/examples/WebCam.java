@@ -67,11 +67,11 @@ public class WebCam {
             if (!capture.read(image)) {
                 break;
             }
-            Image img = factory.fromImage(toBufferedImage(image));
+            Image img = factory.fromImage(image);
             DetectedObjects detections = predictor.predict(img);
             img.drawBoundingBoxes(detections);
 
-            frame.showImage((BufferedImage) img.getWrappedImage());
+            frame.showImage(toBufferedImage((Mat) img.getWrappedImage()));
         }
 
         capture.release();
