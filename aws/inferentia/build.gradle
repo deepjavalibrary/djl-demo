@@ -19,7 +19,7 @@ dependencies {
 
     runtimeOnly "ai.djl.pytorch:pytorch-engine"
     runtimeOnly "ai.djl.pytorch:pytorch-native-cpu-precxx11::linux-x86_64"
-    runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.13.3"
+    runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.15.0"
 }
 
 configure(this) {
