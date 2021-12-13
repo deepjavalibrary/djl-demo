@@ -21,7 +21,7 @@ dependencies {
     // See https://github.com/deepjavalibrary/djl/blob/master/mxnet/mxnet-engine/README.md for more MXNet library selection options
     runtimeOnly "ai.djl.mxnet:mxnet-native-auto"
     runtimeOnly "ai.djl.mxnet:mxnet-model-zoo"
-    runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.12.1"
+    runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.15.0"
 }
 
 application {
