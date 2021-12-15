@@ -19,7 +19,7 @@ dependencies {
     runtimeOnly "ai.djl.mxnet:mxnet-model-zoo"
     runtimeOnly "ai.djl.mxnet:mxnet-native-auto"
 
-    runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.15.0"
+    runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.16.0"
 }
 
 application {
