@@ -22,7 +22,7 @@ dependencies {
     runtimeOnly "ai.djl.pytorch:pytorch-native-auto"
     runtimeOnly "ai.djl.python:python"
 
-    runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.16.0"
+    runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.17.0"
 }
 
 application {
