@@ -46,15 +46,14 @@ public class InteractiveShell {
 
     public void addDependency(Path jarPath) {
         if (!jarPath.toFile().exists()) {
-            throw new IllegalArgumentException(
-                    "jar does not exist in " + jarPath.toAbsolutePath().toString());
+            throw new IllegalArgumentException("jar does not exist in " + jarPath.toAbsolutePath());
         }
         js.addToClasspath(jarPath.toAbsolutePath().toString());
     }
 
     public void addDependencyDir(Path dir) {
         if (!dir.toFile().isDirectory()) {
-            throw new IllegalArgumentException(dir.toString() + " is not directory");
+            throw new IllegalArgumentException(dir + " is not directory");
         }
         File[] files = dir.toFile().listFiles();
         if (files != null) {
@@ -77,7 +76,7 @@ public class InteractiveShell {
                     sb.append(sw.getBuffer().toString());
                 } else {
                     if (event.status() == Snippet.Status.REJECTED) {
-                        sb.append("JConsole rejected command ").append(event.toString());
+                        sb.append("JConsole rejected command ").append(event);
                     }
                     if (event.value() != null) {
                         sb.append(event.value());

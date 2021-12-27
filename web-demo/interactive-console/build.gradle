@@ -1,6 +1,6 @@
 plugins {
-	id 'org.springframework.boot' version '2.3.0.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'org.springframework.boot' version '2.6.2'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 }
 
@@ -19,7 +19,7 @@ configure(this) {
 }
 
 dependencies {
-	implementation platform("ai.djl:bom:0.10.0")
+	implementation platform("ai.djl:bom:0.14.0")
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	runtimeOnly "ai.djl:api"
