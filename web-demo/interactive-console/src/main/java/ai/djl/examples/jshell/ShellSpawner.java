@@ -46,27 +46,27 @@ public final class ShellSpawner {
     private static void extractJars(Path dir) {
         List<String> deps =
                 Arrays.asList(
-                        "api-0.10.0.jar",
-                        "gson-2.8.6.jar",
-                        "commons-compress-1.20.jar",
-                        "jna-5.3.0.jar",
-                        "slf4j-api-1.7.30.jar",
-                        "log4j-api-2.13.2.jar",
-                        "log4j-to-slf4j-2.13.2.jar",
+                        "api-0.14.0.jar",
+                        "gson-2.8.9.jar",
+                        "commons-compress-1.21.jar",
+                        "jna-5.9.0.jar",
+                        "slf4j-api-1.7.32.jar",
+                        "log4j-api-2.17.0.jar",
+                        "log4j-to-slf4j-2.17.0.jar",
                         "protobuf-java-3.8.0.jar",
-                        "javacpp-1.5.4.jar");
+                        "javacpp-1.5.6.jar");
         List<String> engines =
                 Arrays.asList(
-                        "pytorch-engine-0.10.0.jar",
-                        "pytorch-model-zoo-0.10.0.jar",
-                        "pytorch-native-auto-1.7.1.jar",
-                        "mxnet-engine-0.10.0.jar",
-                        "mxnet-model-zoo-0.10.0.jar",
-                        "mxnet-native-auto-1.7.0-backport.jar",
-                        "tensorflow-api-0.10.0.jar",
-                        "tensorflow-engine-0.10.0.jar",
-                        "tensorflow-model-zoo-0.10.0.jar",
-                        "tensorflow-native-auto-2.3.1.jar");
+                        "pytorch-engine-0.14.0.jar",
+                        "pytorch-model-zoo-0.14.0.jar",
+                        "pytorch-native-auto-1.9.1.jar",
+                        "mxnet-engine-0.14.0.jar",
+                        "mxnet-model-zoo-0.14.0.jar",
+                        "mxnet-native-auto-1.8.0.jar",
+                        "tensorflow-api-0.14.0.jar",
+                        "tensorflow-engine-0.14.0.jar",
+                        "tensorflow-model-zoo-0.14.0.jar",
+                        "tensorflow-native-auto-2.4.1.jar");
         Path basicDepsDir = dir.resolve("basic");
         extractAndCopy(basicDepsDir, deps);
         Path engineDir = dir.resolve("engines");
