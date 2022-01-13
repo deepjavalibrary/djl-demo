@@ -6,13 +6,11 @@ plugins {
 group "com.example"
 version "1.0-SNAPSHOT"
 
-def djlVersion = getEnv("DJL_VERSION", "0.14.0")
-if (djlVersion == "") {
-    djlVersion = "0.14.0"
-}
+def djlVersion = getEnv("DJL_VERSION", "0.15.0")
 def engine = getEnv("DJL_ENGINE", "mxnet-native-auto")
 def os = getOsName()
 def stagingRepo = getEnv("DJL_STAGING", null)
+def ptVersion = getEnv("PT_VERSION", "1.10.0")
 
 repositories {
     mavenCentral()
@@ -36,8 +34,6 @@ dependencies {
     implementation platform("ai.djl:bom:${djlVersion}")
     implementation "ai.djl:basicdataset"
     implementation "ai.djl:model-zoo"
-    implementation "ai.djl:basicdataset"
-    implementation "ai.djl:model-zoo"
 
     implementation "ai.djl.aws:aws-ai"
     implementation "ai.djl.fasttext:fasttext-engine"
@@ -51,43 +47,32 @@ dependencies {
 
     if (engine.startsWith("pytorch")) {
         implementation "ai.djl.pytorch:pytorch-model-zoo"
-        if (engine.contains("-auto")) {
-            implementation "ai.djl.pytorch:pytorch-native-auto"
-        } else if (engine.contains("-precxx11")) {
-            implementation "ai.djl.pytorch:pytorch-native-cpu-precxx11::${os}-x86_64"
-        } else {
-            implementation "ai.djl.pytorch:${engine}::${os}-x86_64"
+        if (!engine.contains("-auto")) {
+            implementation "ai.djl.pytorch:pytorch-jni:${ptVersion}-${djlVersion}!!"
+            implementation "ai.djl.pytorch:${engine}:${ptVersion}!!:${os}-x86_64"
         }
     } else if (engine.startsWith("tensorflow")) {
         implementation "ai.djl.tensorflow:tensorflow-model-zoo"
-        if (engine.contains("-auto")) {
-            implementation "ai.djl.tensorflow:tensorflow-native-auto"
-        } else {
+        if (!engine.contains("-auto")) {
             implementation "ai.djl.tensorflow:${engine}::${os}-x86_64"
         }
     } else if (engine.startsWith("onnxruntime")) {
         implementation "ai.djl.pytorch:pytorch-engine"
     } else if (engine.startsWith("paddlepaddle")) {
         implementation "ai.djl.paddlepaddle:paddlepaddle-model-zoo"
-        if (engine.contains("-auto")) {
-            implementation "ai.djl.paddlepaddle:paddlepaddle-native-auto"
-        } else {
+        if (!engine.contains("-auto")) {
             implementation "ai.djl.paddlepaddle:${engine}::${os}-x86_64"
         }
         implementation "ai.djl.pytorch:pytorch-engine"
     } else if (engine.startsWith("dlr")) {
         implementation "ai.djl.dlr:dlr-engine"
-        if (engine.contains("-auto")) {
-            implementation "ai.djl.dlr:dlr-native-auto"
-        } else {
+        if (!engine.contains("-auto")) {
             implementation "ai.djl.dlr:${engine}::${os}-x86_64"
         }
         implementation "ai.djl.pytorch:pytorch-engine"
     } else if (engine.startsWith("tflite")) {
         implementation "ai.djl.tflite:tflite-engine"
-        if (engine.contains("-auto")) {
-            implementation "ai.djl.tflite:${engine}"
-        } else {
+        if (!engine.contains("-auto")) {
             implementation "ai.djl.tflite:${engine}::${os}-x86_64"
         }
     } else if (engine.startsWith("xgboost")) {
@@ -99,9 +84,7 @@ dependencies {
         implementation "ai.djl.python:python"
     } else {
         implementation "ai.djl.mxnet:mxnet-model-zoo"
-        if (engine.contains("-auto")) {
-            implementation "ai.djl.mxnet:mxnet-native-auto"
-        } else {
+        if (!engine.contains("-auto")) {
             implementation "ai.djl.mxnet:${engine}::${os}-x86_64"
         }
     }
@@ -135,5 +118,5 @@ static def getOsName() {
 
 static def getEnv(String key, String defaultValue) {
     String value = System.getenv(key)
-    return value == null ? defaultValue : value
+    return value == null || value.isEmpty() ? defaultValue : value
 }

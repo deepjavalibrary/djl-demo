@@ -3,12 +3,6 @@ name: Canary-Ubuntu
 on:
   schedule:
     - cron:  '0 10 * * *'
-  push:
-    paths:
-      - "canary/**"
-  pull_request:
-    paths:
-      - "canary/**"
   workflow_dispatch:
     inputs:
       repo-id:
@@ -18,7 +12,7 @@ on:
       djl-version:
         description: 'djl version to test'
         required: false
-        default: '0.13.0'
+        default: '0.15.0'
 
 jobs:
   canary-test-ubuntu:
@@ -53,7 +47,15 @@ jobs:
         run: |
           DJL_ENGINE=pytorch-native-auto ./gradlew clean run
           rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.8.1 ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.9.1 ./gradlew clean run
+          rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-cpu PT_VERSION=1.8.1 ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-cpu PT_VERSION=1.9.1 ./gradlew clean run
           rm -rf ~/.djl.ai
       - name: Test TensorFlow
         working-directory: canary
