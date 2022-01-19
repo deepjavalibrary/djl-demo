@@ -3,12 +3,6 @@ name: Canary-Windows
 on:
   schedule:
     - cron:  '0 14 * * *'
-  push:
-    paths:
-      - "canary/**"
-  pull_request:
-    paths:
-      - "canary/**"
   workflow_dispatch:
     inputs:
       repo-id:
@@ -18,7 +12,7 @@ on:
       djl-version:
         description: 'djl version to test'
         required: false
-        default: '0.13.0'
+        default: '0.15.0'
 
 jobs:
   canary-test-windows:
@@ -46,7 +40,15 @@ jobs:
         run: |
           cmd /c "set DJL_ENGINE=pytorch-native-auto&& .\gradlew.bat clean run"
           cmd /c "rd /s /q %userprofile%\.djl.ai"
+          cmd /c "set DJL_ENGINE=pytorch-native-auto&& set PYTORCH_VERSION=1.8.1&& .\gradlew.bat clean run"
+          cmd /c "rd /s /q %userprofile%\.djl.ai"
+          cmd /c "set DJL_ENGINE=pytorch-native-auto&& set PYTORCH_VERSION=1.9.1&& .\gradlew.bat clean run"
+          cmd /c "rd /s /q %userprofile%\.djl.ai"
           cmd /c "set DJL_ENGINE=pytorch-native-cpu&& .\gradlew.bat clean run"
+          cmd /c "rd /s /q %userprofile%\.djl.ai"
+          cmd /c "set DJL_ENGINE=pytorch-native-cpu&& set PT_VERSION=1.8.1&& .\gradlew.bat clean run"
+          cmd /c "rd /s /q %userprofile%\.djl.ai"
+          cmd /c "set DJL_ENGINE=pytorch-native-cpu&& set PT_VERSION=1.9.1&& .\gradlew.bat clean run"
       - name: Test TensorFlow
         working-directory: canary
         run: |
