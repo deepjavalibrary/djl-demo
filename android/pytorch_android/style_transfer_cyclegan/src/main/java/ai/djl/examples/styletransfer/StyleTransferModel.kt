@@ -22,7 +22,6 @@ import ai.djl.ndarray.types.DataType
 import ai.djl.repository.zoo.Criteria
 import ai.djl.repository.zoo.ModelZoo
 import ai.djl.repository.zoo.ZooModel
-import ai.djl.training.util.ProgressBar
 import ai.djl.translate.Batchifier
 import ai.djl.translate.Translator
 import ai.djl.translate.TranslatorContext
@@ -40,7 +39,7 @@ class StyleTransferModel(artist: Styler.Artist) {
         val criteria = Criteria.builder()
             .setTypes(Image::class.java, Image::class.java)
             .optModelUrls(modelUrl)
-            .optProgress(ProgressBar())
+            .optOption("mapLocation", "true")
             .optTranslator(StyleTransferTranslator())
             .build()
 

@@ -1,13 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 32
 
     defaultConfig {
         applicationId "ai.djl.examples.quickdraw"
         minSdkVersion 26
-        targetSdkVersion 30
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
 
@@ -33,9 +32,9 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'ai.djl:api:0.10.0'
-    implementation 'ai.djl.android:core:0.10.0'
-    runtimeOnly 'ai.djl.pytorch:pytorch-engine:0.10.0'
-    runtimeOnly 'ai.djl.android:pytorch-native:0.10.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'ai.djl:api:0.16.0-SNAPSHOT'
+    implementation 'ai.djl.android:core:0.16.0-SNAPSHOT'
+    runtimeOnly 'ai.djl.pytorch:pytorch-engine:0.16.0-SNAPSHOT'
+    runtimeOnly 'ai.djl.android:pytorch-native:0.16.0-SNAPSHOT'
 }
