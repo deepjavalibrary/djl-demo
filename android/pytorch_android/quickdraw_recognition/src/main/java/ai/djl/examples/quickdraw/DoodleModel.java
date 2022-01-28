@@ -39,6 +39,7 @@ final class DoodleModel {
                 Criteria.builder()
                         .setTypes(Image.class, Classifications.class)
                         .optModelUrls("https://djl-ai.s3.amazonaws.com/resources/demo/pytorch/doodle_mobilenet.zip")
+                        .optOption("mapLocation", "true")
                         .optTranslator(translator)
                         .build();
         return ModelZoo.loadModel(criteria);
