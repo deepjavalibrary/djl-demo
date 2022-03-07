@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.12.0")
+    implementation platform("ai.djl:bom:0.15.0")
     implementation "ai.djl:api"
 
     runtimeOnly "ai.djl.pytorch:pytorch-engine"
@@ -23,8 +23,8 @@ dependencies {
 }
 
 configure(this) {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
     apply from: file("${rootProject.projectDir}/../../tools/gradle/formatter.gradle")
 }

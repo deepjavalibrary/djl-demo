@@ -19,7 +19,6 @@ import ai.djl.metric.Metrics;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.types.Shape;
 import ai.djl.repository.zoo.Criteria;
-import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.NoopTranslator;
 import ai.djl.translate.TranslateException;
@@ -63,11 +62,11 @@ public class Benchmark {
         if (modelPath.contains("inferentia")) {
             String extraPath = System.getenv("PYTORCH_EXTRA_LIBRARY_PATH");
             if (extraPath != null) {
-                logger.info("Loading libneuron_op.so from: {}", extraPath);
+                logger.info("Loading libtorchneuron.so from: {}", extraPath);
                 System.load(extraPath);
             } else {
-                logger.info("Loading libneuron_op.so");
-                System.loadLibrary("neuron_op");
+                logger.info("Loading libtorchneuron.so");
+                System.loadLibrary("libtorchneuron");
             }
         } else {
             logger.info("Loading regular pytorch model ...");
@@ -173,14 +172,12 @@ public class Benchmark {
 
         private Predictor<NDList, NDList> predictor;
 
-        private Metrics metrics;
         private AtomicInteger counter;
 
         public PredictorCallable(
                 ZooModel<NDList, NDList> model, Metrics metrics, AtomicInteger counter) {
             this.predictor = model.newPredictor();
             predictor.setMetrics(metrics);
-            this.metrics = metrics;
             this.counter = counter;
         }
 
