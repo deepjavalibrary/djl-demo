@@ -31,7 +31,7 @@ jobs:
       - name: Test MXNet
         working-directory: canary
         run: |
-          cmd /c ".\gradlew.bat clean run"
+          cmd /c "set DJL_ENGINE=mxnet-native-auto&& .\gradlew.bat clean run"
           cmd /c "rd /s /q %userprofile%\.djl.ai"
           # cmd /c "set DJL_ENGINE=mxnet-native-mkl&& .\gradlew.bat clean run"
           # cmd /c "rd /s /q %userprofile%\.djl.ai"
