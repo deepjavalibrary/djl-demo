@@ -6,7 +6,7 @@ plugins {
 group "com.example"
 version "1.0-SNAPSHOT"
 
-def djlVersion = getEnv("DJL_VERSION", "0.15.0")
+def djlVersion = getEnv("DJL_VERSION", "0.16.0")
 def engine = getEnv("DJL_ENGINE", "mxnet-native-auto")
 def os = getOsName()
 def stagingRepo = getEnv("DJL_STAGING", null)
@@ -24,8 +24,8 @@ repositories {
 }
 
 configure(this) {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
     apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
 }

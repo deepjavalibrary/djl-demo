@@ -17,7 +17,6 @@ import ai.djl.Device;
 import ai.djl.Model;
 import ai.djl.ModelException;
 import ai.djl.engine.Engine;
-import ai.djl.fasttext.FtModel;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
 import ai.djl.modality.Input;
@@ -213,7 +212,7 @@ public final class CanaryTest {
         }
     }
 
-    public static void testFastText() throws IOException, ModelException {
+    public static void testFastText() throws IOException, ModelException, TranslateException {
         if (System.getProperty("os.name").startsWith("Win")) {
             throw new AssertionError("fastText doesn't support Windows.");
         }
@@ -225,10 +224,10 @@ public final class CanaryTest {
                         .optArtifactId("ai.djl.fasttext:cooking_stackexchange")
                         .build();
 
-        try (ZooModel<String, Classifications> model = criteria.loadModel()) {
-            FtModel ftModel = (FtModel) model.getWrappedModel();
+        try (ZooModel<String, Classifications> model = criteria.loadModel();
+                Predictor<String, Classifications> predictor = model.newPredictor()) {
             Classifications classifications =
-                    ftModel.classify("Which baking dish is best to bake a banana bread ?", 8);
+                    predictor.predict("Which baking dish is best to bake a banana bread ?");
             logger.info("{}", classifications);
         }
     }
