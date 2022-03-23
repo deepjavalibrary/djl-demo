@@ -1,0 +1,54 @@
+plugins {
+    id "application"
+    id "de.jjohannes.extra-java-module-info" version "0.11"
+}
+
+group "org.examples"
+version "1.0-SNAPSHOT"
+
+def djlVersion = "0.16.0"
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
+}
+
+configure(this) {
+    apply from: file("${rootProject.projectDir}/../../tools/gradle/formatter.gradle")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
+    // modularity.inferModulePath = true
+}
+
+extraJavaModuleInfo {
+    automaticModule("protobuf-java-3.19.2.jar", "com.google.protobuf.protobuf_java")
+}
+
+dependencies {
+    implementation platform("ai.djl:bom:${djlVersion}")
+    implementation "ai.djl:api"
+    implementation "ai.djl.tensorflow:tensorflow-model-zoo"
+    // TODO: remove auto package in next release
+    implementation "ai.djl.tensorflow:tensorflow-native-auto:2.4.1"
+    implementation "org.apache.logging.log4j:log4j-slf4j-impl:2.17.2"
+}
+
+application {
+    mainModule = "org.examples.module"
+    mainClass = "org.examples.module.ModuleTest"
+}
+
+run {
+    environment("TF_CPP_MIN_LOG_LEVEL", "1") // turn off TensorFlow print out
+    systemProperties System.getProperties()
+    systemProperties.remove("user.dir")
+    systemProperty("file.encoding", "UTF-8")
+    systemProperty("disableProgressBar", "true")
+}
+tasks.distTar.enabled = false
