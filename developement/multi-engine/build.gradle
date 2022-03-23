@@ -11,19 +11,17 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.12.0")
+    implementation platform("ai.djl:bom:0.16.0")
     implementation "ai.djl:api"
 
     runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
-    runtimeOnly "ai.djl.pytorch:pytorch-native-auto"
     runtimeOnly "ai.djl.mxnet:mxnet-model-zoo"
-    runtimeOnly "ai.djl.mxnet:mxnet-native-auto"
 
-    runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.17.1"
+    runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.17.2"
 }
 
 application {
-    getMainClass().set(System.getProperty("main", "com.examples.MultiEngine"))
+    mainClass = "com.examples.MultiEngine"
 }
 
 run {
@@ -34,8 +32,8 @@ run {
 tasks.distTar.enabled = false
 
 configure(this) {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
-    apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
+    apply from: file("${rootProject.projectDir}/../../tools/gradle/formatter.gradle")
 }
