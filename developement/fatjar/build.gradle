@@ -1,0 +1,44 @@
+plugins {
+    id "application"
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+group "com.examples"
+version "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+}
+
+dependencies {
+    implementation platform("ai.djl:bom:0.16.0")
+    implementation "ai.djl:api"
+
+    runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
+    runtimeOnly "ai.djl.pytorch:pytorch-jni"
+
+    // Uncomment one of the following native library for your target platform
+    // runtimeOnly "ai.djl.pytorch:pytorch-native-cpu::linux-x86_64"
+    runtimeOnly "ai.djl.pytorch:pytorch-native-cpu::osx-x86_64"
+    //runtimeOnly "ai.djl.pytorch:pytorch-native-cpu::win-x86_64"
+
+    implementation 'org.slf4j:slf4j-simple:1.7.36'
+}
+
+application {
+    mainClass = "com.examples.FatJar"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+shadowJar {
+    mergeServiceFiles()
+}
+
+apply from: file("${rootProject.projectDir}/../../tools/gradle/formatter.gradle")
