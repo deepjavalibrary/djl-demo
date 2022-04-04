@@ -50,10 +50,10 @@ jobs:
         working-directory: malicious-url-detector
         run: ./gradlew build
       - name: Test Module
-        working-directory: module
+        working-directory: developement/module
         run: ./gradlew test
       - name: Compile multi engine
-        working-directory: multi-engine
+        working-directory: developement/multi-engine
         run: ./gradlew build
       - name: Compile Pneumonia detection
         working-directory: pneumonia-detection
