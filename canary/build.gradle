@@ -32,61 +32,60 @@ configure(this) {
 
 dependencies {
     implementation platform("ai.djl:bom:${djlVersion}")
-    implementation "ai.djl:basicdataset"
-    implementation "ai.djl:model-zoo"
-
-    implementation "ai.djl.aws:aws-ai"
-    implementation "ai.djl.fasttext:fasttext-engine"
-    implementation "ai.djl.hadoop:hadoop"
     implementation "ai.djl.sentencepiece:sentencepiece"
 
     implementation "commons-cli:commons-cli:${commons_cli_version}"
     implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_slf4j_version}"
 
-    implementation "ai.djl.onnxruntime:onnxruntime-engine"
-
     if (engine.startsWith("pytorch")) {
-        implementation "ai.djl.pytorch:pytorch-model-zoo"
+        runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
         if (!engine.contains("-auto")) {
-            implementation "ai.djl.pytorch:pytorch-jni:${ptVersion}-${djlVersion}!!"
-            implementation "ai.djl.pytorch:${engine}:${ptVersion}!!:${os}-x86_64"
+            runtimeOnly "ai.djl.pytorch:pytorch-jni:${ptVersion}-${djlVersion}!!"
+            runtimeOnly "ai.djl.pytorch:${engine}:${ptVersion}!!:${os}-x86_64"
         }
     } else if (engine.startsWith("tensorflow")) {
-        implementation "ai.djl.tensorflow:tensorflow-model-zoo"
+        runtimeOnly "ai.djl.tensorflow:tensorflow-model-zoo"
         if (!engine.contains("-auto")) {
-            implementation "ai.djl.tensorflow:${engine}::${os}-x86_64"
+            runtimeOnly "ai.djl.tensorflow:${engine}::${os}-x86_64"
         }
     } else if (engine.startsWith("onnxruntime")) {
-        implementation "ai.djl.pytorch:pytorch-engine"
+        runtimeOnly "ai.djl.onnxruntime:onnxruntime-engine"
+        runtimeOnly "ai.djl.pytorch:pytorch-engine"
     } else if (engine.startsWith("paddlepaddle")) {
-        implementation "ai.djl.paddlepaddle:paddlepaddle-model-zoo"
+        runtimeOnly "ai.djl.paddlepaddle:paddlepaddle-model-zoo"
         if (!engine.contains("-auto")) {
-            implementation "ai.djl.paddlepaddle:${engine}::${os}-x86_64"
+            runtimeOnly "ai.djl.paddlepaddle:${engine}::${os}-x86_64"
         }
         implementation "ai.djl.pytorch:pytorch-engine"
     } else if (engine.startsWith("dlr")) {
-        implementation "ai.djl.dlr:dlr-engine"
+        runtimeOnly "ai.djl.dlr:dlr-engine"
         if (!engine.contains("-auto")) {
-            implementation "ai.djl.dlr:${engine}::${os}-x86_64"
+            runtimeOnly "ai.djl.dlr:${engine}::${os}-x86_64"
         }
-        implementation "ai.djl.pytorch:pytorch-engine"
+        runtimeOnly "ai.djl.pytorch:pytorch-engine"
+
+        runtimeOnly "ai.djl.fasttext:fasttext-engine"
     } else if (engine.startsWith("tflite")) {
-        implementation "ai.djl.tflite:tflite-engine"
+        runtimeOnly "ai.djl.tflite:tflite-engine"
         if (!engine.contains("-auto")) {
-            implementation "ai.djl.tflite:${engine}::${os}-x86_64"
+            runtimeOnly "ai.djl.tflite:${engine}::${os}-x86_64"
         }
     } else if (engine.startsWith("xgboost")) {
-        implementation "ai.djl.ml.xgboost:xgboost"
+        runtimeOnly "ai.djl.ml.xgboost:xgboost"
     } else if (engine.startsWith("tensorrt")) {
-        implementation "ai.djl.tensorrt:tensorrt"
-        implementation "ai.djl.pytorch:pytorch-engine"
+        runtimeOnly "ai.djl.tensorrt:tensorrt"
+        runtimeOnly "ai.djl.pytorch:pytorch-engine"
     } else if (engine.startsWith("python")) {
-        implementation "ai.djl.python:python"
+        runtimeOnly "ai.djl.python:python"
     } else {
-        implementation "ai.djl.mxnet:mxnet-model-zoo"
+        runtimeOnly "ai.djl.mxnet:mxnet-model-zoo"
         if (!engine.contains("-auto")) {
-            implementation "ai.djl.mxnet:${engine}::${os}-x86_64"
+            runtimeOnly "ai.djl.mxnet:${engine}::${os}-x86_64"
         }
+        runtimeOnly "ai.djl:basicdataset"
+        runtimeOnly "ai.djl:model-zoo"
+        runtimeOnly "ai.djl.aws:aws-ai"
+        runtimeOnly "ai.djl.hadoop:hadoop"
     }
 }
 
