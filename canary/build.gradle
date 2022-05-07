@@ -10,7 +10,7 @@ def djlVersion = getEnv("DJL_VERSION", "0.16.0")
 def engine = getEnv("DJL_ENGINE", "mxnet-native-auto")
 def os = getOsName()
 def stagingRepo = getEnv("DJL_STAGING", null)
-def ptVersion = getEnv("PT_VERSION", "1.10.0")
+def ptVersion = getEnv("PT_VERSION", "1.11.0")
 
 repositories {
     mavenCentral()
