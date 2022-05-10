@@ -13,6 +13,10 @@ on:
         description: 'djl version to test'
         required: false
         default: '0.16.0'
+      pt-version:
+        description: 'pytorch version to test'
+        required: false
+        default: ''
 
 jobs:
   canary-test-mac:
@@ -22,6 +26,7 @@ jobs:
       AWS_REGION: us-east-1
       DJL_STAGING: ${{github.event.inputs.repo-id}}
       DJL_VERSION: ${{github.event.inputs.djl-version}}
+      PT_VERSION: ${{github.event.inputs.pt-version}}
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 11
@@ -36,19 +41,23 @@ jobs:
           DJL_ENGINE=mxnet-native-mkl ./gradlew clean run
           rm -rf ~/.djl.ai
       - name: Test PyTorch
+        working-directory: canary
         run: |
-          cd canary
           DJL_ENGINE=pytorch-native-auto ./gradlew clean run
-          rm -rf ~/.djl.ai
-          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.8.1 ./gradlew clean run
           rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.9.1 ./gradlew clean run
           rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.10.0 ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.11.0 ./gradlew clean run
+          rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
           rm -rf ~/.djl.ai
-          DJL_ENGINE=pytorch-native-cpu PT_VERSION=1.8.1 ./gradlew clean run
-          rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-cpu PT_VERSION=1.9.1 ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-cpu PT_VERSION=1.10.0 ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-cpu PT_VERSION=1.11.0 ./gradlew clean run
           rm -rf ~/.djl.ai
       - name: Test TensorFlow
         run: |

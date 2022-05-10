@@ -19,6 +19,10 @@ on:
         description: 'djl version to test'
         required: false
         default: '0.16.0'
+      pt-version:
+        description: 'pytorch version to test'
+        required: false
+        default: ''
 
 jobs:
   canary-test-centos:
@@ -28,6 +32,7 @@ jobs:
       AWS_REGION: us-east-1
       DJL_STAGING: ${{github.event.inputs.repo-id}}
       DJL_VERSION: ${{github.event.inputs.djl-version}}
+      PT_VERSION: ${{github.event.inputs.pt-version}}
     container: centos:7
     steps:
       - uses: actions/checkout@v2
