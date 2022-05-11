@@ -28,13 +28,13 @@ You can use DJL API to create `NDList` and serialize the `NDList` to bytes as th
 
 #### Direct inference
 
-download a sample ndlist encoded data
-
+```
+# download a sample ndlist encoded data
 curl -O https://resources.djl.ai/benchmark/inputs/ones_1_3_224_224.ndlist
 curl -X POST "http://127.0.0.1:8080/predictions/resnet" \
     -T "ones_1_3_224_224.ndlist" \
     -H "Content-type: tensor/ndlist"
-
+```
 
 #### Python client inference
 
