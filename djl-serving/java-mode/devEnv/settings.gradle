@@ -1,0 +1,3 @@
+rootProject.name = 'DJLDemo'
+include 'Example'
+

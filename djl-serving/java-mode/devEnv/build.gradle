@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
+}
+
+configurations {
+    exclusion
+}
+
+
+dependencies {
+    implementation 'ai.djl:api:0.16.0'
+    exclusion 'ai.djl:api:0.16.0'
+}
+
+
+jar {
+    from {
+        (configurations.runtimeClasspath - configurations.exclusion).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    duplicatesStrategy = DuplicatesStrategy.WARN
+}
+
+test {
+    useJUnitPlatform()
+}
