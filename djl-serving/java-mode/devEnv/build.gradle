@@ -18,8 +18,8 @@ configurations {
 
 
 dependencies {
-    implementation 'ai.djl:api:0.16.0'
-    exclusion 'ai.djl:api:0.16.0'
+    implementation 'ai.djl:api:0.17.0'
+    exclusion 'ai.djl:api:0.17.0'
 }
 
 
