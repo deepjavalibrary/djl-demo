@@ -40,11 +40,11 @@ cd engines/python
 ## Migrate your python code
 
 In order to deploy your model in DJL, you need download torchscript model,
-the [`download_models.py`](models/download_models.py) will convert Huggingface models and save
+the [`download_models.py`](https://github.com/deepjavalibrary/djl-demo/blob/master/huggingface/hybrid/models/download_models.py) will convert Huggingface models and save
 torchscript models in `models/hybrid` folder. You can change configuration files
 in `models/hybrid` folder to other Huggingface models you want to try.
 
-[`model.py`](models/hybrid/model.py) is the entry point. It contains pre-processing and
+[`model.py`](https://github.com/deepjavalibrary/djl-demo/blob/master/huggingface/hybrid/models/hybrid/model.py) is the entry point. It contains pre-processing and
 post-processing functions for *text_classification*, *question_answering* and *token_classification*
 use cases:
 

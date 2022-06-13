@@ -46,7 +46,7 @@ pip install torchvision torch-neuron==1.9.1.2.0.392.0 'neuron-cc[tensorflow]==1.
 
 ## Compile your model into Neuron traced model
 
-Use the following command to trace a Huggingface questing answering model. The script can be found in the repo at [trace.py](trace.py).
+Use the following command to trace a Huggingface questing answering model. The script can be found in the repo at [trace.py](https://github.com/deepjavalibrary/djl-demo/blob/master/huggingface/inferentia/trace.py).
 You can also download a traced model from: https://resources.djl.ai/test-models/pytorch/bert_qa_inf1.tar.gz
 
 You can find more details on [Neuron tutorial](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-guide/neuron-frameworks/pytorch-neuron/tutorials/index.html). 

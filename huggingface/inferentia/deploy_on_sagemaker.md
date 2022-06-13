@@ -12,7 +12,7 @@ This demo will show you how to deploy your Huggingface model on SageMaker step b
 1. Follow [the instruction](README.md#compile-your-model-into-neuron-traced-model) to compile your
 model into Neuron traced model.
 2. Create a `.tar.gz` file, by default this example will use djl PyTorch engine to serve the model.
-If you want to serve with Python engine, remove [serving.properties](question_answering/serving.properties) file
+If you want to serve with Python engine, remove [serving.properties](https://github.com/deepjavalibrary/djl-demo/blob/master/huggingface/inferentia/question_answering/serving.properties) file
 
 ```shell
 cd huggingface/inferentia
