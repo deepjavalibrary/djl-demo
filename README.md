@@ -93,7 +93,7 @@ An example application that demonstrates simple HTTP-service to classify images 
 
 ## Other demos
 
-### [Use multiple engines in single JVM](developement/multi-engine/README.md)
+### [Use multiple engines in single JVM](development/multi-engine/README.md)
 
 An example application that runs multiple deep learning frameworks in one Java Process.
 
