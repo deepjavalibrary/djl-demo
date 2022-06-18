@@ -19,12 +19,14 @@ import ai.djl.modality.Classifications;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.util.ProgressBar;
-import java.io.IOException;
+
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.Collector;
+
+import java.io.IOException;
 
 /**
  * Implements a streaming version of the sentiment analysis program.
@@ -51,9 +53,9 @@ public class SentimentAnalysis {
             port = params.getInt("port");
         } catch (Exception e) {
             System.err.println(
-                    "No port specified. Please run 'SentimentAnalysis "
-                            + "--hostname <hostname> --port <port>', where hostname (localhost by default) "
-                            + "and port is the address of the text server");
+                    "No port specified. Please run 'SentimentAnalysis --hostname <hostname> --port"
+                        + " <port>', where hostname (localhost by default) and port is the address"
+                        + " of the text server");
             System.err.println(
                     "To start a simple text server, run 'netcat -l <port>' and "
                             + "type the input text into the command line");

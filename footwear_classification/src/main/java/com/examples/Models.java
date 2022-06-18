@@ -16,6 +16,7 @@ import ai.djl.Model;
 import ai.djl.basicmodelzoo.cv.classification.ResNetV1;
 import ai.djl.ndarray.types.Shape;
 import ai.djl.nn.Block;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;

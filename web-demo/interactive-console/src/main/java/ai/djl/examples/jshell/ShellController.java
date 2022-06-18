@@ -14,17 +14,18 @@ package ai.djl.examples.jshell;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ShellController {
@@ -40,8 +41,9 @@ public class ShellController {
     @RequestMapping("/")
     public String index() {
         return "<html><head>\n"
-                + "  <meta http-equiv=\"refresh\" content=\"0; URL=https://djl.ai/website/demo.html\" />\n"
-                + "</head></html>";
+                   + "  <meta http-equiv=\"refresh\" content=\"0;"
+                   + " URL=https://djl.ai/website/demo.html\" />\n"
+                   + "</head></html>";
     }
 
     @CrossOrigin(origins = "*")

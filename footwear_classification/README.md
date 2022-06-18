@@ -20,7 +20,7 @@ Use the following commands to download and unzip your footwear dataset in Linux:
 
 ```shell
 cd footwear_classification
-curl -O http://vision.cs.utexas.edu/projects/finegrained/utzap50k/ut-zap50k-images-square.zip
+curl -O https://vision.cs.utexas.edu/projects/finegrained/utzap50k/ut-zap50k-images-square.zip
 unzip ut-zap50k-images-square.zip
 ```
 

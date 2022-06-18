@@ -13,12 +13,14 @@
 package com.example;
 
 import ai.djl.MalformedModelException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * FilterProxy class receives requests on a server socket, and handles requests on indvidual threads

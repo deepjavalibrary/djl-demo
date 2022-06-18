@@ -13,6 +13,7 @@
 package com.examples;
 
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
+
 import java.nio.charset.StandardCharsets;
 
 public class MockLogger implements LambdaLogger {
