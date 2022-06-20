@@ -22,13 +22,17 @@ import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import javax.swing.JOptionPane;
+
 import nu.pattern.OpenCV;
+
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
+
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.swing.JOptionPane;
 
 public class WebCam {
 

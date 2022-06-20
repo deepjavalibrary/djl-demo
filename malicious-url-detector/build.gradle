@@ -11,30 +11,28 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.12.0")
+    implementation platform("ai.djl:bom:0.17.0")
     implementation "ai.djl.mxnet:mxnet-engine"
 
     implementation "commons-cli:commons-cli:1.4"
-    implementation "com.google.code.gson:gson:2.8.5"
     implementation "org.apache.httpcomponents:httpcore:4.4.12"
     implementation "org.apache.commons:commons-csv:1.7"
 
-    runtimeOnly "ai.djl.mxnet:mxnet-native-auto"
     runtimeOnly "org.slf4j:slf4j-simple:1.7.29"
 }
 
 application {
-    getMainClass().set(System.getProperty("main", "com.example.FilterProxy"))
+    mainClass = System.getProperty("main", "com.example.FilterProxy")
 }
 
 task train(type:JavaExec) {
-    main = System.getProperty("main", "com.example.ModelTrainer")
+    mainClass = System.getProperty("main", "com.example.ModelTrainer")
     classpath = sourceSets.main.runtimeClasspath
 }
 
 configure(this){
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
     apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
 }

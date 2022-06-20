@@ -23,6 +23,7 @@ import ai.djl.modality.cv.transform.ToTensor;
 import ai.djl.modality.cv.translator.ImageClassificationTranslator;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;

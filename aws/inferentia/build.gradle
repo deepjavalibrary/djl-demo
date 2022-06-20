@@ -30,7 +30,7 @@ configure(this) {
 }
 
 application {
-    getMainClass().set(System.getProperty("main", "com.example.inferentia.InferentiaDemo"))
+    mainClass = System.getProperty("main", "com.example.inferentia.InferentiaDemo")
 }
 
 task benchmark(type: JavaExec) {
@@ -38,6 +38,6 @@ task benchmark(type: JavaExec) {
     systemProperties.remove("user.dir")
     systemProperty("file.encoding", "UTF-8")
     classpath = sourceSets.main.runtimeClasspath
-    main = "com.example.inferentia.Benchmark"
+    mainClass = "com.example.inferentia.Benchmark"
 }
 tasks.distTar.enabled = false

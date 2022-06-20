@@ -2,6 +2,7 @@ package com.examples;
 
 import ai.djl.ModelException;
 import ai.djl.util.Utils;
+
 import com.amazonaws.auth.SystemPropertiesCredentialsProvider;
 import com.amazonaws.kinesisvideo.parser.examples.GetMediaWorker;
 import com.amazonaws.kinesisvideo.parser.utilities.FrameVisitor;
@@ -10,6 +11,7 @@ import com.amazonaws.services.kinesisvideo.AmazonKinesisVideo;
 import com.amazonaws.services.kinesisvideo.AmazonKinesisVideoClientBuilder;
 import com.amazonaws.services.kinesisvideo.model.StartSelector;
 import com.amazonaws.services.kinesisvideo.model.StartSelectorType;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

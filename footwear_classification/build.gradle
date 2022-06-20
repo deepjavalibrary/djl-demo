@@ -10,31 +10,30 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.12.0")
+    implementation platform("ai.djl:bom:0.17.0")
     implementation "ai.djl:model-zoo"
     implementation "ai.djl:basicdataset"
     implementation "org.slf4j:slf4j-simple:1.7.30"
     runtimeOnly "ai.djl.mxnet:mxnet-engine"
-    runtimeOnly "ai.djl.mxnet:mxnet-native-auto"
 }
 
 task training(type: JavaExec) {
     systemProperties System.getProperties()
     systemProperties.remove("user.dir")
     classpath = sourceSets.main.runtimeClasspath
-    main = "com.examples.Training"
+    mainClass = "com.examples.Training"
 }
 
 task inference(type: JavaExec) {
     systemProperties System.getProperties()
     systemProperties.remove("user.dir")
     classpath = sourceSets.main.runtimeClasspath
-    main = "com.examples.Inference"
+    mainClass = "com.examples.Inference"
 }
 
 configure(this) {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
     apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
 }
