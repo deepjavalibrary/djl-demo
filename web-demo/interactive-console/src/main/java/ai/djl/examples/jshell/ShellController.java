@@ -41,9 +41,9 @@ public class ShellController {
     @RequestMapping("/")
     public String index() {
         return "<html><head>\n"
-                   + "  <meta http-equiv=\"refresh\" content=\"0;"
-                   + " URL=https://djl.ai/website/demo.html\" />\n"
-                   + "</head></html>";
+                + "  <meta http-equiv=\"refresh\" content=\"0;"
+                + " URL=https://djl.ai/website/demo.html\" />\n"
+                + "</head></html>";
     }
 
     @CrossOrigin(origins = "*")
