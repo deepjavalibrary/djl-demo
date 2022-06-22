@@ -7,7 +7,7 @@ This is an example of how to create distribution package for DJL application.
 Run/test application with gradle
 
 ```
-cd developement/fatjar
+cd development/fatjar
 
 ./gradlew run
 ```
@@ -33,7 +33,7 @@ java -jar build/libs/fatjar-1.0-SNAPSHOT-all.jar
 Run/test application with maven
 
 ```
-cd developement/fatjar
+cd development/fatjar
 
 mvn exec:java
 ```
@@ -51,7 +51,7 @@ java -jar target/fatjar-1.0-SNAPSHOT.jar
 Run/test application with sbt
 
 ```
-cd developement/fatjar
+cd development/fatjar
 
 sbt run
 ```
