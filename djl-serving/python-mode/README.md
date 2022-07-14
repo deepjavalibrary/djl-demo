@@ -4,7 +4,7 @@
 
 Install `djl_python` from djl-serving source code
 ```
-git clone https://github.com/deepjavalibrary/djl-serving -b v0.17.0
+git clone https://github.com/deepjavalibrary/djl-serving -b v0.18.0
 cd djl-serving/engines/python/setup
 pip install -U .
 ```

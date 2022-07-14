@@ -19,7 +19,7 @@ configure(this) {
 }
 
 dependencies {
-	implementation platform("ai.djl:bom:0.17.0")
+	implementation platform("ai.djl:bom:0.18.0")
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	runtimeOnly "ai.djl:api"

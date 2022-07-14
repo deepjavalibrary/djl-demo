@@ -12,7 +12,7 @@ on:
       djl-version:
         description: 'djl version to test'
         required: false
-        default: '0.17.0'
+        default: '0.18.0'
       pt-version:
         description: 'pytorch version to test'
         required: false

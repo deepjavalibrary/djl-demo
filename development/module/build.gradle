@@ -6,7 +6,7 @@ plugins {
 group "org.examples"
 version "1.0-SNAPSHOT"
 
-def djlVersion = "0.17.0"
+def djlVersion = "0.18.0"
 
 repositories {
     mavenCentral()
