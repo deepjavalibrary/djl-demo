@@ -8,9 +8,9 @@ To use the app, press the Segment button for the image. It will replace the uned
 semantic image that has the identified objects colored in. To move on to the next picture, click
 the restart button.
 
-|             Before              |             After              |
-|:-------------------------------:|:------------------------------:|
-| ![](src/main/assets/before.png) | ![](src/main/assets/after.png) |
+|                                       Before                                        |                                       After                                        |
+|:-----------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------:|
+| ![](https://resources.djl.ai/demo/pytorch/android/semantic_segmentation/before.png) | ![](https://resources.djl.ai/demo/pytorch/android/semantic_segmentation/after.png) |
 
 It has a ResNet-50 backbone with a 92% accuracy. It was trained with a subset of the COCO train2017 dataset. This demo 
 shows how the model can perform inference on a user's device.

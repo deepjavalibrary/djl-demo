@@ -42,7 +42,6 @@ final class SemanticModel {
 
         Criteria<Image, Image> criteria =
                 Criteria.builder()
-                        .optApplication(Application.CV.SEMANTIC_SEGMENTATION)
                         .setTypes(Image.class, Image.class)
                         .optModelUrls(url)
                         .optTranslator(translator)

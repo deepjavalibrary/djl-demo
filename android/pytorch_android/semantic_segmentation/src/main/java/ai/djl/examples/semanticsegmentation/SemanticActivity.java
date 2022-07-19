@@ -1,144 +1,83 @@
 package ai.djl.examples.semanticsegmentation;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import java.io.IOException;
-import java.util.stream.IntStream;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
-import ai.djl.ndarray.NDArray;
+import java.io.IOException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import ai.djl.ModelException;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
-import ai.djl.ndarray.NDManager;
-import ai.djl.ndarray.types.Shape;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.TranslateException;
 
 
-public class SemanticActivity extends AppCompatActivity implements Runnable {
+public class SemanticActivity extends AppCompatActivity {
     private ImageView mImageView;
     private Button mButtonSegment;
     private ProgressBar mProgressBar;
-    private Bitmap mBitmap = null;
     private Image img;
-    private String mImagename = "dog_bike_car.jpg";
+    private String mImageName;
     ZooModel<Image, Image> model;
     Predictor<Image, Image> predictor;
+    Executor executor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        try {
-            mBitmap = BitmapFactory.decodeStream(getAssets().open(mImagename));
-            img = ImageFactory.getInstance().fromInputStream(getAssets().open(mImagename));
-        } catch (IOException e) {
-            Log.e("SemanticSegmentation", "Error reading assets", e);
-            finish();
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.title);
         }
 
+        setContentView(R.layout.activity_main);
         mImageView = findViewById(R.id.imageView);
-        mImageView.setImageBitmap(mBitmap);
-
-        final Button buttonRestart = findViewById(R.id.restartButton);
-        buttonRestart.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (mImagename == "deeplab.jpg")
-                    mImagename = "dog.jpg";
-                else
-                    mImagename = "deeplab.jpg";
-                try {
-                    img = ImageFactory.getInstance().fromInputStream(getAssets().open(mImagename));
-                    mBitmap = BitmapFactory.decodeStream(getAssets().open(mImagename));
-                    mImageView.setImageBitmap(mBitmap);
-                } catch (IOException e) {
-                    Log.e("SemanticSegmentation", "Error reading assets", e);
-                    finish();
-                }
+        Button buttonRestart = findViewById(R.id.restartButton);
+        buttonRestart.setOnClickListener(v -> {
+            if ("dog_bike_car.jpg".equals(mImageName)) {
+                setImageView("dog.jpg");
+            } else {
+                setImageView("dog_bike_car.jpg");
             }
         });
-
         mButtonSegment = findViewById(R.id.segmentButton);
         mProgressBar = findViewById(R.id.progressBar);
-        mButtonSegment.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mButtonSegment.setEnabled(false);
-                mProgressBar.setVisibility(ProgressBar.VISIBLE);
-                mButtonSegment.setText(getString(R.string.run_model));
+        mProgressBar.setVisibility(ProgressBar.VISIBLE);
+        mButtonSegment.setEnabled(false);
+        mButtonSegment.setOnClickListener(v -> {
+            mButtonSegment.setEnabled(false);
+            mProgressBar.setVisibility(ProgressBar.VISIBLE);
+            mButtonSegment.setText(getString(R.string.run_model));
 
-                Thread thread = new Thread(SemanticActivity.this);
-                thread.start();
-            }
+            executor.execute(new InferenceTask());
         });
 
-        new UnpackTask().execute();
+        setImageView("dog_bike_car.jpg");
+
+        mButtonSegment.setText(getString(R.string.download_model));
+        executor.execute(new LoadModelTask());
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class UnpackTask extends AsyncTask<Void, Integer, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-                model = SemanticModel.loadModel();
-                predictor = model.newPredictor();
-                return true;
-            } catch (IOException | ModelException e) {
-                Log.e("Semantic Segmentation", null, e);
-            }
-            return false;
-        }
-    }
-
-    @Override
-    public void run() {
-        try (NDManager manager = NDManager.newBaseManager()) {
-            Image image = predictor.predict(img);
-            NDArray pixels = image.toNDArray(manager);
-            Shape shape = pixels.getShape();
-            int height = (int) shape.get(0);
-            int width = (int) shape.get(1);
-            int imageArea = width * height;
-
-            Bitmap transferredBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-            int[] raw = pixels.toUint8Array();
-            IntStream.range(0, imageArea).parallel().forEach(ele -> {
-                int x = ele % width;
-                int y = ele / width;
-                int red = raw[ele] & 0xFF;
-                int green = raw[ele + imageArea] & 0xFF;
-                int blue = raw[ele + imageArea * 2] & 0xFF;
-                transferredBitmap.setPixel(x, y, Color.argb(255, red, green, blue));
-            });
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mImageView.setImageBitmap(transferredBitmap);
-                    mButtonSegment.setEnabled(true);
-                    mButtonSegment.setText(getString(R.string.segment));
-                    mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-
-                }
-            });
-
-        } catch (TranslateException e) {
-            e.printStackTrace();
+    private void setImageView(String imageName) {
+        try {
+            mImageName = imageName;
+            Bitmap mBitmap = BitmapFactory.decodeStream(getAssets().open(mImageName));
+            mImageView.setImageBitmap(mBitmap);
+            img = ImageFactory.getInstance().fromInputStream(getAssets().open(mImageName));
+        } catch (IOException e) {
+            Log.e("SemanticSegmentation", "Error reading assets", e);
         }
     }
 
@@ -151,5 +90,45 @@ public class SemanticActivity extends AppCompatActivity implements Runnable {
             model.close();
         }
         super.onDestroy();
+    }
+
+    private class LoadModelTask implements Runnable {
+
+        @Override
+        public void run() {
+            try {
+                model = SemanticModel.loadModel();
+                predictor = model.newPredictor();
+                runOnUiThread(() -> {
+                    mButtonSegment.setText(getString(R.string.segment));
+                    mButtonSegment.setEnabled(true);
+                    mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                });
+            } catch (IOException | ModelException e) {
+                AlertDialog alertDialog = new AlertDialog.Builder(SemanticActivity.this).create();
+                alertDialog.setTitle("Error");
+                alertDialog.setMessage("Failed to load model");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        (dialog, which) -> finish());
+            }
+        }
+    }
+
+    private class InferenceTask implements Runnable {
+
+        @Override
+        public void run() {
+            try {
+                Bitmap transferredBitmap = (Bitmap) predictor.predict(img).getWrappedImage();
+                runOnUiThread(() -> {
+                    mImageView.setImageBitmap(transferredBitmap);
+                    mButtonSegment.setText(getString(R.string.segment));
+                    mButtonSegment.setEnabled(true);
+                    mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                });
+            } catch (TranslateException e) {
+                Log.e("SemanticSegmentation", null, e);
+            }
+        }
     }
 }
