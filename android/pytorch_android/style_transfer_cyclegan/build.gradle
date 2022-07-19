@@ -23,8 +23,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
         jvmTarget = '1.8'
@@ -39,8 +39,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-    implementation 'ai.djl:api:0.18.0-SNAPSHOT'
-    implementation 'ai.djl.android:core:0.18.0-SNAPSHOT'
-    runtimeOnly 'ai.djl.pytorch:pytorch-engine:0.18.0-SNAPSHOT'
-    runtimeOnly 'ai.djl.android:pytorch-native:0.18.0-SNAPSHOT'
+    implementation 'ai.djl:api:0.18.0'
+    implementation 'ai.djl.android:core:0.18.0'
+    runtimeOnly 'ai.djl.pytorch:pytorch-engine:0.18.0'
+    runtimeOnly 'ai.djl.android:pytorch-native:0.18.0'
 }
