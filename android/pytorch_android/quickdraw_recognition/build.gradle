@@ -20,21 +20,21 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = 11
+        targetCompatibility = 11
+    }
+    lint {
+        error 'NewerVersionAvailable'
+        lintConfig file('lint.xml')
+        quiet false
     }
 
-    lintOptions {
-        quiet false
-        error 'NewerVersionAvailable'
-        lintConfig file("lint.xml")
-    }
 }
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'ai.djl:api:0.18.0-SNAPSHOT'
+    implementation 'ai.djl:api:0.18.0'
     implementation 'ai.djl.android:core:0.18.0-SNAPSHOT'
-    runtimeOnly 'ai.djl.pytorch:pytorch-engine:0.18.0-SNAPSHOT'
-    runtimeOnly 'ai.djl.android:pytorch-native:0.18.0-SNAPSHOT'
+    runtimeOnly 'ai.djl.pytorch:pytorch-engine:0.18.0'
+    runtimeOnly 'ai.djl.android:pytorch-native:0.18.0'
 }
