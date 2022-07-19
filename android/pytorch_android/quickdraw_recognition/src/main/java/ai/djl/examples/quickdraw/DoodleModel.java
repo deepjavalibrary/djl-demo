@@ -42,6 +42,6 @@ final class DoodleModel {
                         .optOption("mapLocation", "true")
                         .optTranslator(translator)
                         .build();
-        return ModelZoo.loadModel(criteria);
+        return criteria.loadModel();
     }
 }

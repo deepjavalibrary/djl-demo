@@ -46,8 +46,7 @@ final class SemanticModel {
                         .optModelUrls(url)
                         .optTranslator(translator)
                         .optEngine("PyTorch")
-                        .optProgress(new ProgressBar())
                         .build();
-        return ModelZoo.loadModel(criteria);
+        return criteria.loadModel();
     }
 }

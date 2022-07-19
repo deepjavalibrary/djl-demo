@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -128,6 +129,13 @@ public class SemanticActivity extends AppCompatActivity {
                 });
             } catch (TranslateException e) {
                 Log.e("SemanticSegmentation", null, e);
+                runOnUiThread(() -> {
+                    Toast.makeText(SemanticActivity.this, "Inference failed.", Toast.LENGTH_LONG)
+                         .show();
+                    mButtonSegment.setText(getString(R.string.segment));
+                    mButtonSegment.setEnabled(true);
+                    mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                });
             }
         }
     }
