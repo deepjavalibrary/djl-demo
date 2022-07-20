@@ -39,7 +39,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     implementation 'ai.djl:api:0.19.0-SNAPSHOT'
-    implementation 'ai.djl.android:core:0.18.0-SNAPSHOT'
+    implementation 'ai.djl.android:core:0.19.0-SNAPSHOT'
     runtimeOnly 'ai.djl.pytorch:pytorch-engine:0.19.0-SNAPSHOT'
-    runtimeOnly 'ai.djl.android:pytorch-native:0.18.0-SNAPSHOT'
+    runtimeOnly 'ai.djl.android:pytorch-native:0.19.0-SNAPSHOT'
 }
