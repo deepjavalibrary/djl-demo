@@ -2,10 +2,10 @@
 
 In this folder, we will show case the four popular operation modes in DJL. There are four operating modes supported by DJL:
 
-- Python mode: User just need to prepare a python script file to execute.
+- [Python mode](https://github.com/deepjavalibrary/djl-demo/tree/master/djl-serving/python-mode/README.md): User just need to prepare a python script file to execute.
 - Python Hybrid mode (under development): User can offer a python script to do pre/post processing with a model file.
-- Java mode: User need to prepare a Java pre/post processing script and a model file.
-- Binary mode: User just need to prepare a model file, we will just run tensor-in, tensor out operation.
+- [Java mode](https://github.com/deepjavalibrary/djl-demo/tree/master/djl-serving/java-mode/README.md): User need to prepare a Java pre/post processing script and a model file.
+- [Binary mode](https://github.com/deepjavalibrary/djl-demo/tree/master/djl-serving/binary-mode/README.md): User just need to prepare a model file, we will just run tensor-in, tensor out operation.
 
 ## Installation
 
@@ -34,3 +34,9 @@ unzip serving-0.18.0.zip
 # start djl-serving
 serving-0.18.0\bin\serving.bat
 ```
+
+## DJL Serving WorkLoadManager
+
+There are also some demos of the [DJL Serving WorkLoadManager](https://github.com/deepjavalibrary/djl-serving/tree/master/wlm)
+
+- [Sentiment Analysis with Flink](wlm/flink-sentiment-analysis/README.md)

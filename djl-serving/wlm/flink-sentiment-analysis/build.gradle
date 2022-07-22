@@ -1,0 +1,35 @@
+plugins {
+    id "java"
+    id "application"
+}
+group "com.example"
+version "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+}
+
+dependencies {
+    implementation 'org.apache.flink:flink-streaming-java_2.11:1.11.1'
+    implementation platform("ai.djl:bom:0.18.0")
+    implementation "ai.djl:api"
+    implementation "ai.djl.serving:wlm:0.18.0"
+    implementation "org.slf4j:slf4j-simple:1.7.30"
+
+    runtimeOnly 'org.apache.flink:flink-clients_2.11:1.11.1'
+    runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
+}
+
+application {
+    getMainClass().set(System.getProperty("main", "com.example.SentimentAnalysis"))
+}
+
+configure(this) {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    apply from: file("${rootProject.projectDir}/../../../tools/gradle/formatter.gradle")
+}
