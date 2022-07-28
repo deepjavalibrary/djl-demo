@@ -106,11 +106,15 @@ public class SemanticActivity extends AppCompatActivity {
                     mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                 });
             } catch (IOException | ModelException e) {
-                AlertDialog alertDialog = new AlertDialog.Builder(SemanticActivity.this).create();
-                alertDialog.setTitle("Error");
-                alertDialog.setMessage("Failed to load model");
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                        (dialog, which) -> finish());
+                Log.e("SemanticSegmentation", null, e);
+                runOnUiThread(() -> {
+                    AlertDialog alertDialog =
+                            new AlertDialog.Builder(SemanticActivity.this).create();
+                    alertDialog.setTitle("Error");
+                    alertDialog.setMessage("Failed to load model");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            (dialog, which) -> finish());
+                });
             }
         }
     }
