@@ -39,7 +39,7 @@ An example application features a web UI to track and visualize metrics such as 
 
 ## Android
 
-### [Doodle draw app with PyTorch mode](android/pytorch_android/README.md)
+### [Doodle draw app with PyTorch model](android/pytorch_android/quickdraw_recognition/README.md)
 
 A Doodle draw android game that is built with PyTorch model.
 
@@ -51,11 +51,15 @@ A template that can be used to build Android applications with MXNet engine.
 
 An example that shows how to build deep learning android app with ease.
 
-### [Identify objects with Semantic Segmentation](android/semantic_segmentation/README.md)
+### [Make your image look like a painting with Style Transfer](android/pytorch_android/style_transfer_cyclegan/README.md)
+
+This app will take your image and convert it to the style of Van Gogh or Monet among others.
+
+### [Identify objects with Semantic Segmentation](android/pytorch_android/semantic_segmentation/README.md)
 
 An app that takes in an image and colors the objects in it.
 
-### [Translate from French to English with Neural Machine Translation](android/neural_machine_translation/README.md)
+### [Translate from French to English with Neural Machine Translation](android/pytorch_android/neural_machine_translation/README.md)
 
 Write in the French text that you wanted translated and receive an English output.
 
