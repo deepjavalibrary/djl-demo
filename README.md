@@ -51,6 +51,14 @@ A template that can be used to build Android applications with MXNet engine.
 
 An example that shows how to build deep learning android app with ease.
 
+### [Identify objects with Semantic Segmentation](android/semantic_segmentation/README.md)
+
+An app that takes in an image and colors the objects in it.
+
+### [Translate from French to English with Neural Machine Translation](android/neural_machine_translation/README.md)
+
+Write in the French text that you wanted translated and receive an English output.
+
 ## AWS services
 
 ### [AWS Kinesis Video Streams](aws/aws-kinesis-video-streams/README.md)
