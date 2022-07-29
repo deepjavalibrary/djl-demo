@@ -142,18 +142,28 @@ public class NMTActivity extends AppCompatActivity {
     }
 
     private String translate(final String text) {
-        try (NDManager manager = encoderModel.getNDManager().newSubManager()) {
-            NDList list = NeuralModel.predictEncoder(text, encoderModel, encoderWords, manager);
-            return NeuralModel.predictDecoder(list, decoderModel, decoderWords, manager);
-        } catch (ModelException | IOException e) {
-            Log.e("NeuralMachineTranslation", null, e);
+        if (text.length() == 0) {
             runOnUiThread(() -> {
-                Toast.makeText(NMTActivity.this, "Inference failed. " + e.getMessage(), Toast.LENGTH_LONG)
-                     .show();
+                Toast.makeText(NMTActivity.this, "No input for inference.", Toast.LENGTH_LONG)
+                        .show();
                 mButton.setText(getString(R.string.translate));
                 mButton.setEnabled(true);
             });
             return "";
+        } else {
+            try (NDManager manager = encoderModel.getNDManager().newSubManager()) {
+                NDList list = NeuralModel.predictEncoder(text, encoderModel, encoderWords, manager);
+                return NeuralModel.predictDecoder(list, decoderModel, decoderWords, manager);
+            } catch (ModelException | IOException e) {
+                Log.e("NeuralMachineTranslation", null, e);
+                runOnUiThread(() -> {
+                    Toast.makeText(NMTActivity.this, "Inference failed. " + e.getMessage(), Toast.LENGTH_LONG)
+                            .show();
+                    mButton.setText(getString(R.string.translate));
+                    mButton.setEnabled(true);
+                });
+                return "";
+            }
         }
     }
 }

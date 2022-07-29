@@ -18,9 +18,11 @@ import com.google.gson.internal.LinkedTreeMap;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import ai.djl.ModelException;
+import ai.djl.modality.nlp.preprocess.PunctuationSeparator;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
@@ -71,15 +73,22 @@ final class NeuralModel {
                                         LinkedTreeMap<String, Long> wrd2idx, NDManager manager)
             throws ModelException, IOException {
         // maps french input to id's from french file
-        String[] french = text.split(" ");
-        long[] inputs = new long[french.length];
-        for (int i = 0; i < french.length; i++) {
-            String word = french[i].toLowerCase(Locale.FRENCH);
+        List<String> list = new ArrayList<>();
+        list.add(text);
+        PunctuationSeparator punc = new PunctuationSeparator();
+        list = punc.preprocess(list);
+        long[] inputs = new long[list.size()];
+        int loc = 0;
+        for (int i = 0; i < list.size(); i++) {
+            String word = list.get(i).toLowerCase(Locale.FRENCH);
+            if (word.length() == 1 && !Character.isAlphabetic(word.charAt(0))) {
+                continue;
+            }
             Long id = wrd2idx.get(word);
             if (id == null) {
                 throw new ModelException("Word \"" + word + "\" not found.");
             }
-            inputs[i] = id;
+            inputs[loc++] = id;
         }
 
         // for forwarding the model
