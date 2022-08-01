@@ -77,18 +77,16 @@ final class NeuralModel {
         list.add(text);
         PunctuationSeparator punc = new PunctuationSeparator();
         list = punc.preprocess(list);
-        long[] inputs = new long[list.size()];
-        int loc = 0;
-        for (int i = 0; i < list.size(); i++) {
-            String word = list.get(i).toLowerCase(Locale.FRENCH);
+        List<Long> inputs = new ArrayList<>();
+        for (String word : list) {
             if (word.length() == 1 && !Character.isAlphabetic(word.charAt(0))) {
                 continue;
             }
-            Long id = wrd2idx.get(word);
+            Long id = wrd2idx.get(word.toLowerCase(Locale.FRENCH));
             if (id == null) {
                 throw new ModelException("Word \"" + word + "\" not found.");
             }
-            inputs[loc++] = id;
+            inputs.add(id);
         }
 
         // for forwarding the model
