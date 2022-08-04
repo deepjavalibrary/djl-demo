@@ -11,37 +11,36 @@
  * and limitations under the License.
  */
 
-package ai.djl.examples.semanticsegmentation;
+package ai.djl.examples.speechrecognition;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import ai.djl.ModelException;
-import ai.djl.modality.cv.Image;
-import ai.djl.modality.cv.translator.SemanticSegmentationTranslator;
+import ai.djl.modality.audio.translator.SpeechRecognitionTranslator;
+import ai.djl.ndarray.NDList;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ZooModel;
 
-final class SemanticModel {
+final class SpeechRecognitionModel {
 
-    private SemanticModel() {
+    private SpeechRecognitionModel() {
     }
 
-    public static ZooModel<Image, Image> loadModel() throws ModelException, IOException {
+    public static ZooModel<NDList, NDList> loadModel() throws ModelException, IOException {
         String url =
-                "https://mlrepo.djl.ai/model/cv/semantic_segmentation/ai/djl/pytorch/deeplabv3/0.0.1/deeplabv3.zip";
+                "https://djl-misc.s3.amazonaws.com/tmp/speech_recognition/ai/djl/pytorch/wav2vec2/0.0.1/wav2vec2.pt.zip";
         Map<String, String> arguments = new ConcurrentHashMap<>();
-        arguments.put("toTensor", "true");
-        arguments.put("normalize", "true");
-        SemanticSegmentationTranslator translator =
-                SemanticSegmentationTranslator.builder(arguments).build();
+        SpeechRecognitionTranslator translator =
+                SpeechRecognitionTranslator.builder(arguments).build();
 
-        Criteria<Image, Image> criteria =
+        Criteria<NDList, NDList> criteria =
                 Criteria.builder()
-                        .setTypes(Image.class, Image.class)
+                        .setTypes(NDList.class, NDList.class)
                         .optModelUrls(url)
                         .optTranslator(translator)
+//                        .optModelName("wav2vec2.pt")
                         .optEngine("PyTorch")
                         .build();
         return criteria.loadModel();

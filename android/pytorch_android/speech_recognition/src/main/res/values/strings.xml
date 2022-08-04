@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Speech Recognition - Powered by DJL</string>
+    <string name="loader">Downloading the model</string>
+</resources>
