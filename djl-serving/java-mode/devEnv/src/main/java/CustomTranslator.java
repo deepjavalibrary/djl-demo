@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-
 public class CustomTranslator implements ServingTranslator {
 
     private List<String> classes;
@@ -50,8 +49,7 @@ public class CustomTranslator implements ServingTranslator {
     }
 
     @Override
-    public void setArguments(Map<String, ?> arguments) {
-    }
+    public void setArguments(Map<String, ?> arguments) {}
 
     @Override
     public void prepare(TranslatorContext ctx) throws IOException {
