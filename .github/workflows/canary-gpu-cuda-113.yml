@@ -38,13 +38,6 @@ jobs:
         with:
           java-version: 11
           distribution: corretto
-      - name: Test MXNet
-        working-directory: canary
-        run: |
-          DJL_ENGINE=mxnet-native-auto ./gradlew clean run
-          rm -rf ~/.djl.ai
-          DJL_ENGINE=mxnet-native-mkl ./gradlew clean run
-          rm -rf ~/.djl.ai
       - name: Test PyTorch
         working-directory: canary
         run: |
@@ -76,13 +69,6 @@ jobs:
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
           rm -rf ~/.djl.ai
           DJL_ENGINE=tensorflow-native-cu113 ./gradlew clean run
-          rm -rf ~/.djl.ai
-      - name: Test Paddle
-        working-directory: canary
-        run: |
-          DJL_ENGINE=paddlepaddle-native-auto ./gradlew clean run
-          rm -rf ~/.djl.ai
-          DJL_ENGINE=paddlepaddle-native-cpu ./gradlew clean run
           rm -rf ~/.djl.ai
 
   create-gpu-runner:
