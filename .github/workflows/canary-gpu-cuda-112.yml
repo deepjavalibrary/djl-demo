@@ -25,6 +25,11 @@ jobs:
     container:
       image: nvidia/cuda:11.2.2-cudnn8-runtime-ubuntu18.04
       options: --gpus all --runtime=nvidia
+      env:
+        AWS_REGION: us-east-1
+        DJL_STAGING: ${{github.event.inputs.repo-id}}
+        DJL_VERSION: ${{github.event.inputs.djl-version}}
+        PT_VERSION: ${{github.event.inputs.pt-version}}
     timeout-minutes: 30
     needs: create-gpu-runner
     steps:
@@ -45,7 +50,7 @@ jobs:
           rm -rf ~/.djl.ai
           DJL_ENGINE=mxnet-native-mkl ./gradlew clean run
           rm -rf ~/.djl.ai
-          DJL_ENGINE=mxnet-native-cu112mkl ./gradlew clean run
+          DJL_ENGINE=mxnet-native-cu112mkl MXNET_VERSION=1.9.1 ./gradlew clean run
           rm -rf ~/.djl.ai
       - name: Test PyTorch
         working-directory: canary

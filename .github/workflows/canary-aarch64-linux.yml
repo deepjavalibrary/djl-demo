@@ -22,7 +22,13 @@ jobs:
   canary-test-aarch64-linux:
     if: github.repository == 'deepjavalibrary/djl-demo'
     runs-on: [ self-hosted, aarch64 ]
-    container: amazonlinux:2
+    container:
+      image: amazonlinux:2
+      env:
+        AWS_REGION: us-east-1
+        DJL_STAGING: ${{github.event.inputs.repo-id}}
+        DJL_VERSION: ${{github.event.inputs.djl-version}}
+        PT_VERSION: ${{github.event.inputs.pt-version}}
     timeout-minutes: 30
     needs: create-aarch64-runner
     steps:
