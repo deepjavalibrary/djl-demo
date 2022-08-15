@@ -35,48 +35,51 @@ jobs:
           java-version: 11
       - name: Test MXNet
         working-directory: canary
+        shell: cmd
         run: |
-          cmd /c "set DJL_ENGINE=mxnet-native-auto&& .\gradlew.bat clean run"
-          cmd /c "rd /s /q %userprofile%\.djl.ai"
-          # cmd /c "set DJL_ENGINE=mxnet-native-mkl&& .\gradlew.bat clean run"
-          # cmd /c "rd /s /q %userprofile%\.djl.ai"
+          set DJL_ENGINE=mxnet-native-auto&& .\gradlew.bat clean run
+          rd /s /q %userprofile%\.djl.ai
       - name: Test PyTorch
         working-directory: canary
+        shell: cmd
         run: |
-          cmd /c "set DJL_ENGINE=pytorch-native-auto&& .\gradlew.bat clean run"
-          cmd /c "rd /s /q %userprofile%\.djl.ai"
-          cmd /c "set DJL_ENGINE=pytorch-native-auto&& set PYTORCH_VERSION=1.9.1&& .\gradlew.bat clean run"
-          cmd /c "rd /s /q %userprofile%\.djl.ai"
-          cmd /c "set DJL_ENGINE=pytorch-native-auto&& set PYTORCH_VERSION=1.10.0&& .\gradlew.bat clean run"
-          cmd /c "rd /s /q %userprofile%\.djl.ai"
-          cmd /c "set DJL_ENGINE=pytorch-native-auto&& set PYTORCH_VERSION=1.11.0&& .\gradlew.bat clean run"
-          cmd /c "rd /s /q %userprofile%\.djl.ai"
-          cmd /c "set DJL_ENGINE=pytorch-native-cpu&& .\gradlew.bat clean run"
-          cmd /c "rd /s /q %userprofile%\.djl.ai"
-          cmd /c "set DJL_ENGINE=pytorch-native-cpu&& set PT_VERSION=1.9.1&& .\gradlew.bat clean run"
-          cmd /c "rd /s /q %userprofile%\.djl.ai"
-          cmd /c "set DJL_ENGINE=pytorch-native-cpu&& set PT_VERSION=1.10.0&& .\gradlew.bat clean run"
-          cmd /c "rd /s /q %userprofile%\.djl.ai"
-          cmd /c "set DJL_ENGINE=pytorch-native-cpu&& set PT_VERSION=1.11.0&& .\gradlew.bat clean run"
-          cmd /c "rd /s /q %userprofile%\.djl.ai"
+          set DJL_ENGINE=pytorch-native-auto&& .\gradlew.bat clean run
+          rd /s /q %userprofile%\.djl.ai
+          set DJL_ENGINE=pytorch-native-auto&& set PYTORCH_VERSION=1.9.1&& .\gradlew.bat clean run
+          rd /s /q %userprofile%\.djl.ai
+          set DJL_ENGINE=pytorch-native-auto&& set PYTORCH_VERSION=1.10.0&& .\gradlew.bat clean run
+          rd /s /q %userprofile%\.djl.ai
+          set DJL_ENGINE=pytorch-native-auto&& set PYTORCH_VERSION=1.11.0&& .\gradlew.bat clean run
+          rd /s /q %userprofile%\.djl.ai
+          set DJL_ENGINE=pytorch-native-cpu&& .\gradlew.bat clean run
+          rd /s /q %userprofile%\.djl.ai
+          set DJL_ENGINE=pytorch-native-cpu&& set PT_VERSION=1.9.1&& .\gradlew.bat clean run
+          rd /s /q %userprofile%\.djl.ai
+          set DJL_ENGINE=pytorch-native-cpu&& set PT_VERSION=1.10.0&& .\gradlew.bat clean run
+          rd /s /q %userprofile%\.djl.ai
+          set DJL_ENGINE=pytorch-native-cpu&& set PT_VERSION=1.11.0&& .\gradlew.bat clean run
+          rd /s /q %userprofile%\.djl.ai
       - name: Test TensorFlow
         working-directory: canary
+        shell: cmd
         run: |
-          cmd /c "set DJL_ENGINE=tensorflow-native-auto&& .\gradlew.bat clean run"
-          cmd /c "rd /s /q %userprofile%\.djl.ai"
-          cmd /c "set DJL_ENGINE=tensorflow-native-cpu&& .\gradlew.bat clean run"
-          cmd /c "rd /s /q %userprofile%\.djl.ai"
+          set DJL_ENGINE=tensorflow-native-auto&& .\gradlew.bat clean run
+          rd /s /q %userprofile%\.djl.ai
+          set DJL_ENGINE=tensorflow-native-cpu&& .\gradlew.bat clean run
+          rd /s /q %userprofile%\.djl.ai
       - name: Test OnnxRuntime
         working-directory: canary
+        shell: cmd
         run: |
-          cmd /c "set DJL_ENGINE=onnxruntime&& .\gradlew.bat clean run"
+          set DJL_ENGINE=onnxruntime&& .\gradlew.bat clean run
       - name: Test PaddlePaddle
         working-directory: canary
+        shell: cmd
         run: |
-          cmd /c "set DJL_ENGINE=paddlepaddle-native-auto&& .\gradlew.bat clean run"
-          cmd /c "rd /s /q %userprofile%\.djl.ai"
-          cmd /c "set DJL_ENGINE=paddlepaddle-native-cpu&& .\gradlew.bat clean run"
-          cmd /c "rd /s /q %userprofile%\.djl.ai"
+          set DJL_ENGINE=paddlepaddle-native-auto&& .\gradlew.bat clean run
+          rd /s /q %userprofile%\.djl.ai"
+          set DJL_ENGINE=paddlepaddle-native-cpu&& .\gradlew.bat clean run
+          rd /s /q %userprofile%\.djl.ai"
       # DLR doesn't support Windows
       # TFLite doesn't support Windows
       # Xgboost doesn't support Windows
