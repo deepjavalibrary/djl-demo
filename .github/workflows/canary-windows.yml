@@ -2,7 +2,7 @@ name: Canary-Windows
 
 on:
   schedule:
-    - cron:  '0 14 * * *'
+    - cron:  '0 9 * * *'
   workflow_dispatch:
     inputs:
       repo-id:
@@ -43,7 +43,7 @@ jobs:
         working-directory: canary
         shell: cmd
         run: |
-          set DJL_ENGINE=pytorch-native-auto&& .\gradlew.bat clean run
+          set DJL_ENGINE=pytorch-native-auto&& set PYTORCH_VERSION=%PT_VERSION%&& .\gradlew.bat clean run
           rd /s /q %userprofile%\.djl.ai
           set DJL_ENGINE=pytorch-native-auto&& set PYTORCH_VERSION=1.9.1&& .\gradlew.bat clean run
           rd /s /q %userprofile%\.djl.ai
@@ -83,3 +83,5 @@ jobs:
       # DLR doesn't support Windows
       # TFLite doesn't support Windows
       # Xgboost doesn't support Windows
+      # LightGBM doesn't support Windows
+      # Huggingface tokenizers doesn't support Windows
