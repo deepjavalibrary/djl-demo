@@ -12,7 +12,7 @@ on:
       djl-version:
         description: 'djl version to test'
         required: false
-        default: '0.18.0'
+        default: '0.19.0-SNAPSHOT'
       pt-version:
         description: 'pytorch version to test'
         required: false
@@ -57,15 +57,19 @@ jobs:
         run: |
           DJL_ENGINE=pytorch-native-auto ./gradlew clean run
           rm -rf ~/.djl.ai
-          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.9.1 ./gradlew clean run
-          rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.10.0 ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.11.0 ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.12.1 ./gradlew clean run
           rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true ./gradlew clean run
           rm -rf ~/.djl.ai
-          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.9.1 ./gradlew clean run
-          rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.10.0 ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.11.0 ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.12.1 ./gradlew clean run
           rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
           rm -rf ~/.djl.ai

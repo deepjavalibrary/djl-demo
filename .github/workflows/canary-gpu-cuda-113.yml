@@ -12,7 +12,7 @@ on:
       djl-version:
         description: 'djl version to test'
         required: false
-        default: '0.18.0'
+        default: '0.19.0-SNAPSHOT'
       pt-version:
         description: 'pytorch version to test'
         required: false
@@ -23,7 +23,7 @@ jobs:
     if: github.repository == 'deepjavalibrary/djl-demo'
     runs-on: [ self-hosted, gpu ]
     container:
-      image: nvidia/cuda:11.3.1-cudnn8-runtime-ubuntu18.04
+      image: nvidia/cuda:11.6.2-cudnn8-runtime-ubuntu18.04
       options: --gpus all --runtime=nvidia
       env:
         AWS_REGION: us-east-1
@@ -55,23 +55,27 @@ jobs:
         run: |
           DJL_ENGINE=pytorch-native-auto ./gradlew clean run
           rm -rf ~/.djl.ai
-          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.9.1 ./gradlew clean run
-          rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.10.0 ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.11.0 ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.12.1 ./gradlew clean run
           rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true ./gradlew clean run
           rm -rf ~/.djl.ai
-          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.9.1 ./gradlew clean run
-          rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.10.0 ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.11.0 ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.12.1 ./gradlew clean run
           rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
           rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-cpu-precxx11 ./gradlew clean run
           rm -rf ~/.djl.ai
-          DJL_ENGINE=pytorch-native-cu113 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-cu116 ./gradlew clean run
           rm -rf ~/.djl.ai
-          DJL_ENGINE=pytorch-native-cu113-precxx11 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-cu116-precxx11 ./gradlew clean run
           rm -rf ~/.djl.ai
       - name: Test Tensorflow
         working-directory: canary

@@ -12,7 +12,7 @@ on:
       djl-version:
         description: 'djl version to test'
         required: false
-        default: '0.18.0'
+        default: '0.19.0-SNAPSHOT'
       pt-version:
         description: 'pytorch version to test'
         required: false
@@ -36,7 +36,7 @@ jobs:
       - name: Test MXNet
         run: |
           cd canary
-          ./gradlew clean run
+          DJL_ENGINE=mxnet-native-auto ./gradlew clean run
           rm -rf ~/.djl.ai
           DJL_ENGINE=mxnet-native-mkl ./gradlew clean run
           rm -rf ~/.djl.ai
@@ -45,19 +45,19 @@ jobs:
         run: |
           DJL_ENGINE=pytorch-native-auto ./gradlew clean run
           rm -rf ~/.djl.ai
-          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.9.1 ./gradlew clean run
-          rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.10.0 ./gradlew clean run
           rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.11.0 ./gradlew clean run
           rm -rf ~/.djl.ai
-          DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.12.1 ./gradlew clean run
           rm -rf ~/.djl.ai
-          DJL_ENGINE=pytorch-native-cpu PT_VERSION=1.9.1 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
           rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-cpu PT_VERSION=1.10.0 ./gradlew clean run
           rm -rf ~/.djl.ai
           DJL_ENGINE=pytorch-native-cpu PT_VERSION=1.11.0 ./gradlew clean run
+          rm -rf ~/.djl.ai
+          DJL_ENGINE=pytorch-native-cpu PT_VERSION=1.12.1 ./gradlew clean run
           rm -rf ~/.djl.ai
       - name: Test TensorFlow
         run: |
