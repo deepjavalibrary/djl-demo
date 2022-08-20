@@ -17,6 +17,8 @@ import ai.djl.Device;
 import ai.djl.Model;
 import ai.djl.ModelException;
 import ai.djl.engine.Engine;
+import ai.djl.engine.StandardCapabilities;
+import ai.djl.huggingface.tokenizers.HuggingFaceTokenizer;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
 import ai.djl.modality.Input;
@@ -39,8 +41,8 @@ import ai.djl.training.util.DownloadUtils;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.NoopTranslator;
 import ai.djl.translate.TranslateException;
+import ai.djl.util.Utils;
 import ai.djl.util.cuda.CudaUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,6 +66,12 @@ public final class CanaryTest {
 
     public static void main(String[] args) throws IOException, ModelException, TranslateException {
         logger.info("");
+        logger.info("----------Canary----------");
+        logger.info("DJL_ENGINE: {}", System.getenv("DJL_ENGINE"));
+        logger.info("PYTORCH_VERSION: {}", System.getenv("PYTORCH_VERSION"));
+        logger.info("PYTORCH_PRECXX11: {}", System.getenv("PYTORCH_PRECXX11"));
+        Path dir = Utils.getEngineCacheDir();
+        logger.info("Engine cache dir: {} (exist={}).", dir, Files.exists(dir));
         logger.info("----------Environment Variables----------");
         System.getenv().forEach((k, v) -> logger.info(k + ": " + v));
 
@@ -82,10 +90,13 @@ public final class CanaryTest {
 
         String djlEngine = System.getenv("DJL_ENGINE");
         if (djlEngine == null) {
-            djlEngine = "mxnet-native-auto";
+            djlEngine = "pytorch-native-auto";
         }
 
-        Device device = NDManager.newBaseManager().getDevice();
+        Device device;
+        try (NDManager manager = NDManager.newBaseManager()) {
+            device = manager.getDevice();
+        }
         if (djlEngine.contains("-native-cu") && !device.isGpu()) {
             throw new AssertionError("Expecting load engine on GPU.");
         } else if (djlEngine.startsWith("tensorrt")) {
@@ -95,7 +106,14 @@ public final class CanaryTest {
             testOnnxRuntime();
             return;
         } else if (djlEngine.startsWith("xgboost")) {
-            testXgboost();
+            if ("xgboost-gpu".equals(djlEngine)) {
+                testXgboostGpu();
+            } else {
+                testXgboost();
+            }
+            return;
+        } else if (djlEngine.startsWith("lightgbm")) {
+            testLightgbm();
             return;
         } else if (djlEngine.startsWith("tflite")) {
             testTflite();
@@ -112,6 +130,9 @@ public final class CanaryTest {
             return;
         } else if (djlEngine.startsWith("paddle")) {
             testPaddle();
+            return;
+        } else if (djlEngine.startsWith("tokenizers")) {
+            testTokenizers();
             return;
         }
 
@@ -246,8 +267,7 @@ public final class CanaryTest {
                     "https://resources.djl.ai/test-models/sententpiece_test_model.model",
                     "build/test/models/sententpiece_test_model.model");
         }
-        Path modelPath = Paths.get("build/test/models/sententpiece_test_model.model");
-        try (SpTokenizer tokenizer = new SpTokenizer(modelPath)) {
+        try (SpTokenizer tokenizer = new SpTokenizer(modelFile)) {
             String original = "Hello World";
             List<String> tokens = tokenizer.tokenize(original);
             logger.info("{}", String.join(",", tokens));
@@ -323,12 +343,12 @@ public final class CanaryTest {
         if (System.getProperty("os.name").startsWith("Win")) {
             throw new AssertionError("Xgboost only work on macOS and Linux.");
         }
-        Path modelDir = Paths.get("build/model");
+        Path modelDir = Paths.get("build/model/xgb");
         DownloadUtils.download(
                 "https://resources.djl.ai/test-models/xgboost/regression.json",
                 modelDir.resolve("regression.json").toString());
         try (Model model = Model.newInstance("XGBoost")) {
-            model.load(Paths.get("build/model"), "regression");
+            model.load(modelDir, "regression");
             Predictor<NDList, NDList> predictor = model.newPredictor(new NoopTranslator());
             try (NDManager manager = NDManager.newBaseManager()) {
                 NDArray array = manager.ones(new Shape(10, 13));
@@ -338,6 +358,55 @@ public final class CanaryTest {
                 if (result.length != 10) {
                     throw new AssertionError("Wrong prediction result");
                 }
+            }
+        }
+    }
+
+    private static void testXgboostGpu() {
+        Engine engine = Engine.getEngine("XGBoost");
+        if (!engine.hasCapability(StandardCapabilities.CUDA)) {
+            throw new AssertionError("Expected use XGBoost GPU version");
+        }
+    }
+
+    private static void testLightgbm() throws ModelException, IOException, TranslateException {
+        Path modelDir = Paths.get("build/model/lightgbm");
+        DownloadUtils.download(
+                "https://resources.djl.ai/test-models/lightgbm/quadratic.txt",
+                modelDir.resolve("quadratic.txt").toString());
+
+        Criteria<NDList, NDList> criteria =
+                Criteria.builder()
+                        .setTypes(NDList.class, NDList.class)
+                        .optModelPath(modelDir)
+                        .optModelName("quadratic")
+                        .build();
+
+        try (ZooModel<NDList, NDList> model = criteria.loadModel();
+                Predictor<NDList, NDList> predictor = model.newPredictor()) {
+            try (NDManager manager = NDManager.newBaseManager()) {
+                NDArray array = manager.ones(new Shape(10, 4));
+                NDList output = predictor.predict(new NDList(array));
+                double[] result = output.singletonOrThrow().toDoubleArray();
+                logger.info(Arrays.toString(result));
+                if (result.length != 10) {
+                    throw new AssertionError("Wrong prediction result");
+                }
+            }
+        }
+    }
+
+    private static void testTokenizers() {
+        String input = "Hello, y'all! How are you ?";
+        String[] expected = {
+            "[CLS]", "Hello", ",", "y", "'", "all", "!", "How", "are", "you", "?", "[SEP]"
+        };
+
+        try (HuggingFaceTokenizer tokenizer = HuggingFaceTokenizer.newInstance("bert-base-cased")) {
+            String[] ret = tokenizer.tokenize(input).toArray(new String[0]);
+            logger.info(Arrays.toString(ret));
+            if (!Arrays.equals(ret, expected)) {
+                throw new AssertionError("Wrong prediction result");
             }
         }
     }

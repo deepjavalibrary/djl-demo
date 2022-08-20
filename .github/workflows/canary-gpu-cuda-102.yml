@@ -2,7 +2,7 @@ name: Canary-GPU-Cuda-102
 
 on:
   schedule:
-    - cron: '0 20 * * *'
+    - cron: '0 9 * * *'
   workflow_dispatch:
     inputs:
       repo-id:
@@ -12,7 +12,7 @@ on:
       djl-version:
         description: 'djl version to test'
         required: false
-        default: '0.18.0'
+        default: '0.19.0-SNAPSHOT'
       pt-version:
         description: 'pytorch version to test'
         required: false
@@ -46,51 +46,65 @@ jobs:
       - name: Test MXNet
         working-directory: canary
         run: |
+          set -x
           DJL_ENGINE=mxnet-native-auto ./gradlew clean run
-          rm -rf ~/.djl.ai
+          rm -rf /root/.djl.ai/
           DJL_ENGINE=mxnet-native-mkl ./gradlew clean run
-          rm -rf ~/.djl.ai
+          rm -rf /root/.djl.ai/
           DJL_ENGINE=mxnet-native-cu102mkl ./gradlew clean run
-          rm -rf ~/.djl.ai
+          rm -rf /root/.djl.ai/
       - name: Test PyTorch
         working-directory: canary
         run: |
-          DJL_ENGINE=pytorch-native-auto ./gradlew clean run
-          rm -rf ~/.djl.ai
-          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.9.1 ./gradlew clean run
-          rm -rf ~/.djl.ai
+          set -x
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=$PT_VERSION ./gradlew clean run
+          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.10.0 ./gradlew clean run
-          rm -rf ~/.djl.ai
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.11.0 ./gradlew clean run
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.12.1 ./gradlew clean run
+          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true ./gradlew clean run
-          rm -rf ~/.djl.ai
-          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.9.1 ./gradlew clean run
-          rm -rf ~/.djl.ai
+          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.10.0 ./gradlew clean run
-          rm -rf ~/.djl.ai
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.11.0 ./gradlew clean run
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.12.1 ./gradlew clean run
+          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
-          rm -rf ~/.djl.ai
+          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 ./gradlew clean run
-          rm -rf ~/.djl.ai
+          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu102 ./gradlew clean run
-          rm -rf ~/.djl.ai
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=pytorch-native-cu102 PT_VERSION=1.10.0 ./gradlew clean run
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=pytorch-native-cu102 PT_VERSION=1.11.0 ./gradlew clean run
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=pytorch-native-cu102 PT_VERSION=1.12.1 ./gradlew clean run
+          rm -rf /root/.djl.ai/
       - name: Test Tensorflow
         working-directory: canary
         run: |
+          set -x
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
-          rm -rf ~/.djl.ai
+          rm -rf /root/.djl.ai/
       - name: Test Paddle
         working-directory: canary
         run: |
-          mkdir -p ~/.djl.ai/paddle/2.2.2-cu102-linux-x86_64
-          DJL_CACHE_DIR=~/.djl.ai DJL_ENGINE=paddlepaddle-native-auto \
+          set -x
+          mkdir -p $HOME/.djl.ai/paddle/2.2.2-cu102-linux-x86_64
+          DJL_CACHE_DIR=$HOME/.djl.ai/ DJL_ENGINE=paddlepaddle-native-auto \
           LD_LIBRARY_PATH=$DJL_CACHE_DIR/paddle/2.2.2-cu102-linux-x86_64 \
           ./gradlew clean run
-          rm -rf ~/.djl.ai
-          mkdir -p ~/.djl.ai/paddle/2.2.2-20220429-cu102-linux-x86_64
-          DJL_CACHE_DIR=~/.djl.ai DJL_ENGINE=paddlepaddle-native-cu102 \
+          rm -rf /root/.djl.ai/
+          mkdir -p $HOME/.djl.ai/paddle/2.2.2-20220429-cu102-linux-x86_64
+          DJL_CACHE_DIR=$HOME/.djl.ai/ DJL_ENGINE=paddlepaddle-native-cu102 \
           LD_LIBRARY_PATH=$DJL_CACHE_DIR/paddle/2.2.2-20220429-cu102-linux-x86_64 \
           ./gradlew clean run
-          rm -rf ~/.djl.ai
+          rm -rf /root/.djl.ai/
 
   create-gpu-runner:
     if: github.repository == 'deepjavalibrary/djl-demo'
