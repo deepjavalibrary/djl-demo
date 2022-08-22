@@ -1,5 +1,5 @@
 plugins {
-    id 'com.android.application'
+    id "com.android.application"
 }
 
 android {
@@ -18,7 +18,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
     compileOptions {
@@ -28,12 +28,12 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'com.google.android.material:material:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.appcompat:appcompat:1.5.0"
+    implementation "com.google.android.material:material:1.6.1"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
 
-    implementation 'ai.djl:api:0.19.0-SNAPSHOT'
-    implementation 'ai.djl.android:core:0.19.0-SNAPSHOT'
-    runtimeOnly 'ai.djl.pytorch:pytorch-engine:0.19.0-SNAPSHOT'
-    runtimeOnly 'ai.djl.android:pytorch-native:0.19.0-SNAPSHOT'
+    implementation "ai.djl:api:${djl_version}"
+    implementation "ai.djl.android:core:${djl_version}"
+    runtimeOnly "ai.djl.pytorch:pytorch-engine:${djl_version}"
+    runtimeOnly "ai.djl.android:pytorch-native:${djl_version}"
 }
