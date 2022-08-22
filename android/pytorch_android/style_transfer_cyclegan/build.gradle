@@ -1,6 +1,6 @@
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
+    id "com.android.application"
+    id "kotlin-android"
 }
 
 android {
@@ -19,7 +19,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
     compileOptions {
@@ -27,20 +27,19 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "1.8"
     }
 }
 
 dependencies {
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'com.google.android.material:material:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.core:core-ktx:1.8.0"
+    implementation "androidx.appcompat:appcompat:1.5.0"
+    implementation "com.google.android.material:material:1.6.1"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
 
-    implementation 'ai.djl:api:0.18.0'
-    implementation 'ai.djl.android:core:0.18.0'
-    runtimeOnly 'ai.djl.pytorch:pytorch-engine:0.18.0'
-    runtimeOnly 'ai.djl.android:pytorch-native:0.18.0'
+    implementation "ai.djl:api:${djl_version}"
+    implementation "ai.djl.android:core:${djl_version}"
+    runtimeOnly "ai.djl.pytorch:pytorch-engine:${djl_version}"
+    runtimeOnly "ai.djl.android:pytorch-native:${djl_version}"
 }

@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: "com.android.application"
 
 android {
     compileSdkVersion 32
@@ -16,7 +16,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
     compileOptions {
@@ -24,17 +24,16 @@ android {
         targetCompatibility = 11
     }
     lint {
-        error 'NewerVersionAvailable'
-        lintConfig file('lint.xml')
+        error "NewerVersionAvailable"
+        lintConfig file("lint.xml")
         quiet false
     }
-
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'ai.djl:api:0.18.0'
-    implementation 'ai.djl.android:core:0.18.0-SNAPSHOT'
-    runtimeOnly 'ai.djl.pytorch:pytorch-engine:0.18.0'
-    runtimeOnly 'ai.djl.android:pytorch-native:0.18.0'
+    implementation "androidx.appcompat:appcompat:1.5.0"
+    implementation "ai.djl:api:${djl_version}"
+    implementation "ai.djl.android:core:${djl_version}"
+    runtimeOnly "ai.djl.pytorch:pytorch-engine:${djl_version}"
+    runtimeOnly "ai.djl.android:pytorch-native:${djl_version}"
 }
