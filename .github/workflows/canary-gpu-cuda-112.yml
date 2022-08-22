@@ -65,7 +65,7 @@ jobs:
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.12.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true ./gradlew clean run
+          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=$PT_VERSION ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.10.0 ./gradlew clean run
           rm -rf /root/.djl.ai/
@@ -77,21 +77,21 @@ jobs:
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu113 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-cu116 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu113 PT_VERSION=1.10.0 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu113 PT_VERSION=1.11.0 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu113 PT_VERSION=1.12.1 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-cu116 PT_VERSION=1.12.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu113-precxx11 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-cu116-precxx11 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu113-precxx11 PT_VERSION=1.10.0 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu113-precxx11 PT_VERSION=1.11.0 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu113-precxx11 PT_VERSION=1.12.1 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-cu116-precxx11 PT_VERSION=1.12.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
       - name: Test Tensorflow
         working-directory: canary
