@@ -39,7 +39,7 @@
         </dependency>
         <dependency>
             <groupId>ai.djl.pytorch</groupId>
-            <artifactId>pytorch-model-zoo</artifactId>
+            <artifactId>pytorch-engine</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -51,6 +51,11 @@
             <groupId>ai.djl.pytorch</groupId>
             <artifactId>pytorch-native-cpu</artifactId>
             <classifier>osx-x86_64</classifier>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>ai.djl.pytorch</groupId>
+            <artifactId>pytorch-model-zoo</artifactId>
             <scope>runtime</scope>
         </dependency>
         <!-- Includes Pytorch native library for other platforms -->
