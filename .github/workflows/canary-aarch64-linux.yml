@@ -65,6 +65,12 @@ jobs:
           set -x
           DJL_ENGINE=onnxruntime ./gradlew clean run
           rm -rf /root/.djl.ai/
+      - name: Test Huggingface tokenizers
+        working-directory: canary
+        run: |
+          set -x
+          DJL_ENGINE=tokenizers PYTORCH_PRECXX11=true ./gradlew clean run
+          rm -rf /root/.djl.ai/
       # MXNet doesn't support aarch64
       # TensorFlow doesn't support aarch64
       # PaddlePaddle doesn't support aarch64
@@ -72,7 +78,6 @@ jobs:
       # TFLite doesn't support aarch64
       # Xgboost doesn't support aarch64 ?
       # LightGBM doesn't support aarch64 ?
-      # Huggingface tokenizers doesn't support aarch64 ?
 
   create-aarch64-runner:
     if: github.repository == 'deepjavalibrary/djl-demo'
