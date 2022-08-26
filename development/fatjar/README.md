@@ -2,6 +2,9 @@
 
 This is an example of how to create distribution package for DJL application.
 
+In this example you will learn how to package your application that can avoid download
+native libraries at runtime in case you don't have internet access in production environment.
+
 ## Gradle
 
 Run/test application with gradle

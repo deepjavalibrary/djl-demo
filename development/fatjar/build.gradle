@@ -17,14 +17,20 @@ dependencies {
     implementation platform("ai.djl:bom:0.18.0")
     implementation "ai.djl:api"
 
-    runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
+    // Use PyTorch engine
+    runtimeOnly "ai.djl.pytorch:pytorch-engine"
+    // PyTorch JNI offline distribution package
     runtimeOnly "ai.djl.pytorch:pytorch-jni"
 
     // Uncomment one of the following native library for your target platform
-    // runtimeOnly "ai.djl.pytorch:pytorch-native-cpu::linux-x86_64"
     runtimeOnly "ai.djl.pytorch:pytorch-native-cpu::osx-x86_64"
-    //runtimeOnly "ai.djl.pytorch:pytorch-native-cpu::win-x86_64"
+    // runtimeOnly "ai.djl.pytorch:pytorch-native-cpu::linux-aarch64"
+    // runtimeOnly "ai.djl.pytorch:pytorch-native-cpu::linux-x86_64"
+    // runtimeOnly "ai.djl.pytorch:pytorch-native-cpu-precxx11::linux-x86_64"
+    // runtimeOnly "ai.djl.pytorch:pytorch-native-cpu::linux-aarch64"
+    // runtimeOnly "ai.djl.pytorch:pytorch-native-cpu::win-x86_64"
 
+    runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
     implementation 'org.slf4j:slf4j-simple:1.7.36'
 }
 
