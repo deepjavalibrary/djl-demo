@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
-        applicationId "org.pytorch.demo.speechrecognition"
+        applicationId "ai.djl.examples.speechrecognition"
         minSdkVersion 28
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
 
@@ -28,11 +28,13 @@ android {
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-
-//    implementation 'org.pytorch:pytorch_android_lite:1.12.0-SNAPSHOT'
-
     implementation 'ai.djl:api:0.19.0-SNAPSHOT'
     implementation 'ai.djl.android:core:0.19.0-SNAPSHOT'
     runtimeOnly 'ai.djl.pytorch:pytorch-engine:0.19.0-SNAPSHOT'
     runtimeOnly 'ai.djl.android:pytorch-native:0.19.0-SNAPSHOT'
+    runtimeOnly 'ai.djl.audio:audio:0.19.0-SNAPSHOT'
+    runtimeOnly "org.bytedeco:ffmpeg:5.0-1.5.7:android-arm"
+    runtimeOnly "org.bytedeco:ffmpeg:5.0-1.5.7:android-arm64"
+    runtimeOnly "org.bytedeco:ffmpeg:5.0-1.5.7:android-x86"
+    runtimeOnly "org.bytedeco:ffmpeg:5.0-1.5.7:android-x86_64"
 }

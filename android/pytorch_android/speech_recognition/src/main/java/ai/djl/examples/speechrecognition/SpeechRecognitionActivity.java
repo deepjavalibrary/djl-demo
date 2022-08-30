@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -37,20 +36,20 @@ import java.util.concurrent.Executors;
 
 import ai.djl.ModelException;
 import ai.djl.inference.Predictor;
-import ai.djl.ndarray.NDArray;
-import ai.djl.ndarray.NDList;
-import ai.djl.ndarray.NDManager;
+import ai.djl.modality.audio.Audio;
+import ai.djl.modality.audio.AudioFactory;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.TranslateException;
 
 public class SpeechRecognitionActivity extends AppCompatActivity implements Runnable {
+
     private static final String TAG = SpeechRecognitionActivity.class.getName();
 
     private TextView mTextView;
     private Button mButton;
 
-    ZooModel<NDList, NDList> model;
-    Predictor<NDList, NDList> predictor;
+    ZooModel<Audio, String> model;
+    Predictor<Audio, String> predictor;
     Executor executor = Executors.newSingleThreadExecutor();
 
     private final static int REQUEST_RECORD_AUDIO = 13;
@@ -68,13 +67,39 @@ public class SpeechRecognitionActivity extends AppCompatActivity implements Runn
         public void run() {
             mTimerHandler.postDelayed(mRunnable, 1000);
 
-            SpeechRecognitionActivity.this.runOnUiThread(
-                    () -> {
-                        mButton.setText(String.format("Listening - %ds left", AUDIO_LEN_IN_SECOND - mStart));
-                        mStart += 1;
-                    });
+            SpeechRecognitionActivity.this.runOnUiThread(() -> {
+                mButton.setText(String.format("Listening - %ds left", AUDIO_LEN_IN_SECOND - mStart));
+                mStart += 1;
+            });
         }
     };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        mButton = findViewById(R.id.btnRecognize);
+        mTextView = findViewById(R.id.tvResult);
+
+        mButton.setOnClickListener(v -> {
+            mButton.setText(String.format("Listening - %ds left", AUDIO_LEN_IN_SECOND));
+            mButton.setEnabled(false);
+
+            Thread thread = new Thread(SpeechRecognitionActivity.this);
+            thread.start();
+
+            mTimerThread = new HandlerThread("Timer");
+            mTimerThread.start();
+            mTimerHandler = new Handler(mTimerThread.getLooper());
+            mTimerHandler.postDelayed(mRunnable, 1000);
+
+        });
+        requestMicrophonePermission();
+        mButton.setText(getString(R.string.loader));
+        mButton.setEnabled(false);
+        executor.execute(new LoadModelTask());
+    }
 
     @Override
     protected void onDestroy() {
@@ -98,36 +123,6 @@ public class SpeechRecognitionActivity extends AppCompatActivity implements Runn
         } catch (InterruptedException e) {
             Log.e(TAG, "Error on stopping background thread", e);
         }
-    }
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        mButton = findViewById(R.id.btnRecognize);
-        mTextView = findViewById(R.id.tvResult);
-
-        mButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mButton.setText(String.format("Listening - %ds left", AUDIO_LEN_IN_SECOND));
-                mButton.setEnabled(false);
-
-                Thread thread = new Thread(SpeechRecognitionActivity.this);
-                thread.start();
-
-                mTimerThread = new HandlerThread("Timer");
-                mTimerThread.start();
-                mTimerHandler = new Handler(mTimerThread.getLooper());
-                mTimerHandler.postDelayed(mRunnable, 1000);
-
-            }
-        });
-        requestMicrophonePermission();
-        mButton.setText(getString(R.string.loader));
-        mButton.setEnabled(false);
-        executor.execute(new LoadModelTask());
     }
 
     private class LoadModelTask implements Runnable {
@@ -198,39 +193,30 @@ public class SpeechRecognitionActivity extends AppCompatActivity implements Runn
         record.release();
         stopTimerThread();
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mButton.setText("Recognizing...");
-            }
+        runOnUiThread(() -> {
+            mButton.setText("Recognizing...");
         });
 
         float[] floatInputBuffer = new float[RECORDING_LENGTH];
 
         // feed in float values between -1.0f and 1.0f by dividing the signed 16-bit inputs.
-        for (int i = 0; i < RECORDING_LENGTH; ++i) {
-            floatInputBuffer[i] = recordingBuffer[i] / (float)Short.MAX_VALUE;
+        for (int i = 0; i < RECORDING_LENGTH; i++) {
+            floatInputBuffer[i] = recordingBuffer[i] / (float) Short.MAX_VALUE;
         }
 
-
-
         String output = "";
-        try (NDManager manager = model.getNDManager().newSubManager()) {
-            NDArray audioInput = manager.create(floatInputBuffer);
-            NDList input = new NDList(audioInput);
-            output = predictor.predict(input).get(0).toString();
+        try {
+            Audio audio = AudioFactory.getInstance().fromData(floatInputBuffer);
+            output = predictor.predict(audio);
         } catch (TranslateException e) {
             e.printStackTrace();
         }
 
         final String result = output;
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mTextView.setText(result);
-                mButton.setEnabled(true);
-                mButton.setText("Start");
-            }
+        runOnUiThread(() -> {
+            mTextView.setText(result);
+            mButton.setEnabled(true);
+            mButton.setText("Start");
         });
     }
 }

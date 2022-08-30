@@ -14,12 +14,10 @@
 package ai.djl.examples.speechrecognition;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import ai.djl.ModelException;
-import ai.djl.modality.audio.translator.SpeechRecognitionTranslator;
-import ai.djl.ndarray.NDList;
+import ai.djl.modality.audio.Audio;
+import ai.djl.modality.audio.translator.SpeechRecognitionTranslatorFactory;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ZooModel;
 
@@ -28,19 +26,14 @@ final class SpeechRecognitionModel {
     private SpeechRecognitionModel() {
     }
 
-    public static ZooModel<NDList, NDList> loadModel() throws ModelException, IOException {
-        String url =
-                "https://djl-misc.s3.amazonaws.com/tmp/speech_recognition/ai/djl/pytorch/wav2vec2/0.0.1/wav2vec2.pt.zip";
-        Map<String, String> arguments = new ConcurrentHashMap<>();
-        SpeechRecognitionTranslator translator =
-                SpeechRecognitionTranslator.builder(arguments).build();
-
-        Criteria<NDList, NDList> criteria =
+    public static ZooModel<Audio, String> loadModel() throws ModelException, IOException {
+        String url = "https://resources.djl.ai/test-models/pytorch/wav2vec2.zip";
+        Criteria<Audio, String> criteria =
                 Criteria.builder()
-                        .setTypes(NDList.class, NDList.class)
+                        .setTypes(Audio.class, String.class)
                         .optModelUrls(url)
-                        .optTranslator(translator)
-//                        .optModelName("wav2vec2.pt")
+                        .optTranslatorFactory(new SpeechRecognitionTranslatorFactory())
+                        .optModelName("wav2vec2.ptl")
                         .optEngine("PyTorch")
                         .build();
         return criteria.loadModel();
