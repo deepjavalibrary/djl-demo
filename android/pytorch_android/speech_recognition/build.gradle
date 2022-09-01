@@ -1,0 +1,40 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 33
+
+    defaultConfig {
+        applicationId "ai.djl.examples.speechrecognition"
+        minSdkVersion 28
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'ai.djl:api:0.19.0-SNAPSHOT'
+    implementation 'ai.djl.android:core:0.19.0-SNAPSHOT'
+    runtimeOnly 'ai.djl.pytorch:pytorch-engine:0.19.0-SNAPSHOT'
+    runtimeOnly 'ai.djl.android:pytorch-native:0.19.0-SNAPSHOT'
+    runtimeOnly 'ai.djl.audio:audio:0.19.0-SNAPSHOT'
+    runtimeOnly "org.bytedeco:ffmpeg:5.0-1.5.7:android-arm"
+    runtimeOnly "org.bytedeco:ffmpeg:5.0-1.5.7:android-arm64"
+    runtimeOnly "org.bytedeco:ffmpeg:5.0-1.5.7:android-x86"
+    runtimeOnly "org.bytedeco:ffmpeg:5.0-1.5.7:android-x86_64"
+}
