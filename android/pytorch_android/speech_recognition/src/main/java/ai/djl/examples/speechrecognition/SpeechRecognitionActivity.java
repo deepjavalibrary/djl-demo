@@ -209,7 +209,7 @@ public class SpeechRecognitionActivity extends AppCompatActivity implements Runn
             Audio audio = AudioFactory.getInstance().fromData(floatInputBuffer);
             output = predictor.predict(audio);
         } catch (TranslateException e) {
-            e.printStackTrace();
+            Log.e(LOG_TAG, null, e);
         }
 
         final String result = output;
