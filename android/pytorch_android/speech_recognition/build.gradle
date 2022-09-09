@@ -23,16 +23,19 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'ai.djl:api:0.19.0-SNAPSHOT'
-    implementation 'ai.djl.android:core:0.19.0-SNAPSHOT'
-    runtimeOnly 'ai.djl.pytorch:pytorch-engine:0.19.0-SNAPSHOT'
-    runtimeOnly 'ai.djl.android:pytorch-native:0.19.0-SNAPSHOT'
-    runtimeOnly 'ai.djl.audio:audio:0.19.0-SNAPSHOT'
+    implementation "androidx.appcompat:appcompat:1.5.1"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+    implementation "ai.djl:api:${djl_version}"
+    implementation "ai.djl.android:core:${djl_version}"
+    runtimeOnly "ai.djl.pytorch:pytorch-engine:${djl_version}"
+    runtimeOnly "ai.djl.android:pytorch-native:${djl_version}"
+    runtimeOnly "ai.djl.audio:audio:${djl_version}"
     runtimeOnly "org.bytedeco:ffmpeg:5.0-1.5.7:android-arm"
     runtimeOnly "org.bytedeco:ffmpeg:5.0-1.5.7:android-arm64"
     runtimeOnly "org.bytedeco:ffmpeg:5.0-1.5.7:android-x86"

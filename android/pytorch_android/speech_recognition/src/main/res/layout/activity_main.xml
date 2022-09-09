@@ -10,25 +10,22 @@
         android:id="@+id/btnRecognize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
-        android:text="Start"
-        android:textAllCaps="false"
+        android:layout_marginTop="@dimen/margin_xlarge"
+        android:text="@string/start"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvResult"
-        android:layout_width="350dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_large"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:textSize="@dimen/text_size_medium"
         android:gravity="center"
-        android:hint=""
-        android:textAlignment="center"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnRecognize" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

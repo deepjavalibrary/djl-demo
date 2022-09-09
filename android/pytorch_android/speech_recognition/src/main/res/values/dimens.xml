@@ -1,0 +1,9 @@
+<resources>
+    <!-- Text Size -->
+    <dimen name="text_size_medium">18sp</dimen>
+
+    <!-- Margin -->
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_large">48dp</dimen>
+    <dimen name="margin_xlarge">280dp</dimen>
+</resources>
