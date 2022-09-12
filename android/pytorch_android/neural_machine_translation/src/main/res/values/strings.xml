@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">NeuralMT</string>
-    <string name="title">NeuralMT - Powered by DJL</string>
-    <string name="translate">Translate</string>
-    <string name="run_model">Running the model...</string>
-    <string name="download_model">Downloading the model...</string>
+    <string name="app_name">NeuralMT - Powered by DJL</string>
+    <string name="button_translate">Translate</string>
+    <string name="button_run_model">Running the model…</string>
+    <string name="button_download_model">Downloading the model…</string>
+    <string name="dialog_title">Error</string>
+    <string name="dialog_message">Failed to load model</string>
 </resources>

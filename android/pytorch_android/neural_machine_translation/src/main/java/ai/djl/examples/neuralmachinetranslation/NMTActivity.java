@@ -14,13 +14,13 @@
 package ai.djl.examples.neuralmachinetranslation;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -38,43 +38,43 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import ai.djl.ModelException;
+import ai.djl.examples.neuralmachinetranslation.databinding.ActivityMainBinding;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
 import ai.djl.repository.zoo.ZooModel;
 
 public class NMTActivity extends AppCompatActivity {
 
+    private static final String TAG = NMTActivity.class.getSimpleName();
+
     static final Gson GSON = new Gson();
 
     private EditText mEditText;
     private TextView mTextView;
     private Button mButton;
-    ZooModel<NDList, NDList> encoderModel;
-    ZooModel<NDList, NDList> decoderModel;
-    LinkedTreeMap<String, Long> encoderWords;
-    LinkedTreeMap<String, String> decoderWords;
+
+    private ZooModel<NDList, NDList> encoderModel;
+    private ZooModel<NDList, NDList> decoderModel;
+    private LinkedTreeMap<String, Long> encoderWords;
+    private LinkedTreeMap<String, String> decoderWords;
     Executor executor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.title);
-        }
-
-        setContentView(R.layout.activity_main);
-        mButton = findViewById(R.id.btnTranslate);
-        mEditText = findViewById(R.id.etFrom);
-        mTextView = findViewById(R.id.tvTo);
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        mButton = binding.btnTranslate;
+        mEditText = binding.etFrom;
+        mTextView = binding.tvTo;
         mButton.setEnabled(false);
         mButton.setOnClickListener(v -> {
             mButton.setEnabled(false);
-            mButton.setText(getString(R.string.run_model));
+            mButton.setText(R.string.button_run_model);
             executor.execute(new InferenceTask());
         });
 
-        mButton.setText(R.string.download_model);
+        mButton.setText(R.string.button_download_model);
         executor.execute(new LoadModelTask());
     }
 
@@ -99,30 +99,28 @@ public class NMTActivity extends AppCompatActivity {
 
                 try (Reader reader = new InputStreamReader(
                         getAssets().open("source_wrd2idx.json"), StandardCharsets.UTF_8)) {
-                    Type mapType = new TypeToken<Map<String, Long>>() {
-                    }.getType();
+                    Type mapType = new TypeToken<Map<String, Long>>() {}.getType();
                     encoderWords = GSON.fromJson(reader, mapType);
                 }
 
                 try (Reader reader = new InputStreamReader(
                         getAssets().open("target_idx2wrd.json"), StandardCharsets.UTF_8)) {
-                    Type mapType = new TypeToken<Map<String, String>>() {
-                    }.getType();
+                    Type mapType = new TypeToken<Map<String, String>>() {}.getType();
                     decoderWords = GSON.fromJson(reader, mapType);
                 }
 
                 runOnUiThread(() -> {
-                    mButton.setText(getString(R.string.translate));
+                    mButton.setText(getString(R.string.button_translate));
                     mButton.setEnabled(true);
                 });
             } catch (IOException | ModelException e) {
-                Log.e("NeuralMachineTranslation", null, e);
+                Log.e(TAG, null, e);
                 runOnUiThread(() -> {
-                    AlertDialog alertDialog = new AlertDialog.Builder(NMTActivity.this).create();
-                    alertDialog.setTitle("Error");
-                    alertDialog.setMessage("Failed to load model");
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                            (dialog, which) -> finish());
+                    new AlertDialog.Builder(NMTActivity.this)
+                            .setTitle(R.string.dialog_title)
+                            .setMessage(R.string.dialog_message)
+                            .setNeutralButton(android.R.string.ok, (dialog, which) -> finish())
+                            .show();
                 });
             }
         }
@@ -135,18 +133,18 @@ public class NMTActivity extends AppCompatActivity {
             String result = translate(mEditText.getText().toString());
             runOnUiThread(() -> {
                 mTextView.setText(result);
-                mButton.setText(R.string.translate);
+                mButton.setText(R.string.button_translate);
                 mButton.setEnabled(true);
             });
         }
     }
 
     private String translate(final String text) {
-        if (text.length() == 0) {
+        if (TextUtils.isEmpty(text)) {
             runOnUiThread(() -> {
                 Toast.makeText(NMTActivity.this, "No input for inference.", Toast.LENGTH_LONG)
                         .show();
-                mButton.setText(getString(R.string.translate));
+                mButton.setText(getString(R.string.button_translate));
                 mButton.setEnabled(true);
             });
             return "";
@@ -155,11 +153,11 @@ public class NMTActivity extends AppCompatActivity {
                 NDList list = NeuralModel.predictEncoder(text, encoderModel, encoderWords, manager);
                 return NeuralModel.predictDecoder(list, decoderModel, decoderWords, manager);
             } catch (ModelException | IOException e) {
-                Log.e("NeuralMachineTranslation", null, e);
+                Log.e(TAG, null, e);
                 runOnUiThread(() -> {
                     Toast.makeText(NMTActivity.this, "Inference failed. " + e.getMessage(), Toast.LENGTH_LONG)
                             .show();
-                    mButton.setText(getString(R.string.translate));
+                    mButton.setText(getString(R.string.button_translate));
                     mButton.setEnabled(true);
                 });
                 return "";
