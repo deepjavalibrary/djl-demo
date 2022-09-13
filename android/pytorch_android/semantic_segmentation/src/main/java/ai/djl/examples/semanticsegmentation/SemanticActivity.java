@@ -13,36 +13,68 @@
 
 package ai.djl.examples.semanticsegmentation;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
+import android.util.Size;
+import android.view.Surface;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.camera2.Camera2Config;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.CameraXConfig;
+import androidx.camera.core.ImageCapture;
+import androidx.camera.core.ImageCaptureException;
+import androidx.camera.core.ImageProxy;
+import androidx.camera.core.Preview;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import ai.djl.ModelException;
+import ai.djl.examples.semanticsegmentation.databinding.ActivityMainBinding;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.TranslateException;
 
-public class SemanticActivity extends AppCompatActivity {
-    private ImageView mImageView;
-    private Button mButtonSegment;
+public class SemanticActivity extends AppCompatActivity implements CameraXConfig.Provider {
+
+    private static final String TAG = SemanticActivity.class.getSimpleName();
+
+    private static final int CAMERA_REQUEST_CODE = 1;
+
+    private PreviewView mViewFinder;
+    private ImageView mImagePreview;
+    private ImageButton mCloseImageButton;
+    private ImageView mImagePredicted;
     private ProgressBar mProgressBar;
-    private Image img;
-    private String mImageName;
+    private FloatingActionButton mCaptureButton;
+
+    private ImageCapture imageCapture;
+    private Bitmap bitmapBuffer;
+
     ZooModel<Image, Image> model;
     Predictor<Image, Image> predictor;
     Executor executor = Executors.newSingleThreadExecutor();
@@ -50,47 +82,84 @@ public class SemanticActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.title);
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        mViewFinder = binding.viewFinder;
+        mImagePreview = binding.imagePreview;
+        mCloseImageButton = binding.closeImagePreview;
+        mImagePredicted = binding.imagePredicted;
+        mProgressBar = binding.progressBar;
+        mCaptureButton = binding.captureButton;
+
+        mCaptureButton.setOnClickListener(view -> {
+            view.setEnabled(false);
+            mImagePredicted.setVisibility(View.GONE);
+
+            imageCapture.takePicture(executor, new ImageCapture.OnImageCapturedCallback() {
+
+                        @Override
+                        public void onCaptureSuccess(@NonNull ImageProxy image) {
+                            ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+                            byte[] bytes = new byte[buffer.remaining()];
+                            buffer.get(bytes);
+                            bitmapBuffer = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+                            // Rotate image if needed
+                            if (image.getImageInfo().getRotationDegrees() != 0) {
+                                Matrix matrix = new Matrix();
+                                matrix.postRotate(image.getImageInfo().getRotationDegrees());
+                                bitmapBuffer = Bitmap.createBitmap(bitmapBuffer, 0, 0, bitmapBuffer.getWidth(), bitmapBuffer.getHeight(), matrix, true);
+                            }
+
+                            runOnUiThread(() -> {
+                                mViewFinder.setVisibility(View.INVISIBLE);
+                                mImagePreview.setImageBitmap(bitmapBuffer);
+                                mImagePreview.setVisibility(View.VISIBLE);
+                                mProgressBar.setVisibility(View.VISIBLE);
+                            });
+
+                            executor.execute(new InferenceTask());
+
+                            image.close();
+                        }
+
+                        @Override
+                        public void onError(@NonNull ImageCaptureException exception) {
+                            Log.e(TAG, "Photo capture failed: " + exception.getMessage());
+                        }
+                    }
+            );
+        });
+
+        mCloseImageButton.setOnClickListener(view -> {
+            mCloseImageButton.setVisibility(View.GONE);
+            mViewFinder.setVisibility(View.VISIBLE);
+            mImagePreview.setVisibility(View.GONE);
+            mImagePredicted.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.GONE);
+            mCaptureButton.setEnabled(true);
+        });
+
+        if (checkCameraPermission()) {
+            setUpCamera();
+            mCaptureButton.setEnabled(true);
+        } else {
+            requestCameraPermission();
         }
 
-        setContentView(R.layout.activity_main);
-        mImageView = findViewById(R.id.imageView);
-        Button buttonRestart = findViewById(R.id.restartButton);
-        buttonRestart.setOnClickListener(v -> {
-            if ("dog_bike_car.jpg".equals(mImageName)) {
-                setImageView("dog.jpg");
-            } else {
-                setImageView("dog_bike_car.jpg");
-            }
-        });
-        mButtonSegment = findViewById(R.id.segmentButton);
-        mProgressBar = findViewById(R.id.progressBar);
-        mProgressBar.setVisibility(ProgressBar.VISIBLE);
-        mButtonSegment.setEnabled(false);
-        mButtonSegment.setOnClickListener(v -> {
-            mButtonSegment.setEnabled(false);
-            mProgressBar.setVisibility(ProgressBar.VISIBLE);
-            mButtonSegment.setText(getString(R.string.run_model));
-
-            executor.execute(new InferenceTask());
-        });
-
-        setImageView("dog_bike_car.jpg");
-
-        mButtonSegment.setText(getString(R.string.download_model));
+        Snackbar.make(findViewById(android.R.id.content), R.string.message_download_model, Snackbar.LENGTH_LONG).show();
         executor.execute(new LoadModelTask());
     }
 
-    private void setImageView(String imageName) {
-        try {
-            mImageName = imageName;
-            Bitmap mBitmap = BitmapFactory.decodeStream(getAssets().open(mImageName));
-            mImageView.setImageBitmap(mBitmap);
-            img = ImageFactory.getInstance().fromInputStream(getAssets().open(mImageName));
-        } catch (IOException e) {
-            Log.e("SemanticSegmentation", "Error reading assets", e);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (checkCameraPermission()) {
+            setUpCamera();
+            mCaptureButton.setEnabled(true);
+        } else {
+            requestCameraPermission();
         }
     }
 
@@ -105,6 +174,60 @@ public class SemanticActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @NonNull
+    @Override
+    public CameraXConfig getCameraXConfig() {
+        return Camera2Config.defaultConfig();
+    }
+
+    /**
+     * Check for camera permission
+     */
+    private Boolean checkCameraPermission() {
+        return checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    /**
+     * Request camera permission
+     */
+    private void requestCameraPermission() {
+        requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
+    }
+
+    private void setUpCamera() {
+        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(SemanticActivity.this);
+        cameraProviderFuture.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+                bindCameraUseCases(cameraProvider);
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, e.getMessage());
+            }
+        }, ContextCompat.getMainExecutor(this));
+    }
+
+    private void bindCameraUseCases(@NonNull ProcessCameraProvider cameraProvider) {
+        Preview preview = new Preview.Builder()
+                .setTargetRotation(Surface.ROTATION_0)
+                .build();
+        CameraSelector cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA;
+        imageCapture = new ImageCapture.Builder()
+                .setTargetResolution(new Size(250, 250))
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                .setTargetRotation(Surface.ROTATION_0)
+                .build();
+
+        // Must unbind the use-cases before rebinding them
+        cameraProvider.unbindAll();
+
+        try {
+            cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
+            preview.setSurfaceProvider(mViewFinder.getSurfaceProvider());
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
+
     private class LoadModelTask implements Runnable {
 
         @Override
@@ -113,19 +236,17 @@ public class SemanticActivity extends AppCompatActivity {
                 model = SemanticModel.loadModel();
                 predictor = model.newPredictor();
                 runOnUiThread(() -> {
-                    mButtonSegment.setText(getString(R.string.segment));
-                    mButtonSegment.setEnabled(true);
-                    mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    Snackbar.make(findViewById(android.R.id.content), R.string.message_download_model_complete, Snackbar.LENGTH_LONG).show();
                 });
             } catch (IOException | ModelException e) {
-                Log.e("SemanticSegmentation", null, e);
+                Log.e(TAG, null, e);
                 runOnUiThread(() -> {
-                    AlertDialog alertDialog =
-                            new AlertDialog.Builder(SemanticActivity.this).create();
-                    alertDialog.setTitle("Error");
-                    alertDialog.setMessage("Failed to load model");
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                            (dialog, which) -> finish());
+                    mCaptureButton.setEnabled(false);
+                    new AlertDialog.Builder(SemanticActivity.this)
+                            .setTitle(R.string.dialog_title)
+                            .setMessage(R.string.dialog_message)
+                            .setNeutralButton(android.R.string.ok, (dialog, which) -> finish())
+                            .show();
                 });
             }
         }
@@ -136,21 +257,21 @@ public class SemanticActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
+                // Predict
+                Image img = ImageFactory.getInstance().fromImage(bitmapBuffer);
                 Bitmap transferredBitmap = (Bitmap) predictor.predict(img).getWrappedImage();
                 runOnUiThread(() -> {
-                    mImageView.setImageBitmap(transferredBitmap);
-                    mButtonSegment.setText(getString(R.string.segment));
-                    mButtonSegment.setEnabled(true);
-                    mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    mImagePredicted.setImageBitmap(transferredBitmap);
+                    mImagePredicted.setVisibility(View.VISIBLE);
+                    mCloseImageButton.setVisibility(View.VISIBLE);
+                    mProgressBar.setVisibility(View.GONE);
                 });
             } catch (TranslateException e) {
-                Log.e("SemanticSegmentation", null, e);
+                Log.e(TAG, null, e);
                 runOnUiThread(() -> {
-                    Toast.makeText(SemanticActivity.this, "Inference failed.", Toast.LENGTH_LONG)
-                         .show();
-                    mButtonSegment.setText(getString(R.string.segment));
-                    mButtonSegment.setEnabled(true);
-                    mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    mCaptureButton.setEnabled(true);
+                    mProgressBar.setVisibility(View.GONE);
+                    Snackbar.make(findViewById(android.R.id.content), "Inference failed.", Snackbar.LENGTH_LONG).show();
                 });
             }
         }
