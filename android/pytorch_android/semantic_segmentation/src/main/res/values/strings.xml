@@ -1,10 +1,7 @@
 <resources>
-    <string name="app_name">SemanticSegmentation</string>
-    <string name="title">Semantic Segmentation - Powered by DJL</string>
-    <string name="an_image">an image</string>
-    <string name="image_view">Image View</string>
-    <string name="segment">Segment</string>
-    <string name="run_model">Running the model...</string>
-    <string name="download_model">Downloading the model...</string>
-    <string name="restart">Restart</string>
+    <string name="app_name">Semantic Segmentation - Powered by DJL</string>
+    <string name="message_download_model">Downloading the model…</string>
+    <string name="message_download_model_complete">Download model complete</string>
+    <string name="dialog_title">Error</string>
+    <string name="dialog_message">Download model failed</string>
 </resources>
