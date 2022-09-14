@@ -32,7 +32,7 @@ public class InteractiveShell {
     private SourceCodeAnalysis sca;
 
     public InteractiveShell() {
-        js = JShell.create();
+        js = JShell.builder().remoteVMOptions("-Djshell=true").build();
         timeStamp = System.currentTimeMillis();
         sca = js.sourceCodeAnalysis();
     }

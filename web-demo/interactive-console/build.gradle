@@ -1,30 +1,36 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.2'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.7.2'
+    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+    id 'java'
 }
 
 group = 'ai.djl.examples'
 version = '0.0.1-SNAPSHOT'
 
 repositories {
-	mavenCentral()
+    mavenCentral()
+    mavenLocal()
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
 }
 
 configure(this) {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
 
-	apply from: file("${rootProject.projectDir}/../../tools/gradle/formatter.gradle")
+    apply from: file("${rootProject.projectDir}/../../tools/gradle/formatter.gradle")
 }
 
 dependencies {
-	implementation platform("ai.djl:bom:0.18.0")
+    implementation platform("ai.djl:bom:0.19.0")
 
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	runtimeOnly "ai.djl:api"
-	runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
-	runtimeOnly "ai.djl.mxnet:mxnet-model-zoo"
-	runtimeOnly "ai.djl.tensorflow:tensorflow-model-zoo"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.apache.commons:commons-compress:1.21"
+
+    runtimeOnly "ai.djl:api"
+    runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
+    runtimeOnly "ai.djl.mxnet:mxnet-model-zoo"
+    runtimeOnly "ai.djl.tensorflow:tensorflow-model-zoo"
 }
 

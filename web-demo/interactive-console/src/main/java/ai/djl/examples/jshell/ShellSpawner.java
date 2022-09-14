@@ -17,10 +17,15 @@ import org.springframework.boot.system.ApplicationHome;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 public final class ShellSpawner {
 
@@ -47,27 +52,16 @@ public final class ShellSpawner {
     private static void extractJars(Path dir) {
         List<String> deps =
                 Arrays.asList(
-                        "api-0.14.0.jar",
-                        "gson-2.8.9.jar",
-                        "commons-compress-1.21.jar",
-                        "jna-5.9.0.jar",
-                        "slf4j-api-1.7.32.jar",
-                        "log4j-api-2.17.0.jar",
-                        "log4j-to-slf4j-2.17.0.jar",
-                        "protobuf-java-3.8.0.jar",
-                        "javacpp-1.5.6.jar");
-        List<String> engines =
-                Arrays.asList(
-                        "pytorch-engine-0.14.0.jar",
-                        "pytorch-model-zoo-0.14.0.jar",
-                        "pytorch-native-auto-1.9.1.jar",
-                        "mxnet-engine-0.14.0.jar",
-                        "mxnet-model-zoo-0.14.0.jar",
-                        "mxnet-native-auto-1.8.0.jar",
-                        "tensorflow-api-0.14.0.jar",
-                        "tensorflow-engine-0.14.0.jar",
-                        "tensorflow-model-zoo-0.14.0.jar",
-                        "tensorflow-native-auto-2.4.1.jar");
+                        "api-",
+                        "gson-",
+                        "commons-compress-",
+                        "jna-",
+                        "slf4j-api-",
+                        "log4j-",
+                        "log4j-to-slf4j-",
+                        "protobuf-java-",
+                        "javacpp-");
+        List<String> engines = Arrays.asList("pytorch-", "mxnet-", "tensorflow-");
         Path basicDepsDir = dir.resolve("basic");
         extractAndCopy(basicDepsDir, deps);
         Path engineDir = dir.resolve("engines");
@@ -79,13 +73,34 @@ public final class ShellSpawner {
             if (!dir.toFile().mkdirs()) {
                 throw new IllegalStateException("Cannot make directories in " + dir);
             }
-            for (String name : names) {
-                String url = "/BOOT-INF/lib/" + name;
-                try (InputStream is = ShellSpawner.class.getResourceAsStream(url)) {
-                    Files.copy(is, dir.resolve(name));
-                } catch (IOException e) {
-                    throw new RuntimeException("Copy to dir failed", e);
+            URL url = ShellSpawner.class.getProtectionDomain().getCodeSource().getLocation();
+            String path = url.getPath();
+            if (path.endsWith("!/BOOT-INF/classes!/")) {
+                path = path.substring(5, path.length() - 20);
+            }
+            if (!path.toLowerCase().endsWith(".jar")) {
+                throw new IllegalStateException("Must run in jar file.");
+            }
+            try (JarFile jarFile = new JarFile(new File(path))) {
+                Enumeration<JarEntry> en = jarFile.entries();
+                while (en.hasMoreElements()) {
+                    JarEntry entry = en.nextElement();
+                    String fileName = entry.getName();
+                    if (fileName.startsWith("BOOT-INF/lib/") && fileName.endsWith(".jar")) {
+                        fileName = fileName.substring(13);
+                        for (String n : names) {
+                            if (fileName.startsWith(n)) {
+                                InputStream is = jarFile.getInputStream(entry);
+                                Files.copy(
+                                        is,
+                                        dir.resolve(fileName),
+                                        StandardCopyOption.REPLACE_EXISTING);
+                            }
+                        }
+                    }
                 }
+            } catch (IOException e) {
+                throw new IllegalStateException("Copy to dir failed", e);
             }
         }
     }

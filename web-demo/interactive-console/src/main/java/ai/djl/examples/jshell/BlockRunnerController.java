@@ -12,6 +12,8 @@
  */
 package ai.djl.examples.jshell;
 
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -59,7 +60,7 @@ public class BlockRunnerController {
 
     private void prepareFiles(String engine, String commands, HttpServletResponse response)
             throws IOException {
-        ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
+        ZipArchiveOutputStream zos = new ZipArchiveOutputStream(response.getOutputStream());
         List<String> names =
                 Arrays.asList(
                         "gradlew",
@@ -82,15 +83,19 @@ public class BlockRunnerController {
         try (InputStream is = new ByteArrayInputStream(buf)) {
             addZipEntry(is, "src/main/java/ai/djl/examples/Example.java", zos);
         }
-        zos.close();
+        zos.finish();
     }
 
-    private void addZipEntry(InputStream is, String targetLocation, ZipOutputStream zos)
+    private void addZipEntry(InputStream is, String targetLocation, ZipArchiveOutputStream zos)
             throws IOException {
-        ZipEntry entry = new ZipEntry("djl-starter/" + targetLocation);
-        zos.putNextEntry(entry);
+        ZipArchiveEntry entry = new ZipArchiveEntry("djl-starter/" + targetLocation);
+        entry.setMethod(ZipEntry.DEFLATED);
+        if ("gradlew".equals(targetLocation)) {
+            entry.setUnixMode(0755);
+        }
+        zos.putArchiveEntry(entry);
         is.transferTo(zos);
-        zos.closeEntry();
+        zos.closeArchiveEntry();
     }
 
     private String naiveCommandSplitter(String commands) {
@@ -105,9 +110,12 @@ public class BlockRunnerController {
                 scopeCommands.add(command);
             }
         }
-        sb.append("package ai.djl.examples;\n");
+        sb.append("package ai.djl.examples;\n\n");
         sb.append(String.join("\n", imports));
-        sb.append("\n\npublic class Example {\n  public static void main(String[] args) {\n    ");
+        sb.append(
+                "\n\npublic class Example {\n\n"
+                        + "  public static void main(String[] args) throws Exception {\n"
+                        + "    ");
         sb.append(String.join("\n    ", scopeCommands));
         sb.append("\n  }\n}\n");
         return sb.toString();
