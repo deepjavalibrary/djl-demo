@@ -20,8 +20,8 @@ djl-serving
 ### Linux
 
 ```
-curl -O https://publish.djl.ai/djl-serving/djl-serving_0.18.0-1_all.deb
-sudo dpkg -i djl-serving_0.18.0-1_all.deb
+curl -O https://publish.djl.ai/djl-serving/djl-serving_0.19.0-1_all.deb
+sudo dpkg -i djl-serving_0.19.0-1_all.deb
 # run serving
 djl-serving
 ```
@@ -29,10 +29,10 @@ djl-serving
 ### Windows
 
 ```
-curl -O https://publish.djl.ai/djl-serving/serving-0.18.0.zip
-unzip serving-0.18.0.zip
+curl -O https://publish.djl.ai/djl-serving/serving-0.19.0.zip
+unzip serving-0.19.0.zip
 # start djl-serving
-serving-0.18.0\bin\serving.bat
+serving-0.19.0\bin\serving.bat
 ```
 
 ## DJL Serving WorkLoadManager

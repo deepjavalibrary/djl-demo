@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.18.0")
+    implementation platform("ai.djl:bom:0.19.0")
     implementation "ai.djl:api"
 
     // Use PyTorch engine
