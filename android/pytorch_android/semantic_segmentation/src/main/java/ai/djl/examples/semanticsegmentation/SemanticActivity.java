@@ -93,43 +93,44 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
         mCaptureButton = binding.captureButton;
 
         mCaptureButton.setOnClickListener(view -> {
-            view.setEnabled(false);
+            mCaptureButton.setEnabled(false);
             mImagePredicted.setVisibility(View.GONE);
 
-            imageCapture.takePicture(executor, new ImageCapture.OnImageCapturedCallback() {
+            if (imageCapture != null) {
+                imageCapture.takePicture(executor, new ImageCapture.OnImageCapturedCallback() {
 
-                        @Override
-                        public void onCaptureSuccess(@NonNull ImageProxy image) {
-                            ByteBuffer buffer = image.getPlanes()[0].getBuffer();
-                            byte[] bytes = new byte[buffer.remaining()];
-                            buffer.get(bytes);
-                            bitmapBuffer = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            @Override
+                            public void onCaptureSuccess(@NonNull ImageProxy image) {
+                                ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+                                byte[] bytes = new byte[buffer.remaining()];
+                                buffer.get(bytes);
+                                bitmapBuffer = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                image.close();
 
-                            // Rotate image if needed
-                            if (image.getImageInfo().getRotationDegrees() != 0) {
-                                Matrix matrix = new Matrix();
-                                matrix.postRotate(image.getImageInfo().getRotationDegrees());
-                                bitmapBuffer = Bitmap.createBitmap(bitmapBuffer, 0, 0, bitmapBuffer.getWidth(), bitmapBuffer.getHeight(), matrix, true);
+                                // Rotate image if needed
+                                if (image.getImageInfo().getRotationDegrees() != 0) {
+                                    Matrix matrix = new Matrix();
+                                    matrix.postRotate(image.getImageInfo().getRotationDegrees());
+                                    bitmapBuffer = Bitmap.createBitmap(bitmapBuffer, 0, 0, bitmapBuffer.getWidth(), bitmapBuffer.getHeight(), matrix, true);
+                                }
+
+                                runOnUiThread(() -> {
+                                    mViewFinder.setVisibility(View.INVISIBLE);
+                                    mImagePreview.setImageBitmap(bitmapBuffer);
+                                    mImagePreview.setVisibility(View.VISIBLE);
+                                    mProgressBar.setVisibility(View.VISIBLE);
+                                });
+
+                                executor.execute(new InferenceTask());
                             }
 
-                            runOnUiThread(() -> {
-                                mViewFinder.setVisibility(View.INVISIBLE);
-                                mImagePreview.setImageBitmap(bitmapBuffer);
-                                mImagePreview.setVisibility(View.VISIBLE);
-                                mProgressBar.setVisibility(View.VISIBLE);
-                            });
-
-                            executor.execute(new InferenceTask());
-
-                            image.close();
+                            @Override
+                            public void onError(@NonNull ImageCaptureException exception) {
+                                Log.e(TAG, "Photo capture failed: " + exception.getMessage());
+                            }
                         }
-
-                        @Override
-                        public void onError(@NonNull ImageCaptureException exception) {
-                            Log.e(TAG, "Photo capture failed: " + exception.getMessage());
-                        }
-                    }
-            );
+                );
+            }
         });
 
         mCloseImageButton.setOnClickListener(view -> {
@@ -141,23 +142,17 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
             mCaptureButton.setEnabled(true);
         });
 
-        if (checkCameraPermission()) {
-            setUpCamera();
-            mCaptureButton.setEnabled(true);
-        } else {
-            requestCameraPermission();
-        }
-
-        Snackbar.make(findViewById(android.R.id.content), R.string.message_download_model, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(findViewById(android.R.id.content), R.string.message_download_model,
+                Snackbar.LENGTH_LONG).show();
         executor.execute(new LoadModelTask());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        // Request permissions each time the app resumes, since they can be revoked at any time
         if (checkCameraPermission()) {
             setUpCamera();
-            mCaptureButton.setEnabled(true);
         } else {
             requestCameraPermission();
         }
@@ -172,6 +167,18 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
             model.close();
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                setUpCamera();
+            } else {
+                mCaptureButton.setEnabled(false);
+            }
+        }
     }
 
     @NonNull
@@ -236,6 +243,7 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
                 model = SemanticModel.loadModel();
                 predictor = model.newPredictor();
                 runOnUiThread(() -> {
+                    mCaptureButton.setEnabled(true);
                     Snackbar.make(findViewById(android.R.id.content), R.string.message_download_model_complete, Snackbar.LENGTH_LONG).show();
                 });
             } catch (IOException | ModelException e) {
