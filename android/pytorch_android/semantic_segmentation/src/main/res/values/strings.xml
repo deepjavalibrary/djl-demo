@@ -4,4 +4,5 @@
     <string name="message_download_model_complete">Download model complete</string>
     <string name="dialog_title">Error</string>
     <string name="dialog_message">Download model failed</string>
+    <string name="use_self_translator">use self-translator</string>
 </resources>

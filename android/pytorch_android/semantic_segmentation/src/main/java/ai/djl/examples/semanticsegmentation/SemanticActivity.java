@@ -21,6 +21,7 @@ import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.widget.ImageButton;
@@ -30,6 +31,7 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.camera.camera2.Camera2Config;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.CameraXConfig;
@@ -71,9 +73,11 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
     private ImageView mImagePredicted;
     private ProgressBar mProgressBar;
     private FloatingActionButton mCaptureButton;
+    private SwitchCompat mSwitch;
 
     private ImageCapture imageCapture;
     private Bitmap bitmapBuffer;
+    boolean isUseSelfTranslator = false;
 
     ZooModel<Image, Image> model;
     Predictor<Image, Image> predictor;
@@ -91,8 +95,19 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
         mImagePredicted = binding.imagePredicted;
         mProgressBar = binding.progressBar;
         mCaptureButton = binding.captureButton;
+        mSwitch = binding.useSelfTranslatorSwitch;
+        mSwitch.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                view.performClick();
+                isUseSelfTranslator = mSwitch.isChecked();
+                executor.execute(new LoadModelTask());
+                return false;
+            }
+        });
 
         mCaptureButton.setOnClickListener(view -> {
+
             mCaptureButton.setEnabled(false);
             mImagePredicted.setVisibility(View.GONE);
 
@@ -144,6 +159,7 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
 
         Snackbar.make(findViewById(android.R.id.content), R.string.message_download_model,
                 Snackbar.LENGTH_LONG).show();
+        //first initialize
         executor.execute(new LoadModelTask());
     }
 
@@ -240,7 +256,8 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
         @Override
         public void run() {
             try {
-                model = SemanticModel.loadModel();
+                isUseSelfTranslator =  mSwitch.isChecked();
+                model = SemanticModel.loadModel(isUseSelfTranslator);
                 predictor = model.newPredictor();
                 runOnUiThread(() -> {
                     mCaptureButton.setEnabled(true);

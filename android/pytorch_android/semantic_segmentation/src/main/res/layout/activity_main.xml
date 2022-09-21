@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:elevation="10dp"
     tools:context=".SemanticActivity">
 
     <androidx.camera.view.PreviewView
@@ -11,9 +12,9 @@
         android:layout_width="@dimen/preview_width"
         android:layout_height="@dimen/preview_height"
         android:layout_marginTop="@dimen/margin_large"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/image_preview"
@@ -21,10 +22,11 @@
         android:layout_height="@dimen/preview_height"
         android:layout_marginTop="@dimen/margin_large"
         android:contentDescription="@string/app_name"
+        android:elevation="10dp"
         android:scaleType="centerCrop"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -33,10 +35,11 @@
         android:layout_height="@dimen/preview_height"
         android:layout_marginTop="@dimen/margin_large"
         android:contentDescription="@string/app_name"
+        android:elevation="10dp"
         android:scaleType="centerCrop"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view_finder" />
 
     <ImageButton
@@ -45,13 +48,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_medium"
         android:layout_marginEnd="@dimen/margin_medium"
-        android:contentDescription="@string/app_name"
-        android:visibility="gone"
         android:background="@drawable/circle_background"
+        android:contentDescription="@string/app_name"
+        android:elevation="20dp"
         android:src="@drawable/ic_close"
-        app:tint="@color/button_selector"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/image_predicted"
-        app:layout_constraintTop_toTopOf="@id/image_predicted" />
+        app:layout_constraintTop_toTopOf="@id/image_predicted"
+        app:tint="@color/button_selector" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -59,21 +63,33 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_xxlarge"
         android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/image_predicted"  />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/image_predicted" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/capture_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_xlarge"
         android:layout_gravity="bottom"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/ic_camera"
+        android:layout_marginBottom="@dimen/margin_xlarge"
         android:backgroundTint="@color/fab_selector"
+        android:contentDescription="@string/app_name"
         android:enabled="false"
-        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/ic_camera"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/use_self_translator_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:minHeight="48dp"
+        android:text="@string/use_self_translator"
+        app:layout_constraintBottom_toTopOf="@+id/capture_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
