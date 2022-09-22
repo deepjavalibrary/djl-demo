@@ -1,12 +1,12 @@
 apply plugin: "com.android.application"
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "ai.djl.example.neuralmachinetranslation"
         minSdkVersion 28
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
 
@@ -22,10 +22,13 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
-    implementation "androidx.appcompat:appcompat:1.5.0"
+    implementation "androidx.appcompat:appcompat:1.5.1"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
 
     implementation "ai.djl:api:${djl_version}"
