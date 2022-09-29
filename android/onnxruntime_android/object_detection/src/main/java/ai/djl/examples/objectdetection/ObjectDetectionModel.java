@@ -14,37 +14,28 @@
 package ai.djl.examples.objectdetection;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import ai.djl.ModelException;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.output.DetectedObjects;
-import ai.djl.modality.cv.translator.YoloV5Translator;
+import ai.djl.modality.cv.translator.YoloV5TranslatorFactory;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ZooModel;
 
 final class ObjectDetectionModel {
 
+    private static final String MODEL_URL = "https://mlrepo.djl.ai/model/cv/object_detection/ai/djl/onnxruntime/yolo5s/0.0.1/yolov5s.zip";
+
     private ObjectDetectionModel() {
     }
 
-    public static ZooModel<Image, DetectedObjects> loadModel(Path modelPath) throws ModelException, IOException {
-
-        Map<String, String> arguments = new ConcurrentHashMap<>();
-        arguments.put("toTensor", "true");
-        arguments.put("normalize", "true");
-        YoloV5Translator translator =
-                YoloV5Translator.builder(arguments).build();
-
+    public static ZooModel<Image, DetectedObjects> loadModel() throws ModelException, IOException {
         Criteria<Image, DetectedObjects> criteria =
                 Criteria.builder()
                         .setTypes(Image.class, DetectedObjects.class)
-                        .optModelPath(modelPath)
-                        .optTranslator(translator)
+                        .optModelUrls(MODEL_URL)
                         .optEngine("OnnxRuntime")
+                        .optTranslatorFactory(new YoloV5TranslatorFactory())
                         .build();
         return criteria.loadModel();
     }

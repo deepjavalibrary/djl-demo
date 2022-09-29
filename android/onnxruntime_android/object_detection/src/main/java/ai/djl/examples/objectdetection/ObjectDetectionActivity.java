@@ -18,7 +18,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
@@ -46,19 +45,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.common.util.concurrent.ListenableFuture;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -73,14 +63,9 @@ import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.output.BoundingBox;
 import ai.djl.modality.cv.output.DetectedObjects;
 import ai.djl.modality.cv.output.Rectangle;
-import ai.djl.modality.cv.translator.SemanticSegmentationTranslator;
-import ai.djl.modality.cv.translator.YoloV5Translator;
 import ai.djl.modality.cv.util.NDImageUtils;
 import ai.djl.ndarray.NDManager;
-import ai.djl.repository.zoo.Criteria;
-import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
-import ai.djl.translate.TranslateException;
 
 public class ObjectDetectionActivity extends AppCompatActivity implements CameraXConfig.Provider {
 
@@ -97,7 +82,6 @@ public class ObjectDetectionActivity extends AppCompatActivity implements Camera
 
     private ImageCapture imageCapture;
     private Bitmap bitmapBuffer;
-    private String modelUrl = "file:///android_assert/yolov5s.onnx";
 
     ZooModel<Image, DetectedObjects> model;
     Predictor<Image, DetectedObjects> predictor;
@@ -106,8 +90,6 @@ public class ObjectDetectionActivity extends AppCompatActivity implements Camera
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//      disable hybrid engine for OnnxRuntime
-//        System.setProperty("ai.djl.onnx.disable_alternative", "true");
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -262,29 +244,11 @@ public class ObjectDetectionActivity extends AppCompatActivity implements Camera
     }
 
     private class LoadModelTask implements Runnable {
-        private void cacheFile(String source, String dest) {
-            File f = getCacheDir().toPath().resolve(dest).toFile();
-            if (!f.exists()) try {
-                InputStream is = getAssets().open(source);
-                int size = is.available();
-                byte[] buffer = new byte[size];
-                is.read(buffer);
-                is.close();
-
-                FileOutputStream fos = new FileOutputStream(f);
-                fos.write(buffer);
-                fos.close();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
 
         @Override
         public void run() {
             try {
-                cacheFile("yolov5s.onnx","yolov5s.onnx");
-                cacheFile("synset.txt","synset.txt");
-                model = ObjectDetectionModel.loadModel(getCacheDir().toPath().resolve("yolov5s.onnx"));
+                model = ObjectDetectionModel.loadModel();
                 predictor = model.newPredictor();
                 runOnUiThread(() -> {
                     mCaptureButton.setEnabled(true);
@@ -341,7 +305,6 @@ public class ObjectDetectionActivity extends AppCompatActivity implements Camera
                     mCloseImageButton.setVisibility(View.VISIBLE);
                     mProgressBar.setVisibility(View.GONE);
                 });
-//            } catch (TranslateException e) {
             } catch (Exception e) {
                 Log.e(TAG, null, e);
                 runOnUiThread(() -> {
