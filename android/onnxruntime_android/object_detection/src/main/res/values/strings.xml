@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Object Detection - Powered by DJL</string>
+    <string name="message_download_model">Downloading the model…</string>
+    <string name="message_download_model_complete">Download model complete</string>
+    <string name="dialog_title">Error</string>
+    <string name="dialog_message">Download model failed</string>
+</resources>
