@@ -90,7 +90,7 @@
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
             <!-- Why this get downgraded to 3.6.1 by default? -->
-            <version>3.16.1</version>
+            <version>3.16.3</version>
         </dependency>
         <dependency>
             <groupId>ai.djl.tensorflow</groupId>
