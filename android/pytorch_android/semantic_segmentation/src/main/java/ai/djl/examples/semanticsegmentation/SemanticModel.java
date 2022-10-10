@@ -19,6 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import ai.djl.ModelException;
 import ai.djl.modality.cv.Image;
+import ai.djl.modality.cv.output.CategoryMask;
 import ai.djl.modality.cv.translator.SemanticSegmentationTranslator;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ZooModel;
@@ -29,24 +30,17 @@ final class SemanticModel {
     private SemanticModel() {
     }
 
-    public static ZooModel<Image, Image> loadModel(boolean isUseSelfTranslator) throws ModelException, IOException {
+    public static ZooModel<Image, CategoryMask> loadModel() throws ModelException, IOException {
         String url =
                 "https://mlrepo.djl.ai/model/cv/semantic_segmentation/ai/djl/pytorch/deeplabv3/0.0.1/deeplabv3.zip";
         Map<String, String> arguments = new ConcurrentHashMap<>();
         arguments.put("toTensor", "true");
         arguments.put("normalize", "true");
-        Translator<Image, Image> translator;
-        if(isUseSelfTranslator){
-            translator = SelfSemanticSegmentationTranslator.builder(arguments).build();
-        }else {
-            translator = SemanticSegmentationTranslator.builder(arguments).build();
-        }
+        Translator<Image, CategoryMask> translator = SemanticSegmentationTranslator.builder(arguments).build();
 
-
-
-        Criteria<Image, Image> criteria =
+        Criteria<Image, CategoryMask> criteria =
                 Criteria.builder()
-                        .setTypes(Image.class, Image.class)
+                        .setTypes(Image.class, CategoryMask.class)
                         .optModelUrls(url)
                         .optTranslator(translator)
                         .optEngine("PyTorch")

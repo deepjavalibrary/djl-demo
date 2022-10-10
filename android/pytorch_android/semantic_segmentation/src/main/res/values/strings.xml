@@ -2,7 +2,49 @@
     <string name="app_name">Semantic Segmentation - Powered by DJL</string>
     <string name="message_download_model">Downloading the model…</string>
     <string name="message_download_model_complete">Download model complete</string>
+    <string name="message_inference_failed">Inference failed</string>
     <string name="dialog_title">Error</string>
     <string name="dialog_message">Download model failed</string>
-    <string name="use_self_translator">use self-translator</string>
+    <string name="class_label">Class</string>
+    <string name="option_label">Option</string>
+    <string name="color_label">Color</string>
+    <string name="default_color">FFFF00</string>
+    <string name="transparency_label">Transparency</string>
+
+    <string-array name="class_array">
+        <item>All</item>
+        <item>Background</item>
+        <item>Aeroplane</item>
+        <item>Bicycle</item>
+        <item>Bird</item>
+        <item>Boat</item>
+        <item>Bottle</item>
+        <item>Bus</item>
+        <item>Car</item>
+        <item>Cat</item>
+        <item>Chair</item>
+        <item>Cow</item>
+        <item>Dining Table</item>
+        <item>Dog</item>
+        <item>Horse</item>
+        <item>Motor Bike</item>
+        <item>Person</item>
+        <item>Potted Plant</item>
+        <item>Sheep</item>
+        <item>Sofa</item>
+        <item>Train</item>
+        <item>TV Monitor</item>
+    </string-array>
+    <string-array name="option_array1">
+        <item>Highlight with color</item>
+    </string-array>
+    <string-array name="option_array2">
+        <item>Highlight with color</item>
+        <item>Extract object</item>
+    </string-array>
+    <string-array name="option_array3">
+        <item>Highlight with color</item>
+        <item>Extract object</item>
+        <item>Replace background with image</item>
+    </string-array>
 </resources>

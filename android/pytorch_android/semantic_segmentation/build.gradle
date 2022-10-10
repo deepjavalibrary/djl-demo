@@ -39,8 +39,8 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:1.1.0"
     implementation "androidx.camera:camera-view:1.1.0"
 
-    implementation "ai.djl:api:${djl_version}"
-    implementation "ai.djl.android:core:${djl_version}"
+    implementation "ai.djl:api:0.20.0-SNAPSHOT"
+    implementation "ai.djl.android:core:0.20.0-SNAPSHOT"
     runtimeOnly "ai.djl.pytorch:pytorch-engine:${djl_version}"
     runtimeOnly "ai.djl.android:pytorch-native:${djl_version}"
 }
