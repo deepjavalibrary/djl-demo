@@ -19,17 +19,22 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatSeekBar;
 import androidx.camera.camera2.Camera2Config;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.CameraXConfig;
@@ -46,6 +51,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -56,27 +63,38 @@ import ai.djl.examples.semanticsegmentation.databinding.ActivityMainBinding;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
+import ai.djl.modality.cv.output.CategoryMask;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.TranslateException;
 
-public class SemanticActivity extends AppCompatActivity implements CameraXConfig.Provider {
+public class SemanticActivity extends AppCompatActivity implements CameraXConfig.Provider, AdapterView.OnItemSelectedListener {
 
     private static final String TAG = SemanticActivity.class.getSimpleName();
 
     private static final int CAMERA_REQUEST_CODE = 1;
 
+    private static final int CLASS_ALL = -1;
+    private static final int CLASS_BACKGROUND = 0;
+
+    private static final int OPTION_HIGHLIGHT = 0;
+    private static final int OPTION_EXTRACT = 1;
+
     private PreviewView mViewFinder;
     private ImageView mImagePreview;
-    private ImageButton mCloseImageButton;
     private ImageView mImagePredicted;
     private ProgressBar mProgressBar;
+    private Spinner mClassSpinner;
+    private Spinner mOptionSpinner;
+    private EditText mColorText;
+    private AppCompatSeekBar mTransparencySeekbar;
     private FloatingActionButton mCaptureButton;
+    private FloatingActionButton mCloseButton;
 
     private ImageCapture imageCapture;
     private Bitmap bitmapBuffer;
 
-    ZooModel<Image, Image> model;
-    Predictor<Image, Image> predictor;
+    ZooModel<Image, CategoryMask> model;
+    Predictor<Image, CategoryMask> predictor;
     Executor executor = Executors.newSingleThreadExecutor();
 
     @Override
@@ -87,14 +105,33 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
 
         mViewFinder = binding.viewFinder;
         mImagePreview = binding.imagePreview;
-        mCloseImageButton = binding.closeImagePreview;
         mImagePredicted = binding.imagePredicted;
         mProgressBar = binding.progressBar;
+        mClassSpinner = binding.classSpinner;
+        mOptionSpinner = binding.optionSpinner;
+        mColorText = binding.colorEdittext;
+        mTransparencySeekbar = binding.transparencySeekbar;
         mCaptureButton = binding.captureButton;
+        mCloseButton = binding.closeButton;
+
+        ArrayAdapter<CharSequence> classAdapter = ArrayAdapter.createFromResource
+                (this, R.array.class_array, android.R.layout.simple_spinner_item);
+        classAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mClassSpinner.setAdapter(classAdapter);
+        mClassSpinner.setOnItemSelectedListener(this);
+
+        ArrayAdapter<CharSequence> optionAdapter = ArrayAdapter.createFromResource
+                (this, R.array.option_array1, android.R.layout.simple_spinner_item);
+        optionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mOptionSpinner.setAdapter(optionAdapter);
 
         mCaptureButton.setOnClickListener(view -> {
             mCaptureButton.setEnabled(false);
-            mImagePredicted.setVisibility(View.GONE);
+            mImagePredicted.setVisibility(View.INVISIBLE);
+            mClassSpinner.setEnabled(false);
+            mOptionSpinner.setEnabled(false);
+            mColorText.setEnabled(false);
+            mTransparencySeekbar.setEnabled(false);
 
             if (imageCapture != null) {
                 imageCapture.takePicture(executor, new ImageCapture.OnImageCapturedCallback() {
@@ -104,6 +141,9 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
                                 ByteBuffer buffer = image.getPlanes()[0].getBuffer();
                                 byte[] bytes = new byte[buffer.remaining()];
                                 buffer.get(bytes);
+                                if (bitmapBuffer != null) {
+                                    bitmapBuffer.recycle();
+                                }
                                 bitmapBuffer = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                                 image.close();
 
@@ -111,7 +151,10 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
                                 if (image.getImageInfo().getRotationDegrees() != 0) {
                                     Matrix matrix = new Matrix();
                                     matrix.postRotate(image.getImageInfo().getRotationDegrees());
-                                    bitmapBuffer = Bitmap.createBitmap(bitmapBuffer, 0, 0, bitmapBuffer.getWidth(), bitmapBuffer.getHeight(), matrix, true);
+                                    Bitmap oldBitmap = bitmapBuffer;
+                                    bitmapBuffer = Bitmap.createBitmap(bitmapBuffer, 0, 0,
+                                            bitmapBuffer.getWidth(), bitmapBuffer.getHeight(), matrix, true);
+                                    oldBitmap.recycle();
                                 }
 
                                 runOnUiThread(() -> {
@@ -133,17 +176,23 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
             }
         });
 
-        mCloseImageButton.setOnClickListener(view -> {
-            mCloseImageButton.setVisibility(View.GONE);
+        mCloseButton.setOnClickListener(view -> {
+            mCloseButton.setVisibility(View.GONE);
             mViewFinder.setVisibility(View.VISIBLE);
             mImagePreview.setVisibility(View.GONE);
-            mImagePredicted.setVisibility(View.GONE);
+            mImagePredicted.setVisibility(View.INVISIBLE);
             mProgressBar.setVisibility(View.GONE);
+            mClassSpinner.setEnabled(true);
+            mOptionSpinner.setEnabled(true);
+            mColorText.setEnabled(true);
+            mTransparencySeekbar.setEnabled(true);
             mCaptureButton.setEnabled(true);
+            mCaptureButton.setVisibility(View.VISIBLE);
         });
 
         Snackbar.make(findViewById(android.R.id.content), R.string.message_download_model,
                 Snackbar.LENGTH_LONG).show();
+        //first initialize
         executor.execute(new LoadModelTask());
     }
 
@@ -170,7 +219,8 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == CAMERA_REQUEST_CODE) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -187,6 +237,29 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
         return Camera2Config.defaultConfig();
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        if (adapterView.getId() == R.id.class_spinner) {
+            switch (i - 1) {
+                case CLASS_ALL:
+                    mOptionSpinner.setAdapter(ArrayAdapter.createFromResource
+                            (this, R.array.option_array1, android.R.layout.simple_spinner_item));
+                    break;
+                case CLASS_BACKGROUND:
+                    mOptionSpinner.setAdapter(ArrayAdapter.createFromResource
+                            (this, R.array.option_array2, android.R.layout.simple_spinner_item));
+                    break;
+                default:
+                    mOptionSpinner.setAdapter(ArrayAdapter.createFromResource
+                            (this, R.array.option_array3, android.R.layout.simple_spinner_item));
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {}
+
     /**
      * Check for camera permission
      */
@@ -202,7 +275,8 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
     }
 
     private void setUpCamera() {
-        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(SemanticActivity.this);
+        ListenableFuture<ProcessCameraProvider> cameraProviderFuture =
+                ProcessCameraProvider.getInstance(SemanticActivity.this);
         cameraProviderFuture.addListener(() -> {
             try {
                 ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
@@ -244,7 +318,8 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
                 predictor = model.newPredictor();
                 runOnUiThread(() -> {
                     mCaptureButton.setEnabled(true);
-                    Snackbar.make(findViewById(android.R.id.content), R.string.message_download_model_complete, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(android.R.id.content),
+                            R.string.message_download_model_complete, Snackbar.LENGTH_LONG).show();
                 });
             } catch (IOException | ModelException e) {
                 Log.e(TAG, null, e);
@@ -267,11 +342,42 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
             try {
                 // Predict
                 Image img = ImageFactory.getInstance().fromImage(bitmapBuffer);
-                Bitmap transferredBitmap = (Bitmap) predictor.predict(img).getWrappedImage();
+                CategoryMask mask = predictor.predict(img);
+
+                int transparency = mTransparencySeekbar.getProgress();
+                int classId = mClassSpinner.getSelectedItemPosition() - 1;
+
+                final Bitmap segmentBitmap;
+                if (mOptionSpinner.getSelectedItemPosition() == OPTION_HIGHLIGHT) {
+                    if (classId < 0) {
+                        mask.drawMask(img, transparency, 0);
+                    } else {
+                        if (TextUtils.isEmpty(mColorText.getText())) {
+                            mColorText.setText(R.string.default_color);
+                        }
+                        mask.drawMask(img, classId,
+                                Integer.parseInt(mColorText.getText().toString(), 16), transparency);
+                    }
+                    segmentBitmap = (Bitmap) img.getWrappedImage();
+                } else if (mOptionSpinner.getSelectedItemPosition() == OPTION_EXTRACT) {
+                    Image maskImage = mask.getMaskImage(img, classId);
+                    maskImage = maskImage.resize(img.getWidth(), img.getHeight(), true);
+                    segmentBitmap = (Bitmap) maskImage.getWrappedImage();
+                } else {
+                    Image maskImage = mask.getMaskImage(img, classId);
+                    maskImage = maskImage.resize(img.getWidth(), img.getHeight(), true);
+                    Image bg = ImageFactory.getInstance().fromUrl(new URL("https://images.pexels.com/photos/924824/pexels-photo-924824.jpeg"));
+                    bg = bg.resize(img.getWidth(), img.getHeight(), true);
+                    bg.drawImage(maskImage, true);
+                    segmentBitmap = (Bitmap) bg.getWrappedImage();
+                }
+
                 runOnUiThread(() -> {
-                    mImagePredicted.setImageBitmap(transferredBitmap);
+                    mImagePredicted.setImageBitmap(segmentBitmap);
                     mImagePredicted.setVisibility(View.VISIBLE);
-                    mCloseImageButton.setVisibility(View.VISIBLE);
+                    mCaptureButton.setVisibility(View.GONE);
+                    mCloseButton.setEnabled(true);
+                    mCloseButton.setVisibility(View.VISIBLE);
                     mProgressBar.setVisibility(View.GONE);
                 });
             } catch (TranslateException e) {
@@ -279,8 +385,13 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
                 runOnUiThread(() -> {
                     mCaptureButton.setEnabled(true);
                     mProgressBar.setVisibility(View.GONE);
-                    Snackbar.make(findViewById(android.R.id.content), "Inference failed.", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(android.R.id.content), R.string.message_inference_failed,
+                            Snackbar.LENGTH_LONG).show();
                 });
+            } catch (MalformedURLException e) {
+                Log.d(TAG, "MalformedURLException: " + e.getMessage());
+            } catch (IOException e) {
+                Log.d(TAG, "IOException: " + e.getMessage());
             }
         }
     }
