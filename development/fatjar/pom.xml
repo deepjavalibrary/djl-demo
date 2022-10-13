@@ -50,7 +50,8 @@
         <dependency>
             <groupId>ai.djl.pytorch</groupId>
             <artifactId>pytorch-native-cpu</artifactId>
-            <classifier>osx-x86_64</classifier>
+            <classifier>osx-aarch64</classifier>
+<!--            <classifier>osx-x86_64</classifier>-->
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -60,6 +61,12 @@
         </dependency>
         <!-- Includes Pytorch native library for other platforms -->
         <!--
+        <dependency>
+            <groupId>ai.djl.pytorch</groupId>
+            <artifactId>pytorch-native-cpu</artifactId>
+            <classifier>osx-aarch64</classifier>
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
             <groupId>ai.djl.pytorch</groupId>
             <artifactId>pytorch-native-cpu</artifactId>
