@@ -112,25 +112,25 @@
         app:layout_constraintStart_toEndOf="@+id/color_label" />
 
     <TextView
-        android:id="@+id/transparency_label"
+        android:id="@+id/opacity_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_medium"
         android:layout_marginTop="@dimen/margin_medium"
-        android:text="@string/transparency_label"
+        android:text="@string/opacity_label"
         android:textSize="@dimen/text_size"
         app:layout_constraintBottom_toBottomOf="@+id/color_label"
         app:layout_constraintStart_toEndOf="@+id/color_edittext" />
 
     <androidx.appcompat.widget.AppCompatSeekBar
-        android:id="@+id/transparency_seekbar"
+        android:id="@+id/opacity_seekbar"
         android:layout_width="@dimen/seekbar_width"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_medium"
         android:max="255"
         android:progress="180"
-        app:layout_constraintBottom_toBottomOf="@+id/transparency_label"
-        app:layout_constraintStart_toEndOf="@+id/transparency_label" />
+        app:layout_constraintBottom_toBottomOf="@+id/opacity_label"
+        app:layout_constraintStart_toEndOf="@+id/opacity_label" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/capture_button"
