@@ -86,7 +86,7 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
     private Spinner mClassSpinner;
     private Spinner mOptionSpinner;
     private EditText mColorText;
-    private AppCompatSeekBar mTransparencySeekbar;
+    private AppCompatSeekBar mOpacitySeekbar;
     private FloatingActionButton mCaptureButton;
     private FloatingActionButton mCloseButton;
 
@@ -110,7 +110,7 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
         mClassSpinner = binding.classSpinner;
         mOptionSpinner = binding.optionSpinner;
         mColorText = binding.colorEdittext;
-        mTransparencySeekbar = binding.transparencySeekbar;
+        mOpacitySeekbar = binding.opacitySeekbar;
         mCaptureButton = binding.captureButton;
         mCloseButton = binding.closeButton;
 
@@ -131,7 +131,7 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
             mClassSpinner.setEnabled(false);
             mOptionSpinner.setEnabled(false);
             mColorText.setEnabled(false);
-            mTransparencySeekbar.setEnabled(false);
+            mOpacitySeekbar.setEnabled(false);
 
             if (imageCapture != null) {
                 imageCapture.takePicture(executor, new ImageCapture.OnImageCapturedCallback() {
@@ -185,7 +185,7 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
             mClassSpinner.setEnabled(true);
             mOptionSpinner.setEnabled(true);
             mColorText.setEnabled(true);
-            mTransparencySeekbar.setEnabled(true);
+            mOpacitySeekbar.setEnabled(true);
             mCaptureButton.setEnabled(true);
             mCaptureButton.setVisibility(View.VISIBLE);
         });
@@ -344,19 +344,19 @@ public class SemanticActivity extends AppCompatActivity implements CameraXConfig
                 Image img = ImageFactory.getInstance().fromImage(bitmapBuffer);
                 CategoryMask mask = predictor.predict(img);
 
-                int transparency = mTransparencySeekbar.getProgress();
+                int opacity = mOpacitySeekbar.getProgress();
                 int classId = mClassSpinner.getSelectedItemPosition() - 1;
 
                 final Bitmap segmentBitmap;
                 if (mOptionSpinner.getSelectedItemPosition() == OPTION_HIGHLIGHT) {
                     if (classId < 0) {
-                        mask.drawMask(img, transparency, 0);
+                        mask.drawMask(img, opacity, 0);
                     } else {
                         if (TextUtils.isEmpty(mColorText.getText())) {
                             mColorText.setText(R.string.default_color);
                         }
                         mask.drawMask(img, classId,
-                                Integer.parseInt(mColorText.getText().toString(), 16), transparency);
+                                Integer.parseInt(mColorText.getText().toString(), 16), opacity);
                     }
                     segmentBitmap = (Bitmap) img.getWrappedImage();
                 } else if (mOptionSpinner.getSelectedItemPosition() == OPTION_EXTRACT) {

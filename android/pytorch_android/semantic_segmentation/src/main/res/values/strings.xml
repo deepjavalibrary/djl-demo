@@ -9,7 +9,7 @@
     <string name="option_label">Option</string>
     <string name="color_label">Color</string>
     <string name="default_color">FFFF00</string>
-    <string name="transparency_label">Transparency</string>
+    <string name="opacity_label">Opacity</string>
 
     <string-array name="class_array">
         <item>All</item>
