@@ -24,6 +24,7 @@ dependencies {
 
     // Uncomment one of the following native library for your target platform
     runtimeOnly "ai.djl.pytorch:pytorch-native-cpu::osx-x86_64"
+    // runtimeOnly "ai.djl.pytorch:pytorch-native-cpu::osx-aarch64"
     // runtimeOnly "ai.djl.pytorch:pytorch-native-cpu::linux-aarch64"
     // runtimeOnly "ai.djl.pytorch:pytorch-native-cpu::linux-x86_64"
     // runtimeOnly "ai.djl.pytorch:pytorch-native-cpu-precxx11::linux-x86_64"
@@ -36,6 +37,12 @@ dependencies {
 
 application {
     mainClass = "com.examples.FatJar"
+}
+
+run {
+    systemProperties System.getProperties()
+    systemProperties.remove("user.dir")
+    systemProperty("file.encoding", "UTF-8")
 }
 
 java {

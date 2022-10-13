@@ -16,7 +16,10 @@ libraryDependencies += "ai.djl.pytorch" % "pytorch-jni" % "0.19.0"
 
 // Uncomment one of the following native library for your target platform
 libraryDependencies += "ai.djl.pytorch" % "pytorch-native-cpu" % "1.12.1" classifier "osx-x86_64"
+// libraryDependencies += "ai.djl.pytorch" % "pytorch-native-cpu" % "1.12.1" classifier "osx-aarch64"
 // libraryDependencies += "ai.djl.pytorch" % "pytorch-native-cpu" % "1.12.1" classifier "linux-x86_64"
+// libraryDependencies += "ai.djl.pytorch" % "pytorch-native-cpu" % "1.12.1" classifier "linux-aarch64"
+// libraryDependencies += "ai.djl.pytorch" % "pytorch-native-cpu-precxx11" % "1.12.1" classifier "linux-x86_64"
 // libraryDependencies += "ai.djl.pytorch" % "pytorch-native-cpu" % "1.12.1" classifier "win-x86_64"
 
 libraryDependencies += "ai.djl.pytorch" % "pytorch-model-zoo" % "0.19.0"
