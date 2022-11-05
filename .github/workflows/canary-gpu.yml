@@ -12,7 +12,6 @@ on:
       djl-version:
         description: 'djl version to test'
         required: false
-        default: '0.19.0'
       pt-version:
         description: 'pytorch version to test'
         required: false
@@ -95,14 +94,14 @@ jobs:
         working-directory: canary
         run: |
           set -x
-          mkdir -p $HOME/.djl.ai/paddle/2.2.2-cu102-linux-x86_64
+          mkdir -p $HOME/.djl.ai/paddle/2.3.2-cu102-linux-x86_64
           DJL_CACHE_DIR=$HOME/.djl.ai/ DJL_ENGINE=paddlepaddle-native-auto \
-          LD_LIBRARY_PATH=$DJL_CACHE_DIR/paddle/2.2.2-cu102-linux-x86_64 \
+          LD_LIBRARY_PATH=$DJL_CACHE_DIR/paddle/2.3.2-cu102-linux-x86_64 \
           ./gradlew clean run
           rm -rf /root/.djl.ai/
-          mkdir -p $HOME/.djl.ai/paddle/2.2.2-20220429-cu102-linux-x86_64
+          mkdir -p $HOME/.djl.ai/paddle/2.3.2-20221103-cu102-linux-x86_64
           DJL_CACHE_DIR=$HOME/.djl.ai/ DJL_ENGINE=paddlepaddle-native-cu102 \
-          LD_LIBRARY_PATH=$DJL_CACHE_DIR/paddle/2.2.2-20220429-cu102-linux-x86_64 \
+          LD_LIBRARY_PATH=$DJL_CACHE_DIR/paddle/2.3.2-20221103-cu102-linux-x86_64 \
           ./gradlew clean run
           rm -rf /root/.djl.ai/
 
@@ -192,14 +191,14 @@ jobs:
         working-directory: canary
         run: |
           set -x
-          mkdir -p $HOME/.djl.ai/paddle/2.2.2-cu112-linux-x86_64
+          mkdir -p $HOME/.djl.ai/paddle/2.3.2-cu112-linux-x86_64
           DJL_CACHE_DIR=$HOME/.djl.ai/ DJL_ENGINE=paddlepaddle-native-auto \
-          LD_LIBRARY_PATH=$DJL_CACHE_DIR/paddle/2.2.2-cu112-linux-x86_64 \
+          LD_LIBRARY_PATH=$DJL_CACHE_DIR/paddle/2.3.2-cu112-linux-x86_64 \
           ./gradlew clean run
           rm -rf /root/.djl.ai/
-          mkdir -p $HOME/.djl.ai/paddle/2.2.2-20220429-cu112-linux-x86_64
+          mkdir -p $HOME/.djl.ai/paddle/2.3.2-20221103-cu112-linux-x86_64
           DJL_CACHE_DIR=$HOME/.djl.ai/ DJL_ENGINE=paddlepaddle-native-cu112 \
-          LD_LIBRARY_PATH=$DJL_CACHE_DIR/paddle/2.2.2-20220429-cu112-linux-x86_64 \
+          LD_LIBRARY_PATH=$DJL_CACHE_DIR/paddle/2.3.2-20221103-cu112-linux-x86_64 \
           ./gradlew clean run
           rm -rf /root/.djl.ai/
       - name: Test Xgboost GPU

@@ -6,7 +6,7 @@ plugins {
 group "com.example"
 version "1.0-SNAPSHOT"
 
-def djlVersion = getEnv("DJL_VERSION", "0.19.0-SNAPSHOT")
+def djlVersion = getEnv("DJL_VERSION", "0.20.0-SNAPSHOT")
 def engine = getEnv("DJL_ENGINE", "pytorch-native-auto")
 def os = getOsName()
 def arch = System.getProperty("os.arch") == "amd64" ? "x86_64" : System.getProperty("os.arch")
