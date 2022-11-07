@@ -1,19 +1,20 @@
-#djl-serving运行stable diffusion
+# djl-serving运行stable diffusion
 建议使用docker环境的djl-serving运行stable diffusion，这样能省去很多环境上的配置操作。
-##拉取djl-serving的镜像
+
+## 拉取djl-serving的镜像
 这里我们使用pytorch-cu113-nightly这个版本的docker镜像
 
-###拉取镜像
+### 拉取镜像
 
 `docker pull deepjavalibrary/djl-serving:pytorch-cu113-nightly`
 
-###创建容器
+### 创建容器
 
-` nvidia-docker run -itd --name serving1  -p 8080:8080 deepjavalibrary/djl-serving:0.19.0-pytorch-cu113`
+`nvidia-docker run -itd --name serving1 -p 8080:8080 deepjavalibrary/djl-serving:0.19.0-pytorch-cu113`
 
 如果你没有gpu环境，可以把**nvidia-docker**换成**docker**
 
-###安装stable diffusion环境
+### 安装stable diffusion环境
 
 进入到docker容器内，选择一个目录存放stable diffusion源码，这里我选择djl-serving的模型存放目录/opt/ml/model
 
@@ -26,6 +27,7 @@
 `apt install git-lfs  -y`
 
 把项目下载下来，这里需要token，自行到huggingface官网注册账号激活后，到**Settings**下的**Access Tokens**
+
 创建
 
 `git clone https://huggingface.co/CompVis/stable-diffusion-v1-4`
@@ -34,7 +36,7 @@
 
 `pip install --upgrade diffusers transformers scipy`
 
-###准备Model Server代码
+### 准备Model Server代码
 这里我们只需要两个文件，一个requirements.txt，添加stable diffusion依赖
 
 ```text
@@ -95,7 +97,6 @@ def handle(inputs: Input) -> Output:
             image.save(buf, format='PNG')
             byte_im = buf.getvalue()
             return Output().add(byte_im).add_property("content-type","image/png")
-
 ```
 
 这里定义了两个pipe,一个textPipe用于文本转图片，一个imgPipe用于图片生成图片
@@ -106,20 +107,16 @@ application/json可自定义height、width、steps等参数
 
 剩下的就是img2img了，需要上传一张图片，还有在form-data里传入prompt
 
-###以下是示例报文
-
+### 以下是示例报文
 
 默认参数text2text
-```http request
-
+```
 curl --location --request POST 'http://your server:8080/predictions/sd_v1_4/' \
 --header 'content-type: text/string' \
---data-raw 'a photograph of an astronaut riding a horse
-'
+--data-raw 'a photograph of an astronaut riding a horse'
 ```
 自定义参数text2text
-```http request
-
+```
 curl --location --request POST 'http://your server:8080/predictions/sd_v1_4/' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -130,33 +127,27 @@ curl --location --request POST 'http://your server:8080/predictions/sd_v1_4/' \
     "scale":7.5
 }'
 ```
+
 img2img
-```http request
+```
 curl --location --request POST 'http://your server:8080/predictions/sd_v1_4/' \
 --form 'data=@"/C:/Users/Administrator/Desktop/sketch-mountains-input.jpg"' \
 --form 'prompt="A fantasy landscape, trending on artstation"'
 ```
 当然，你也可以通过djl-serving自带的控制台发送上面的请求
 
-![model-list](file://D:\deeplearning\djl-demo\djl-serving\python-mode\stable-diffusion\docs\img\model-list.png)
+![model-list](img/model-list.png)
 
-通过"http:// your server:8080/console"进入控制台,从主页的Model List 找到模型，进入模型推理界面
+通过"http://your server:8080/console"进入控制台，从主页的Model List 找到模型，进入模型推理界面
 
 默认参数text2text
 
-![inferece](file://D:\deeplearning\djl-demo\djl-serving\python-mode\stable-diffusion\docs\img\inference.png)
+![inference](img/inference.png)
 
 自定义参数text2text
 
-![inferece](file://D:\deeplearning\djl-demo\djl-serving\python-mode\stable-diffusion\docs\img\text2text.png)
+![inference](img/text2text.png)
 
 img2img
 
-![inferece](file://D:\deeplearning\djl-demo\djl-serving\python-mode\stable-diffusion\docs\img\img2img.png)
-
-
-
-
-
-
-
+![inference](img/img2img.png)
