@@ -387,7 +387,7 @@ public final class CanaryTest {
             try (NDManager manager = NDManager.newBaseManager()) {
                 NDArray array = manager.ones(new Shape(10, 4));
                 NDList output = predictor.predict(new NDList(array));
-                double[] result = output.singletonOrThrow().toDoubleArray();
+                float[] result = output.singletonOrThrow().toFloatArray();
                 logger.info(Arrays.toString(result));
                 if (result.length != 10) {
                     throw new AssertionError("Wrong prediction result");
