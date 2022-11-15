@@ -1,0 +1,228 @@
+{
+	"info": {
+		"_postman_id": "43754568-82db-4d23-a190-bc492e0afc8c",
+		"name": "DJLServing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "example1_register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/models?url=https://resources.djl.ai/demo/pytorch/traced_resnet18.zip&engine=PyTorch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"models"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "https://resources.djl.ai/demo/pytorch/traced_resnet18.zip"
+						},
+						{
+							"key": "engine",
+							"value": "PyTorch"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "example1_predict1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/tmp/kitten.jpg"
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/predictions/traced_resnet18",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"predictions",
+						"traced_resnet18"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "example1_predict2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "data",
+							"type": "file",
+							"src": "/tmp/kitten.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/predictions/traced_resnet18",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"predictions",
+						"traced_resnet18"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "example2_register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/models?url=https://mlrepo.djl.ai/model/nlp/question_answer/ai/djl/huggingface/pytorch/deepset/bert-base-cased-squad2/0.0.1/bert-base-cased-squad2.zip&engine=PyTorch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"models"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "https://mlrepo.djl.ai/model/nlp/question_answer/ai/djl/huggingface/pytorch/deepset/bert-base-cased-squad2/0.0.1/bert-base-cased-squad2.zip"
+						},
+						{
+							"key": "engine",
+							"value": "PyTorch"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "example2_predict",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"question\": \"How is the weather\", \"paragraph\": \"The weather is nice, it is beautiful day\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/predictions/bert_base_cased_squad2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"predictions",
+						"bert_base_cased_squad2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "example3_register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/models?url=https://mlrepo.djl.ai/model/nlp/fill_mask/ai/djl/huggingface/pytorch/bert-base-uncased/0.0.1/bert-base-uncased.zip&engine=PyTorch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"models"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "https://mlrepo.djl.ai/model/nlp/fill_mask/ai/djl/huggingface/pytorch/bert-base-uncased/0.0.1/bert-base-uncased.zip"
+						},
+						{
+							"key": "engine",
+							"value": "PyTorch"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "example3_predict",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"data\": \"The man worked as a [MASK].\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/predictions/bert_base_uncased",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"predictions",
+						"bert_base_uncased"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
