@@ -1,5 +1,5 @@
 import numpy as np
-import urllib3 
+import urllib3
 from tempfile import TemporaryFile
 
 http = urllib3.PoolManager()
@@ -9,12 +9,11 @@ outfile = TemporaryFile()
 np.savez(outfile, data)
 _ = outfile.seek(0)
 
+response = http.request(
+    'POST',
+    'http://localhost:8080/predictions/resnet',
+    headers={'Content-Type': 'tensor/npz', "Accept": "tensor/npz"},
+    body=outfile.read()
+)
 
-response = http.request('POST',
-	'http://localhost:8080/predictions/resnet',
-	headers={'Content-Type':'tensor/ndlist'},
-	body=outfile.read())
-
-print(response.status)
-# Will support in the future
-# print(np.load(response.data))
+print(np.load(response.data))
