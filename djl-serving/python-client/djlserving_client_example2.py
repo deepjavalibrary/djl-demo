@@ -18,19 +18,20 @@ import requests
 import json
 
 # Register model
-url = 'http://localhost:8080/models'
-params = {'url': 'https://mlrepo.djl.ai/model/nlp/question_answer/ai/djl/huggingface/pytorch/deepset/bert-base-cased-squad2/0.0.1/bert-base-cased-squad2.zip', 'engine': 'PyTorch'}
-res = requests.post(url, params=params)
+params = {
+    'url': 'https://mlrepo.djl.ai/model/nlp/question_answer/ai/djl/huggingface/pytorch/deepset/bert-base-cased-squad2'
+           '/0.0.1/bert-base-cased-squad2.zip',
+    'engine': 'PyTorch'
+}
+requests.post('http://localhost:8080/models', params=params)
 
 # Run inference
 url = 'http://localhost:8080/predictions/bert_base_cased_squad2'
-headers = {'Content-Type': 'application/json'}
-data = {"question": "How is the weather", "paragraph": "The weather is nice, it is beautiful day"}
-res = requests.post(url, data=json.dumps(data), headers=headers)
-print(res.text)
-
-# Another way to run inference
-url = 'http://localhost:8080/predictions/bert_base_cased_squad2'
 data = {"question": "How is the weather", "paragraph": "The weather is nice, it is beautiful day"}
 res = requests.post(url, json=data)
+print(res.text)
+
+# Another way to run inference with explicit content-type
+headers = {'Content-Type': 'application/json'}
+res = requests.post(url, data=json.dumps(data), headers=headers)
 print(res.text)

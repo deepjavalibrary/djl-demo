@@ -11,7 +11,6 @@ In the first example, let's load an [Image Classification model](https://resourc
 First we need to download the input image.
 
 ```
-cd /tmp
 curl -O https://resources.djl.ai/images/kitten.jpg
 ```
 
@@ -20,16 +19,13 @@ To register the model and make predictions:
 ```python
 import requests
 
-url = 'http://localhost:8080/models'
+# Register model
 params = {'url': 'https://resources.djl.ai/demo/pytorch/traced_resnet18.zip', 'engine': 'PyTorch'}
-res = requests.post(url, params=params)
+requests.post('http://localhost:8080/models', params=params)
 
 # Run inference
 url = 'http://localhost:8080/predictions/traced_resnet18'
-headers = {'Content-Type': 'application/octet-stream'}
-with open('/tmp/kitten.jpg', 'rb') as f:
-    data = f.read()
-res = requests.post(url, data=data, headers=headers)
+res = requests.post(url, files={'data': open('kitten.jpg', 'rb')})
 print(res.text)
 ```
 
@@ -38,7 +34,7 @@ The above code specifies the image as binary input. Or you can use multipart/for
 ```python
 # Run inference
 url = 'http://localhost:8080/predictions/traced_resnet18'
-res = requests.post(url, files={'data': open('/tmp/kitten.jpg', 'rb')})
+res = requests.post(url, files={'data': open('kitten.jpg', 'rb')})
 print(res.text)
 ```
 
@@ -81,18 +77,19 @@ In the second example, we load a [HuggingFace Bert QA model](https://mlrepo.djl.
 
 ```python
 import requests
-import json
 
 # Register model
-url = 'http://localhost:8080/models'
-params = {'url': 'https://mlrepo.djl.ai/model/nlp/question_answer/ai/djl/huggingface/pytorch/deepset/bert-base-cased-squad2/0.0.1/bert-base-cased-squad2.zip', 'engine': 'PyTorch'}
-res = requests.post(url, params=params)
+params = {
+    'url': 'https://mlrepo.djl.ai/model/nlp/question_answer/ai/djl/huggingface/pytorch/deepset/bert-base-cased-squad2'
+           '/0.0.1/bert-base-cased-squad2.zip',
+    'engine': 'PyTorch'
+}
+requests.post('http://localhost:8080/models', params=params)
 
 # Run inference
 url = 'http://localhost:8080/predictions/bert_base_cased_squad2'
-headers = {'Content-Type': 'application/json'}
 data = {"question": "How is the weather", "paragraph": "The weather is nice, it is beautiful day"}
-res = requests.post(url, data=json.dumps(data), headers=headers)
+res = requests.post(url, json=data)
 print(res.text)
 ```
 
@@ -125,18 +122,19 @@ In the third example, we can try a [HuggingFace Fill Mask model](https://mlrepo.
 
 ```python
 import requests
-import json
 
 # Register model
-url = 'http://localhost:8080/models'
-params = {'url': 'https://mlrepo.djl.ai/model/nlp/fill_mask/ai/djl/huggingface/pytorch/bert-base-uncased/0.0.1/bert-base-uncased.zip', 'engine': 'PyTorch'}
-res = requests.post(url, params=params)
+params = {
+    'url': 'https://mlrepo.djl.ai/model/nlp/fill_mask/ai/djl/huggingface/pytorch/bert-base-uncased/0.0.1'
+           '/bert-base-uncased.zip',
+    'engine': 'PyTorch'
+}
+requests.post('http://localhost:8080/models', params=params)
 
 # Run inference
 url = 'http://localhost:8080/predictions/bert_base_uncased'
-headers = {'Content-Type': 'application/json'}
 data = {"data": "The man worked as a [MASK]."}
-res = requests.post(url, data=json.dumps(data), headers=headers)
+res = requests.post(url, json=data)
 print(res.text)
 ```
 

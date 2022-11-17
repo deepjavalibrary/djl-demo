@@ -17,19 +17,17 @@ DJLServing Python client example - Image Classification
 import requests
 
 # Register model
-url = 'http://localhost:8080/models'
 params = {'url': 'https://resources.djl.ai/demo/pytorch/traced_resnet18.zip', 'engine': 'PyTorch'}
-res = requests.post(url, params=params)
+requests.post('http://localhost:8080/models', params=params)
 
 # Run inference
 url = 'http://localhost:8080/predictions/traced_resnet18'
-headers = {'Content-Type': 'application/octet-stream'}
-with open('/tmp/kitten.jpg', 'rb') as f:
-    data = f.read()
-res = requests.post(url, data=data, headers=headers)
+res = requests.post(url, files={'data': open('kitten.jpg', 'rb')})
 print(res.text)
 
-# Another way to run inference
-url = 'http://localhost:8080/predictions/traced_resnet18'
-res = requests.post(url, files={'data': open('/tmp/kitten.jpg', 'rb')})
+# Another way to run inference with explicit content-type
+headers = {'Content-Type': 'application/octet-stream'}
+with open('kitten.jpg', 'rb') as f:
+    data = f.read()
+res = requests.post(url, data=data, headers=headers)
 print(res.text)

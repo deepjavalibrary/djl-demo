@@ -18,19 +18,20 @@ import requests
 import json
 
 # Register model
-url = 'http://localhost:8080/models'
-params = {'url': 'https://mlrepo.djl.ai/model/nlp/fill_mask/ai/djl/huggingface/pytorch/bert-base-uncased/0.0.1/bert-base-uncased.zip', 'engine': 'PyTorch'}
-res = requests.post(url, params=params)
+params = {
+    'url': 'https://mlrepo.djl.ai/model/nlp/fill_mask/ai/djl/huggingface/pytorch/bert-base-uncased/0.0.1'
+           '/bert-base-uncased.zip',
+    'engine': 'PyTorch'
+}
+requests.post('http://localhost:8080/models', params=params)
 
 # Run inference
 url = 'http://localhost:8080/predictions/bert_base_uncased'
-headers = {'Content-Type': 'application/json'}
-data = {"data": "The man worked as a [MASK]."}
-res = requests.post(url, data=json.dumps(data), headers=headers)
-print(res.text)
-
-# Another way to run inference
-url = 'http://localhost:8080/predictions/bert_base_uncased'
 data = {"data": "The man worked as a [MASK]."}
 res = requests.post(url, json=data)
+print(res.text)
+
+# Another way to run inference with explicit content-type
+headers = {'Content-Type': 'application/json'}
+res = requests.post(url, data=json.dumps(data), headers=headers)
 print(res.text)
