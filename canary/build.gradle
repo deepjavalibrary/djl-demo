@@ -11,7 +11,7 @@ def engine = getEnv("DJL_ENGINE", "pytorch-native-auto")
 def os = getOsName()
 def arch = System.getProperty("os.arch") == "amd64" ? "x86_64" : System.getProperty("os.arch")
 def stagingRepo = getEnv("DJL_STAGING", null)
-def ptVersion = getEnv("PT_VERSION", "1.12.1")
+def ptVersion = getEnv("PT_VERSION", "1.13.0")
 
 repositories {
     mavenCentral()

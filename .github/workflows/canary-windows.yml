@@ -44,19 +44,19 @@ jobs:
         run: |
           set DJL_ENGINE=pytorch-native-auto&& set PYTORCH_VERSION=%PT_VERSION%&& .\gradlew.bat clean run
           rd /s /q %userprofile%\.djl.ai
-          set DJL_ENGINE=pytorch-native-auto&& set PYTORCH_VERSION=1.9.1&& .\gradlew.bat clean run
-          rd /s /q %userprofile%\.djl.ai
-          set DJL_ENGINE=pytorch-native-auto&& set PYTORCH_VERSION=1.10.0&& .\gradlew.bat clean run
-          rd /s /q %userprofile%\.djl.ai
           set DJL_ENGINE=pytorch-native-auto&& set PYTORCH_VERSION=1.11.0&& .\gradlew.bat clean run
+          rd /s /q %userprofile%\.djl.ai
+          set DJL_ENGINE=pytorch-native-auto&& set PYTORCH_VERSION=1.12.1&& .\gradlew.bat clean run
+          rd /s /q %userprofile%\.djl.ai
+          set DJL_ENGINE=pytorch-native-auto&& set PYTORCH_VERSION=1.13.0&& .\gradlew.bat clean run
           rd /s /q %userprofile%\.djl.ai
           set DJL_ENGINE=pytorch-native-cpu&& .\gradlew.bat clean run
           rd /s /q %userprofile%\.djl.ai
-          set DJL_ENGINE=pytorch-native-cpu&& set PT_VERSION=1.9.1&& .\gradlew.bat clean run
-          rd /s /q %userprofile%\.djl.ai
-          set DJL_ENGINE=pytorch-native-cpu&& set PT_VERSION=1.10.0&& .\gradlew.bat clean run
-          rd /s /q %userprofile%\.djl.ai
           set DJL_ENGINE=pytorch-native-cpu&& set PT_VERSION=1.11.0&& .\gradlew.bat clean run
+          rd /s /q %userprofile%\.djl.ai
+          set DJL_ENGINE=pytorch-native-cpu&& set PT_VERSION=1.12.1&& .\gradlew.bat clean run
+          rd /s /q %userprofile%\.djl.ai
+          set DJL_ENGINE=pytorch-native-cpu&& set PT_VERSION=1.13.0&& .\gradlew.bat clean run
           rd /s /q %userprofile%\.djl.ai
       - name: Test TensorFlow
         working-directory: canary

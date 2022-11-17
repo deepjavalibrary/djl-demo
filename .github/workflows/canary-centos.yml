@@ -41,53 +41,53 @@ jobs:
         run: |
           set -x
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=$PT_VERSION PYTORCH_PRECXX11=true ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
-          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.10.0 ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
+          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.11.0 ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
+          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.12.1 ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.13.0 ./gradlew clean run
+          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
-          DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=1.10.0 ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
+          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=1.11.0 ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
+          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=1.12.1 ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=1.13.0 ./gradlew clean run
+          rm -rf /root/.djl.ai/
       - name: Test TensorFlow
         working-directory: canary
         run: |
           set -x
           DJL_ENGINE=tensorflow-native-auto ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
+          rm -rf /root/.djl.ai/
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
+          rm -rf /root/.djl.ai/
       - name: Test OnnxRuntime
         working-directory: canary
         run: |
           set -x
           DJL_ENGINE=onnxruntime PYTORCH_PRECXX11=true ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
+          rm -rf /root/.djl.ai/
       - name: Test Xgboost
         working-directory: canary
         run: |
           set -x
           DJL_ENGINE=xgboost PYTORCH_PRECXX11=true ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
+          rm -rf /root/.djl.ai/
       - name: Test LightGBM
         working-directory: canary
         run: |
           set -x
           DJL_ENGINE=lightgbm PYTORCH_PRECXX11=true ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
+          rm -rf /root/.djl.ai/
       - name: Test Huggingface tokenizers
         working-directory: canary
         run: |
           set -x
           DJL_ENGINE=tokenizers PYTORCH_PRECXX11=true ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
+          rm -rf /root/.djl.ai/
       # MXNet doesn't support centos 7
       # DLR doesn't support centos 7
       # PaddlePaddle doesn't support centos 7

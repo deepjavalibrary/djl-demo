@@ -43,6 +43,7 @@ import ai.djl.translate.NoopTranslator;
 import ai.djl.translate.TranslateException;
 import ai.djl.util.Utils;
 import ai.djl.util.cuda.CudaUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,13 +94,7 @@ public final class CanaryTest {
             djlEngine = "pytorch-native-auto";
         }
 
-        Device device;
-        try (NDManager manager = NDManager.newBaseManager()) {
-            device = manager.getDevice();
-        }
-        if (djlEngine.contains("-native-cu") && !device.isGpu()) {
-            throw new AssertionError("Expecting load engine on GPU.");
-        } else if (djlEngine.startsWith("tensorrt")) {
+        if (djlEngine.startsWith("tensorrt")) {
             testTensorrt();
             return;
         } else if (djlEngine.startsWith("onnxruntime")) {
@@ -134,6 +129,14 @@ public final class CanaryTest {
         } else if (djlEngine.startsWith("tokenizers")) {
             testTokenizers();
             return;
+        }
+
+        Device device;
+        try (NDManager manager = NDManager.newBaseManager()) {
+            device = manager.getDevice();
+        }
+        if (djlEngine.contains("-native-cu") && !device.isGpu()) {
+            throw new AssertionError("Expecting load engine on GPU.");
         }
 
         logger.info("");
