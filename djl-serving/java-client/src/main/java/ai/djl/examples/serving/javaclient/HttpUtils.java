@@ -12,7 +12,6 @@
  */
 package ai.djl.examples.serving.javaclient;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -20,15 +19,15 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.Map;
 
 public class HttpUtils {
 
-    public static String postRequest(String url, Map<String, String> params, String contentType,
-                                     String data, File file) throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
-                .build();
+    public static String postRequest(
+            String url, Map<String, String> params, String contentType, String data, Path file)
+            throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build();
 
         HttpRequest.Builder builder = HttpRequest.newBuilder();
         if (params != null) {
@@ -55,7 +54,7 @@ public class HttpUtils {
         if (data != null) {
             builder.POST(HttpRequest.BodyPublishers.ofString(data));
         } else if (file != null) {
-            builder.POST(HttpRequest.BodyPublishers.ofFile(file.toPath()));
+            builder.POST(HttpRequest.BodyPublishers.ofFile(file));
         } else {
             builder.POST(HttpRequest.BodyPublishers.noBody());
         }

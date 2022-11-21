@@ -14,7 +14,14 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.json:json:20220924'
+    implementation "com.google.code.gson:gson:2.10"
+}
+
+configure(this) {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
+    apply from: file("${rootProject.projectDir}/../../tools/gradle/formatter.gradle")
 }
 
 application {

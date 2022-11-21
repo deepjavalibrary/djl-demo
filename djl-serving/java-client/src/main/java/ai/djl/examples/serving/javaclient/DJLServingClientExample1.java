@@ -12,21 +12,25 @@
  */
 package ai.djl.examples.serving.javaclient;
 
-import java.io.File;
-import java.util.HashMap;
+import java.nio.file.Path;
 import java.util.Map;
 
 public class DJLServingClientExample1 {
 
     public static void main(String[] args) throws Exception {
         // Register model
-        Map<String, String> params = new HashMap<>();
-        params.put("url", "https://resources.djl.ai/demo/pytorch/traced_resnet18.zip");
-        params.put("engine", "PyTorch");
+        String url = "https://resources.djl.ai/demo/pytorch/traced_resnet18.zip";
+        Map<String, String> params = Map.of("url", url, "engine", "PyTorch");
         HttpUtils.postRequest("http://localhost:8080/models", params, null, null, null);
 
         // Run inference
-        String response = HttpUtils.postRequest("http://localhost:8080/predictions/traced_resnet18", null, "application/octet-stream", null, new File("/tmp/kitten.jpg"));
+        String response =
+                HttpUtils.postRequest(
+                        "http://localhost:8080/predictions/traced_resnet18",
+                        null,
+                        "application/octet-stream",
+                        null,
+                        Path.of("kitten.jpg"));
         System.out.println(response);
     }
 }

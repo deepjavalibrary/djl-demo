@@ -12,24 +12,27 @@
  */
 package ai.djl.examples.serving.javaclient;
 
-import org.json.JSONObject;
-
-import java.util.HashMap;
 import java.util.Map;
 
 public class DJLServingClientExample3 {
 
     public static void main(String[] args) throws Exception {
         // Register model
-        Map<String, String> params = new HashMap<>();
-        params.put("url", "https://mlrepo.djl.ai/model/nlp/fill_mask/ai/djl/huggingface/pytorch/bert-base-uncased/0.0.1/bert-base-uncased.zip");
-        params.put("engine", "PyTorch");
+        String url = "djl://ai.djl.huggingface.pytorch/bert-base-uncased";
+        // or use http URL:
+        // url = "https://mlrepo.djl.ai/model/nlp/fill_mask/ai/djl/huggingface/pytorch/bert-base-uncased/0.0.1/bert-base-uncased.zip"
+        Map<String, String> params = Map.of("url", url, "engine", "PyTorch");
         HttpUtils.postRequest("http://localhost:8080/models", params, null, null, null);
 
         // Run inference
-        JSONObject json = new JSONObject();
-        json.put("data", "The man worked as a [MASK].");
-        String response = HttpUtils.postRequest("http://localhost:8080/predictions/bert_base_uncased", null, "application/json", json.toString(), null);
+        String data = "The man worked as a [MASK].";
+        String response =
+                HttpUtils.postRequest(
+                        "http://localhost:8080/predictions/bert_base_uncased",
+                        null,
+                        "text/plain",
+                        data,
+                        null);
         System.out.println(response);
     }
 }

@@ -16,7 +16,7 @@ This demo provides a `postRequest` utility method that can create a POST `HttpRe
 
 ```java
 public static String postRequest(String url, Map<String, String> params, String contentType,
-                                 String data, File file) throws IOException, InterruptedException {
+                                 String data, Path file) throws IOException, InterruptedException {
     HttpClient client = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_1_1)
             .build();
@@ -46,7 +46,7 @@ public static String postRequest(String url, Map<String, String> params, String 
     if (data != null) {
         builder.POST(HttpRequest.BodyPublishers.ofString(data));
     } else if (file != null) {
-        builder.POST(HttpRequest.BodyPublishers.ofFile(file.toPath()));
+        builder.POST(HttpRequest.BodyPublishers.ofFile(file));
     } else {
         builder.POST(HttpRequest.BodyPublishers.noBody());
     }
@@ -64,26 +64,33 @@ In the first example, let's load an [Image Classification model](https://resourc
 First we need to download the input image.
 
 ```
-cd /tmp
 curl -O https://resources.djl.ai/images/kitten.jpg
 ```
 
 To register the model and make predictions:
 
 ```java
-Map<String, String> params = new HashMap<>();
-params.put("url", "https://resources.djl.ai/demo/pytorch/traced_resnet18.zip");
-params.put("engine", "PyTorch");
+String url = "https://resources.djl.ai/demo/pytorch/traced_resnet18.zip";
+Map<String, String> params = Map.of("url", url, "engine", "PyTorch");
 HttpUtils.postRequest("http://localhost:8080/models", params, null, null, null);
 
 // Run inference
-String response = HttpUtils.postRequest("http://localhost:8080/predictions/traced_resnet18", null, "application/octet-stream", null, new File("/tmp/kitten.jpg"));
+String response =
+        HttpUtils.postRequest(
+                "http://localhost:8080/predictions/traced_resnet18",
+                null,
+                "application/octet-stream",
+                null,
+                Path.of("kitten.jpg"));
 System.out.println(response);
 ```
 
 Run the example:
 
 ```
+# start djl-serving locally
+djl-serving
+
 ./gradlew run -Dmain=ai.djl.examples.serving.javaclient.DJLServingClientExample1
 ```
 
@@ -119,23 +126,34 @@ This should return the following result:
 In the second example, we load a [HuggingFace Bert QA model](https://mlrepo.djl.ai/model/nlp/question_answer/ai/djl/huggingface/pytorch/deepset/bert-base-cased-squad2/0.0.1/bert-base-cased-squad2.zip) and make predictions.
 
 ```java
-// Register model
-Map<String, String> params = new HashMap<>();
-params.put("url", "https://mlrepo.djl.ai/model/nlp/question_answer/ai/djl/huggingface/pytorch/deepset/bert-base-cased-squad2/0.0.1/bert-base-cased-squad2.zip");
-params.put("engine", "PyTorch");
+String url = "djl://ai.djl.huggingface.pytorch/deepset/bert-base-cased-squad2";
+Map<String, String> params = Map.of("url", url, "engine", "PyTorch");
 HttpUtils.postRequest("http://localhost:8080/models", params, null, null, null);
 
 // Run inference
-JSONObject json = new JSONObject();
-json.put("question", "How is the weather");
-json.put("paragraph", "The weather is nice, it is beautiful day");
-String response = HttpUtils.postRequest("http://localhost:8080/predictions/bert_base_cased_squad2", null, "application/json", json.toString(), null);
+Map<String, String> input =
+        Map.of(
+                "question",
+                "How is the weather",
+                "paragraph",
+                "The weather is nice, it is beautiful day");
+String json = new Gson().toJson(input);
+String response =
+        HttpUtils.postRequest(
+                "http://localhost:8080/predictions/bert_base_cased_squad2",
+                null,
+                "application/json",
+                json,
+                null);
 System.out.println(response);
 ```
 
 Run the example:
 
 ```
+# start djl-serving locally
+djl-serving
+
 ./gradlew run -Dmain=ai.djl.examples.serving.javaclient.DJLServingClientExample2
 ```
 
@@ -150,22 +168,28 @@ nice
 In the third example, we can try a [HuggingFace Fill Mask model](https://mlrepo.djl.ai/model/nlp/fill_mask/ai/djl/huggingface/pytorch/bert-base-uncased/0.0.1/bert-base-uncased.zip). Masked model inputs masked words in a sentence and predicts which words should replace those masks.
 
 ```java
-// Register model
-Map<String, String> params = new HashMap<>();
-params.put("url", "https://mlrepo.djl.ai/model/nlp/fill_mask/ai/djl/huggingface/pytorch/bert-base-uncased/0.0.1/bert-base-uncased.zip");
-params.put("engine", "PyTorch");
+String url = "djl://ai.djl.huggingface.pytorch/bert-base-uncased";
+Map<String, String> params = Map.of("url", url, "engine", "PyTorch");
 HttpUtils.postRequest("http://localhost:8080/models", params, null, null, null);
 
 // Run inference
-JSONObject json = new JSONObject();
-json.put("data", "The man worked as a [MASK].");
-String response = HttpUtils.postRequest("http://localhost:8080/predictions/bert_base_uncased", null, "application/json", json.toString(), null);
+String data = "The man worked as a [MASK].";
+String response =
+        HttpUtils.postRequest(
+                "http://localhost:8080/predictions/bert_base_uncased",
+                null,
+                "text/plain",
+                data,
+                null);
 System.out.println(response);
 ```
 
 Run the example:
 
 ```
+# start djl-serving locally
+djl-serving
+
 ./gradlew run -Dmain=ai.djl.examples.serving.javaclient.DJLServingClientExample3
 ```
 
