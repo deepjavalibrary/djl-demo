@@ -17,22 +17,22 @@ curl -O https://resources.djl.ai/images/kitten.jpg
 To register the model and make predictions:
 
 ```python
-import requests
-
 # Register model
 params = {'url': 'https://resources.djl.ai/demo/pytorch/traced_resnet18.zip', 'engine': 'PyTorch'}
 requests.post('http://localhost:8080/models', params=params)
 
 # Run inference
 url = 'http://localhost:8080/predictions/traced_resnet18'
-res = requests.post(url, files={'data': open('kitten.jpg', 'rb')})
+headers = {'Content-Type': 'application/octet-stream'}
+with open('kitten.jpg', 'rb') as f:
+    data = f.read()
+res = requests.post(url, data=data, headers=headers)
 print(res.text)
 ```
 
 The above code specifies the image as binary input. Or you can use multipart/form-data format as below:
 
 ```python
-# Run inference
 url = 'http://localhost:8080/predictions/traced_resnet18'
 res = requests.post(url, files={'data': open('kitten.jpg', 'rb')})
 print(res.text)
@@ -76,8 +76,6 @@ This should return the following result:
 In the second example, we load a [HuggingFace Bert QA model](https://mlrepo.djl.ai/model/nlp/question_answer/ai/djl/huggingface/pytorch/deepset/bert-base-cased-squad2/0.0.1/bert-base-cased-squad2.zip) and make predictions.
 
 ```python
-import requests
-
 # Register model
 params = {
     'url': 'https://mlrepo.djl.ai/model/nlp/question_answer/ai/djl/huggingface/pytorch/deepset/bert-base-cased-squad2'
@@ -93,14 +91,13 @@ res = requests.post(url, json=data)
 print(res.text)
 ```
 
-The above code passes the data to the server using the Content-Type application/json.
+The above code passes the data to the server using the `json` keyword.
 
-Another way is to use the `json` keyword:
+Another way is to use the explicit Content-Type application/json:
 
 ```python
-url = 'http://localhost:8080/predictions/bert_base_cased_squad2'
-data = {"question": "How is the weather", "paragraph": "The weather is nice, it is beautiful day"}
-res = requests.post(url, json=data)
+headers = {'Content-Type': 'application/json'}
+res = requests.post(url, data=json.dumps(data), headers=headers)
 print(res.text)
 ```
 
@@ -121,8 +118,6 @@ nice
 In the third example, we can try a [HuggingFace Fill Mask model](https://mlrepo.djl.ai/model/nlp/fill_mask/ai/djl/huggingface/pytorch/bert-base-uncased/0.0.1/bert-base-uncased.zip). Masked model inputs masked words in a sentence and predicts which words should replace those masks.
 
 ```python
-import requests
-
 # Register model
 params = {
     'url': 'https://mlrepo.djl.ai/model/nlp/fill_mask/ai/djl/huggingface/pytorch/bert-base-uncased/0.0.1'
@@ -138,14 +133,13 @@ res = requests.post(url, json=data)
 print(res.text)
 ```
 
-The above code passes the data to the server using the Content-Type application/json.
+The above code passes the data to the server using the `json` keyword.
 
-Another way is to use the `json` keyword:
+Another way is to use the explicit Content-Type application/json:
 
 ```python
-url = 'http://localhost:8080/predictions/bert_base_uncased'
-data = {"data": "The man worked as a [MASK]."}
-res = requests.post(url, json=data)
+headers = {'Content-Type': 'application/json'}
+res = requests.post(url, data=json.dumps(data), headers=headers)
 print(res.text)
 ```
 

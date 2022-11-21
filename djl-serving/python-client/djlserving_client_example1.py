@@ -22,12 +22,12 @@ requests.post('http://localhost:8080/models', params=params)
 
 # Run inference
 url = 'http://localhost:8080/predictions/traced_resnet18'
-res = requests.post(url, files={'data': open('kitten.jpg', 'rb')})
-print(res.text)
-
-# Another way to run inference with explicit content-type
 headers = {'Content-Type': 'application/octet-stream'}
 with open('kitten.jpg', 'rb') as f:
     data = f.read()
 res = requests.post(url, data=data, headers=headers)
+print(res.text)
+
+# Another way to run inference with multipart/form-data format
+res = requests.post(url, files={'data': open('kitten.jpg', 'rb')})
 print(res.text)
