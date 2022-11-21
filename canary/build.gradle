@@ -49,6 +49,10 @@ dependencies {
             runtimeOnly "ai.djl.pytorch:pytorch-jni:${ptVersion}-${djlVersion}!!"
             runtimeOnly "ai.djl.pytorch:${engine}:${ptVersion}!!:${os}-${arch}"
         }
+        runtimeOnly "ai.djl:basicdataset"
+        runtimeOnly "ai.djl:model-zoo"
+        runtimeOnly "ai.djl.aws:aws-ai"
+        runtimeOnly "ai.djl.hadoop:hadoop"
     } else if (engine.startsWith("tensorflow")) {
         runtimeOnly "ai.djl.tensorflow:tensorflow-model-zoo"
         if (!engine.contains("-auto")) {
@@ -91,17 +95,14 @@ dependencies {
     } else if (engine.startsWith("python")) {
         runtimeOnly "ai.djl.python:python"
     } else if (engine.startsWith("tokenizers")) {
-        runtimeOnly "ai.djl.huggingface:tokenizers"
         runtimeOnly "ai.djl.pytorch:pytorch-engine"
-    } else {
+    } else if (engine.startsWith("mxnet")) {
         runtimeOnly "ai.djl.mxnet:mxnet-model-zoo"
         if (!engine.contains("-auto")) {
             runtimeOnly "ai.djl.mxnet:${engine}::${os}-x86_64"
         }
-        runtimeOnly "ai.djl:basicdataset"
-        runtimeOnly "ai.djl:model-zoo"
-        runtimeOnly "ai.djl.aws:aws-ai"
-        runtimeOnly "ai.djl.hadoop:hadoop"
+    } else {
+        throw new GradleException("Unsupported engine: ${engine}.")
     }
 }
 
