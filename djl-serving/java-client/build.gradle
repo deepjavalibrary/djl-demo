@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+    id "application"
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
+}
+
+dependencies {
+    implementation 'org.json:json:20220924'
+}
+
+application {
+    mainClass = System.getProperty("main", "ai.djl.examples.serving.javaclient.DJLServingClientExample1")
+}
