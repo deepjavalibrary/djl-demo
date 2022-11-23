@@ -29,7 +29,8 @@ jobs:
           java-version: 11
       - name: Install libgomp
         run: |
-          yum -y install libgomp
+          sudo apt-get update
+          sudo apt-get install -y libgomp1
       - name: Test PyTorch model zoo
         if: ${{github.event.inputs.download}} == 'pytorch' || ${{github.event.inputs.download}} == 'all'
         working-directory: canary
