@@ -12,7 +12,7 @@ libraryDependencies += "ai.djl" % "api" % "0.20.0"
 libraryDependencies += "ai.djl.pytorch" % "pytorch-engine" % "0.20.0"
 
 // PyTorch JNI offline distribution package
-libraryDependencies += "ai.djl.pytorch" % "pytorch-jni" % "0.20.0"
+libraryDependencies += "ai.djl.pytorch" % "pytorch-jni" % "1.13.0-0.20.0"
 
 // Uncomment one of the following native library for your target platform
 libraryDependencies += "ai.djl.pytorch" % "pytorch-native-cpu" % "1.12.1" classifier "osx-x86_64"
