@@ -13,20 +13,25 @@ In the demo, you will learn how to run PyTorch model with DJL on Amazon EC2 Inf1
 
 ### Launch Inf1 EC2 instance
 
-Please launch Inf1 instance by following the [Install Neuron Instructions](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/pytorch-setup/pytorch-install.html#install-neuron-pytorch)
+Please launch Inf1 instance by following the [Install Neuron Instructions](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuron/setup/pytorch-install.html)
 
-This demo tested on Neuron SDK 1.16.1 and PyTorch 1.10.1 on Ubuntu DLAMI.
+This demo tested on Neuron SDK 2.5.0 and PyTorch 1.12.1 on Ubuntu DLAMI.
 Please make sure you have Neuron Runtime 2.x installed:
 
 ```
+# Configure Linux for Neuron repository updates
+. /etc/os-release
+
+sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
+deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main
+EOF
+wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
+
+# Update OS packages
 sudo apt-get update -y
 
-# - Stop any existing Neuron runtime 1.0 daemon (neuron-rtd) by calling
-sudo systemctl stop neuron-rtd
-
-sudo apt-get install linux-headers-$(uname -r) -y
-sudo apt-get install aws-neuron-dkms -y
-sudo apt-get install aws-neuron-tools -y
+sudo apt-get install aws-neuronx-dkms -y
+sudo apt-get install aws-neuronx-tools -y
 ```
 
 ### Install AWS Inferentia neuron SDK
@@ -38,21 +43,16 @@ python3 -m venv myenv
 
 source myenv/bin/activate
 pip install -U pip
-pip install torch-neuron==1.10.1.* neuron-cc[tensorflow] torchvision --extra-index-url=https://pip.repos.neuron.amazonaws.com
+
+pip install torch-neuron==1.12.1.* neuron-cc[tensorflow] torchvision --extra-index-url=https://pip.repos.neuron.amazonaws.com
 ```
 
 After installing the Inferentia neuron SDK, you will find `libtorchneuron.so` is installed in
-`myenv/lib/python3.6/site-packages/torch_neuron/lib` folder.
+`myenv/lib/python3.8/site-packages/torch_neuron/lib` folder.
 You need configuration environment variable to enable Inferentia for DJL:
 
 ```
 export PYTORCH_EXTRA_LIBRARY_PATH=$(python -m site | grep $VIRTUAL_ENV | awk -F"'" '{print $2}')/torch_neuron/lib/libtorchneuron.so
-```
-
-`libtorchneuron.so` depends on some shared library in its folder, you also need to specify LD_LIBRARY_PATH to make it work:
-
-```
-export LD_LIBRARY_PATH=$LD_LIBRARYPATH:$(python -m site | grep $VIRTUAL_ENV | awk -F"'" '{print $2}')/torch_neuron/lib/
 ```
 
 ## Compile your model into Neuron traced model
@@ -100,7 +100,6 @@ print("Compile success")
 ```
 
 ```
-cd
 git clone https://github.com/deepjavalibrary/djl-demo.git
 cd djl-demo/aws/inferentia
 
@@ -112,6 +111,9 @@ Execute above command, now you have a Neuron traced model ready for inference in
 
 ## Run example java program
 
+*Notes:* in torch-neuron 1.11.x and 1.12.x, the stack size must be set to 2M and more. The default
+JVM stack size is 1M, you have to explicitly set the JVM arguments: `-Xss2m` 
+
 ```
 cd djl-demo/aws/inferentia
 
@@ -119,7 +121,7 @@ cd djl-demo/aws/inferentia
 
 [INFO ] - Number of inter-op threads is 4
 [INFO ] - Number of intra-op threads is 8
-Running inference with PyTorch: 1.10.0
+Running inference with PyTorch: 1.12.1
 [
         class: "n02124075 Egyptian cat", probability: 0.41596
         class: "n02123159 tiger cat", probability: 0.26856
@@ -133,13 +135,13 @@ Running inference with PyTorch: 1.10.0
 
 You can use DJL benchmark tool to compare performance w/o Inferentia enabled:
 
-### Run multi-threaded benchmark with Inferentia enabled:
+### Run multithreading benchmark with Inferentia enabled:
 
 ```
 ./gradlew benchmark
 
-[INFO ] - Running inference with PyTorch: 1.10.0
-[INFO ] - Loading libneuron_op.so from: /home/ubuntu/myenv/lib/python3.6/site-packages/torch_neuron/lib/libtorchneuron.so
+[INFO ] - Running inference with PyTorch: 1.12.1
+[INFO ] - Loading libneuron_op.so from: /home/ubuntu/myenv/lib/python3.8/site-packages/torch_neuron/lib/libtorchneuron.so
 [INFO ] - Multithreaded inference with 8 threads.
 [INFO ] - Throughput: 288.59, completed 8000 iteration in 27721 ms.
 [INFO ] - Latency P50: 27.697 ms, P90: 27.915 ms, P99: 28.426 ms
@@ -150,7 +152,7 @@ You can use DJL benchmark tool to compare performance w/o Inferentia enabled:
 ```
 ./gradlew benchmark --args="models/djl/resnet50"
 
-[INFO ] - Running inference with PyTorch: 1.10.0
+[INFO ] - Running inference with PyTorch: 1.12.1
 [INFO ] - Loading regular pytorch model ...
 [INFO ] - Multithreaded inference with 8 threads.
 [INFO ] - Throughput: 33.92, completed 8000 iteration in 235833 ms.
