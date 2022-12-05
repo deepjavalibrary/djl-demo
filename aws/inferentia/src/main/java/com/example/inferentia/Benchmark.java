@@ -16,6 +16,7 @@ import ai.djl.ModelException;
 import ai.djl.engine.Engine;
 import ai.djl.inference.Predictor;
 import ai.djl.metric.Metrics;
+import ai.djl.metric.Unit;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.types.Shape;
 import ai.djl.repository.zoo.Criteria;
@@ -52,6 +53,10 @@ public class Benchmark {
         int numOfThreads = Runtime.getRuntime().availableProcessors();
         if (args.length > 1) {
             numOfThreads = Integer.parseInt(args[1]);
+        }
+        if (numOfThreads > 1) {
+            System.setProperty("ai.djl.pytorch.num_interop_threads", "1");
+            System.setProperty("ai.djl.pytorch.num_threads", "1");
         }
         int iterations = 1000;
         if (args.length > 2) {
@@ -106,7 +111,7 @@ public class Benchmark {
             }
             long duration = System.currentTimeMillis() - begin;
             if (metrics != null) {
-                metrics.addMetric("duration", duration, "mills");
+                metrics.addMetric("duration", duration, Unit.MILLISECONDS);
             }
         }
     }
@@ -133,7 +138,7 @@ public class Benchmark {
                 logger.error("", e);
             }
             long duration = System.currentTimeMillis() - begin;
-            metrics.addMetric("duration", duration, "mills");
+            metrics.addMetric("duration", duration, Unit.MILLISECONDS);
 
             for (PredictorCallable callable : callables) {
                 callable.close();
