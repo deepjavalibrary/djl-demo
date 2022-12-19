@@ -125,7 +125,7 @@ class MaliciousURLModel {
             Files.createDirectories(modelPath);
             logger.info("Downloading model file ...");
             String url =
-                    "https://djl-ai.s3.amazonaws.com/resources/demo/malicious-url-model/maliciousURLCNNModel-0001.params";
+                    "https://djl-ai.s3.amazonaws.com/resources/demo/malicious-url-model/maliciousURLCNNModel-0002.params";
             Files.copy(new URL(url).openStream(), modelFile);
             logger.info("Model download success.");
         }
