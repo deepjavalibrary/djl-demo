@@ -145,15 +145,15 @@ public class CSVDataset extends RandomAccessDataset {
                 Files.copy(url.openStream(), csvFile);
             }
 
+            CSVFormat format =
+                    CSVFormat.Builder.create(CSVFormat.DEFAULT)
+                            .setHeader("url", "isMalicious")
+                            .setSkipHeaderRecord(true)
+                            .setIgnoreHeaderCase(true)
+                            .setTrim(true)
+                            .build();
             try (Reader reader = Files.newBufferedReader(csvFile);
-                    CSVParser csvParser =
-                            new CSVParser(
-                                    reader,
-                                    CSVFormat.DEFAULT
-                                            .withHeader("url", "isMalicious")
-                                            .withFirstRecordAsHeader()
-                                            .withIgnoreHeaderCase()
-                                            .withTrim())) {
+                    CSVParser csvParser = new CSVParser(reader, format)) {
                 dataset = csvParser.getRecords();
                 return new CSVDataset(this);
             }

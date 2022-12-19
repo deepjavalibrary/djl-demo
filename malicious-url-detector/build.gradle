@@ -11,14 +11,19 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.19.0")
+    implementation platform("ai.djl:bom:0.20.0")
     implementation "ai.djl.mxnet:mxnet-engine"
 
-    implementation "commons-cli:commons-cli:1.4"
-    implementation "org.apache.httpcomponents:httpcore:4.4.12"
-    implementation "org.apache.commons:commons-csv:1.7"
+    implementation "commons-cli:commons-cli:1.5.0"
+    implementation "org.apache.httpcomponents:httpcore:4.4.16"
+    implementation "org.apache.commons:commons-csv:1.9.0"
 
-    runtimeOnly "org.slf4j:slf4j-simple:1.7.29"
+    runtimeOnly "org.slf4j:slf4j-simple:1.7.36"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 application {
@@ -30,9 +35,4 @@ task train(type:JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
-configure(this){
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-
-    apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
-}
+apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
