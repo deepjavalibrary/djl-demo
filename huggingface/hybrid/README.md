@@ -17,7 +17,7 @@ to deploy model in production quickly.
 Go into the `model` directory and run the following command to download Huggingface models:
 
 ```
-cd model
+cd models
 
 pip install requirements.txt
 python download_models.py

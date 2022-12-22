@@ -26,7 +26,7 @@ unzip ut-zap50k-images-square.zip
 
 ### Load the dataset from local folder
 
-You can use [ImageFolder](https://javadoc.io/ai/djl/api/dataset/ImageFolder) class to load the dataset.
+You can use [ImageFolder](https://javadoc.io/doc/ai.djl/basicdataset/latest/ai/djl/basicdataset/cv/classification/ImageFolder.html) class to load the dataset.
 `ImageFolder` by default use subfolder names as image class names. You should see four subfolders inside
 `ut-zap50k-images-square`: Boots, Sandals, Shoes, and Slippers. These four folders will be used as labels.
 
@@ -42,7 +42,6 @@ the `ImageFolder`:
         .setSampling(BATCH_SIZE, true) // random sampling; don't process the data in order
         .build();
 ```
-
 
 ## Train the footwear classification model
 

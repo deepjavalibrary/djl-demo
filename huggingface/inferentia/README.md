@@ -82,7 +82,7 @@ export PYTORCH_EXTRA_LIBRARY_PATH=$(python -m site | grep $VIRTUAL_ENV | awk -F"
 `libtorchneuron.so` depends on some shared library in its folder, you also need to specify `LD_LIBRARY_PATH` to make it work:
 
 ```
-export LD_LIBRARY_PATH=$LD_LIBRARYPATH:$(python -m site | grep $VIRTUAL_ENV | awk -F"'" '{print $2}')/torch_neuron/lib/
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(python -m site | grep $VIRTUAL_ENV | awk -F"'" '{print $2}')/torch_neuron/lib/
 ```
 
 Neuron SDK requires precxx11 version of PyTorch native library, you need set the
