@@ -98,7 +98,7 @@ Train the model.
 > Task :train
 [main] INFO com.example.ModelTrainer - Loading Dataset
 [main] INFO ai.djl.training.listener.LoggingTrainingListener - Running Malicious URL training on: cpu().
-[main] INFO ai.djl.training.listener.LoggingTrainingListener - Load MXNet Engine Version 1.6.0 in 0.153 ms.
+[main] INFO ai.djl.training.listener.LoggingTrainingListener - Load MXNet Engine Version 1.9.0 in 0.153 ms.
 [main] INFO com.example.ModelTrainer - Begin Training
 Training:    100% |████████████████████████████████████████| accuracy: 0.71 loss: 0.54 speed: 323.74 urls/sec
 Validating:  100% |████████████████████████████████████████|

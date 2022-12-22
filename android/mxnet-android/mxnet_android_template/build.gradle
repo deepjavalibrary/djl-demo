@@ -34,20 +34,18 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation('ai.djl:api:0.10.0') {
+    implementation('ai.djl:api:0.20.0') {
         exclude group: "net.java.dev.jna", module: "jna"
     }
-    implementation('ai.djl.android:core:0.10.0') {
+    implementation('ai.djl.android:core:0.20.0') {
         exclude group: "net.java.dev.jna", module: "jna"
     }
-    runtimeOnly('ai.djl.mxnet:mxnet-engine:0.10.0')  {
+    runtimeOnly('ai.djl.mxnet:mxnet-engine:0.20.0')  {
         exclude group: "net.java.dev.jna", module: "jna"
     }
-    runtimeOnly('ai.djl.mxnet:mxnet-model-zoo:0.10.0')  {
+    runtimeOnly('ai.djl.mxnet:mxnet-model-zoo:0.20.0')  {
         exclude group: "net.java.dev.jna", module: "jna"
     }
     runtimeOnly 'net.java.dev.jna:jna:5.3.0@aar'
-
 }

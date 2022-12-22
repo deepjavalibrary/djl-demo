@@ -61,7 +61,7 @@ The output should look something like this:
 
 ```
 [main] INFO ai.djl.training.listener.LoggingTrainingListener - Training on: cpu().
-[main] INFO ai.djl.training.listener.LoggingTrainingListener - Load MXNet Engine Version 1.7.0 in 0.073 ms.
+[main] INFO ai.djl.training.listener.LoggingTrainingListener - Load MXNet Engine Version 1.9.0 in 0.073 ms.
 Training:    100% |████████████████████████████████████████| Accuracy: 0.88, SoftmaxCrossEntropyLoss: 0.37
 Validating:  100% |████████████████████████████████████████|
 [main] INFO ai.djl.training.listener.LoggingTrainingListener - Epoch 1 finished.

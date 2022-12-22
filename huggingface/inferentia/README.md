@@ -18,7 +18,7 @@ documentation for more details.
 
 Please launch Inf1 instance by following the [Install Neuron Instructions](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/neuron-intro/pytorch-setup/pytorch-install.html#install-neuron-pytorch)
 
-This demo tested on Neuron SDK 1.16.1 and PyTorch 1.9.1 on Ubuntu DLAMI.
+This demo tested on Neuron SDK 2.5.0 and PyTorch 1.12.1 on Ubuntu DLAMI.
 Please make sure you have Neuron Runtime 2.x installed:
 
 ```
@@ -41,7 +41,7 @@ python3 -m venv myenv
 
 source myenv/bin/activate
 pip install -U pip
-pip install torchvision torch-neuron==1.9.1.2.0.392.0 'neuron-cc[tensorflow]==1.7.3.0' --extra-index-url=https://pip.repos.neuron.amazonaws.com
+pip install torch-neuron==1.12.1.* neuron-cc[tensorflow] torchvision --extra-index-url=https://pip.repos.neuron.amazonaws.com
 ```
 
 ## Compile your model into Neuron traced model
@@ -61,8 +61,8 @@ Execute above command, now you have a Neuron traced model `model.pt` ready for i
 ## Install djl-serving
 
 ```
-curl -O https://publish.djl.ai/djl-serving/djl-serving_0.14.0-1_all.deb
-sudo dpkg -i djl-serving_0.14.0-1_all.deb
+curl -O https://publish.djl.ai/djl-serving/djl-serving_0.20.0-1_all.deb
+sudo dpkg -i djl-serving_0.20.0-1_all.deb
 ```
 
 ## Deploy question answering model with DJL
@@ -72,7 +72,7 @@ sudo dpkg -i djl-serving_0.14.0-1_all.deb
 ### Run java engine
 
 After installing the Inferentia neuron SDK, you will find `libtorchneuron.so` is installed in
-`myenv/lib/python3.6/site-packages/torch_neuron/lib` folder.
+`myenv/lib/python3.8/site-packages/torch_neuron/lib` folder.
 You need configuration environment variable to enable Inferentia for DJL:
 
 ```
@@ -172,5 +172,3 @@ djl-serving -m "bert_qa::PyTorch:nc0-1;nc2-3=file:$HOME/source/djl-demo/huggingf
 # python engine
 djl-serving -m "bert_qa::Python:nc0-1;nc2-3=file:$HOME/source/djl-demo/huggingface/inferentia/question_answering"
 ```
-
-

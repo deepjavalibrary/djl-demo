@@ -31,8 +31,8 @@ AWS_ACCOUNT=$(aws sts get-caller-identity | jq -r .Account || true)
 aws ecr get-login-password | docker login --username AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com
 aws ecr create-repository --repository-name djl-inf1
 
-docker pull deepjavalibrary/djl-serving:0.14.0-inf1
-docker tag deepjavalibrary/djl-serving:0.14.0-inf1 $AWS_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/djl-inf1
+docker pull deepjavalibrary/djl-serving:0.20.0-pytorch-inf1
+docker tag deepjavalibrary/djl-serving:0.20.0-pytorch-inf1 $AWS_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/djl-inf1
 docker push $AWS_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/djl-inf1
 ```
 
