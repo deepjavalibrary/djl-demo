@@ -26,7 +26,7 @@ You will find both `.zip` and `.tar` file in `build/distributions` folder.
 Create fatjar:
 
 ```shell
-./gradle shodowJar
+./gradlew shadowJar
 
 java -jar build/libs/fatjar-1.0-SNAPSHOT-all.jar
 ```

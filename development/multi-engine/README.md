@@ -36,7 +36,7 @@ Run the following command to run the project:
 ./gradlew run
 
 # for Windows:
-..\gradlew build
+..\gradlew run
 ```
 
 This will take the original image:

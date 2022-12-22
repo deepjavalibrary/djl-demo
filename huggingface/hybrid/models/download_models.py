@@ -42,7 +42,7 @@ def transformers_model_downloader(app):
         settings = json.load(f)
 
     model_name = settings["model_name"]
-    num_labels = int(settings["num_labels"])
+    num_labels = int(settings.get("num_labels", "0"))
     max_length = int(settings["max_length"])
     do_lower_case = settings["do_lower_case"]
     if app == "text_classification":

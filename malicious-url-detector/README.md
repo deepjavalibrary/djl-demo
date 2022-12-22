@@ -57,7 +57,7 @@ This demo contains a simple proxy server that can work with browsers to detect m
 Run the proxy server from your terminal.
 
 ```bash
-$ ./gradlew run
+./gradlew run
 ```
 
 This command starts the server, listening at port 8080.
@@ -93,7 +93,7 @@ To train the model, a GPU instance is recommended. Training with a CPU is very s
 Train the model.
 
 ```bash
-$./gradle train
+./gradlew train
 
 > Task :train
 [main] INFO com.example.ModelTrainer - Loading Dataset
