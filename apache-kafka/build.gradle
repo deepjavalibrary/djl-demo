@@ -11,12 +11,11 @@ repositories {
 
 dependencies {
     implementation 'org.apache.kafka:kafka-clients:2.7.0'
-    implementation platform("ai.djl:bom:0.12.0")
+    implementation platform("ai.djl:bom:0.20.0")
     implementation "ai.djl:api"
     implementation "org.slf4j:slf4j-simple:1.7.30"
 
     runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
-    runtimeOnly "ai.djl.pytorch:pytorch-native-auto"
 }
 
 application {
