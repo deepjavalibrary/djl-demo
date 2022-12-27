@@ -115,10 +115,6 @@
                     <groupId>ai.djl.tensorflow</groupId>
                     <artifactId>tensorflow-model-zoo</artifactId>
                 </dependency>
-                <dependency>
-                    <groupId>ai.djl.tensorflow</groupId>
-                    <artifactId>tensorflow-native-auto</artifactId>
-                </dependency>
             </dependencies>
         </profile>
         <profile>
@@ -127,10 +123,6 @@
                 <dependency>
                     <groupId>ai.djl.pytorch</groupId>
                     <artifactId>pytorch-model-zoo</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>ai.djl.pytorch</groupId>
-                    <artifactId>pytorch-native-auto</artifactId>
                 </dependency>
             </dependencies>
         </profile>
