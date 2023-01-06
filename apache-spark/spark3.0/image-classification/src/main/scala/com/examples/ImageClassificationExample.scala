@@ -12,91 +12,34 @@
  */
 package com.examples
 
-import java.util
-
-import ai.djl.Model
 import ai.djl.modality.Classifications
-import ai.djl.modality.cv.transform.{ Resize, ToTensor}
-import ai.djl.ndarray.types.{DataType, Shape}
-import ai.djl.ndarray.{NDList, NDManager}
-import ai.djl.repository.zoo.{Criteria, ZooModel}
-import ai.djl.training.util.ProgressBar
-import ai.djl.translate.{Batchifier, Pipeline, Translator, TranslatorContext}
-import ai.djl.util.Utils
-import org.apache.spark.ml.image.ImageSchema
-import org.apache.spark.sql.functions.col
-import org.apache.spark.sql.{Encoders, Row, SparkSession}
-
+import ai.djl.spark.SparkTransformer
+import ai.djl.spark.translator.SparkImageClassificationTranslator
+import org.apache.spark.sql.SparkSession
 
 /**
  * Example to run image classification on Spark.
  */
 object ImageClassificationExample {
 
-  private lazy val model = loadModel()
-
-  def loadModel(): ZooModel[Row, Classifications] = {
-    val modelUrl = "https://alpha-djl-demos.s3.amazonaws.com/model/djl-blockrunner/pytorch_resnet18.zip?model_name=traced_resnet18"
-    val criteria = Criteria.builder
-      .setTypes(classOf[Row], classOf[Classifications])
-      .optModelUrls(modelUrl)
-      .optTranslator(new MyTranslator())
-      .optProgress(new ProgressBar)
-      .build()
-    criteria.loadModel()
-  }
-
-  // Translator: a class used to do preprocessing and post processing
-  class MyTranslator extends Translator[Row, Classifications] {
-
-    private var classes: java.util.List[String] = new util.ArrayList[String]()
-    private val pipeline: Pipeline = new Pipeline()
-      .add(new Resize(224, 224))
-      .add(new ToTensor())
-
-    override def prepare(manager: NDManager, model: Model): Unit = {
-        classes = Utils.readLines(model.getArtifact("synset.txt").openStream())
-      }
-
-    override def processInput(ctx: TranslatorContext, row: Row): NDList = {
-
-      val height = ImageSchema.getHeight(row)
-      val width = ImageSchema.getWidth(row)
-      val channel = ImageSchema.getNChannels(row)
-      var image = ctx.getNDManager.create(ImageSchema.getData(row), new Shape(height, width, channel)).toType(DataType.UINT8, true)
-      // BGR to RGB
-      image = image.flip(2)
-      pipeline.transform(new NDList(image))
-    }
-
-    // Deal with the output.，NDList contains output result, usually one or more NDArray(s).
-    override def processOutput(ctx: TranslatorContext, list: NDList): Classifications = {
-      var probabilitiesNd = list.singletonOrThrow
-      probabilitiesNd = probabilitiesNd.softmax(0)
-      new Classifications(classes, probabilitiesNd)
-    }
-
-    override def getBatchifier: Batchifier = Batchifier.STACK
-  }
-
-  def main(args: Array[String]) {
-
-    // Spark configuration
+  def main(args: Array[String]): Unit = {
     val spark = SparkSession.builder()
       .master("local[*]")
       .appName("Image Classification")
       .getOrCreate()
 
-    val df = spark.read.format("image").option("dropInvalid", true).load("../../image-classification/images")
-    println(df.select("image.origin", "image.width", "image.height").show(truncate=false))
+    val df = spark.read.format("image").option("dropInvalid", true).load("s3://alpha-djl-demos/temp/images")
+    df.select("image.origin", "image.width", "image.height").show(truncate = false)
 
-    val result = df.select(col("image.*")).mapPartitions(partition => {
-      val predictor = model.newPredictor()
-      partition.map(row => {
-        // image data stored as HWC format
-        predictor.predict(row).toString
-      })
-    })(Encoders.STRING)
-    println(result.collect().mkString("\n"))
+    val transformer = new SparkTransformer[Classifications]()
+      .setInputCol("image.*")
+      .setOutputCol("value")
+      .setModelUrl("https://alpha-djl-demos.s3.amazonaws.com/model/djl-blockrunner/pytorch_resnet18.zip?model_name=traced_resnet18")
+      .setOutputClass(classOf[Classifications])
+      .setTranslator(new SparkImageClassificationTranslator())
+    val outputDf = transformer.transform(df)
+    outputDf.show(truncate = false)
+
+    spark.stop()
   }
 }

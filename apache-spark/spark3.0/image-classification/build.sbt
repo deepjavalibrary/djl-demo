@@ -7,15 +7,14 @@ scalacOptions += "-target:jvm-1.8"
 
 resolvers += Resolver.jcenterRepo
 
-libraryDependencies += "org.apache.spark" %% "spark-sql" % "3.0.1"
-libraryDependencies += "org.apache.spark" %% "spark-mllib" % "3.0.1"
-libraryDependencies += "ai.djl" % "api" % "0.12.0"
+libraryDependencies += "ai.djl" % "api" % "0.20.0"
+libraryDependencies += "ai.djl.spark" % "spark" % "0.20.0"
 
-// libraryDependencies += "ai.djl.mxnet" % "mxnet-model-zoo" % "0.12.0"
-// libraryDependencies += "ai.djl.mxnet" % "mxnet-native-auto" % "1.8.0"
+// libraryDependencies += "ai.djl.mxnet" % "mxnet-engine" % "0.20.0"
+// libraryDependencies += "ai.djl.mxnet" % "mxnet-native-mkl" % "1.9.1"
 
-libraryDependencies += "ai.djl.pytorch" % "pytorch-model-zoo" % "0.12.0"
-libraryDependencies += "ai.djl.pytorch" % "pytorch-native-auto" % "1.8.1"
+libraryDependencies += "ai.djl.pytorch" % "pytorch-engine" % "0.20.0"
+libraryDependencies += "ai.djl.pytorch" % "pytorch-native-cpu-precxx11" % "1.13.0"
 
-// libraryDependencies += "ai.djl.tensorflow" % "tensorflow-model-zoo" % "0.12.0"
-// libraryDependencies += "ai.djl.tensorflow" % "tensorflow-native-auto" % "2.4.1"
+// libraryDependencies += "ai.djl.tensorflow" % "tensorflow-engine" % "0.20.0"
+// libraryDependencies += "ai.djl.tensorflow" % "tensorflow-native-cpu" % "2.7.0"
