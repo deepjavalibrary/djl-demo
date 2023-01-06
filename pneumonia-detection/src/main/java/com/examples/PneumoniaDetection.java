@@ -21,6 +21,7 @@ import ai.djl.modality.cv.translator.ImageClassificationTranslator;
 import ai.djl.modality.cv.util.NDImageUtils;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ZooModel;
+import ai.djl.training.util.DownloadUtils;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 
@@ -28,6 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -53,6 +56,15 @@ public class PneumoniaDetection {
             image = ImageFactory.getInstance().fromFile(Paths.get(imagePath));
         }
 
+        Path modelPath = Paths.get("models/saved_model");
+        if (Files.notExists(modelPath)) {
+            logger.info("Pre-trained model not found, downloading ...");
+            DownloadUtils.download(
+                    "https://djl-ai.s3.amazonaws.com/resources/demo/pneumonia-detection-model/saved_model.zip",
+                    "models/saved_model.zip");
+            modelPath = Paths.get("models/saved_model.zip");
+        }
+
         Translator<Image, Classifications> translator =
                 ImageClassificationTranslator.builder()
                         .addTransform(a -> NDImageUtils.resize(a, 224).div(255.0f))
@@ -61,6 +73,7 @@ public class PneumoniaDetection {
         Criteria<Image, Classifications> criteria =
                 Criteria.builder()
                         .setTypes(Image.class, Classifications.class)
+                        .optModelPath(modelPath)
                         .optModelName("saved_model")
                         .optTranslator(translator)
                         .build();
