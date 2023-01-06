@@ -34,7 +34,7 @@ cd models
 curl https://djl-ai.s3.amazonaws.com/resources/demo/pneumonia-detection-model/saved_model.zip | jar xv
 cd ..
 
-./gradlew run -Dai.djl.repository.zoo.location=models/saved_model
+./gradlew run
 ```
 
 run the following command for Windows:
@@ -45,7 +45,7 @@ cd models
 curl https://djl-ai.s3.amazonaws.com/resources/demo/pneumonia-detection-model/saved_model.zip | jar xv
 cd ..
 
-..\gradlew run -Dai.djl.repository.zoo.location=models/saved_model
+..\gradlew run
 ```
 
 
