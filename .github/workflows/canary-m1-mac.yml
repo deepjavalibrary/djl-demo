@@ -64,6 +64,12 @@ jobs:
           set -x
           DJL_ENGINE=tokenizers ./gradlew clean run
           rm -rf $HOME/.djl.ai/
+      - name: Test SentencePiece tokenizers
+        working-directory: canary
+        run: |
+          set -x
+          DJL_ENGINE=sentencepiece ./gradlew clean run
+          rm -rf /root/.djl.ai/
       # MXNet doesn't support aarch64
       # TensorFlow doesn't support aarch64
       # PaddlePaddle doesn't support aarch64

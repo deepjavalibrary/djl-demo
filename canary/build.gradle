@@ -96,6 +96,8 @@ dependencies {
         runtimeOnly "ai.djl.python:python"
     } else if (engine.startsWith("tokenizers")) {
         runtimeOnly "ai.djl.pytorch:pytorch-engine"
+    } else if (engine.startsWith("sentencepiece")) {
+        runtimeOnly "ai.djl.pytorch:pytorch-engine"
     } else if (engine.startsWith("mxnet")) {
         runtimeOnly "ai.djl.mxnet:mxnet-model-zoo"
         if (!engine.contains("-auto")) {
