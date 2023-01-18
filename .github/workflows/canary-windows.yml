@@ -90,3 +90,4 @@ jobs:
       # Xgboost doesn't support Windows
       # LightGBM doesn't support Windows
       # Huggingface tokenizers doesn't support Windows
+      # SentencePiece tokenizers doesn't support Windows

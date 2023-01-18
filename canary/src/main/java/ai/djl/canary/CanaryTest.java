@@ -119,15 +119,17 @@ public final class CanaryTest {
         } else if (djlEngine.startsWith("dlr")) {
             testDlr();
 
-            // similar to DLR, fastText and SentencePiece only support Mac and Ubuntu 16.04+
+            // similar to DLR, fastText only support Mac and Ubuntu 16.04+
             testFastText();
-            testSentencePiece();
             return;
         } else if (djlEngine.startsWith("paddle")) {
             testPaddle();
             return;
         } else if (djlEngine.startsWith("tokenizers")) {
             testTokenizers();
+            return;
+        } else if (djlEngine.startsWith("sentencepiece")) {
+            testSentencePiece();
             return;
         }
 
