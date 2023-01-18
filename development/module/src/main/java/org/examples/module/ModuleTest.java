@@ -58,11 +58,10 @@ public final class ModuleTest {
                         .optOptions(options)
                         .build();
 
-        try (ZooModel<Image, DetectedObjects> model = criteria.loadModel()) {
-            try (Predictor<Image, DetectedObjects> predictor = model.newPredictor()) {
-                DetectedObjects detection = predictor.predict(img);
-                logger.info("{}", detection);
-            }
+        try (ZooModel<Image, DetectedObjects> model = criteria.loadModel();
+                Predictor<Image, DetectedObjects> predictor = model.newPredictor()) {
+            DetectedObjects detection = predictor.predict(img);
+            logger.info("{}", detection);
         }
     }
 }
