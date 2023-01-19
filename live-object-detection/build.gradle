@@ -14,12 +14,11 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.14.0")
+    implementation platform("ai.djl:bom:0.20.0")
     implementation "ai.djl.mxnet:mxnet-model-zoo"
     implementation "ai.djl.opencv:opencv"
-    implementation "org.openpnp:opencv:4.5.1-2"
 
-    runtimeOnly 'org.slf4j:slf4j-simple:1.7.32'
+    runtimeOnly 'org.slf4j:slf4j-simple:1.7.36'
 }
 
 application {
@@ -27,8 +26,8 @@ application {
 }
 
 configure(this) {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
     apply from: file("${rootProject.projectDir}/../tools/gradle/formatter.gradle")
 }
