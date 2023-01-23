@@ -129,4 +129,4 @@ jobs:
         run: |
           set -x
           DJL_ENGINE=sentencepiece ./gradlew clean run
-          rm -rf /root/.djl.ai/
+          rm -rf $HOME/.djl.ai/
