@@ -67,14 +67,9 @@ dependencies {
             runtimeOnly "ai.djl.paddlepaddle:${engine}::${os}-x86_64"
         }
         implementation "ai.djl.pytorch:pytorch-engine"
-    } else if (engine.startsWith("dlr")) {
-        runtimeOnly "ai.djl.dlr:dlr-engine"
-        if (!engine.contains("-auto")) {
-            runtimeOnly "ai.djl.dlr:${engine}::${os}-x86_64"
-        }
-        runtimeOnly "ai.djl.pytorch:pytorch-engine"
-
+    } else if (engine.startsWith("fasttext")) {
         runtimeOnly "ai.djl.fasttext:fasttext-engine"
+        runtimeOnly "ai.djl.pytorch:pytorch-engine"
     } else if (engine.startsWith("tflite")) {
         runtimeOnly "ai.djl.tflite:tflite-engine"
         if (!engine.contains("-auto")) {

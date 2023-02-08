@@ -96,6 +96,6 @@ jobs:
           DJL_ENGINE=sentencepiece PYTORCH_PRECXX11=true ./gradlew clean run
           rm -rf /root/.djl.ai/
       # MXNet doesn't support centos 7
-      # DLR doesn't support centos 7
+      # fastText doesn't support centos 7
       # PaddlePaddle doesn't support centos 7
       # TFLite doesn't support centos 7

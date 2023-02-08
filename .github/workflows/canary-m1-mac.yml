@@ -73,7 +73,7 @@ jobs:
       # MXNet doesn't support aarch64
       # TensorFlow doesn't support aarch64
       # PaddlePaddle doesn't support aarch64
-      # DLR doesn't support aarch64
+      # fastText doesn't support aarch64
       # TFLite doesn't support aarch64
       # Xgboost doesn't support aarch64 ?
       # LightGBM doesn't support aarch64 ?

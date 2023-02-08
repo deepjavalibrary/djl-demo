@@ -26,9 +26,6 @@ import ai.djl.modality.Output;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.output.DetectedObjects;
-import ai.djl.modality.cv.transform.Resize;
-import ai.djl.modality.cv.transform.ToTensor;
-import ai.djl.modality.cv.translator.ImageClassificationTranslator;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
@@ -38,12 +35,10 @@ import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.sentencepiece.SpTokenizer;
 import ai.djl.training.util.DownloadUtils;
-import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.NoopTranslator;
 import ai.djl.translate.TranslateException;
 import ai.djl.util.Utils;
 import ai.djl.util.cuda.CudaUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,10 +111,7 @@ public final class CanaryTest {
         } else if (djlEngine.startsWith("python")) {
             testPython();
             return;
-        } else if (djlEngine.startsWith("dlr")) {
-            testDlr();
-
-            // similar to DLR, fastText only support Mac and Ubuntu 16.04+
+        } else if (djlEngine.startsWith("fasttext")) {
             testFastText();
             return;
         } else if (djlEngine.startsWith("paddle")) {
@@ -198,39 +190,6 @@ public final class CanaryTest {
                         .optModelUrls("djl://ai.djl.onnxruntime/resnet/0.0.1/resnet18_v1-7")
                         .build();
 
-        String url = "https://resources.djl.ai/images/kitten.jpg";
-        Image image = ImageFactory.getInstance().fromUrl(url);
-        try (ZooModel<Image, Classifications> model = ModelZoo.loadModel(criteria);
-                Predictor<Image, Classifications> predictor = model.newPredictor()) {
-            Classifications classifications = predictor.predict(image);
-            logger.info("{}", classifications);
-        }
-    }
-
-    private static void testDlr() throws ModelException, IOException, TranslateException {
-        String os;
-        if (System.getProperty("os.name").toLowerCase().startsWith("mac")) {
-            os = "osx";
-        } else if (System.getProperty("os.name").toLowerCase().startsWith("linux")) {
-            os = "linux";
-        } else {
-            throw new AssertionError("DLR only work on mac and Linux.");
-        }
-        ImageClassificationTranslator translator =
-                ImageClassificationTranslator.builder()
-                        .addTransform(new Resize(224, 224))
-                        .addTransform(new ToTensor())
-                        .build();
-        Criteria<Image, Classifications> criteria =
-                Criteria.builder()
-                        .setTypes(Image.class, Classifications.class)
-                        .optApplication(Application.CV.IMAGE_CLASSIFICATION)
-                        .optFilter("layers", "50")
-                        .optFilter("os", os)
-                        .optTranslator(translator)
-                        .optEngine("DLR")
-                        .optProgress(new ProgressBar())
-                        .build();
         String url = "https://resources.djl.ai/images/kitten.jpg";
         Image image = ImageFactory.getInstance().fromUrl(url);
         try (ZooModel<Image, Classifications> model = ModelZoo.loadModel(criteria);
