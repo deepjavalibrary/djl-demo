@@ -85,9 +85,9 @@ jobs:
           rm -rf ~/.djl.ai
           DJL_ENGINE=paddlepaddle-native-cpu ./gradlew clean run
           rm -rf ~/.djl.ai
-      # DLR doesn't support Windows
       # TFLite doesn't support Windows
       # Xgboost doesn't support Windows
       # LightGBM doesn't support Windows
       # Huggingface tokenizers doesn't support Windows
       # SentencePiece tokenizers doesn't support Windows
+      # fastText doesn't support Windows

@@ -69,13 +69,11 @@ jobs:
           rm -rf $HOME/.djl.ai/
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
           rm -rf $HOME/.djl.ai/
-      - name: Test DLR
+      - name: Test fastText
         working-directory: canary
         run: |
           set -x
-          DJL_ENGINE=dlr-native-auto ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
-          DJL_ENGINE=dlr-native-cpu ./gradlew clean run
+          DJL_ENGINE=fasttext ./gradlew clean run
           rm -rf $HOME/.djl.ai/
       - name: Test OnnxRuntime
         working-directory: canary
