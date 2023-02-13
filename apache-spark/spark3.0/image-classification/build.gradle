@@ -13,10 +13,10 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.20.0")
-    implementation "ai.djl:api"
+    implementation platform("ai.djl:bom:0.21.0-SNAPSHOT")
     implementation "ai.djl.spark:spark"
     runtimeOnly "ai.djl.pytorch:pytorch-engine"
+    runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
     runtimeOnly "ai.djl.pytorch:pytorch-native-cpu-precxx11"
 }
 
