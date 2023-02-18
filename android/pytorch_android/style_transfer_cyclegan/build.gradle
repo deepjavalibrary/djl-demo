@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "ai.djl.examples.styletransfer"
         minSdkVersion 26
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
 
@@ -32,14 +32,16 @@ android {
 }
 
 dependencies {
+    implementation platform("ai.djl:bom:${djl_version}")
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "androidx.core:core-ktx:1.8.0"
-    implementation "androidx.appcompat:appcompat:1.5.0"
-    implementation "com.google.android.material:material:1.6.1"
+    implementation "androidx.core:core-ktx:1.9.0"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "com.google.android.material:material:1.8.0"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
 
-    implementation "ai.djl:api:${djl_version}"
-    implementation "ai.djl.android:core:${djl_version}"
-    runtimeOnly "ai.djl.pytorch:pytorch-engine:${djl_version}"
-    runtimeOnly "ai.djl.android:pytorch-native:${djl_version}"
+    implementation "ai.djl:api"
+    implementation "ai.djl.android:core"
+    runtimeOnly "ai.djl.pytorch:pytorch-engine"
+    runtimeOnly "ai.djl.android:pytorch-native"
 }

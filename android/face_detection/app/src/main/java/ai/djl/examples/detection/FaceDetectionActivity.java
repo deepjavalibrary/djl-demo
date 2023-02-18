@@ -25,22 +25,18 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -63,10 +59,9 @@ public class FaceDetectionActivity extends AppCompatActivity {
     View progressBar;
     View containerView;
     private static final int SELECT_IMAGE = 1;
-    private Bitmap selectedImage = null;
-    private Uri selectedImageUri = null;
+    private Bitmap selectedImage;
+    private Uri selectedImageUri;
     private ImageView iv;
-    private Button btnSelect, button;
     private TextView tv;
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -100,9 +95,9 @@ public class FaceDetectionActivity extends AppCompatActivity {
     }
 
     public void activate() {
-        btnSelect = findViewById(R.id.btn_select);
+        Button btnSelect = findViewById(R.id.btn_select);
         iv = findViewById(R.id.iv);
-        button = findViewById(R.id.btn);
+        Button button = findViewById(R.id.btn);
         tv = findViewById(R.id.tv);
 
         btnSelect.setOnClickListener(new View.OnClickListener() {
@@ -248,6 +243,7 @@ public class FaceDetectionActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(
             final int requestCode, final String[] permissions, final int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_EXTERNAL_STORAGE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED

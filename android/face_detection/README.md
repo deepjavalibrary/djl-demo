@@ -9,9 +9,9 @@ The model github can be found at [Ultra-Light-Fast-Generic-Face-Detector-1MB](ht
 
 ## Face Detection
 
-Sample 1                     |  Sample 2                     
-:-------------------------:|:-------------------------:
-![](img/1.jpeg)        |  ![](img/2.jpeg)         
+|    Sample 1     |    Sample 2     |
+|:---------------:|:---------------:|
+| ![](img/1.jpeg) | ![](img/2.jpeg) |
 
 
 The minimum API level for this project is 26.
