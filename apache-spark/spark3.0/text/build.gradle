@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.21.0-SNAPSHOT")
+    implementation platform("ai.djl:bom:${djl_version}")
     implementation "ai.djl.spark:spark"
     runtimeOnly "ai.djl.tensorflow:tensorflow-engine"
     runtimeOnly "ai.djl.tensorflow:tensorflow-native-cpu"

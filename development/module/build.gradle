@@ -7,8 +7,6 @@ plugins {
 group "org.examples"
 version "1.0"
 
-def djlVersion = "0.20.0"
-
 repositories {
     mavenCentral()
     maven {
@@ -35,15 +33,16 @@ java {
 }
 
 extraJavaModuleInfo {
-    automaticModule("opencv-4.5.1-2.jar", "org.openpnp.opencv")
+    automaticModule("opencv-4.6.0-0.jar", "org.openpnp.opencv")
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:${djlVersion}")
+    implementation platform("ai.djl:bom:${djl_version}")
     implementation "ai.djl:api"
     implementation "ai.djl.pytorch:pytorch-model-zoo"
     implementation "ai.djl.opencv:opencv"
-    implementation "org.apache.logging.log4j:log4j-slf4j-impl:2.17.2"
+
+    implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_slf4j_version}"
 }
 
 application {

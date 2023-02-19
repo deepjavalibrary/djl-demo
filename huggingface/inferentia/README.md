@@ -61,8 +61,8 @@ Execute above command, now you have a Neuron traced model `model.pt` ready for i
 ## Install djl-serving
 
 ```
-curl -O https://publish.djl.ai/djl-serving/djl-serving_0.20.0-1_all.deb
-sudo dpkg -i djl-serving_0.20.0-1_all.deb
+curl -O https://publish.djl.ai/djl-serving/djl-serving_0.21.0-1_all.deb
+sudo dpkg -i djl-serving_0.21.0-1_all.deb
 ```
 
 ## Deploy question answering model with DJL

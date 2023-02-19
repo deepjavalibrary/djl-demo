@@ -16,13 +16,13 @@ We use PyTorch engine by default, you can switch to MXNet or TensorFlow Engine a
 
 #### MXNet
 ```
-libraryDependencies += "ai.djl.mxnet" % "mxnet-engine" % "0.20.0"
+libraryDependencies += "ai.djl.mxnet" % "mxnet-engine" % "0.21.0"
 libraryDependencies += "ai.djl.mxnet" % "mxnet-native-mkl" % "1.9.1"
 ```
 
 #### TensorFlow
 ```
-libraryDependencies += "ai.djl.tensorflow" % "tensorflow-engine" % "0.20.0"
+libraryDependencies += "ai.djl.tensorflow" % "tensorflow-engine" % "0.21.0"
 libraryDependencies += "ai.djl.tensorflow" % "tensorflow-native-cpu" % "2.7.0"
 ```
 
@@ -32,13 +32,13 @@ You should add these in `dependencies`
 
 #### MXNet
 ```
-runtimeOnly "ai.djl.mxnet:mxnet-engine:0.20.0"
+runtimeOnly "ai.djl.mxnet:mxnet-engine:0.21.0"
 runtimeOnly "ai.djl.mxnet:mxnet-native-mkl:1.9.1"
 ```
 
 #### TensorFlow
 ```
-runtimeOnly "ai.djl.tensorflow:tensorflow-engine:0.20.0"
+runtimeOnly "ai.djl.tensorflow:tensorflow-engine:0.21.0"
 runtimeOnly "ai.djl.tensorflow:tensorflow-native-cpu:2.7.0"
 ```
 

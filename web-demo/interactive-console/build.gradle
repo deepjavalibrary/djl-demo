@@ -23,7 +23,7 @@ configure(this) {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.20.0")
+    implementation platform("ai.djl:bom:${djl_version}")
 
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.apache.commons:commons-compress:1.21"

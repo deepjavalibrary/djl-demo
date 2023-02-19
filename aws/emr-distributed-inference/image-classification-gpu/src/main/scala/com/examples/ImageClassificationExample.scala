@@ -58,8 +58,8 @@ object ImageClassificationExample {
       .add(new Resize(224, 224))
       .add(new ToTensor())
 
-    override def prepare(manager: NDManager, model: Model): Unit = {
-        classes = Utils.readLines(model.getArtifact("synset.txt").openStream())
+    override def prepare(ctx: TranslatorContext): Unit = {
+        classes = Utils.readLines(ctx.getModel.getArtifact("synset.txt").openStream())
       }
 
     override def processInput(ctx: TranslatorContext, row: Row): NDList = {
