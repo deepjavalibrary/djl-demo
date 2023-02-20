@@ -65,7 +65,7 @@ public class FaceDetectionActivity extends AppCompatActivity {
     private TextView tv;
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
+    private static final String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
@@ -100,13 +100,10 @@ public class FaceDetectionActivity extends AppCompatActivity {
         Button button = findViewById(R.id.btn);
         tv = findViewById(R.id.tv);
 
-        btnSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                Intent i = new Intent(Intent.ACTION_PICK);
-                i.setType("image/*");
-                startActivityForResult(i, SELECT_IMAGE);
-            }
+        btnSelect.setOnClickListener(arg0 -> {
+            Intent i = new Intent(Intent.ACTION_PICK);
+            i.setType("image/*");
+            startActivityForResult(i, SELECT_IMAGE);
         });
 
         iv.post(() -> iv.setImageBitmap(ImageUtil.getBitmap(iv.getContext(), "img/selfie.jpg")));
@@ -269,13 +266,11 @@ public class FaceDetectionActivity extends AppCompatActivity {
                 if (requestCode == SELECT_IMAGE) {
                     BitmapFactory.Options o = new BitmapFactory.Options();
                     Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImageUri), null, o);
-                    Bitmap rgba = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-                    selectedImage = rgba;
+                    selectedImage = bitmap.copy(Bitmap.Config.ARGB_8888, true);
                     iv.setImageBitmap(selectedImage);
                 }
             } catch (FileNotFoundException e) {
                 Log.e("FaceDetectionActivity", e.getMessage());
-                return;
             }
         }
     }

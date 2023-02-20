@@ -1,6 +1,8 @@
-rootProject.name='android'
-include ':quickdraw_recognition'
-include ':style_transfer_cyclegan'
-include ':semantic_segmentation'
-include ':neural_machine_translation'
-include ':speech_recognition'
+rootProject.name="android"
+
+include ":face_detection"
+include ":neural_machine_translation"
+include ":quickdraw_recognition"
+include ":semantic_segmentation"
+include ":speech_recognition"
+include ":style_transfer_cyclegan"
