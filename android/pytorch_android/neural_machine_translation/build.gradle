@@ -28,11 +28,13 @@ android {
 }
 
 dependencies {
-    implementation "androidx.appcompat:appcompat:1.5.1"
+    implementation platform("ai.djl:bom:${djl_version}")
+
+    implementation "androidx.appcompat:appcompat:1.6.1"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
 
-    implementation "ai.djl:api:${djl_version}"
-    implementation "ai.djl.android:core:${djl_version}"
-    runtimeOnly "ai.djl.pytorch:pytorch-engine:${djl_version}"
-    runtimeOnly "ai.djl.android:pytorch-native:${djl_version}"
+    implementation "ai.djl:api"
+    implementation "ai.djl.android:core"
+    runtimeOnly "ai.djl.pytorch:pytorch-engine"
+    runtimeOnly "ai.djl.android:pytorch-native"
 }

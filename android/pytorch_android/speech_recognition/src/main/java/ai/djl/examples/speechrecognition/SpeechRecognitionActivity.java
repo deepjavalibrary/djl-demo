@@ -191,7 +191,7 @@ public class SpeechRecognitionActivity extends AppCompatActivity {
 
             String output = "";
             try {
-                Audio audio = AudioFactory.getInstance().fromData(floatInputBuffer);
+                Audio audio = AudioFactory.newInstance().fromData(floatInputBuffer);
                 output = predictor.predict(audio);
             } catch (TranslateException e) {
                 Log.e(TAG, null, e);
