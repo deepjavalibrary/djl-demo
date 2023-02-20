@@ -22,7 +22,8 @@ public class DJLServingClientExample2 {
         // Register model
         String url = "djl://ai.djl.huggingface.pytorch/deepset/bert-base-cased-squad2";
         // or use http URL:
-        // url = "https://mlrepo.djl.ai/model/nlp/question_answer/ai/djl/huggingface/pytorch/deepset/bert-base-cased-squad2/0.0.1/bert-base-cased-squad2.zip"
+        // url =
+        // "https://mlrepo.djl.ai/model/nlp/question_answer/ai/djl/huggingface/pytorch/deepset/bert-base-cased-squad2/0.0.1/bert-base-cased-squad2.zip"
         Map<String, String> params = Map.of("url", url, "engine", "PyTorch");
         HttpUtils.postRequest("http://localhost:8080/models", params, null, null, null);
 

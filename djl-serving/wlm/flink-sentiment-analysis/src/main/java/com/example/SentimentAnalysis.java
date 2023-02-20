@@ -13,7 +13,6 @@
 package com.example;
 
 import ai.djl.Application;
-import ai.djl.Device;
 import ai.djl.modality.Classifications;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.serving.wlm.Job;
@@ -89,7 +88,7 @@ public class SentimentAnalysis {
                             .optProgress(new ProgressBar())
                             .build();
             modelInfo = new ModelInfo<>("model", criteria);
-            wlm.registerModel(modelInfo).scaleWorkers(Device.cpu(), 1, 4);
+            wlm.registerModel(modelInfo).scaleWorkers(null, 1, 4);
         }
 
         @Override

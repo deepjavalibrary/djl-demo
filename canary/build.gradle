@@ -6,7 +6,7 @@ plugins {
 group "com.example"
 version "1.0-SNAPSHOT"
 
-def djlVersion = getEnv("DJL_VERSION", "0.21.0-SNAPSHOT")
+def djlVersion = getEnv("DJL_VERSION", "0.21.0")
 def engine = getEnv("DJL_ENGINE", "pytorch-native-auto")
 def os = getOsName()
 def arch = System.getProperty("os.arch") == "amd64" ? "x86_64" : System.getProperty("os.arch")
@@ -41,7 +41,7 @@ dependencies {
     implementation "ai.djl.huggingface:tokenizers"
 
     implementation "commons-cli:commons-cli:${commons_cli_version}"
-    implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_slf4j_version}"
+    runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_slf4j_version}"
 
     if (engine.startsWith("pytorch")) {
         runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"

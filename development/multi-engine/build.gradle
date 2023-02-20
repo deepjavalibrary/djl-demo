@@ -11,13 +11,13 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.20.0")
+    implementation platform("ai.djl:bom:${djl_version}")
     implementation "ai.djl:api"
 
     runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
     runtimeOnly "ai.djl.mxnet:mxnet-model-zoo"
 
-    runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.17.2"
+    runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_slf4j_version}"
 }
 
 application {

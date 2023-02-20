@@ -16,10 +16,10 @@ configurations {
     exclusion
 }
 
-
 dependencies {
-    implementation 'ai.djl:api:0.20.0'
-    exclusion 'ai.djl:api:0.20.0'
+    implementation platform("ai.djl:bom:${djl_version}")
+    implementation "ai.djl:api"
+    exclusion "ai.djl:api:${djl_version}"
 }
 
 configure(this) {
@@ -28,8 +28,6 @@ configure(this) {
 
     apply from: file("${rootProject.projectDir}/../../../tools/gradle/formatter.gradle")
 }
-
-
 
 jar {
     from {
