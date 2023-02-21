@@ -71,9 +71,8 @@ public class FaceDetectionTranslator implements Translator<Image, FaceDetectedOb
     }
     NDArray mean = ctx.getNDManager().create(new float[] {104f, 117f, 123f}, new Shape(3, 1, 1));
     array = array.sub(mean);
-    NDList list = new NDList(array);
 
-    return list;
+    return new NDList(array);
   }
 
   @Override
@@ -89,14 +88,14 @@ public class FaceDetectionTranslator implements Translator<Image, FaceDetectedOb
         this.decodeLandm(landms.toFloatArray(), priors, variance, width, height);
 
     PriorityQueue<FaceObject> pq =
-        new PriorityQueue<FaceObject>(
-            10,
-            new Comparator<FaceObject>() {
-              @Override
-              public int compare(final FaceObject lhs, final FaceObject rhs) {
-                return Double.compare(rhs.getScore(), lhs.getScore());
-              }
-            });
+            new PriorityQueue<>(
+                    10,
+                    new Comparator<FaceObject>() {
+                      @Override
+                      public int compare(final FaceObject lhs, final FaceObject rhs) {
+                        return Double.compare(rhs.getScore(), lhs.getScore());
+                      }
+                    });
 
     for (int i = 0; i < scores.length; i++) {
       if (scores[i] > this.confThresh) {
@@ -109,7 +108,7 @@ public class FaceDetectionTranslator implements Translator<Image, FaceDetectedOb
       }
     }
 
-    ArrayList<FaceObject> topKArrayList = new ArrayList<FaceObject>();
+    ArrayList<FaceObject> topKArrayList = new ArrayList<>();
     int index = 0;
     while (pq.size() > 0) {
       FaceObject faceObject = pq.poll();
@@ -119,16 +118,16 @@ public class FaceDetectionTranslator implements Translator<Image, FaceDetectedOb
       topKArrayList.add(faceObject);
     }
 
-    ArrayList<FaceObject> nmsList = this.nms(topKArrayList, this.nmsThresh);
+    ArrayList<FaceObject> nmsList = nms(topKArrayList, this.nmsThresh);
 
-    List<String> classNames = new ArrayList<String>();
-    List<Double> probabilities = new ArrayList<Double>();
-    List<BoundingBox> boundingBoxes = new ArrayList<BoundingBox>();
-    List<Landmark> landmarks = new ArrayList<Landmark>();
+    List<String> classNames = new ArrayList<>();
+    List<Double> probabilities = new ArrayList<>();
+    List<BoundingBox> boundingBoxes = new ArrayList<>();
+    List<Landmark> landmarks = new ArrayList<>();
 
     for (int i = 0; i < nmsList.size(); i++) {
       FaceObject faceObject = nmsList.get(i);
-      classNames.add(new String("Face"));
+      classNames.add("Face");
       probabilities.add((double) faceObject.getScore());
       boundingBoxes.add(faceObject.getBoundingBox());
       List<Point> keyPoints = faceObject.getKeyPoints();
@@ -153,12 +152,12 @@ public class FaceDetectionTranslator implements Translator<Image, FaceDetectedOb
       int[] scale = scales[idx];
       for (int h = 0; h < aspectRatio[idx][0]; h++) {
         for (int w = 0; w < aspectRatio[idx][1]; w++) {
-          for (int index = 0; index < scale.length; index++) {
-            double skx = scale[index] * 1.0 / width;
-            double sky = scale[index] * 1.0 / height;
+          for (int i : scale) {
+            double skx = i * 1.0 / width;
+            double sky = i * 1.0 / height;
             double cx = (w + 0.5) * steps[idx] / width;
             double cy = (h + 0.5) * steps[idx] / height;
-            defaultBoxes.add(new double[] {cx, cy, skx, sky});
+            defaultBoxes.add(new double[]{cx, cy, skx, sky});
           }
         }
       }
@@ -174,7 +173,7 @@ public class FaceDetectionTranslator implements Translator<Image, FaceDetectedOb
   private double[][] decodeBoxes(float[] locs, double[][] priors, double[] variance) {
     double[][] boxes = new double[priors.length][4];
     for (int i = 0; i < priors.length; i++) {
-      double x = priors[i][0] + locs[i * 4 + 0] * variance[0] * priors[i][2];
+      double x = priors[i][0] + locs[i * 4] * variance[0] * priors[i][2];
       double y = priors[i][1] + locs[i * 4 + 1] * variance[0] * priors[i][3];
       double w = priors[i][2] * (float) Math.exp(locs[i * 4 + 2] * variance[1]);
       double h = priors[i][3] * (float) Math.exp(locs[i * 4 + 3] * variance[1]);
@@ -197,9 +196,8 @@ public class FaceDetectionTranslator implements Translator<Image, FaceDetectedOb
   private List<List<Point>> decodeLandm(
       float[] landms, double[][] priors, double[] variance, int width, int height) {
     List<List<Point>> landmsArr = new ArrayList<>();
-    List<Point> points = new ArrayList<>();
     for (int i = 0; i < priors.length; i++) {
-      points = new ArrayList<>();
+      List<Point> points = new ArrayList<>();
       for (int j = 0; j < 5; j++) { // 5 face landmarks
         double x = priors[i][0] + landms[i * 5 * 2 + j * 2] * variance[0] * priors[i][2];
         double y = priors[i][1] + landms[i * 5 * 2 + j * 2 + 1] * variance[0] * priors[i][3];
@@ -212,23 +210,18 @@ public class FaceDetectionTranslator implements Translator<Image, FaceDetectedOb
 
   // NMS - non maximum suppression
   public static ArrayList<FaceObject> nms(ArrayList<FaceObject> list, double nmsThresh) {
-    ArrayList<FaceObject> nmsList = new ArrayList<FaceObject>();
+    ArrayList<FaceObject> nmsList = new ArrayList<>();
     // Find max confidence
     PriorityQueue<FaceObject> pq =
-        new PriorityQueue<FaceObject>(
-            10,
-            new Comparator<FaceObject>() {
-              @Override
-              public int compare(final FaceObject lhs, final FaceObject rhs) {
-                // Intentionally reversed to put high confidence at the head of the queue.
-                return Float.compare(rhs.getScore(), lhs.getScore());
-              }
-            });
+            new PriorityQueue<>(
+                    10,
+                    (lhs, rhs) -> {
+                      // Intentionally reversed to put high confidence at the head of the queue.
+                      return Float.compare(rhs.getScore(), lhs.getScore());
+                    });
 
-    for (int i = 0; i < list.size(); i++) {
-      // put high confidence at the head of the queue.
-      pq.add(list.get(i));
-    }
+    // put high confidence at the head of the queue.
+    pq.addAll(list);
 
     while (pq.size() > 0) {
       // insert face object with max confidence

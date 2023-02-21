@@ -39,17 +39,13 @@ An example application features a web UI to track and visualize metrics such as 
 
 ## Android
 
+### [Face detection made easy with DJL](android/pytorch_android/face_detection/README.md)
+
+An example that shows how to build deep learning android app with ease.
+
 ### [Doodle draw app with PyTorch model](android/pytorch_android/quickdraw_recognition/README.md)
 
 A Doodle draw android game that is built with PyTorch model.
-
-### [Build Android app with MXNet engine](android/mxnet-android/README.md)
-
-A template that can be used to build Android applications with MXNet engine.
-
-### [Face detection made easy with DJL](android/face_detection/README.md)
-
-An example that shows how to build deep learning android app with ease.
 
 ### [Make your image look like a painting with Style Transfer](android/pytorch_android/style_transfer_cyclegan/README.md)
 
@@ -62,6 +58,18 @@ An app that takes in an image and colors the objects in it.
 ### [Translate from French to English with Neural Machine Translation](android/pytorch_android/neural_machine_translation/README.md)
 
 Write in the French text that you wanted translated and receive an English output.
+
+### [Speech recognition](android/pytorch_android/speech_recognition/README.md)
+
+An example that shows how to build speech recognition app.
+
+### [Object detection with ONNX model](android/onnxruntime_android/object_detection/README.md)
+
+An example that shows how to build object detection app with ONNX model.
+
+### [Build Android app with MXNet engine](android/mxnet-android/README.md)
+
+A template that can be used to build Android applications with MXNet engine.
 
 ## AWS services
 
