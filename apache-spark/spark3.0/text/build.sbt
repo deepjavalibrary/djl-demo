@@ -9,3 +9,6 @@ resolvers += Resolver.jcenterRepo
 
 libraryDependencies += "ai.djl" % "api" % "0.21.0"
 libraryDependencies += "ai.djl.spark" % "spark" % "0.21.0"
+
+libraryDependencies += "ai.djl.tensorflow" % "tensorflow-engine" % "0.21.0"
+libraryDependencies += "ai.djl.tensorflow" % "tensorflow-native-cpu" % "2.7.0"
