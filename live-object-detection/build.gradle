@@ -18,7 +18,7 @@ dependencies {
     implementation "ai.djl.mxnet:mxnet-model-zoo"
     implementation "ai.djl.opencv:opencv"
 
-    runtimeOnly 'org.slf4j:slf4j-simple:${slf4j_simple_version}'
+    runtimeOnly "org.slf4j:slf4j-simple:${slf4j_simple_version}"
 }
 
 application {
