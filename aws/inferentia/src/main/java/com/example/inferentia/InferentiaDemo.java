@@ -37,17 +37,6 @@ public class InferentiaDemo {
         String version = Engine.getEngine("PyTorch").getVersion();
         System.out.println("Running inference with PyTorch: " + version);
 
-        // You need manually load libneuron_op.so prior to 0.12.0, uncomment the following code
-        // if use 0.11.0 release. And libneuron_op.so must be loaded after PyTorch engine is loaded.
-        /*
-        String extraPath = System.getenv("PYTORCH_EXTRA_LIBRARY_PATH");
-        if (extraPath != null) {
-            System.load(extraPath);
-        } else {
-            System.loadLibrary("neuron_op");
-        }
-        */
-
         String url = "https://resources.djl.ai/images/kitten.jpg";
         Image img = ImageFactory.getInstance().fromUrl(url);
         Criteria<Image, Classifications> criteria =

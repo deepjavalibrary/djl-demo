@@ -12,7 +12,7 @@ logger.setLevel(logging.INFO)
 image = torch.zeros([1, 3, 224, 224], dtype=torch.float32)
 
 # Load a pretrained ResNet50 model
-model = models.resnet50(pretrained=True)
+model = models.resnet50(weights='ResNet50_Weights.DEFAULT')
 
 # Tell the model we are using it for evaluation (not training)
 model.eval()
