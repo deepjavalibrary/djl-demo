@@ -1,23 +1,21 @@
 ## Low cost inference with AWS Inferentia
 
-This demo uses Inf2 instance, read [here](inf1.md) for Inf1 demo.
-
 [AWS Inferentia](https://aws.amazon.com/machine-learning/inferentia/) is a high performance machine
-learning inference chip, custom designed by AWS. Amazon EC2 Inf2 instances are powered by AWS
+learning inference chip, custom designed by AWS. Amazon EC2 Inf1 instances are powered by AWS
 Inferentia chips, which provides you with the lowest cost per inference in the cloud and lower
 the barriers for everyday developers to use machine learning (ML) at scale. Customers using models
 such as YOLO v3 and YOLO v4 can get up to 1.85 times higher throughput and up to 40% lower cost per
 inference compared to the EC2 G4 GPU-based instances.
 
-In the demo, you will learn how to run PyTorch model with DJL on Amazon EC2 Inf2 instances.
+In the demo, you will learn how to run PyTorch model with DJL on Amazon EC2 Inf1 instances.
 
 ## Setup environment
 
-### Launch Inf2 EC2 instance
+### Launch Inf1 EC2 instance
 
-Please launch Inf2 instance by following the [Install Neuron Instructions](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/setup/pytorch-install.html#pytorch-neuronx-install)
+Please launch Inf1 instance by following the [Install Neuron Instructions](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuron/setup/pytorch-install.html)
 
-This demo tested on neuronx-tools 2.8.2.0 and PyTorch 1.13.0 on Ubuntu DLAMI.
+This demo tested on Neuron SDK 2.5.0 and PyTorch 1.12.1 on Ubuntu DLAMI.
 Please make sure you have Neuron Runtime 2.x installed:
 
 ```
@@ -32,11 +30,8 @@ curl -L https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
 # Update OS packages
 sudo apt-get update -y
 
-sudo apt-get install -y linux-headers-$(uname -r)
-sudo apt-get install -y aws-neuronx-dkms=2.*
-sudo apt-get install -y aws-neuronx-collectives=2.*
-sudo apt-get install -y aws-neuronx-runtime-lib=2.*
-sudo apt-get install -y aws-neuronx-tools=2.*
+sudo apt-get install aws-neuronx-dkms -y
+sudo apt-get install aws-neuronx-tools -y
 ```
 
 ### Install AWS Inferentia neuron SDK
@@ -49,25 +44,25 @@ python3 -m venv myenv
 source myenv/bin/activate
 pip install -U pip
 
-pip install neuronx-cc==2.* torch_neuronx==1.13.0.* torchvision --extra-index-url=https://pip.repos.neuron.amazonaws.com
+pip install torch-neuron==1.12.1.* neuron-cc[tensorflow] torchvision --extra-index-url=https://pip.repos.neuron.amazonaws.com
 ```
 
 After installing the Inferentia neuron SDK, you will find `libtorchneuron.so` is installed in
-`myenv/lib/python3.8/site-packages/torch_neuronx/lib` folder.
+`myenv/lib/python3.8/site-packages/torch_neuron/lib` folder.
 You need configuration environment variable to enable Inferentia for DJL:
 
 ```
-export PYTORCH_EXTRA_LIBRARY_PATH=$(python -m site | grep $VIRTUAL_ENV | awk -F"'" 'END{print $2}')/torch_neuronx/lib/libtorchneuron.so
+export PYTORCH_EXTRA_LIBRARY_PATH=$(python -m site | grep $VIRTUAL_ENV | awk -F"'" 'END{print $2}')/torch_neuron/lib/libtorchneuron.so
 ```
 
 ## Compile your model into Neuron traced model
 
-Use the following python script to trace a PyTorch resnet50 model. The script can also be found in the repo at [trace_inf2.py](https://github.com/deepjavalibrary/djl-demo/blob/master/aws/inferentia/trace_inf2.py).
+Use the following python script to trace a PyTorch resnet50 model. The script can also be found in the repo at [trace_inf1.py](https://github.com/deepjavalibrary/djl-demo/blob/master/aws/inferentia/trace_inf1.py).
 
 ```
 import torch
 import os
-import torch_neuronx
+import torch_neuron
 from torchvision import models
 import logging
 
@@ -91,9 +86,12 @@ djl_traced_model = torch.jit.trace(model, image)
 os.makedirs("models/djl/resnet50", exist_ok=True)
 djl_traced_model.save("models/djl/resnet50/resnet50.pt")
 
+# Analyze the model - this will show operator support and operator count
+torch.neuron.analyze_model(model, example_inputs=[image])
+
 # Now compile the model - with logging set to "info" we will see
 # what compiles for Neuron, and if there are any fallbacks
-model_neuron = torch_neuronx.trace(model, example_inputs=[image])
+model_neuron = torch.neuron.trace(model, example_inputs=[image])
 
 # Export to saved model
 os.makedirs("models/inferentia/resnet50", exist_ok=True)
@@ -123,7 +121,7 @@ cd djl-demo/aws/inferentia
 
 [INFO ] - Number of inter-op threads is 4
 [INFO ] - Number of intra-op threads is 8
-Running inference with PyTorch: 1.13.0
+Running inference with PyTorch: 1.12.1
 [
         class: "n02124075 Egyptian cat", probability: 0.41596
         class: "n02123159 tiger cat", probability: 0.26856
@@ -142,8 +140,8 @@ You can use DJL benchmark tool to compare performance w/o Inferentia enabled:
 ```
 ./gradlew benchmark
 
-[INFO ] - Running inference with PyTorch: 1.13.0
-[INFO ] - Loading libneuron_op.so from: /home/ubuntu/myenv/lib/python3.8/site-packages/torch_neuronx/lib/libtorchneuron.so
+[INFO ] - Running inference with PyTorch: 1.12.1
+[INFO ] - Loading libneuron_op.so from: /home/ubuntu/myenv/lib/python3.8/site-packages/torch_neuron/lib/libtorchneuron.so
 [INFO ] - Multithreaded inference with 8 threads.
 [INFO ] - Throughput: 288.59, completed 8000 iteration in 27721 ms.
 [INFO ] - Latency P50: 27.697 ms, P90: 27.915 ms, P99: 28.426 ms
@@ -154,7 +152,7 @@ You can use DJL benchmark tool to compare performance w/o Inferentia enabled:
 ```
 ./gradlew benchmark --args="models/djl/resnet50"
 
-[INFO ] - Running inference with PyTorch: 1.13.0
+[INFO ] - Running inference with PyTorch: 1.12.1
 [INFO ] - Loading regular pytorch model ...
 [INFO ] - Multithreaded inference with 8 threads.
 [INFO ] - Throughput: 33.92, completed 8000 iteration in 235833 ms.
