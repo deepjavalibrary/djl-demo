@@ -74,7 +74,7 @@ logger.setLevel(logging.INFO)
 image = torch.zeros([1, 3, 224, 224], dtype=torch.float32)
 
 # Load a pretrained ResNet50 model
-model = models.resnet50(pretrained=True)
+model = models.resnet50(weights='ResNet50_Weights.DEFAULT')
 
 # Tell the model we are using it for evaluation (not training)
 model.eval()
@@ -103,10 +103,10 @@ print("Compile success")
 git clone https://github.com/deepjavalibrary/djl-demo.git
 cd djl-demo/aws/inferentia
 
-python trace.py 
+python trace_inf1.py
 ```
 
-Execute above command, now you have a Neuron traced model ready for inference in 
+Execute above command, now you have a Neuron traced model ready for inference in
 `models/inferentia/resnet50` folder.
 
 ## Run example java program
@@ -116,6 +116,9 @@ JVM stack size is 1M, you have to explicitly set the JVM arguments: `-Xss2m`
 
 ```
 cd djl-demo/aws/inferentia
+
+# inf1 only support PyTorch 1.12.1
+export PYTORCH_VERSION=1.12.1
 
 ./gradlew run
 
@@ -138,6 +141,9 @@ You can use DJL benchmark tool to compare performance w/o Inferentia enabled:
 ### Run multithreading benchmark with Inferentia enabled:
 
 ```
+# inf1 only support PyTorch 1.12.1
+export PYTORCH_VERSION=1.12.1
+
 ./gradlew benchmark
 
 [INFO ] - Running inference with PyTorch: 1.12.1
@@ -150,7 +156,10 @@ You can use DJL benchmark tool to compare performance w/o Inferentia enabled:
 ### Run multi-thread benchmark with regular PyTorch model:
 
 ```
-./gradlew benchmark --args="models/djl/resnet50"
+# inf1 only support PyTorch 1.12.1
+export PYTORCH_VERSION=1.12.1
+
+./gradlew benchmark --args="models/djl/resnet50 8"
 
 [INFO ] - Running inference with PyTorch: 1.12.1
 [INFO ] - Loading regular pytorch model ...
@@ -162,6 +171,9 @@ You can use DJL benchmark tool to compare performance w/o Inferentia enabled:
 ### Run single-threaded benchmark with Inferentia enabled:
 
 ```
+# inf1 only support PyTorch 1.12.1
+export PYTORCH_VERSION=1.12.1
+
 ./gradlew benchmark --args="models/inferentia/resnet50 1"
 ```
 

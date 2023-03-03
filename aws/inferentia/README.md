@@ -17,7 +17,7 @@ In the demo, you will learn how to run PyTorch model with DJL on Amazon EC2 Inf2
 
 Please launch Inf2 instance by following the [Install Neuron Instructions](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/torch-neuronx/setup/pytorch-install.html#pytorch-neuronx-install)
 
-This demo tested on neuronx-tools 2.8.2.0 and PyTorch 1.13.0 on Ubuntu DLAMI.
+This demo tested on neuronx-tools 2.8.2.0 and PyTorch 1.13.1 on Ubuntu DLAMI.
 Please make sure you have Neuron Runtime 2.x installed:
 
 ```
@@ -49,7 +49,7 @@ python3 -m venv myenv
 source myenv/bin/activate
 pip install -U pip
 
-pip install neuronx-cc==2.* torch_neuronx==1.13.0.* torchvision --extra-index-url=https://pip.repos.neuron.amazonaws.com
+pip install neuronx-cc==2.* torch_neuronx==1.13.1.* torchvision --extra-index-url=https://pip.repos.neuron.amazonaws.com
 ```
 
 After installing the Inferentia neuron SDK, you will find `libtorchneuron.so` is installed in
@@ -93,7 +93,7 @@ djl_traced_model.save("models/djl/resnet50/resnet50.pt")
 
 # Now compile the model - with logging set to "info" we will see
 # what compiles for Neuron, and if there are any fallbacks
-model_neuron = torch_neuronx.trace(model, example_inputs=[image])
+model_neuron = torch_neuronx.trace(model, image)
 
 # Export to saved model
 os.makedirs("models/inferentia/resnet50", exist_ok=True)
@@ -105,10 +105,10 @@ print("Compile success")
 git clone https://github.com/deepjavalibrary/djl-demo.git
 cd djl-demo/aws/inferentia
 
-python trace.py 
+python trace_inf2.py
 ```
 
-Execute above command, now you have a Neuron traced model ready for inference in 
+Execute above command, now you have a Neuron traced model ready for inference in
 `models/inferentia/resnet50` folder.
 
 ## Run example java program
@@ -123,7 +123,7 @@ cd djl-demo/aws/inferentia
 
 [INFO ] - Number of inter-op threads is 4
 [INFO ] - Number of intra-op threads is 8
-Running inference with PyTorch: 1.13.0
+Running inference with PyTorch: 1.13.1
 [
         class: "n02124075 Egyptian cat", probability: 0.41596
         class: "n02123159 tiger cat", probability: 0.26856
@@ -142,7 +142,7 @@ You can use DJL benchmark tool to compare performance w/o Inferentia enabled:
 ```
 ./gradlew benchmark
 
-[INFO ] - Running inference with PyTorch: 1.13.0
+[INFO ] - Running inference with PyTorch: 1.13.1
 [INFO ] - Loading libneuron_op.so from: /home/ubuntu/myenv/lib/python3.8/site-packages/torch_neuronx/lib/libtorchneuron.so
 [INFO ] - Multithreaded inference with 8 threads.
 [INFO ] - Throughput: 288.59, completed 8000 iteration in 27721 ms.
@@ -154,7 +154,7 @@ You can use DJL benchmark tool to compare performance w/o Inferentia enabled:
 ```
 ./gradlew benchmark --args="models/djl/resnet50"
 
-[INFO ] - Running inference with PyTorch: 1.13.0
+[INFO ] - Running inference with PyTorch: 1.13.1
 [INFO ] - Loading regular pytorch model ...
 [INFO ] - Multithreaded inference with 8 threads.
 [INFO ] - Throughput: 33.92, completed 8000 iteration in 235833 ms.
