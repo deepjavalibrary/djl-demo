@@ -15,13 +15,10 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.20.0")
+    implementation platform("ai.djl:bom:${djl_version}")
     implementation "ai.djl:api"
 
     runtimeOnly "ai.djl.pytorch:pytorch-engine"
-    // latest inf1 only support PyTorch 1.12.1
-    // inf2 only support PyTorch 1.13.0
-    runtimeOnly "ai.djl.pytorch:pytorch-native-cpu-precxx11:1.13.0!!:linux-x86_64"
     runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_slf4j_version}"
 }
 
@@ -38,12 +35,14 @@ application {
 }
 
 run {
+    environment("PYTORCH_PRECXX11", "true") // must use precxx11 libtorch
     systemProperties System.getProperties()
     systemProperties.remove("user.dir")
     systemProperty("file.encoding", "UTF-8")
 }
 
 task benchmark(type: JavaExec) {
+    environment("PYTORCH_PRECXX11", "true") // must use precxx11 libtorch
     systemProperties System.getProperties()
     systemProperties.remove("user.dir")
     systemProperty("file.encoding", "UTF-8")
