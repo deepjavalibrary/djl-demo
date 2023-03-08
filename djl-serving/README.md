@@ -48,3 +48,9 @@ We also demo DJL Serving Client applications that run inference in various forma
 There are also some demos of the [DJL Serving WorkLoadManager](https://github.com/deepjavalibrary/djl-serving/tree/master/wlm)
 
 - [Sentiment Analysis with Flink](wlm/flink-sentiment-analysis/README.md)
+
+## DJL Serving Workflow
+
+There are also some demos of the DJLServing Workflows.
+
+- [Resnet18 Workflow](workflows/resnet18/README.md)
