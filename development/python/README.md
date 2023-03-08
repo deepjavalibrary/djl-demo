@@ -101,7 +101,7 @@ automatically scale both models based in traffic.
 
 You can use DJLServing's workflow feature, group multiple models as a single workflow.
 
-See: https://github.com/deepjavalibrary/djl-serving/tree/master/serving/src/test/resources/workflows
+See: https://github.com/deepjavalibrary/djl-demo/tree/master/djl-serving/workflows/
 
 ## Run/test application with gradle
 

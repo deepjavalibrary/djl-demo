@@ -1,0 +1,14 @@
+{
+  "name": "resnet18",
+  "version": "0.1",
+  "models": {
+    "preprocess": "preprocess/",
+    "model": "djl://ai.djl.pytorch/resnet?translatorFactory=ai.djl.translate.NoopServingTranslatorFactory",
+    "postprocess": "postprocess/"
+  },
+  "workflow": {
+    "preprocessed": ["preprocess", "in"],
+    "inferenced": ["model", "preprocessed"],
+    "out": ["postprocess", "inferenced"]
+  }
+}
