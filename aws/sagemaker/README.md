@@ -4,6 +4,7 @@ Amazon SageMaker helps data scientists and developers to prepare, build, train, 
 
 - SageMaker Notebook: Simple setup to use Jupyter notebook
 - SageMaker Studio: Container solution for ML experiment
+- SageMaker Large Language Model Launch template
 - SageMaker Inference endpoint (coming soon): scalable and easy-to-use Java inference solution.
 
 To learn more, please go to the following instructions:
@@ -11,3 +12,6 @@ To learn more, please go to the following instructions:
 [SageMaker Notebook](notebook/README.md)
 
 [SageMaker Studio](studio/README.md)
+
+[SageMaker LLM Launch template](large-model-inference/README.md)
+
