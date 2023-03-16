@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2023 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
  * with the License. A copy of the License is located at
@@ -13,6 +13,7 @@
 package com.examples
 
 import ai.djl.spark.task.text.TextEmbedder
+import org.apache.spark.sql.SparkSession
 
 /**
  * Example to run text embedding on Spark.
@@ -21,25 +22,23 @@ object TextEmbeddingExample {
 
   def main(args: Array[String]): Unit = {
     val outputPath: String = if (args.length > 0) args(0) else null
-    val spark = SparkUtils.createSparkSession("TextEmbeddingExample")
+    val spark = SparkSession.builder()
+      .appName("TextEmbeddingExample")
+      .getOrCreate()
+    spark.sparkContext.setLogLevel("ERROR")
 
     // Input
-    val df = SparkUtils.createTextDataFrame(spark)
-    df.show(truncate = false)
-    // +---+--------------------------+
-    // |id |text                      |
-    // +---+--------------------------+
-    // |1  |Hello, y'all! How are you?|
-    // |2  |Hello to you too!         |
-    // |3  |I'm fine, thank you!      |
-    // +---+--------------------------+
+    val df = spark.createDataFrame(Seq(
+      (1, "This is an example sentence"),
+      (2, "Each sentence is converted")
+    )).toDF("id", "text")
 
     // Embedding
     val embedder = new TextEmbedder()
       .setInputCol("text")
       .setOutputCol("embedding")
-      .setEngine("TensorFlow")
-      .setModelUrl("https://storage.googleapis.com/tfhub-modules/google/universal-sentence-encoder/4.tar.gz")
+      .setEngine("PyTorch")
+      .setModelUrl("djl://ai.djl.huggingface.pytorch/sentence-transformers/all-MiniLM-L6-v2")
     val outputDf = embedder.embed(df)
 
     if (outputPath != null) {
@@ -49,7 +48,7 @@ object TextEmbeddingExample {
       println("Printing results to output stream")
       outputDf.printSchema()
       // root
-      //  |-- id: string (nullable = true)
+      //  |-- id: integer (nullable = true)
       //  |-- text: string (nullable = true)
       //  |-- embedding: array (nullable = true)
       //  |    |-- element: float (containsNull = true)
@@ -58,9 +57,8 @@ object TextEmbeddingExample {
       // +---+--------------------+--------------------+
       // | id|                text|           embedding|
       // +---+--------------------+--------------------+
-      // |  1|Hello, y'all! How...|[-0.05769434, -0....|
-      // |  2|   Hello to you too!|[0.012077843, -0....|
-      // |  3|I'm fine, thank you!|[-0.040518265, -0...|
+      // |  1|This is an exampl...|[0.0676569, 0.063...|
+      // |  2|Each sentence is ...|[0.08643859, 0.10...|
       // +---+--------------------+--------------------+
     }
 

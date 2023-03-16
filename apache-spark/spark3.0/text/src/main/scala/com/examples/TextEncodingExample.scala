@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2023 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
  * with the License. A copy of the License is located at
@@ -13,6 +13,7 @@
 package com.examples
 
 import ai.djl.spark.task.text.{HuggingFaceTextDecoder, HuggingFaceTextEncoder}
+import org.apache.spark.sql.SparkSession
 
 /**
  * Example to run text encoding / decoding on Spark.
@@ -21,24 +22,23 @@ object TextEncodingExample {
 
   def main(args: Array[String]): Unit = {
     val outputPath: String = if (args.length > 0) args(0) else null
-    val spark = SparkUtils.createSparkSession("TextEncodingExample")
+    val spark = SparkSession.builder()
+      .appName("TextEncodingExample")
+      .getOrCreate()
+    spark.sparkContext.setLogLevel("ERROR")
 
     // Input
-    val df = SparkUtils.createTextDataFrame(spark)
-    df.show(truncate = false)
-    // +---+--------------------------+
-    // |id |text                      |
-    // +---+--------------------------+
-    // |1  |Hello, y'all! How are you?|
-    // |2  |Hello to you too!         |
-    // |3  |I'm fine, thank you!      |
-    // +---+--------------------------+
+    val df = spark.createDataFrame(Seq(
+      (1, "Hello, y'all! How are you?"),
+      (2, "Hello to you too!"),
+      (3, "I'm fine, thank you!")
+    )).toDF("id", "text")
 
     // Encoding
     val encoder = new HuggingFaceTextEncoder()
       .setInputCol("text")
       .setOutputCol("encoded")
-      .setName("bert-base-cased")
+      .setTokenizer("bert-base-cased")
     var encDf = encoder.encode(df)
     encDf.printSchema()
     // root
@@ -57,7 +57,7 @@ object TextEncodingExample {
     val decoder = new HuggingFaceTextDecoder()
       .setInputCol("ids")
       .setOutputCol("decoded")
-      .setName("bert-base-cased")
+      .setTokenizer("bert-base-cased")
     var decDf = decoder.decode(encDf)
     decDf.printSchema()
     // root

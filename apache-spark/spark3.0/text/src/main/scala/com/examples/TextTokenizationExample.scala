@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2023 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
  * with the License. A copy of the License is located at
@@ -13,6 +13,7 @@
 package com.examples
 
 import ai.djl.spark.task.text.HuggingFaceTextTokenizer
+import org.apache.spark.sql.SparkSession
 
 /**
  * Example to run text tokenization on Spark.
@@ -21,24 +22,23 @@ object TextTokenizationExample {
 
   def main(args: Array[String]): Unit = {
     val outputPath: String = if (args.length > 0) args(0) else null
-    val spark = SparkUtils.createSparkSession("TextTokenizationExample")
+    val spark = SparkSession.builder()
+      .appName("TextTokenizationExample")
+      .getOrCreate()
+    spark.sparkContext.setLogLevel("ERROR")
 
     // Input
-    val df = SparkUtils.createTextDataFrame(spark)
-    df.show(truncate = false)
-    // +---+--------------------------+
-    // |id |text                      |
-    // +---+--------------------------+
-    // |1  |Hello, y'all! How are you?|
-    // |2  |Hello to you too!         |
-    // |3  |I'm fine, thank you!      |
-    // +---+--------------------------+
+    val df = spark.createDataFrame(Seq(
+      (1, "Hello, y'all! How are you?"),
+      (2, "Hello to you too!"),
+      (3, "I'm fine, thank you!")
+    )).toDF("id", "text")
 
     // Tokenization
     val tokenizer = new HuggingFaceTextTokenizer()
       .setInputCol("text")
       .setOutputCol("tokens")
-      .setName("bert-base-cased")
+      .setTokenizer("bert-base-cased")
     val outputDf = tokenizer.tokenize(df)
 
     if (outputPath != null) {
