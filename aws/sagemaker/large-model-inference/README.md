@@ -3,8 +3,8 @@
 In this section, we provide some sample instruction to use LMI container on SageMaker.
 
 - [Bring-Your-Own-Container template](BYOC_template_with_LMI_solution.ipynb)
-- [Standard model.py template](coming soon)
-- [LMI handler template](coming soon)
+- [Standard model.py template](standard_template_with_LMI_solution.ipynb)
+- [LMI PySDK template](pysdk_template_with_LMI_solution.ipynb)
 
 For the list of LMI containers that is on DLC, please click [here](https://github.com/aws/deep-learning-containers/blob/master/available_images.md#large-model-inference-containers).
 
