@@ -1,0 +1,29 @@
+{
+  "name": "multi-model",
+  "version": "0.1",
+  "models": {
+    "objectDetection": {
+      "application": "cv/object_detection",
+      "modelUrl": "djl://ai.djl.mxnet/ssd",
+      "filters": {
+        "backbone": "resnet50"
+      }
+    },
+    "poseEstimation": {
+      "application": "cv/pose_estimation",
+      "modelUrl": "djl://ai.djl.mxnet/simple_pose",
+      "filters": {
+        "backbone": "resnet18",
+        "dataset": "imagenet"
+      }
+    }
+  },
+  "functions": {
+    "extractPerson": "org.example.ExtractPersonWF"
+  },
+  "workflow": {
+    "detectedObjects": ["objectDetection", "in"],
+    "person": ["extractPerson", "in", "detectedObjects"],
+    "out": ["poseEstimation", "person"]
+  }
+}

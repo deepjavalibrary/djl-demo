@@ -54,3 +54,4 @@ There are also some demos of the [DJL Serving WorkLoadManager](https://github.co
 There are also some demos of the DJLServing Workflows.
 
 - [Resnet18 Workflow](workflows/resnet18/README.md)
+- [Multi-model Workflow](workflows/multi-model/README.md)
