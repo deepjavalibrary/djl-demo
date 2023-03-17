@@ -88,6 +88,15 @@ This defines a workflow named `resnet18`. It first applies preprocessing to the 
 Then applies "model" to the result of preprocessing stored in the value "preprocessed".
 Finally applies postprocessing to the inferenced result output to the output "out".
 
+It is also possible to nest function calls by replacing arguments with a list.
+That means that this operation can be defined on a single line:
+
+```
+  "workflow": {
+    "out": ["postprocess", ["model", ["preprocess", "in"]]]
+  }
+```
+
 ## Run the example
 
 ### Step 1: Start the model server
