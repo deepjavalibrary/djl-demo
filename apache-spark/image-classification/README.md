@@ -7,7 +7,7 @@ task.
 - ImageClassificationExample: Ready to run for classification using built in model in ModelZoo
 - DataProcessExample: If you are new to DJL and would like to learn more on the processing logic. (PyTorch Engine only)
 
-You can also look at the Spark3.0 version of this demo [here](../spark3.0/image-classification).
+You can also look at the Spark3.0 version of this demo [here](../spark3.0/image).
 
 ## Setup
 
