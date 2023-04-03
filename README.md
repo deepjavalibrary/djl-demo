@@ -99,7 +99,7 @@ An example application that runs low cost/high performance inference with AWS In
 
 ## Big data integration
 
-### [Spark Image Classification](apache-spark/spark3.0/image-classification/README.md)
+### [Spark Image Classification](apache-spark/spark3.0/image/README.md)
 
 Contains Spark image classification demos.
 

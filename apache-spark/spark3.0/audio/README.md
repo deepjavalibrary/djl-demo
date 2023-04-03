@@ -1,14 +1,11 @@
-# DJL Spark Text Example
+# DJL Spark Audio Example
 
 ## Introduction
-This folder contains 5 demo applications built with Spark 3.0 and DJL to run text related
+This folder contains 2 demo applications built with Spark 3.0 and DJL to run audio related
 tasks.
 
-- QuestionAnsweringExample: Example to run question answering on Spark.
-- TextClassificationExample: Example to run text classification on Spark.
-- TextEmbeddingExample: Example to run text embedding on Spark.
-- TextEncodingExample: Example to run text encoding / decoding on Spark.
-- TextTokenizationExample: Example to run text tokenization on Spark.
+- SpeechRecognitionExample: Ready to run for speech recognition using Wav2Vec2 model
+- WhisperSpeechRecognitionExample: Ready to run for speech recognition using Whisper model
 
 ## Setup
 
@@ -36,12 +33,13 @@ dependencies {
     runtimeOnly "ai.djl.pytorch:pytorch-native-cpu-precxx11"
 }
 ```
+
 ## Run the example
 
-Use `spark-submit` to run the examples. For example, to run the text embedding example, you can run:
+Use `spark-submit` to run the examples. For example, to run the speech recognition example, you can run:
 
 ```
-spark-submit --class com.examples.TextEmbeddingExample \
+spark-submit --class com.examples.SpeechRecognitionExample \
     --master yarn \
     --mode cluster \
     --conf spark.executor.instances=2 \
@@ -49,7 +47,7 @@ spark-submit --class com.examples.TextEmbeddingExample \
     --conf spark.executor.cores=2 \
     --conf spark.driver.memory=1G \
     --conf spark.driver.cores=1 \
-    build/libs/text-1.0-SNAPSHOT-all.jar
+    build/libs/audio-1.0-SNAPSHOT-all.jar
 ```
 
 Refer to the [Set up EMR on EKS](../image-classification-pyspark/README.md) if you want to run this example
