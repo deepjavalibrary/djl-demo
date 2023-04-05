@@ -53,5 +53,7 @@ There are also some demos of the [DJL Serving WorkLoadManager](https://github.co
 
 There are also some demos of the DJLServing Workflows.
 
-- [Resnet18 Workflow](workflows/resnet18/README.md)
-- [Multi-model Workflow](workflows/multi-model/README.md)
+- [Python Workflow](workflows/python/README.md): User just need to prepare a python model to run in a workflow.
+- [Python Pre/Post Processing Workflow](workflows/python-pre-post-processing/README.md): User can offer a python script to do pre/post processing with a model file to run in a workflow.
+- [Java Pre/Post Processing Workflow](workflows/java-pre-post-processing/README.md): User need to prepare a Java pre/post processing code and a model file to run in a workflow.
+- [Multi-model Workflow](workflows/multi-model/README.md): Multiple models can be loaded and run in a workflow.

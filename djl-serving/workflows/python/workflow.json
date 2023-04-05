@@ -1,0 +1,10 @@
+{
+  "name": "resnet18",
+  "version": "0.1",
+  "models": {
+    "model": "resnet18/"
+  },
+  "workflow": {
+    "out": ["model", "in"]
+  }
+}
