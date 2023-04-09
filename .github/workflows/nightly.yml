@@ -17,62 +17,26 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: 11
+      - name: Compile all gradle projects
+        run: ./gradlew build
       - name: Compile Apache Beam
         working-directory: apache-beam/ctr-prediction
         run: mvn package
-      - name: Compile Apache Kafka
-        working-directory: apache-kafka
-        run: ./gradlew build
-      - name: Compile AWS projects
+      - name: Compile EMR projects
         working-directory: aws
         run: |
-          cd aws-kinesis-video-streams && ./gradlew build && cd ..
-          cd beanstalk-model-serving && ./gradlew build && cd ..
           cd emr-distributed-inference/dataprocess && ./gradlew build && cd ../../
           cd emr-distributed-inference/image-classification-gpu && ./gradlew build && cd ../../
-          cd lambda-model-serving && ./gradlew build && cd ..
       - name: Compile Apache Camel
-        run: cd camel-djl && mvn package
-      - name: Compile Apache Flink
-        working-directory: apache-flink
-        run: |
-          cd sentence_embedding && ./gradlew build && cd ..
-          cd sentiment-analysis && ./gradlew build
-      - name: Compile Footwear Classification
-        working-directory: footwear_classification
-        run: ./gradlew build
+        working-directory: camel-djl
+        run: mvn package
       - name: Compile graalvm
         working-directory: graalvm
         run: ./mvnw package
-      - name: Compile Live object detection
-        working-directory: live-object-detection
-        run: ./gradlew build
-      - name: Compile Malicious Url Detector
-        working-directory: malicious-url-detector
-        run: ./gradlew build
-      - name: Test Module
-        working-directory: development/module
-        run: ./gradlew test
-      - name: Compile multi engine
-        working-directory: development/multi-engine
-        run: ./gradlew build
-      - name: Compile Pneumonia detection
-        working-directory: pneumonia-detection
-        run: ./gradlew build
       - name: Compile Quarkus
         working-directory: quarkus
         run: |
           cd example && ./mvnw package && cd ..
           cd extension && mvn package install && cd ..
           cd extension-example && ./mvnw package
-#      - name: Compile Apache Spark
-#        working-directory: apache-spark
-#        run: |
-#          cd image-classification && ./gradlew run && cd ..
-#          cd spark3.0/image-classification && ./gradlew run
-      - name: Compile Web Demo
-        working-directory: web-demo
-        run: |
-          cd doodle_game/backend && ./gradlew build && cd ../../
-          cd interactive-console && ./gradlew build
 

@@ -13,12 +13,12 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.apache.flink:flink-streaming-java_2.11:1.11.1'
+    implementation 'org.apache.flink:flink-streaming-java_2.11:1.14.6'
     implementation platform("ai.djl:bom:${djl_version}")
     implementation "ai.djl:api"
     implementation "org.slf4j:slf4j-simple:${slf4j_simple_version}"
 
-    runtimeOnly 'org.apache.flink:flink-clients_2.11:1.11.1'
+    runtimeOnly 'org.apache.flink:flink-clients_2.11:1.14.6'
     runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
 }
 
@@ -30,5 +30,5 @@ configure(this) {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
 
-    apply from: file("${rootProject.projectDir}/../../tools/gradle/formatter.gradle")
+    apply from: file("${projectDir}/../../tools/gradle/formatter.gradle")
 }
