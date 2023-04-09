@@ -22,7 +22,7 @@ jlink {
 }
 
 configure(this) {
-    apply from: file("${rootProject.projectDir}/../../tools/gradle/formatter.gradle")
+    apply from: file("${projectDir}/../../tools/gradle/formatter.gradle")
 }
 
 java {

@@ -17,13 +17,12 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    implementation platform("ai.djl:bom:0.12.0")
+    implementation platform("ai.djl:bom:${djl_version}")
     implementation "org.scala-lang:scala-library:2.11.12"
-    implementation "org.apache.spark:spark-core_2.11:2.3.0"
+    implementation "org.apache.spark:spark-core_2.11:2.3.3"
     implementation "ai.djl:api"
 
     runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
-    runtimeOnly "ai.djl.pytorch:pytorch-native-auto"
 }
 
 compileScala {
