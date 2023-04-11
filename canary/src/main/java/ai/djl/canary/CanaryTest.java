@@ -39,6 +39,7 @@ import ai.djl.translate.NoopTranslator;
 import ai.djl.translate.TranslateException;
 import ai.djl.util.Utils;
 import ai.djl.util.cuda.CudaUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +52,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** Canary test for DJL. */
 @SuppressWarnings("MissingJavadocMethod")
@@ -129,8 +132,13 @@ public final class CanaryTest {
         try (NDManager manager = NDManager.newBaseManager()) {
             device = manager.getDevice();
         }
-        if (djlEngine.contains("-native-cu") && !device.isGpu()) {
-            throw new AssertionError("Expecting load engine on GPU.");
+        Matcher m = Pattern.compile(".+-native-cu(\\d\\d\\d).*").matcher(djlEngine);
+        if (m.matches() && !device.isGpu()) {
+            int cudaVersion = Integer.parseInt(CudaUtils.getCudaVersionString());
+            int libVersion = Integer.parseInt(m.group(1));
+            if (cudaVersion >= libVersion) {
+                throw new AssertionError("Expecting load engine on GPU.");
+            }
         }
 
         logger.info("");
