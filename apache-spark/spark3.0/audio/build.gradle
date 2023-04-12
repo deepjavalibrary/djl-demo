@@ -10,11 +10,16 @@ version "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
     mavenLocal()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
 }
 
 dependencies {
     implementation platform("ai.djl:bom:${djl_version}")
     implementation "ai.djl.spark:spark"
+    implementation 'org.scala-lang:scala-library:2.12.15'
+    implementation "org.apache.spark:spark-sql_2.12:3.3.2"
     runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
     runtimeOnly "ai.djl.pytorch:pytorch-native-cpu-precxx11"
 }
