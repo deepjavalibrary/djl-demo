@@ -20,7 +20,8 @@ dependencies {
     implementation "ai.djl.spark:spark_2.12"
     runtimeOnly "ai.djl.pytorch:pytorch-engine"
     runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
-    runtimeOnly "ai.djl.pytorch:pytorch-native-cpu-precxx11"
+    // runtimeOnly "ai.djl.pytorch:pytorch-native-cpu-precxx11"
+    // runtimeOnly "ai.djl.pytorch:pytorch-jni"
 }
 
 compileScala {

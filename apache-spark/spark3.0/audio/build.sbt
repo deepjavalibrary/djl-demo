@@ -11,4 +11,4 @@ libraryDependencies += "ai.djl.spark" % "spark_2.12" % "0.22.1"
 
 libraryDependencies += "ai.djl.pytorch" % "pytorch-engine" % "0.22.1"
 libraryDependencies += "ai.djl.pytorch" % "pytorch-model-zoo" % "0.22.1"
-libraryDependencies += "ai.djl.pytorch" % "pytorch-native-cpu-precxx11" % "1.13.1"
+// libraryDependencies += "ai.djl.pytorch" % "pytorch-native-cpu-precxx11" % "1.13.1"
