@@ -91,12 +91,11 @@ def handle(inputs: Input) -> Optional[Output]:
     """
     Default handler function
     """
+    if inputs.is_empty():
+        return None
+
     if not _service.initialized:
         # stateful model
         _service.initialize(inputs.get_properties())
-
-    if inputs.is_empty():
-        # initialization request
-        return None
 
     return _service.postprocess(inputs)
