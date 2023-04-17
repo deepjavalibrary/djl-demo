@@ -2,7 +2,7 @@ name: Canary-Ubuntu
 
 on:
   schedule:
-    - cron:  '0 9 * * *'
+    - cron: '0 9 * * *'
   workflow_dispatch:
     inputs:
       repo-id:
@@ -23,7 +23,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-22.04, ubuntu-latest]
+        os: [ ubuntu-22.04, ubuntu-latest ]
     env:
       AWS_REGION: us-east-1
       DJL_STAGING: ${{github.event.inputs.repo-id}}
@@ -40,6 +40,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libgomp1
+      - name: Test BOM dependencies
+        working-directory: canary
+        run: |
+          set -x
+          if [[ $(./gradlew -b bom.gradle --configuration runtimeClassPath | grep FAILED | wc -l) -gt 0 ]]; then false; fi
       - name: Test MXNet
         working-directory: canary
         run: |
