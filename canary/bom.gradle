@@ -8,7 +8,7 @@ version "1.0-SNAPSHOT"
 
 defaultTasks "build"
 
-def djlVersion = getEnv("DJL_VERSION", "0.22.0")
+def djlVersion = getEnv("DJL_VERSION", "${djl_version}")
 def stagingRepo = getEnv("DJL_STAGING", null)
 
 repositories {
@@ -64,9 +64,9 @@ dependencies {
     implementation "ai.djl.pytorch:pytorch-native-cpu::osx-aarch64"
     implementation "ai.djl.pytorch:pytorch-native-cpu::osx-x86_64"
     implementation "ai.djl.pytorch:pytorch-native-cpu::win-x86_64"
-    implementation "ai.djl.pytorch:pytorch-native-cu118-precxx11::linux-x86_64"
-    implementation "ai.djl.pytorch:pytorch-native-cu118::linux-x86_64"
-    implementation "ai.djl.pytorch:pytorch-native-cu118::win-x86_64"
+    implementation "ai.djl.pytorch:pytorch-native-cu117-precxx11::linux-x86_64"
+    implementation "ai.djl.pytorch:pytorch-native-cu117::linux-x86_64"
+    implementation "ai.djl.pytorch:pytorch-native-cu117::win-x86_64"
     implementation "ai.djl.sentencepiece:sentencepiece"
     implementation "ai.djl.spark:spark_2.12"
     implementation "ai.djl.tablesaw:tablesaw"
