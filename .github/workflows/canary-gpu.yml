@@ -165,7 +165,7 @@ jobs:
           rm -rf /root/.djl.ai/
 
           # not support lower version of CUDA since 0.22.0, fallback to CPU
-          DJL_ENGINE=pytorch-native-cu118 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-cu117 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu113 PT_VERSION=1.11.0 ./gradlew clean run
           rm -rf /root/.djl.ai/
@@ -175,7 +175,7 @@ jobs:
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu118 PT_VERSION=2.0.0 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu118-precxx11 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-cu117-precxx11 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu113-precxx11 PT_VERSION=1.11.0 ./gradlew clean run
           rm -rf /root/.djl.ai/
@@ -341,7 +341,7 @@ jobs:
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu118 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-cu117 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu113 PT_VERSION=1.11.0 ./gradlew clean run
           rm -rf /root/.djl.ai/
@@ -351,7 +351,7 @@ jobs:
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu118 PT_VERSION=2.0.0 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu118-precxx11 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-cu117-precxx11 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu113-precxx11 PT_VERSION=1.11.0 ./gradlew clean run
           rm -rf /root/.djl.ai/
