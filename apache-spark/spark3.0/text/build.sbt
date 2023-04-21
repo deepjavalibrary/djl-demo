@@ -7,8 +7,8 @@ scalacOptions += "-target:jvm-1.8"
 
 resolvers += Resolver.jcenterRepo
 
-libraryDependencies += "ai.djl" % "api" % "0.21.0"
-libraryDependencies += "ai.djl.spark" % "spark" % "0.21.0"
+libraryDependencies += "ai.djl" % "api" % "0.22.1"
+libraryDependencies += "ai.djl.spark" % "spark_2.12" % "0.22.1"
 
-libraryDependencies += "ai.djl.tensorflow" % "tensorflow-engine" % "0.21.0"
-libraryDependencies += "ai.djl.tensorflow" % "tensorflow-native-cpu" % "2.7.0"
+libraryDependencies += "ai.djl.tensorflow" % "tensorflow-engine" % "0.22.1"
+libraryDependencies += "ai.djl.tensorflow" % "tensorflow-native-cpu" % "2.10.1"
