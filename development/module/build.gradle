@@ -33,7 +33,7 @@ java {
 }
 
 extraJavaModuleInfo {
-    automaticModule("opencv-4.6.0-0.jar", "org.openpnp.opencv")
+    automaticModule("opencv-4.7.0-0.jar", "org.openpnp.opencv")
 }
 
 dependencies {

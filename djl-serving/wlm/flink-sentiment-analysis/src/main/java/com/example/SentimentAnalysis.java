@@ -12,7 +12,6 @@
  */
 package com.example;
 
-import ai.djl.Application;
 import ai.djl.modality.Classifications;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.serving.wlm.Job;
@@ -81,13 +80,14 @@ public class SentimentAnalysis {
         private static final ModelInfo<String, Classifications> modelInfo;
 
         static {
+            String url = "djl://ai.djl.pytorch/distilbert";
             Criteria<String, Classifications> criteria =
                     Criteria.builder()
-                            .optApplication(Application.NLP.SENTIMENT_ANALYSIS)
+                            .optModelUrls(url)
                             .setTypes(String.class, Classifications.class)
                             .optProgress(new ProgressBar())
                             .build();
-            modelInfo = new ModelInfo<>("model", criteria);
+            modelInfo = new ModelInfo<>("model", url, criteria);
             wlm.registerModel(modelInfo).scaleWorkers(null, 1, 4);
         }
 
