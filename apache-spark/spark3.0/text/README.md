@@ -1,7 +1,8 @@
 # DJL Spark Text Example
 
 ## Introduction
-This folder contains 5 demo applications built with Spark 3.0 and DJL to run text related
+
+This folder contains 5 demo applications built with Spark and DJL to run text related
 tasks.
 
 - QuestionAnsweringExample: Example to run question answering on Spark.
@@ -17,9 +18,9 @@ We provide two options to build, you can choose to build with `sbt` or `gradle`.
 ### sbt
 
 ```
-libraryDependencies += "ai.djl.spark" % "spark" % "0.21.0"
-libraryDependencies += "ai.djl.pytorch" % "pytorch-engine" % "0.21.0"
-libraryDependencies += "ai.djl.pytorch" % "pytorch-model-zoo" % "0.21.0"
+libraryDependencies += "ai.djl.spark" % "spark_2.12" % "0.22.1"
+libraryDependencies += "ai.djl.pytorch" % "pytorch-engine" % "0.22.1"
+libraryDependencies += "ai.djl.pytorch" % "pytorch-model-zoo" % "0.22.1"
 libraryDependencies += "ai.djl.pytorch" % "pytorch-native-cpu-precxx11" % "1.13.1"
 ```
 
@@ -30,7 +31,7 @@ You should add these in `dependencies`
 ```
 dependencies {
     implementation platform("ai.djl:bom:${djl_version}")
-    implementation "ai.djl.spark:spark"
+    implementation "ai.djl.spark:spark_2.12"
     runtimeOnly "ai.djl.pytorch:pytorch-engine"
     runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
     runtimeOnly "ai.djl.pytorch:pytorch-native-cpu-precxx11"
@@ -38,10 +39,10 @@ dependencies {
 ```
 ## Run the example
 
-Use `spark-submit` to run the examples. For example, to run the text embedding example, you can run:
+Use `spark-submit` to run the examples. For example, to run the text classification example, you can run:
 
 ```
-spark-submit --class com.examples.TextEmbeddingExample \
+spark-submit --class com.examples.TextClassificationExample \
     --master yarn \
     --mode cluster \
     --conf spark.executor.instances=2 \
@@ -51,6 +52,3 @@ spark-submit --class com.examples.TextEmbeddingExample \
     --conf spark.driver.cores=1 \
     build/libs/text-1.0-SNAPSHOT-all.jar
 ```
-
-Refer to the [Set up EMR on EKS](../image-classification-pyspark/README.md) if you want to run this example
-on EMR on EKS.

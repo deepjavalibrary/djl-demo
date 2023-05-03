@@ -43,7 +43,7 @@ object TextEmbeddingExample {
 
     if (outputPath != null) {
       println("Saving results S3 path: " + outputPath)
-      outputDf.write.mode("overwrite").orc(outputPath)
+      outputDf.write.mode("overwrite").parquet(outputPath)
     } else {
       println("Printing results to output stream")
       outputDf.printSchema()

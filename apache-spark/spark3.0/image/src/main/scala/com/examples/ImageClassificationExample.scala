@@ -60,18 +60,18 @@ object ImageClassificationExample {
     //  |    |    |-- element: string (containsNull = true)
     //  |    |-- probabilities: array (nullable = true)
     //  |    |    |-- element: double (containsNull = true)
-    //  |    |-- topK: array (nullable = true)
+    //  |    |-- top_k: array (nullable = true)
     //  |    |    |-- element: string (containsNull = true)
 
-    outputDf = outputDf.select("origin", "prediction.topK")
+    outputDf = outputDf.select("origin", "prediction.top_k")
     if (outputPath != null) {
       println("Saving results S3 path: " + outputPath)
-      outputDf.write.mode("overwrite").orc(outputPath)
+      outputDf.write.mode("overwrite").parquet(outputPath)
     } else {
       println("Printing results to output stream")
       outputDf.show(truncate = false)
       // +-------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-      // |origin                                                       |topK                                                                                                                                                                            |
+      // |origin                                                       |top_k                                                                                                                                                                           |
       // +-------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
       // |s3://djl-ai/resources/demo/spark/image_classification/car.jpg|[class: "n03770679 minivan", probability: 0.93501, class: "n02814533 beach wagon, station wagon, wagon, estate car, beach waggon, station waggon, waggon", probability: 0.01280]|
       // |s3://djl-ai/resources/demo/spark/image_classification/dog.jpg|[class: "n02085936 Maltese dog, Maltese terrier, Maltese", probability: 0.99027, class: "n02098413 Lhasa, Lhasa apso", probability: 0.00534]                                    |

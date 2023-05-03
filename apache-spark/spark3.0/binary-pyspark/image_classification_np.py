@@ -44,10 +44,10 @@ def transform(img_data):
     return np_util.to_npz([arr])
 
 
-def transform_udf(dataframe_batch_iterator: Iterator[pd.DataFrame]) -> Iterator[pd.DataFrame]:
-    for dataframe_batch in dataframe_batch_iterator:
-        dataframe_batch["transformed_image"] = dataframe_batch.apply(transform, axis=1)
-        yield dataframe_batch
+def transform_udf(iterator: Iterator[pd.DataFrame]) -> Iterator[pd.DataFrame]:
+    for batch in iterator:
+        batch["transformed_image"] = batch.apply(transform, axis=1)
+        yield batch
 
 
 def softmax(data):
@@ -80,11 +80,13 @@ if __name__ == "__main__":
 
     df = df.select("image.*").filter("nChannels=3")  # The model expects RGB images
 
+    # Pre-processing
     schema = StructType(df.select("*").schema.fields + [
         StructField("transformed_image", BinaryType(), True)
     ])
     transformed_df = df.mapInPandas(transform_udf, schema)
 
+    # Inference
     predictor = BinaryPredictor(input_col="transformed_image",
                                 output_col="prediction",
                                 engine="PyTorch",
@@ -92,6 +94,7 @@ if __name__ == "__main__":
                                 batchifier="stack")
     outputDf = predictor.predict(transformed_df)
 
+    # Post-processing
     softmax_udf = udf(softmax, ArrayType(FloatType()))
     outputDf = outputDf.withColumn("probabilities", softmax_udf(outputDf['prediction']))
     outputDf.printSchema()
@@ -110,7 +113,7 @@ if __name__ == "__main__":
     outputDf = outputDf.select("origin", "probabilities")
     if output_path:
         print("Saving results S3 path: " + output_path)
-        outputDf.write.mode("overwrite").orc(output_path)
+        outputDf.write.mode("overwrite").parquet(output_path)
     else:
         print("Printing results output stream")
         outputDf.show()

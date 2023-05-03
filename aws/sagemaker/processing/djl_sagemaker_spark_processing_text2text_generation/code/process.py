@@ -15,14 +15,14 @@ def main():
 
     spark = SparkSession.builder.appName("sm-spark-djl-text2text-generation").getOrCreate()
 
-    df = spark.read.option("header","true").csv("s3://" + os.path.join(args.s3_input_bucket, args.s3_input_key_prefix))
+    df = spark.read.json("s3://" + os.path.join(args.s3_input_bucket, args.s3_input_key_prefix))
 
     # Text2Text generation using Flan-Alpaca model
-    generator = Text2TextGenerator(input_col="instruction",
+    generator = Text2TextGenerator(input_col="text",
                                    output_col="prediction",
                                    hf_model_id="declare-lab/flan-alpaca-base")
-    outputDf = generator.generate(df, do_sample=True, max_length=30)
-    outputDf.write.mode("overwrite").option("header","true").csv("s3://" + os.path.join(args.s3_output_bucket, args.s3_output_key_prefix))
+    outputDf = generator.generate(df, do_sample=True, max_length=30).select("text", "prediction")
+    outputDf.write.mode("overwrite").parquet("s3://" + os.path.join(args.s3_output_bucket, args.s3_output_key_prefix))
 
 
 if __name__ == "__main__":

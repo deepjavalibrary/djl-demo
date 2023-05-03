@@ -27,7 +27,7 @@ object SemanticSegmentationExample {
       .getOrCreate()
     spark.sparkContext.setLogLevel("ERROR")
 
-    var df = spark.read.format("image").option("dropInvalid", true).load("s3://djl-ai/resources/images/dog_bike_car.jpg")
+    val df = spark.read.format("image").option("dropInvalid", true).load("s3://djl-ai/resources/images/dog_bike_car.jpg")
     df.printSchema()
     // root
     // |-- image: struct (nullable = true)
@@ -38,13 +38,11 @@ object SemanticSegmentationExample {
     // |    |-- mode: integer (nullable = true)
     // |    |-- data: binary (nullable = true)
 
-    df = df.select("image.*").filter("nChannels=3") // The model expects RGB images
-
     val segmenter = new SemanticSegmenter()
       .setInputCols(Array("origin", "height", "width", "nChannels", "mode", "data"))
       .setOutputCol("prediction")
       .setEngine("PyTorch")
-      .setModelUrl("https://mlrepo.djl.ai/model/cv/semantic_segmentation/ai/djl/pytorch/deeplabv3/0.0.1/deeplabv3.zip")
+      .setModelUrl("djl://ai.djl.pytorch/deeplabv3")
     var outputDf = segmenter.segment(df)
     outputDf.printSchema()
     // root
@@ -64,7 +62,7 @@ object SemanticSegmentationExample {
     outputDf = outputDf.select("origin", "prediction.*")
     if (outputPath != null) {
       println("Saving results S3 path: " + outputPath)
-      outputDf.write.mode("overwrite").orc(outputPath)
+      outputDf.write.mode("overwrite").parquet(outputPath)
     } else {
       println("Printing results to output stream")
       outputDf.show()

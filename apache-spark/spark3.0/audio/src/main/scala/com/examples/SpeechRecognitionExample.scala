@@ -42,10 +42,12 @@ object SpeechRecognitionExample {
       .setOutputCol("prediction")
       .setEngine("PyTorch")
       .setModelUrl("https://resources.djl.ai/test-models/pytorch/wav2vec2.zip")
+      .setChannels(1)
+      .setSampleRate(16000)
     val outputDf = recognizer.recognize(df).select("path", "prediction")
     if (outputPath != null) {
       println("Saving results S3 path: " + outputPath)
-      outputDf.write.mode("overwrite").orc(outputPath)
+      outputDf.write.mode("overwrite").csv(outputPath)
     } else {
       println("Printing results to output stream")
       outputDf.show(truncate = false)

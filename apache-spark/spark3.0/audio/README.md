@@ -1,11 +1,11 @@
 # DJL Spark Audio Example
 
 ## Introduction
-This folder contains 2 demo applications built with Spark 3.0 and DJL to run audio related
+
+This folder contains 2 demo applications built with Spark and DJL to run audio related
 tasks.
 
 - SpeechRecognitionExample: Ready to run for speech recognition using Wav2Vec2 model
-- WhisperSpeechRecognitionExample: Ready to run for speech recognition using Whisper model
 
 ## Setup
 
@@ -14,9 +14,9 @@ We provide two options to build, you can choose to build with `sbt` or `gradle`.
 ### sbt
 
 ```
-libraryDependencies += "ai.djl.spark" % "spark" % "0.21.0"
-libraryDependencies += "ai.djl.pytorch" % "pytorch-engine" % "0.21.0"
-libraryDependencies += "ai.djl.pytorch" % "pytorch-model-zoo" % "0.21.0"
+libraryDependencies += "ai.djl.spark" % "spark_2.12" % "0.22.1"
+libraryDependencies += "ai.djl.pytorch" % "pytorch-engine" % "0.22.1"
+libraryDependencies += "ai.djl.pytorch" % "pytorch-model-zoo" % "0.22.1"
 libraryDependencies += "ai.djl.pytorch" % "pytorch-native-cpu-precxx11" % "1.13.1"
 ```
 
@@ -27,7 +27,7 @@ You should add these in `dependencies`
 ```
 dependencies {
     implementation platform("ai.djl:bom:${djl_version}")
-    implementation "ai.djl.spark:spark"
+    implementation "ai.djl.spark:spark_2.12"
     runtimeOnly "ai.djl.pytorch:pytorch-engine"
     runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
     runtimeOnly "ai.djl.pytorch:pytorch-native-cpu-precxx11"
@@ -49,6 +49,3 @@ spark-submit --class com.examples.SpeechRecognitionExample \
     --conf spark.driver.cores=1 \
     build/libs/audio-1.0-SNAPSHOT-all.jar
 ```
-
-Refer to the [Set up EMR on EKS](../image-classification-pyspark/README.md) if you want to run this example
-on EMR on EKS.

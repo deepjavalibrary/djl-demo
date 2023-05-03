@@ -27,7 +27,7 @@ object ObjectDetectionExample {
       .getOrCreate()
     spark.sparkContext.setLogLevel("ERROR")
 
-    var df = spark.read.format("image").option("dropInvalid", true).load("s3://djl-ai/resources/images/dog_bike_car.jpg")
+    val df = spark.read.format("image").option("dropInvalid", true).load("s3://djl-ai/resources/images/dog_bike_car.jpg")
     df.printSchema()
     // root
     // |-- image: struct (nullable = true)
@@ -38,13 +38,12 @@ object ObjectDetectionExample {
     // |    |-- mode: integer (nullable = true)
     // |    |-- data: binary (nullable = true)
 
-    df = df.select("image.*").filter("nChannels=3") // The model expects RGB images
-
+    // Object detection
     val detector = new ObjectDetector()
       .setInputCols(Array("origin", "height", "width", "nChannels", "mode", "data"))
       .setOutputCol("prediction")
       .setEngine("PyTorch")
-      .setModelUrl("https://mlrepo.djl.ai/model/cv/object_detection/ai/djl/pytorch/yolov5s/0.0.1/yolov5s.zip")
+      .setModelUrl("djl://ai.djl.pytorch/yolov5s")
     var outputDf = detector.detect(df)
     outputDf.printSchema()
     // root
@@ -59,21 +58,21 @@ object ObjectDetectionExample {
     //  |    |    |-- element: string (containsNull = true)
     //  |    |-- probabilities: array (nullable = true)
     //  |    |    |-- element: double (containsNull = true)
-    //  |    |-- boundingBoxes: array (nullable = true)
+    //  |    |-- bounding_boxes: array (nullable = true)
     //  |    |    |-- element: string (containsNull = true)
 
-    outputDf = outputDf.select("origin", "prediction.*")
+    outputDf = outputDf.select("origin", "prediction.bounding_boxes")
     if (outputPath != null) {
       println("Saving results S3 path: " + outputPath)
-      outputDf.write.mode("overwrite").orc(outputPath)
+      outputDf.write.mode("overwrite").parquet(outputPath)
     } else {
       println("Printing results to output stream")
       outputDf.show(truncate = false)
-      // +---------------------------------------------+-----------+----------------------------------------+-------------------------------------------------------------------------------------------------------------+
-      // |origin                                       |class_names|probabilities                           |boundingBoxes                                                                                                |
-      // +---------------------------------------------+-----------+----------------------------------------+-------------------------------------------------------------------------------------------------------------+
-      // |s3://djl-ai/resources/images/dog_bike_car.jpg|[car, dog] |[0.6604642271995544, 0.9015125036239624]|[[x=392.622, y=85.052, width=181.403, height=105.517], [x=108.948, y=240.220, width=150.455, height=370.261]]|
-      // +---------------------------------------------+-----------+----------------------------------------+-------------------------------------------------------------------------------------------------------------+
+      // +---------------------------------------------+--------------------------------------------------------------------------------------------------------------+
+      // |origin                                       |bounding_boxes                                                                                                |
+      // +---------------------------------------------+--------------------------------------------------------------------------------------------------------------+
+      // |s3://djl-ai/resources/images/dog_bike_car.jpg|[{"x"=0.613, "y"=0.133, "width"=0.283, "height"=0.165}, {"x"=0.170, "y"=0.375, "width"=0.235, "height"=0.579}]|
+      // +---------------------------------------------+--------------------------------------------------------------------------------------------------------------+
     }
 
     spark.stop()
