@@ -12,7 +12,7 @@
  */
 package com.examples
 
-import ai.djl.spark.task.text.HuggingFaceTextTokenizer
+import ai.djl.spark.task.text.TextTokenizer
 import org.apache.spark.sql.SparkSession
 
 /**
@@ -35,20 +35,20 @@ object TextTokenizationExample {
     )).toDF("id", "text")
 
     // Tokenization
-    val tokenizer = new HuggingFaceTextTokenizer()
+    val tokenizer = new TextTokenizer()
       .setInputCol("text")
       .setOutputCol("tokens")
-      .setTokenizer("bert-base-cased")
+      .setHfModelId("bert-base-cased")
     val outputDf = tokenizer.tokenize(df)
 
     if (outputPath != null) {
       println("Saving results S3 path: " + outputPath)
-      outputDf.write.mode("overwrite").orc(outputPath)
+      outputDf.write.mode("overwrite").csv(outputPath)
     } else {
       println("Printing results to output stream")
       outputDf.printSchema()
       // root
-      //  |-- id: string (nullable = true)
+      //  |-- id: integer (nullable = false)
       //  |-- text: string (nullable = true)
       //  |-- tokens: array (nullable = true)
       //  |    |-- element: string (containsNull = true)

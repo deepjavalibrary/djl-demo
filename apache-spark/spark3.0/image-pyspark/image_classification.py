@@ -41,11 +41,12 @@ if __name__ == "__main__":
 
     df = df.select("image.*").filter("nChannels=3") # The model expects RGB images
 
+    # Image classification
     classifier = ImageClassifier(input_cols=["origin", "height", "width", "nChannels", "mode", "data"],
                                  output_col="prediction",
                                  engine="PyTorch",
                                  model_url="djl://ai.djl.pytorch/resnet",
-                                 topK=2)
+                                 top_k=2)
     outputDf = classifier.classify(df)
     outputDf.printSchema()
     # root
@@ -60,23 +61,22 @@ if __name__ == "__main__":
     #  |    |    |-- element: string (containsNull = true)
     #  |    |-- probabilities: array (nullable = true)
     #  |    |    |-- element: double (containsNull = true)
-    #  |    |-- topK: map (nullable = true)
-    #  |    |    |-- key: string
-    #  |    |    |-- value: double (valueContainsNull = true)
+    #  |    |-- top_k: array (nullable = true)
+    #  |    |    |-- element: string (containsNull = true)
 
-    outputDf = outputDf.select("origin", "prediction.topK")
+    outputDf = outputDf.select("origin", "prediction.top_k")
     if output_path:
         print("Saving results S3 path: " + output_path)
-        outputDf.write.mode("overwrite").orc(output_path)
+        outputDf.write.mode("overwrite").parquet(output_path)
     else:
         print("Printing results output stream")
         outputDf.show(truncate=False)
-        # +-------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------+
-        # |origin                                                       |topK                                                                                                                                                           |
-        # +-------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------+
-        # |s3://djl-ai/resources/demo/spark/image_classification/car.jpg|{n03770679 minivan -> 0.8499245047569275, n02814533 beach wagon, station wagon, wagon, estate car, beach waggon, station waggon, waggon -> 0.04071871191263199}|
-        # |s3://djl-ai/resources/demo/spark/image_classification/dog.jpg|{n02085936 Maltese dog, Maltese terrier, Maltese -> 0.7925896644592285, n02113624 toy poodle -> 0.11378670483827591}                                           |
-        # |s3://djl-ai/resources/demo/spark/image_classification/cat.jpg|{n02123394 Persian cat -> 0.9232246279716492, n02127052 lynx, catamount -> 0.05277140066027641}                                                                |
-        # +-------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------+
+        # +-------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+        # |origin                                                       |top_k                                                                                                                                                                           |
+        # +-------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+        # |s3://djl-ai/resources/demo/spark/image_classification/car.jpg|[class: "n03770679 minivan", probability: 0.93501, class: "n02814533 beach wagon, station wagon, wagon, estate car, beach waggon, station waggon, waggon", probability: 0.01280]|
+        # |s3://djl-ai/resources/demo/spark/image_classification/dog.jpg|[class: "n02085936 Maltese dog, Maltese terrier, Maltese", probability: 0.99027, class: "n02098413 Lhasa, Lhasa apso", probability: 0.00534]                                    |
+        # |s3://djl-ai/resources/demo/spark/image_classification/cat.jpg|[class: "n02123394 Persian cat", probability: 0.64565, class: "n02123045 tabby, tabby cat", probability: 0.18182]                                                               |
+        # +-------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
     spark.stop()

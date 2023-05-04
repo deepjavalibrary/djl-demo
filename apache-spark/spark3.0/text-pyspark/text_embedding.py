@@ -30,9 +30,9 @@ if __name__ == "__main__":
 
     df = spark.createDataFrame(
         [
-            ("1", "Hello, y'all! How are you?"),
-            ("2", "Hello to you too!"),
-            ("3", "I'm fine, thank you!")
+            (1, "Hello, y'all! How are you?"),
+            (2, "Hello to you too!"),
+            (3, "I'm fine, thank you!")
         ],
         ["id", "text"]
     )
@@ -48,18 +48,18 @@ if __name__ == "__main__":
     # Embedding
     embedder = TextEmbedder(input_col="text",
                             output_col="prediction",
-                            engine="TensorFlow",
-                            model_url="https://storage.googleapis.com/tfhub-modules/google/universal-sentence-encoder/4.tar.gz")
+                            engine="PyTorch",
+                            model_url="djl://ai.djl.huggingface.pytorch/sentence-transformers/all-MiniLM-L6-v2")
     outputDf = embedder.embed(df)
 
     if output_path:
         print("Saving results S3 path: " + output_path)
-        outputDf.write.mode("overwrite").orc(output_path)
+        outputDf.write.mode("overwrite").parquet(output_path)
     else:
         print("Printing results output stream")
         outputDf.printSchema()
         # root
-        #  |-- id: string (nullable = true)
+        #  |-- id: long (nullable = true)
         #  |-- text: string (nullable = true)
         #  |-- embedding: array (nullable = true)
         #  |    |-- element: float (containsNull = true)

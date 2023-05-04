@@ -28,11 +28,12 @@ if __name__ == "__main__":
     sc = spark.sparkContext
     sc.setLogLevel("ERROR")
 
+    # Input
     df = spark.createDataFrame(
         [
-            ("1", "My name is Julien and I like to"),
-            ("2", "My name is Thomas and my main"),
-            ("3", "My name is Mariama, my favorite")
+            (1, "My name is Julien and I like to"),
+            (2, "My name is Thomas and my main"),
+            (3, "My name is Mariama, my favorite")
         ],
         ["id", "text"]
     )
@@ -49,16 +50,16 @@ if __name__ == "__main__":
     generator = TextGenerator(input_col="text",
                               output_col="prediction",
                               hf_model_id="facebook/opt-125m")
-    outputDf = generator.generate(df, do_sample=True, max_length=15)
+    outputDf = generator.generate(df, do_sample=True, max_length=30)
 
     if output_path:
         print("Saving results S3 path: " + output_path)
-        outputDf.write.mode("overwrite").csv(output_path)
+        outputDf.write.mode("overwrite").parquet(output_path)
     else:
         print("Printing results output stream")
         outputDf.printSchema()
         # root
-        #  |-- id: string (nullable = true)
+        #  |-- id: long (nullable = true)
         #  |-- text: string (nullable = true)
         #  |-- prediction: string (nullable = true)
 

@@ -13,7 +13,7 @@
 
 import sys
 from pyspark.sql.session import SparkSession
-from djl_spark.task.text import HuggingFaceTextTokenizer
+from djl_spark.task.text import TextTokenizer
 
 
 if __name__ == "__main__":
@@ -30,9 +30,9 @@ if __name__ == "__main__":
 
     df = spark.createDataFrame(
         [
-            ("1", "Hello, y'all! How are you?"),
-            ("2", "Hello to you too!"),
-            ("3", "I'm fine, thank you!")
+            (1, "Hello, y'all! How are you?"),
+            (2, "Hello to you too!"),
+            (3, "I'm fine, thank you!")
         ],
         ["id", "text"]
     )
@@ -46,19 +46,19 @@ if __name__ == "__main__":
     # +---+--------------------------+
 
     # Tokenization
-    tokenizer = HuggingFaceTextTokenizer(input_col="text",
-                                         output_col="tokens",
-                                         name="bert-base-cased")
+    tokenizer = TextTokenizer(input_col="text",
+                              output_col="tokens",
+                              hf_model_id="bert-base-cased")
     outputDf = tokenizer.tokenize(df)
 
     if output_path:
         print("Saving results S3 path: " + output_path)
-        outputDf.write.mode("overwrite").orc(output_path)
+        outputDf.write.mode("overwrite").parquet(output_path)
     else:
         print("Printing results output stream")
         outputDf.printSchema()
         # root
-        #  |-- id: string (nullable = true)
+        #  |-- id: long (nullable = true)
         #  |-- text: string (nullable = true)
         #  |-- tokens: array (nullable = true)
         #  |    |-- element: string (containsNull = true)

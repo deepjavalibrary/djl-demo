@@ -33,39 +33,38 @@ object TextClassificationExample {
       (2, "Hello, my dog is cute")
     )).toDF("id", "text")
 
-    // Classification
+    // Text classification
     val classifier = new TextClassifier()
       .setInputCol("text")
       .setOutputCol("prediction")
       .setEngine("PyTorch")
       .setModelUrl("djl://ai.djl.huggingface.pytorch/distilbert-base-uncased-finetuned-sst-2-english")
-    val outputDf = classifier.classify(df)
+    var outputDf = classifier.classify(df)
+    outputDf.printSchema()
+    // root
+    //  |-- id: integer (nullable = true)
+    //  |-- text: string (nullable = true)
+    //  |-- prediction: struct (nullable = true)
+    //  |    |-- class_names: array (nullable = true)
+    //  |    |    |-- element: string (containsNull = true)
+    //  |    |-- probabilities: array (nullable = true)
+    //  |    |    |-- element: double (containsNull = true)
+    //  |    |-- top_k: array (nullable = true)
+    //  |    |    |-- element: string (containsNull = true)
 
+    outputDf = outputDf.select("text", "prediction.top_k")
     if (outputPath != null) {
       println("Saving results S3 path: " + outputPath)
-      outputDf.write.mode("overwrite").orc(outputPath)
+      outputDf.write.mode("overwrite").parquet(outputPath)
     } else {
       println("Printing results to output stream")
-      outputDf.printSchema()
-      // root
-      //  |-- id: integer (nullable = true)
-      //  |-- text: string (nullable = true)
-      //  |-- prediction: struct (nullable = true)
-      //  |    |-- class_names: array (nullable = true)
-      //  |    |    |-- element: string (containsNull = true)
-      //  |    |-- probabilities: array (nullable = true)
-      //  |    |    |-- element: double (containsNull = true)
-      //  |    |-- topK: map (nullable = true)
-      //  |    |    |-- key: string
-      //  |    |    |-- value: double (valueContainsNull = true)
-
       outputDf.show(truncate = false)
-      // +---+--------------------------+--------------------------------------------------------------------------------------------------------------------------------------+
-      // |id |text                      |prediction                                                                                                                            |
-      // +---+--------------------------+--------------------------------------------------------------------------------------------------------------------------------------+
-      // |1  |Hello, y'all! How are you?|{[POSITIVE, NEGATIVE], [0.9972201585769653, 0.002779838163405657], {POSITIVE -> 0.9972201585769653, NEGATIVE -> 0.002779838163405657}}|
-      // |2  |Hello, my dog is cute     |{[POSITIVE, NEGATIVE], [0.9997830986976624, 2.169553335988894E-4], {POSITIVE -> 0.9997830986976624, NEGATIVE -> 2.169553335988894E-4}}|
-      // +---+--------------------------+--------------------------------------------------------------------------------------------------------------------------------------+
+      // +--------------------------+----------------------------------------------------------------------------------------------+
+      // |text                      |top_k                                                                                         |
+      // +--------------------------+----------------------------------------------------------------------------------------------+
+      // |Hello, y'all! How are you?|[{"class": "POSITIVE", "probability": 0.99722}, {"class": "NEGATIVE", "probability": 0.00277}]|
+      // |Hello, my dog is cute     |[{"class": "POSITIVE", "probability": 0.99978}, {"class": "NEGATIVE", "probability": 0.00021}]|
+      // +--------------------------+----------------------------------------------------------------------------------------------+
     }
 
     spark.stop()

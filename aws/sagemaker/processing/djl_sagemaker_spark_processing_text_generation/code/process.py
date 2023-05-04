@@ -2,7 +2,8 @@ import argparse
 import os
 
 from pyspark.sql import SparkSession
-from djl_spark.task.text import TextClassifier
+from pyspark.sql.functions import col, substring_index
+from djl_spark.task.text import TextGenerator
 
 
 def main():
@@ -13,16 +14,19 @@ def main():
     parser.add_argument("--s3_output_key_prefix", type=str, help="s3 output key prefix")
     args = parser.parse_args()
 
-    spark = SparkSession.builder.appName("sm-spark-djl-text-classification").getOrCreate()
+    spark = SparkSession.builder.appName("sm-spark-djl-text-generation").getOrCreate()
 
+    # Input
     df = spark.read.json("s3://" + os.path.join(args.s3_input_bucket, args.s3_input_key_prefix))
 
-    # Text classification
-    classifier = TextClassifier(input_col="inputs",
-                                output_col="prediction",
-                                engine="PyTorch",
-                                model_url="djl://ai.djl.huggingface.pytorch/distilbert-base-uncased-finetuned-sst-2-english")
-    outputDf = classifier.classify(df).select("text", "prediction.top_k")
+    # Truncate the input to 8 words to make the input shorter than max_length 30
+    df = df.select(substring_index(col("inputs"), " ", 8).alias("inputs"))
+
+    # Text generation
+    generator = TextGenerator(input_col="inputs",
+                              output_col="prediction",
+                              hf_model_id="facebook/opt-125m")
+    outputDf = generator.generate(df, do_sample=True, max_length=30)
     outputDf.write.mode("overwrite").parquet("s3://" + os.path.join(args.s3_output_bucket, args.s3_output_key_prefix))
 
 

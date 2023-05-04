@@ -1,6 +1,7 @@
 # DJL Spark Image Classification Binary Example
 
 ## Introduction
+
 This folder contains a demo application built with Spark and DJL to run a group image classification task.
 Note that this demo does its own pre-processing using numpy and pass in the input in .npz binary format, do
 the inference, then does its own post-processing and loads result in .npz binary format.
@@ -68,9 +69,6 @@ spark-submit \
     image_classification_np.py
 ```
 
-Refer to the [Set up EMR on EKS](../image-classification-pyspark/README.md) if you want to run this example
-on EMR on EKS.
-
 This is the expected output from console:
 ```
 +--------------------+--------------------+
@@ -81,3 +79,6 @@ This is the expected output from console:
 |s3://djl-ai/resou...|[3.0311656E-10, 3...|
 +--------------------+--------------------+
 ```
+
+Refer [here](https://github.com/deepjavalibrary/djl-demo/blob/master/aws/sagemaker/processing/djl_sagemaker_spark_processing_binary/djl_sagemaker_spark_processing_binary.ipynb)
+on how to run this example on Amazon SageMaker Processing.

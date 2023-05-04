@@ -30,11 +30,11 @@ if __name__ == "__main__":
 
     df = spark.createDataFrame(
         [
-            ("1", "Give three tips for staying healthy."),
-            ("2", "What are the three primary colors?"),
-            ("3", "Describe the structure of an atom."),
-            ("4", "How can we reduce air pollution?"),
-            ("5", "Describe a time when you had to make a difficult decision.")
+            (1, "Give three tips for staying healthy."),
+            (2, "What are the three primary colors?"),
+            (3, "Describe the structure of an atom."),
+            (4, "How can we reduce air pollution?"),
+            (5, "Describe a time when you had to make a difficult decision.")
         ],
         ["id", "text"]
     )
@@ -57,12 +57,12 @@ if __name__ == "__main__":
 
     if output_path:
         print("Saving results S3 path: " + output_path)
-        outputDf.write.mode("overwrite").csv(output_path)
+        outputDf.write.mode("overwrite").parquet(output_path)
     else:
         print("Printing results output stream")
         outputDf.printSchema()
         # root
-        #  |-- id: string (nullable = true)
+        #  |-- id: long (nullable = true)
         #  |-- text: string (nullable = true)
         #  |-- prediction: string (nullable = true)
 

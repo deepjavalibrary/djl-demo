@@ -13,7 +13,7 @@
 
 import sys
 from pyspark.sql.session import SparkSession
-from djl_spark.task.text import HuggingFaceTextEncoder, HuggingFaceTextDecoder
+from djl_spark.task.text import TextEncoder, TextDecoder
 
 
 if __name__ == "__main__":
@@ -30,9 +30,9 @@ if __name__ == "__main__":
 
     df = spark.createDataFrame(
         [
-            ("1", "Hello, y'all! How are you?"),
-            ("2", "Hello to you too!"),
-            ("3", "I'm fine, thank you!")
+            (1, "Hello, y'all! How are you?"),
+            (2, "Hello to you too!"),
+            (3, "I'm fine, thank you!")
         ],
         ["id", "text"]
     )
@@ -46,13 +46,13 @@ if __name__ == "__main__":
     # +---+--------------------------+
 
     # Encoding
-    encoder = HuggingFaceTextEncoder(input_col="text",
-                                    output_col="encoded",
-                                    name="bert-base-cased")
+    encoder = TextEncoder(input_col="text",
+                          output_col="encoded",
+                          hf_model_id="bert-base-cased")
     encDf = encoder.encode(df)
     encDf.printSchema()
     # root
-    #  |-- id: string (nullable = true)
+    #  |-- id: long (nullable = true)
     #  |-- text: string (nullable = true)
     #  |-- encoded: struct (nullable = true)
     #  |    |-- ids: array (nullable = true)
@@ -64,13 +64,13 @@ if __name__ == "__main__":
 
     # Decoding
     encDf = encDf.select("id", "text", "encoded.*")
-    decoder = HuggingFaceTextDecoder(input_col="ids",
-                                    output_col="decoded",
-                                    name="bert-base-cased")
+    decoder = TextDecoder(input_col="ids",
+                          output_col="decoded",
+                          hf_model_id="bert-base-cased")
     decDf = decoder.decode(encDf)
     decDf.printSchema()
     # root
-    #  |-- id: string (nullable = true)
+    #  |-- id: long (nullable = true)
     #  |-- text: string (nullable = true)
     #  |-- ids: array (nullable = true)
     #  |    |-- element: long (containsNull = true)
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     decDf = decDf.select("id", "text", "ids", "decoded")
     if output_path:
         print("Saving results S3 path: " + output_path)
-        decDf.write.mode("overwrite").orc(output_path)
+        decDf.write.mode("overwrite").parquet(output_path)
     else:
         print("Printing results output stream")
         decDf.show(truncate=False)

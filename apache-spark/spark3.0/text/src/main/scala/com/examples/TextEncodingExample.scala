@@ -12,7 +12,7 @@
  */
 package com.examples
 
-import ai.djl.spark.task.text.{HuggingFaceTextDecoder, HuggingFaceTextEncoder}
+import ai.djl.spark.task.text.{TextDecoder, TextEncoder}
 import org.apache.spark.sql.SparkSession
 
 /**
@@ -35,14 +35,14 @@ object TextEncodingExample {
     )).toDF("id", "text")
 
     // Encoding
-    val encoder = new HuggingFaceTextEncoder()
+    val encoder = new TextEncoder()
       .setInputCol("text")
       .setOutputCol("encoded")
-      .setTokenizer("bert-base-cased")
+      .setHfModelId("bert-base-cased")
     var encDf = encoder.encode(df)
     encDf.printSchema()
     // root
-    //  |-- id: string (nullable = true)
+    //  |-- id: integer (nullable = false)
     //  |-- text: string (nullable = true)
     //  |-- encoded: struct (nullable = true)
     //  |    |-- ids: array (nullable = true)
@@ -54,14 +54,14 @@ object TextEncodingExample {
 
     // Decoding
     encDf = encDf.select("id", "text", "encoded.*")
-    val decoder = new HuggingFaceTextDecoder()
+    val decoder = new TextDecoder()
       .setInputCol("ids")
       .setOutputCol("decoded")
-      .setTokenizer("bert-base-cased")
+      .setHfModelId("bert-base-cased")
     var decDf = decoder.decode(encDf)
     decDf.printSchema()
     // root
-    //  |-- id: string (nullable = true)
+    //  |-- id: integer (nullable = false)
     //  |-- text: string (nullable = true)
     //  |-- ids: array (nullable = true)
     //  |    |-- element: long (containsNull = true)
@@ -74,7 +74,7 @@ object TextEncodingExample {
     decDf = decDf.select("id", "text", "ids", "decoded")
     if (outputPath != null) {
       println("Saving results S3 path: " + outputPath)
-      decDf.write.mode("overwrite").orc(outputPath)
+      decDf.write.mode("overwrite").parquet(outputPath)
     } else {
       println("Printing results to output stream")
       decDf.show(truncate = false)
