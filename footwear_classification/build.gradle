@@ -18,6 +18,7 @@ dependencies {
     implementation "ai.djl:basicdataset"
     implementation "org.slf4j:slf4j-simple:${slf4j_simple_version}"
     runtimeOnly "ai.djl.mxnet:mxnet-engine"
+    runtimeOnly "ai.djl.pytorch:pytorch-engine"
 }
 
 task training(type: JavaExec) {

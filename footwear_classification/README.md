@@ -50,7 +50,11 @@ By running this command will train this model for 2 epochs.
 ```shell
 cd footwear_classification
 
-# for Linux/macOS
+# for Linux/macOS (x86)
+./gradlew training
+
+# for macOS (ARM64 - Apple Silicon)
+export DJL_DEFAULT_ENGINE=PyTorch
 ./gradlew training
 
 # for Windows:
