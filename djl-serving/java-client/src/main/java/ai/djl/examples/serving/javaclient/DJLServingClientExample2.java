@@ -14,6 +14,7 @@ package ai.djl.examples.serving.javaclient;
 
 import com.google.gson.Gson;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class DJLServingClientExample2 {
@@ -35,13 +36,16 @@ public class DJLServingClientExample2 {
                         "paragraph",
                         "The weather is nice, it is beautiful day");
         String json = new Gson().toJson(input);
-        String response =
+        byte[] response =
                 HttpUtils.postRequest(
                         "http://localhost:8080/predictions/bert_base_cased_squad2",
                         null,
                         "application/json",
-                        json,
+                        json.getBytes(StandardCharsets.UTF_8),
                         null);
-        System.out.println(response);
+        System.out.println(new String(response, StandardCharsets.UTF_8));
+
+        // unregister model
+        HttpUtils.unregisterModel("http://localhost:8080/models/bert_base_cased_squad2");
     }
 }

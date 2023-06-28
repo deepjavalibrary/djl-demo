@@ -12,6 +12,9 @@
  */
 package ai.djl.examples.serving.javaclient;
 
+import ai.djl.training.util.DownloadUtils;
+
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Map;
 
@@ -23,14 +26,20 @@ public class DJLServingClientExample1 {
         Map<String, String> params = Map.of("url", url, "engine", "PyTorch");
         HttpUtils.postRequest("http://localhost:8080/models", params, null, null, null);
 
+        // download kitten image
+        DownloadUtils.download("https://resources.djl.ai/images/kitten.jpg", "kitten.jpg");
+
         // Run inference
-        String response =
+        byte[] response =
                 HttpUtils.postRequest(
                         "http://localhost:8080/predictions/traced_resnet18",
                         null,
                         "application/octet-stream",
                         null,
                         Path.of("kitten.jpg"));
-        System.out.println(response);
+        System.out.println(new String(response, StandardCharsets.UTF_8));
+
+        // unregister model
+        HttpUtils.unregisterModel("http://localhost:8080/models/traced_resnet18");
     }
 }

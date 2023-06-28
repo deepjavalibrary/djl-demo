@@ -14,7 +14,9 @@ repositories {
 }
 
 dependencies {
-    implementation "com.google.code.gson:gson:2.10"
+    implementation platform("ai.djl:bom:${djl_version}")
+    implementation "ai.djl:api"
+    implementation "ai.djl.pytorch:pytorch-engine"
 }
 
 configure(this) {
