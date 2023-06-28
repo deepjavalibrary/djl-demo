@@ -24,8 +24,8 @@ import java.util.Map;
 
 public class HttpUtils {
 
-    public static String postRequest(
-            String url, Map<String, String> params, String contentType, String data, Path file)
+    public static byte[] postRequest(
+            String url, Map<String, String> params, String contentType, byte[] data, Path file)
             throws IOException, InterruptedException {
         HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build();
 
@@ -52,7 +52,7 @@ public class HttpUtils {
         }
 
         if (data != null) {
-            builder.POST(HttpRequest.BodyPublishers.ofString(data));
+            builder.POST(HttpRequest.BodyPublishers.ofByteArray(data));
         } else if (file != null) {
             builder.POST(HttpRequest.BodyPublishers.ofFile(file));
         } else {
@@ -60,7 +60,24 @@ public class HttpUtils {
         }
 
         HttpRequest request = builder.build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<byte[]> response =
+                client.send(request, HttpResponse.BodyHandlers.ofByteArray());
         return response.body();
+    }
+
+    public static void unregisterModel(String url) throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build();
+        HttpRequest.Builder builder = HttpRequest.newBuilder();
+        builder.uri(URI.create(url));
+        builder.DELETE();
+
+        HttpRequest request = builder.build();
+        HttpResponse<byte[]> response =
+                client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+        if (response.statusCode() != 200) {
+            throw new IOException(
+                    "Failed unregister model: "
+                            + new String(response.body(), StandardCharsets.UTF_8));
+        }
     }
 }

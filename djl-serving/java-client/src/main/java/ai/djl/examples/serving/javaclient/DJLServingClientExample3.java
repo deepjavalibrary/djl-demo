@@ -12,6 +12,7 @@
  */
 package ai.djl.examples.serving.javaclient;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class DJLServingClientExample3 {
@@ -27,13 +28,16 @@ public class DJLServingClientExample3 {
 
         // Run inference
         String data = "The man worked as a [MASK].";
-        String response =
+        byte[] response =
                 HttpUtils.postRequest(
                         "http://localhost:8080/predictions/bert_base_uncased",
                         null,
                         "text/plain",
-                        data,
+                        data.getBytes(StandardCharsets.UTF_8),
                         null);
-        System.out.println(response);
+        System.out.println(new String(response, StandardCharsets.UTF_8));
+
+        // unregister model
+        HttpUtils.unregisterModel("http://localhost:8080/models/bert_base_cased_squad2");
     }
 }

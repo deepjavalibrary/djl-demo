@@ -11,12 +11,12 @@ This demo provides a `postRequest` utility method that can create a POST `HttpRe
 - `url`: The URL string.
 - `params`: The URL parameters to append to the URL.
 - `contentType`: The content type of the request.
-- `data`: The body in bytes or text to attach to the request.
+- `data`: The body in bytes to attach to the request.
 - `file`: The file to upload in the request.
 
 ```java
-public static String postRequest(String url, Map<String, String> params, String contentType,
-                                 String data, Path file) throws IOException, InterruptedException {
+public static byte[] postRequest(String url, Map<String, String> params, String contentType,
+                                 byte[] data, Path file) throws IOException, InterruptedException {
     HttpClient client = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_1_1)
             .build();
@@ -44,7 +44,7 @@ public static String postRequest(String url, Map<String, String> params, String 
     }
 
     if (data != null) {
-        builder.POST(HttpRequest.BodyPublishers.ofString(data));
+        builder.POST(HttpRequest.BodyPublishers.ofByteArray(data));
     } else if (file != null) {
         builder.POST(HttpRequest.BodyPublishers.ofFile(file));
     } else {
@@ -52,20 +52,14 @@ public static String postRequest(String url, Map<String, String> params, String 
     }
 
     HttpRequest request = builder.build();
-    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
     return response.body();
 }
 ```
 
-## Example 1
+## Example 1: send an file to model server as payload to run inference
 
 In the first example, let's load an [Image Classification model](https://resources.djl.ai/demo/pytorch/traced_resnet18.zip).
-
-First we need to download the input image.
-
-```
-curl -O https://resources.djl.ai/images/kitten.jpg
-```
 
 To register the model and make predictions:
 
@@ -74,15 +68,18 @@ String url = "https://resources.djl.ai/demo/pytorch/traced_resnet18.zip";
 Map<String, String> params = Map.of("url", url, "engine", "PyTorch");
 HttpUtils.postRequest("http://localhost:8080/models", params, null, null, null);
 
+// download kitten image
+DownloadUtils.download("https://resources.djl.ai/images/kitten.jpg", "kitten.jpg");
+
 // Run inference
-String response =
+byte[] response =
         HttpUtils.postRequest(
                 "http://localhost:8080/predictions/traced_resnet18",
                 null,
                 "application/octet-stream",
                 null,
                 Path.of("kitten.jpg"));
-System.out.println(response);
+System.out.println(new String(response, StandardCharsets.UTF_8));
 ```
 
 Run the example:
@@ -121,7 +118,7 @@ This should return the following result:
 ]
 ```
 
-## Example 2
+## Example 2: send json to model server as payload to run inference
 
 In the second example, we load a [HuggingFace Bert QA model](https://mlrepo.djl.ai/model/nlp/question_answer/ai/djl/huggingface/pytorch/deepset/bert-base-cased-squad2/0.0.1/bert-base-cased-squad2.zip) and make predictions.
 
@@ -138,14 +135,14 @@ Map<String, String> input =
                 "paragraph",
                 "The weather is nice, it is beautiful day");
 String json = new Gson().toJson(input);
-String response =
+byte[] response =
         HttpUtils.postRequest(
                 "http://localhost:8080/predictions/bert_base_cased_squad2",
                 null,
                 "application/json",
-                json,
+                json.getBytes(StandardCharsets.UTF_8),
                 null);
-System.out.println(response);
+System.out.println(new String(response, StandardCharsets.UTF_8));
 ```
 
 Run the example:
@@ -163,7 +160,7 @@ This should return the following result:
 nice
 ```
 
-## Example 3
+## Example 3: send plain text to model server as payload to run inference
 
 In the third example, we can try a [HuggingFace Fill Mask model](https://mlrepo.djl.ai/model/nlp/fill_mask/ai/djl/huggingface/pytorch/bert-base-uncased/0.0.1/bert-base-uncased.zip). Masked model inputs masked words in a sentence and predicts which words should replace those masks.
 
@@ -174,14 +171,14 @@ HttpUtils.postRequest("http://localhost:8080/models", params, null, null, null);
 
 // Run inference
 String data = "The man worked as a [MASK].";
-String response =
+byte[] response =
         HttpUtils.postRequest(
                 "http://localhost:8080/predictions/bert_base_uncased",
                 null,
                 "text/plain",
-                data,
+                data.getBytes(StandardCharsets.UTF_8),
                 null);
-System.out.println(response);
+System.out.println(new String(response, StandardCharsets.UTF_8));
 ```
 
 Run the example:
@@ -219,3 +216,65 @@ This should return the following result:
   }
 ]
 ```
+
+## Example 4: send tensors (NDList) to model server as payload to run inference
+
+In the first example, let's load an [Image Classification model](https://resources.djl.ai/demo/pytorch/traced_resnet18.zip).
+
+To register the model and make predictions:
+
+```
+String url =
+    "https://resources.djl.ai/demo/pytorch/traced_resnet18.zip?translatorFactory=ai.djl.translate.NoopServingTranslatorFactory";
+Map<String, String> params = Map.of("url", url, "engine", "PyTorch");
+HttpUtils.postRequest("http://localhost:8080/models", params, null, null, null);
+
+try (NDManager manager = NDManager.newBaseManager()) {
+Engine engine = manager.getEngine();
+NDList list;
+if ("PyTorch".equals(engine.getEngineName())) {
+    // You need include a proper engine in the build.gradle to perform the following
+    // NDArray operations:
+    ImageFactory factory = ImageFactory.getInstance();
+    Image image = factory.fromUrl("https://resources.djl.ai/images/kitten.jpg");
+    NDArray array = image.toNDArray(manager);
+    array = new Resize(224, 224).transform(array);
+    array = new ToTensor().transform(array);
+    array = array.expandDims(0);
+    list = new NDList(array);
+} else {
+    // create a fake NDArray input for demo
+    NDArray array = manager.ones(new Shape(1, 3, 224, 224));
+    list = new NDList(array);
+}
+
+// Run inference
+byte[] data = list.encode();
+byte[] response =
+        HttpUtils.postRequest(
+                "http://localhost:8080/predictions/traced_resnet18",
+                null,
+                "tenosr/ndlist",
+                data,
+                null);
+NDList output = NDList.decode(manager, response);
+System.out.println(output.get(0));
+```
+
+Run the example:
+
+```
+# start djl-serving locally
+djl-serving
+
+./gradlew run -Dmain=ai.djl.examples.serving.javaclient.DJLServingClientExample4
+```
+
+This should return the following result:
+
+```
+ND: (1, 1000) cpu() float32
+...
+
+```
+
