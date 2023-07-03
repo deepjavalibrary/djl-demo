@@ -28,41 +28,41 @@ public class DJLServingClientExample4 {
 
     public static void main(String[] args) throws Exception {
         // Register model with tensor in/tensor out mode
-String url =
-    "https://resources.djl.ai/demo/pytorch/traced_resnet18.zip?translatorFactory=ai.djl.translate.NoopServingTranslatorFactory";
-Map<String, String> params = Map.of("url", url, "engine", "PyTorch");
-HttpUtils.postRequest("http://localhost:8080/models", params, null, null, null);
+        String url =
+                "https://resources.djl.ai/demo/pytorch/traced_resnet18.zip?translatorFactory=ai.djl.translate.NoopServingTranslatorFactory";
+        Map<String, String> params = Map.of("url", url, "engine", "PyTorch");
+        HttpUtils.postRequest("http://localhost:8080/models", params, null, null, null);
 
-try (NDManager manager = NDManager.newBaseManager()) {
-Engine engine = manager.getEngine();
-NDList list;
-if ("PyTorch".equals(engine.getEngineName())) {
-    // You need include a proper engine in the build.gradle to perform the following
-    // NDArray operations:
-    ImageFactory factory = ImageFactory.getInstance();
-    Image image = factory.fromUrl("https://resources.djl.ai/images/kitten.jpg");
-    NDArray array = image.toNDArray(manager);
-    array = new Resize(224, 224).transform(array);
-    array = new ToTensor().transform(array);
-    array = array.expandDims(0);
-    list = new NDList(array);
-} else {
-    // create a fake NDArray input for demo
-    NDArray array = manager.ones(new Shape(1, 3, 224, 224));
-    list = new NDList(array);
-}
+        try (NDManager manager = NDManager.newBaseManager()) {
+            Engine engine = manager.getEngine();
+            NDList list;
+            if ("PyTorch".equals(engine.getEngineName())) {
+                // You need include a proper engine in the build.gradle to perform the following
+                // NDArray operations:
+                ImageFactory factory = ImageFactory.getInstance();
+                Image image = factory.fromUrl("https://resources.djl.ai/images/kitten.jpg");
+                NDArray array = image.toNDArray(manager);
+                array = new Resize(224, 224).transform(array);
+                array = new ToTensor().transform(array);
+                array = array.expandDims(0);
+                list = new NDList(array);
+            } else {
+                // create a fake NDArray input for demo
+                NDArray array = manager.ones(new Shape(1, 3, 224, 224));
+                list = new NDList(array);
+            }
 
-// Run inference
-byte[] data = list.encode();
-byte[] response =
-        HttpUtils.postRequest(
-                "http://localhost:8080/predictions/traced_resnet18",
-                null,
-                "tenosr/ndlist",
-                data,
-                null);
-NDList output = NDList.decode(manager, response);
-System.out.println(output.get(0));
+            // Run inference
+            byte[] data = list.encode();
+            byte[] response =
+                    HttpUtils.postRequest(
+                            "http://localhost:8080/predictions/traced_resnet18",
+                            null,
+                            "tenosr/ndlist",
+                            data,
+                            null);
+            NDList output = NDList.decode(manager, response);
+            System.out.println(output.get(0));
         }
 
         // unregister model
