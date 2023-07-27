@@ -1,3 +1,5 @@
+package com.examples;
+
 import ai.djl.modality.Classifications;
 import ai.djl.modality.Input;
 import ai.djl.modality.Output;
