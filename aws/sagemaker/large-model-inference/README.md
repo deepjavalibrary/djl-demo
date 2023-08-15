@@ -13,3 +13,8 @@ For the list of available BYOC containers, please clck [here](https://hub.docker
 For more information on LMI documentation on SageMaker, click [here](https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints-large-model-inference.html).
 
 For all the serving.prorperties options you could set on DJLServing, click [here](https://docs.djl.ai/docs/serving/serving/docs/modes.html#servingproperties).
+
+## Sample notebooks
+
+- [LLAMA2-70B](sample-llm/deploy_llama2_70b.ipynb)
+- [LLAMA 7B rolling batch with customized model.py](sample-llm/llama_7b_customized_preprocessing.ipynb)
