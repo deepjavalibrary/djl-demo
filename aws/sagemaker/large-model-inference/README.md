@@ -22,4 +22,4 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 - [MPT-30B](sample-llm/rollingbatch_deploy_mpt_30b.ipynb)
 - [Octocoder](sample-llm/rollingbatch_deploy_octocoder_w_pagedattn.ipynb)
 - [CodeGen 2.5](sample-llm/rollingbatch_deploy_codegen25_7b.ipynb)
-
+- [Falcon-40B](sample-llm/rollingbatch_deploy_falcon_40b.ipynb)
