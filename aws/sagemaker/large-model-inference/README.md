@@ -16,5 +16,10 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 
 ## Sample notebooks
 
-- [LLAMA2-70B](sample-llm/deploy_llama2_70b.ipynb)
-- [LLAMA 7B rolling batch with customized model.py](sample-llm/llama_7b_customized_preprocessing.ipynb)
+- [LLAMA2-70B](sample-llm/rollingbatch_deploy_llama2_70b_w_pagedattn.ipynb)
+- [LLAMA 7B rolling batch with customized model.py](sample-llm/rollingbatch_llama_7b_customized_preprocessing.ipynb)
+- [Flan-UL2](sample-llm/rollingbatch_deploy_flan_ul2.ipynb)
+- [MPT-30B](sample-llm/rollingbatch_deploy_mpt_30b.ipynb)
+- [Octocoder](sample-llm/rollingbatch_deploy_octocoder_w_pagedattn.ipynb)
+- [CodeGen 2.5](sample-llm/rollingbatch_deploy_codegen25_7b.ipynb)
+- [Falcon-40B](sample-llm/rollingbatch_deploy_falcon_40b.ipynb)
