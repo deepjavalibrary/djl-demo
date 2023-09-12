@@ -16,7 +16,7 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 
 ## Sample notebooks
 
-### Rolling Batch
+### LMI_Dist Rolling Batch
 
 - [LLAMA2-70B](sample-llm/rollingbatch_deploy_llama2_70b_w_pagedattn.ipynb)
 - [LLAMA 7B rolling batch with customized model.py](sample-llm/rollingbatch_llama_7b_customized_preprocessing.ipynb)
@@ -25,7 +25,12 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 - [Octocoder](sample-llm/rollingbatch_deploy_octocoder_w_pagedattn.ipynb)
 - [CodeGen 2.5](sample-llm/rollingbatch_deploy_codegen25_7b.ipynb)
 - [Falcon-40B](sample-llm/rollingbatch_deploy_falcon_40b.ipynb)
+- [CodeLLAMA-34B](sample-llm/rollingbatch_deploy_codellama_34b.ipynb)
 
 ### FasterTransformer
 
 - [OpenAssistant GPTNeoX](sample-llm/fastertransformer_deploy_pythia12b_triton_mode.ipynb)
+
+### VLLM Rolling Batch
+
+- [LLAMA-13B](sample-llm/vllm_deploy_llama_13b.ipynb)
