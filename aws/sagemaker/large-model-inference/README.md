@@ -34,3 +34,7 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 ### VLLM Rolling Batch
 
 - [LLAMA-13B](sample-llm/vllm_deploy_llama_13b.ipynb)
+
+### Neuron inference
+
+- [OPT RollingBatch](sample-llm/tnx_rollingbatch_deploy_opt.ipynb)
