@@ -29,7 +29,7 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 
 ### HF Acc Rolling Batch
 
-- [Mistral 7B](sample-llm/hf_acc_rollingbatch_deploy_mistral_7b.ipynb)
+- [Mistral 7B](sample-llm/hf_acc_deploy_mistral_7b.ipynb)
 
 ### FasterTransformer
 
