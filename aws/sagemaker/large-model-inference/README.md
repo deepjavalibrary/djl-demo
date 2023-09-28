@@ -27,6 +27,10 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 - [Falcon-40B](sample-llm/rollingbatch_deploy_falcon_40b.ipynb)
 - [CodeLLAMA-34B](sample-llm/rollingbatch_deploy_codellama_34b.ipynb)
 
+### HF Acc Rolling Batch
+
+- [Mistral 7B](sample-llm/hf_acc_deploy_mistral_7b.ipynb)
+
 ### FasterTransformer
 
 - [OpenAssistant GPTNeoX](sample-llm/fastertransformer_deploy_pythia12b_triton_mode.ipynb)
@@ -34,6 +38,7 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 ### VLLM Rolling Batch
 
 - [LLAMA-13B](sample-llm/vllm_deploy_llama_13b.ipynb)
+- [Mistral-7B](sample-llm/vllm_deploy_mistral_7b.ipynb)
 
 ### Neuron inference
 
