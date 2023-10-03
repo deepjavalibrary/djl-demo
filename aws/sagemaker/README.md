@@ -15,3 +15,4 @@ To learn more, please go to the following instructions:
 
 [SageMaker LLM Launch template](large-model-inference/README.md)
 
+[SageMaker LLM instance recommendation](llm-instance-recommend/README.md)
