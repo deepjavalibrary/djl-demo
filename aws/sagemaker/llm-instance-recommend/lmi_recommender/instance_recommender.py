@@ -86,7 +86,10 @@ general_supported_arch = {
     "GPTJForCausalLM": 'gptj',
     "OPTForCausalLM": 'opt',
     "BloomForCausalLM": 'bloom',
-    "ChatGLMModel": 'chatglm'
+    "ChatGLMModel": 'chatglm',
+    "BaiChuanForCausalLM": "baichuan",
+    "InternLMForCausalLM": "internlm",
+    "MistralForCausalLM": "mistral"
 }
 
 neuron_supported_arch = {
