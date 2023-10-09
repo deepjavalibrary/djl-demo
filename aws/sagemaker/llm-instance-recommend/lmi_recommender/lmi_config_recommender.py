@@ -33,10 +33,10 @@ rolling_batch_fallback = {
 }
 
 tnx_rolling_batch = {
-    'strategy': {0.1: {"option.max_rolling_batch_size": 4},
-                 0.3: {"option.max_rolling_batch_size": 8},
-                 0.5: {"option.max_rolling_batch_size": 32},
-                 0.7: {"option.max_rolling_batch_size": 64}
+    'strategy': {0.1: {"option.max_rolling_batch_size": 4, "option.batch_size": 4},
+                 0.3: {"option.max_rolling_batch_size": 8, "option.batch_size": 8},
+                 0.5: {"option.max_rolling_batch_size": 32, "option.batch_size": 32},
+                 0.7: {"option.max_rolling_batch_size": 64, "option.batch_size": 64}
                  },
     'fp16': {
         "engine": "Python",
@@ -60,7 +60,7 @@ lmi_dist_rolling_batch = {
         'model_category': ['llama-13b', 'llama-7b', 'falcon-7b', 'falcon-40b', 'flan-t5', 'gptneox', 'mpt', 'bigcode'],
         'instance': ['g4', 'g5', 'p4', 'p5']},
     'flash2': {'model_category': {'llama', 'falcon', 'flan-t5', 'gptneox', 'mpt', 'bigcode'},
-               'instance': ['g5', 'p4']},
+               'instance': ['g5', 'p4', 'p5']},
     'strategy': {0.1: {"option.max_rolling_batch_size": 4,
                        "option.max_rolling_batch_prefill_tokens": 1560},
                  0.3: {"option.max_rolling_batch_size": 8,
@@ -84,6 +84,23 @@ lmi_dist_rolling_batch = {
     }
 }
 
+vllm_rolling_batch = {
+    'vllm': {
+        'model_category': {'llama', 'falcon', 'flan-t5', 'gptneox', 'mpt', 'bigcode', 'chatglm', 'baichuan', 'internlm',
+                           'mistral'},
+        'instance': ['g5', 'p4', 'p5']},
+    'strategy': {0.1: {"option.max_rolling_batch_size": 4},
+                 0.3: {"option.max_rolling_batch_size": 8},
+                 0.5: {"option.max_rolling_batch_size": 32},
+                 0.7: {"option.max_rolling_batch_size": 64},
+                 0.85: {"option.max_rolling_batch_size": 128}},
+    'fp16': {
+        "engine": "Python",
+        "option.dtype": "fp16",
+        "option.rolling_batch": "vllm"
+    }
+}
+
 
 def category_checker(target, category):
     found = False
@@ -94,7 +111,7 @@ def category_checker(target, category):
     return found
 
 
-def rolling_batch_chooser(model_category: str, instance: dict):
+def rolling_batch_chooser(model_category: str, instance: dict, dtype: str):
     instance_name = instance['name']
     if instance_name.startswith('inf2') or instance_name.startswith('trn1'):
         return 'neuronx'
@@ -103,6 +120,11 @@ def rolling_batch_chooser(model_category: str, instance: dict):
     if category_checker(model_category, flash2_checker['model_category']):
         if category_checker(instance['name'], flash2_checker['instance']):
             return 'flash2'
+    # find vllm supported model
+    vllm_checker = vllm_rolling_batch['vllm']
+    if category_checker(model_category, vllm_checker['model_category']):
+        if category_checker(instance['name'], vllm_checker['instance']) and dtype == 'fp16':
+            return 'vllm'
     # find Flash 1 supported model
     flash1_checker = lmi_dist_rolling_batch['flash1']
     if category_checker(model_category, flash1_checker['model_category']):
@@ -115,7 +137,7 @@ def memory_prealloc_chooser(model_size, instance_info):
     tp_sizes = [1, 2, 4, 8]
     if instance_info['name'].startswith('inf2'):
         # https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/transformers-neuronx/transformers-neuronx-developer-guide.html#tensor-parallelism-support
-        tp_sizes = [1, 2, 4, 8, 24]
+        tp_sizes = [1, 2, 4, 8, 12, 24]
     elif instance_info['name'].startswith('trn1'):
         tp_sizes = [1, 2, 8, 16, 32]
     tp_sizes = filter(lambda x: x <= instance_info['num_acc'], tp_sizes)
@@ -132,12 +154,14 @@ def lmi_config_recommender(instance_recommendation: dict):
     dtype = instance_recommendation['dtype']
     for instance in instance_recommendation['instances']:
         result = []
-        strategy = rolling_batch_chooser(instance_recommendation['category'], instance)
+        strategy = rolling_batch_chooser(instance_recommendation['category'], instance, dtype)
         tp_memories = memory_prealloc_chooser(instance_recommendation['size'], instance)
         if 'flash2' == strategy or 'flash1' == strategy:
             rolling_batch = lmi_dist_rolling_batch
         elif 'neuronx' == strategy:
             rolling_batch = tnx_rolling_batch
+        elif 'vllm' == strategy:
+            rolling_batch = vllm_rolling_batch
         else:
             rolling_batch = rolling_batch_fallback
         remained_memory_ratios = sorted(rolling_batch['strategy'].keys(), reverse=True)
