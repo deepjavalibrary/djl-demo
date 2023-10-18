@@ -1,4 +1,4 @@
-## Writing the CSV Translator
+# Writing the CSV Translator
 
 Translator classes provide a way to include methods that pre-process input and post-process output during inference. Passing a translator to a model predictor object enables automatic invocation of the logic in these methods.
 The comma separated values (CSV) Translator needs to handle the following:

@@ -1,4 +1,4 @@
-## Low cost inference with AWS Inferentia
+# Low cost inference with AWS Inferentia
 
 [AWS Inferentia](https://aws.amazon.com/machine-learning/inferentia/) is a high performance machine
 learning inference chip, custom designed by AWS. Amazon EC2 Inf1 instances are powered by AWS
