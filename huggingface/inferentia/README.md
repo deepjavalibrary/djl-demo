@@ -1,4 +1,4 @@
-## Serving Huggingface model with AWS Inferentia
+# Serving Huggingface model with AWS Inferentia
 
 [AWS Inferentia](https://aws.amazon.com/machine-learning/inferentia/) is a high performance machine
 learning inference chip, custom designed by AWS. Amazon EC2 Inf1 instances are powered by AWS

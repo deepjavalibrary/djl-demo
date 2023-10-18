@@ -1,4 +1,4 @@
-## DoodleDraw recognition
+# DoodleDraw recognition
 
 Rabbit                     |  Cat                      | banana
 :-------------------------:|:-------------------------:|:-------------------------:

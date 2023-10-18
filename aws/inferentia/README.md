@@ -1,4 +1,4 @@
-## Low cost inference with AWS Inferentia
+# Low cost inference with AWS Inferentia
 
 This demo uses Inf2 instance, read [here](inf1.md) for Inf1 demo.
 
