@@ -32,6 +32,10 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 
 - [Mistral 7B](sample-llm/hf_acc_deploy_mistral_7b.ipynb)
 
+### DeepSpeed
+
+- [LLAMA-2-13B-SmoothQuant](sample-llm/ds_deploy_llama2-13b-smoothquant.ipynb)
+
 ### FasterTransformer
 
 - [OpenAssistant GPTNeoX](sample-llm/fastertransformer_deploy_pythia12b_triton_mode.ipynb)
