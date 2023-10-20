@@ -42,6 +42,7 @@ dynamic_batch_deepspeed = {
     'int8': {
         "engine": "DeepSpeed",
         "option.dtype": "fp16",
+        "option.parallel_loading": "true",
         "option.quantize": "smoothquant",
         "max_batch_delay": "100"
     }
