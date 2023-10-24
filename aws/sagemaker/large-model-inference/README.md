@@ -54,3 +54,25 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 ### Misc
 
 - [Multi-LoRA Adapters](sample-llm/multi_lora_adapter_inference.ipynb)
+
+### Amazon SageMaker Examples
+
+[Source Repo](https://github.com/aws/amazon-sagemaker-examples/tree/main)
+
+- [GPT-J 6B](https://github.com/aws/amazon-sagemaker-examples/blob/master/inference/generativeai/deepspeed/GPT-J-6B_DJLServing_with_PySDK.ipynb)
+- [Bloom 176B](https://github.com/aws/amazon-sagemaker-examples/blob/master/inference/nlp/realtime/llm/bloom_176b/djl_deepspeed_deploy.ipynb)
+- [Dolly 12B DeepSpeed](https://github.com/aws/amazon-sagemaker-examples/blob/master/inference/generativeai/llm-workshop/deploy-dolly-12b/dolly-12b-deepspeed-sagemaker.ipynb)
+- [OPT-30B](https://github.com/aws/amazon-sagemaker-examples/blob/master/inference/nlp/realtime/llm/opt30b/djl_deepspeed_deploy_opt30b_no_custom_inference_code.ipynb)
+- [OpenChatKit](https://github.com/aws/amazon-sagemaker-examples/blob/master/inference/generativeai/llm-workshop/lab4-openchatkit/deploy_openchatkit_on_sagemaker.ipynb)
+- [GPT4AllJ](https://github.com/aws/amazon-sagemaker-examples/blob/master/inference/generativeai/llm-workshop/lab8-Inferentia2-gpt4all-j/inferentia2-llm-GPT4allJ.ipynb)
+- [GPT NeoX HF Acc](https://github.com/aws/amazon-sagemaker-examples/blob/master/inference/generativeai/llm-workshop/lab3-optimize-llm/djl_accelerate_deploy_g5_12x_GPT_NeoX.ipynb)
+- [GPT NeoX DeepSpeed](https://github.com/aws/amazon-sagemaker-examples/blob/master/inference/generativeai/llm-workshop/lab3-optimize-llm/g5_24xlarge/djl_deepspeed_deploy_GPT_NeoX.ipynb)
+- [Flan-XXL fastertransformer](https://github.com/aws/amazon-sagemaker-examples/blob/master/inference/generativeai/llm-workshop/lab5-flan-t5-xxl/flan-xxl-sagemaker-fastertransformer-smaster.ipynb)
+- [FlanT5 XXL FasterTransformer](https://github.com/aws/amazon-sagemaker-examples/blob/master/inference/generativeai/llm-workshop/lab5-flan-t5-xxl/flant5-xxl-fastertransformer-no-code.ipynb)
+- [Flan UL2](https://github.com/aws/amazon-sagemaker-examples/blob/master/inference/generativeai/llm-workshop/flan-ul2-pySDK/flan-ul2-pySDK.ipynb)
+- [GPT-J-6B Model Parallel Inference](https://github.com/aws/amazon-sagemaker-examples/blob/master/advanced_functionality/pytorch_deploy_large_GPT_model/GPT-J-6B-model-parallel-inference-DJL.ipynb)
+- [Open LLama 7B](https://github.com/aws/amazon-sagemaker-examples/blob/master/inference/generativeai/llm-workshop/lab10-open-llama/open-llama-7b/open_llama_7b.ipynb)
+- [LLama2 7B](https://github.com/aws/amazon-sagemaker-examples/blob/master/inference/generativeai/llm-workshop/lab11-llama2/meta-llama-2-7b-lmi.ipynb)
+- [LLama2 7B Batching Throughput](https://github.com/aws/amazon-sagemaker-examples/blob/master/inference/generativeai/llm-workshop/llama2-7b-batching-throughput/llama2-7b-batching-throughput.ipynb)
+- [LLama2 13B](https://github.com/aws/amazon-sagemaker-examples/blob/master/inference/generativeai/llm-workshop/lab11-llama2/meta-llama-2-13b-lmi.ipynb)
+- [LLama2 70B](https://github.com/aws/amazon-sagemaker-examples/blob/master/inference/generativeai/llm-workshop/lab11-llama2/meta-llama-2-70b-lmi.ipynb)
