@@ -16,9 +16,9 @@ We provide two options to build, you can choose to build with `sbt` or `gradle`.
 ### sbt
 
 ```
-libraryDependencies += "ai.djl.spark" % "spark_2.12" % "0.23.0"
-libraryDependencies += "ai.djl.pytorch" % "pytorch-engine" % "0.23.0"
-libraryDependencies += "ai.djl.pytorch" % "pytorch-model-zoo" % "0.23.0"
+libraryDependencies += "ai.djl.spark" % "spark_2.12" % "0.24.0"
+libraryDependencies += "ai.djl.pytorch" % "pytorch-engine" % "0.24.0"
+libraryDependencies += "ai.djl.pytorch" % "pytorch-model-zoo" % "0.24.0"
 libraryDependencies += "ai.djl.pytorch" % "pytorch-native-cpu-precxx11" % "1.13.1"
 ```
 
