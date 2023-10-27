@@ -1,8 +1,22 @@
 name: Canary-ARM64-MacOS
 
 on:
-  schedule:
-    - cron: '0 9 * * *'
+  workflow_call:
+    inputs:
+      repo-id:
+        description: 'staging repository id to test'
+        required: false
+        type: string
+        default: ''
+      djl-version:
+        description: 'djl version to test'
+        type: string
+        required: false
+      pt-version:
+        description: 'pytorch version to test'
+        type: string
+        required: false
+        default: ''
   workflow_dispatch:
     inputs:
       repo-id:

@@ -1,0 +1,69 @@
+name: Canary
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+    inputs:
+      repo-id:
+        description: 'staging repository id to test'
+        required: false
+        default: ''
+      djl-version:
+        description: 'djl version to test'
+        required: false
+      pt-version:
+        description: 'pytorch version to test'
+        required: false
+        default: ''
+
+jobs:
+  aarch64-linux:
+    uses: ./.github/workflows/canary-aarch64-linux.yml
+    secrets: inherit
+    with:
+      repo-id: ${{ github.events.inputs.repo-id }}
+      djl-version: ${{ github.event.inputs.djl-version }}
+      pt-version: ${{ github.event.inputs.pt-version }}
+  centos:
+    uses: ./.github/workflows/canary-centos.yml
+    secrets: inherit
+    with:
+      repo-id: ${{ github.events.inputs.repo-id }}
+      djl-version: ${{ github.event.inputs.djl-version }}
+      pt-version: ${{ github.event.inputs.pt-version }}
+  gpu:
+    uses: ./.github/workflows/canary-gpu.yml
+    secrets: inherit
+    with:
+      repo-id: ${{ github.events.inputs.repo-id }}
+      djl-version: ${{ github.event.inputs.djl-version }}
+      pt-version: ${{ github.event.inputs.pt-version }}
+  m1-mac:
+    uses: ./.github/workflows/canary-m1-mac.yml
+    secrets: inherit
+    with:
+      repo-id: ${{ github.events.inputs.repo-id }}
+      djl-version: ${{ github.event.inputs.djl-version }}
+      pt-version: ${{ github.event.inputs.pt-version }}
+  mac:
+    uses: ./.github/workflows/canary-mac.yml
+    secrets: inherit
+    with:
+      repo-id: ${{ github.events.inputs.repo-id }}
+      djl-version: ${{ github.event.inputs.djl-version }}
+      pt-version: ${{ github.event.inputs.pt-version }}
+  ubuntu:
+    uses: ./.github/workflows/canary-ubuntu.yml
+    secrets: inherit
+    with:
+      repo-id: ${{ github.events.inputs.repo-id }}
+      djl-version: ${{ github.event.inputs.djl-version }}
+      pt-version: ${{ github.event.inputs.pt-version }}
+  windows:
+    uses: ./.github/workflows/canary-windows.yml
+    secrets: inherit
+    with:
+      repo-id: ${{ github.events.inputs.repo-id }}
+      djl-version: ${{ github.event.inputs.djl-version }}
+      pt-version: ${{ github.event.inputs.pt-version }}
