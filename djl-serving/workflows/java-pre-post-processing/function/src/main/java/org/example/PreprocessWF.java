@@ -74,7 +74,7 @@ public class PreprocessWF extends WorkflowFunction {
 
                                     // Add to output
                                     output.addProperty("Content-Type", "tensor/npz");
-                                    output.add(batched.encode(true));
+                                    output.add(batched.encode(NDList.Encoding.NPZ));
 
                                     // Attach the NDList resource to NDManager to avoid memory leak
                                     manager.tempAttachAll(batched);

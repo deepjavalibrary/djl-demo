@@ -88,7 +88,7 @@ public class SentimentAnalysis {
                             .optProgress(new ProgressBar())
                             .build();
             modelInfo = new ModelInfo<>("model", url, criteria);
-            wlm.registerModel(modelInfo).scaleWorkers(null, 1, 4);
+            wlm.registerWorkerPool(modelInfo).scaleWorkers(null, 1, 4);
         }
 
         @Override
