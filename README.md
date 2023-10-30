@@ -125,7 +125,7 @@ An example application that runs multiple deep learning frameworks in one Java P
 
 An example application that demonstrates compile DJL apps into native executables.
 
-### [Deploy DJL models on guarkus](quarkus/example/README.md)
+### [Deploy DJL models on Quarkus](quarkus/example/README.md)
 
-An example application that serves deep learning models using quarkus.
+An example application that serves deep learning models using Quarkus.
 
