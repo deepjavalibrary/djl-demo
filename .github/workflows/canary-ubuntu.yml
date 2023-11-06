@@ -58,7 +58,7 @@ jobs:
         working-directory: canary
         run: |
           set -x
-          if [[ $(./gradlew -b bom.gradle --configuration runtimeClassPath | grep FAILED | wc -l) -gt 0 ]]; then false; fi
+          if [[ $(./gradlew -b bom.gradle dep --configuration runtimeClassPath | grep FAILED | wc -l) -gt 0 ]]; then false; fi
       - name: Test MXNet
         working-directory: canary
         run: |
