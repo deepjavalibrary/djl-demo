@@ -13,7 +13,7 @@
     "test:ci": "npm run lint && npm run test:unit"
   },
   "dependencies": {
-    "axios": "0.21.2",
+    "axios": "1.6.0",
     "core-js": "3.6.5",
     "easy-circular-progress": "1.0.4",
     "echarts": "^4.2.1",
