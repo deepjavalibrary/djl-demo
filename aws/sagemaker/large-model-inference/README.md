@@ -51,6 +51,10 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 - [LLAMA-13B RollingBatch](sample-llm/tnx_rollingbatch_deploy_llama_13b.ipynb)
 - [LLAMA-7B Int8 RollingBatch](sample-llm/tnx_rollingbatch_deploy_llama_7b_int8.ipynb)
 
+### TensorRT-LLM Rolling Batch
+
+- [LLAMA-13B RollingBatch](sample-llm/trtllm_rollingbatch_deploy_llama_13b.ipynb)
+
 ### Misc
 
 - [Multi-LoRA Adapters](sample-llm/multi_lora_adapter_inference.ipynb)
