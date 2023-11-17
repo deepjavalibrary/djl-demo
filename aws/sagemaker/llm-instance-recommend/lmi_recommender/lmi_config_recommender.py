@@ -32,6 +32,22 @@ rolling_batch_fallback = {
     }
 }
 
+dynamic_batch_deepspeed = {
+    'smoothquant': {'model_category': {'llama-13b', 'llama-7b', 'gptneox', 'bloom', 'gptj'},
+               'instance': ['g4', 'g5', 'p4', 'p5']},
+    'strategy': {0.1: {"batch_size": 4},
+                 0.3: {"batch_size": 8},
+                 0.5: {"batch_size": 32},
+                 0.7: {"batch_size": 64}},
+    'int8': {
+        "engine": "DeepSpeed",
+        "option.dtype": "fp16",
+        "option.parallel_loading": "true",
+        "option.quantize": "smoothquant",
+        "max_batch_delay": "100"
+    }
+}
+
 tnx_rolling_batch = {
     'strategy': {0.1: {"option.max_rolling_batch_size": 4, "option.batch_size": 4},
                  0.3: {"option.max_rolling_batch_size": 8, "option.batch_size": 8},
@@ -111,8 +127,13 @@ def category_checker(target, category):
     return found
 
 
-def rolling_batch_chooser(model_category: str, instance: dict, dtype: str):
+def strategy_chooser(model_category: str, instance: dict, dtype: str):
     instance_name = instance['name']
+    smoothquant_checker = dynamic_batch_deepspeed['smoothquant']
+    if dtype == 'int8':
+        if category_checker(model_category, smoothquant_checker['model_category']):
+            if category_checker(instance['name'], smoothquant_checker['instance']):
+                return 'smoothquant'
     if instance_name.startswith('inf2') or instance_name.startswith('trn1'):
         return 'neuronx'
     # find Flash 2 supported model
@@ -154,9 +175,11 @@ def lmi_config_recommender(instance_recommendation: dict):
     dtype = instance_recommendation['dtype']
     for instance in instance_recommendation['instances']:
         result = []
-        strategy = rolling_batch_chooser(instance_recommendation['category'], instance, dtype)
+        strategy = strategy_chooser(instance_recommendation['category'], instance, dtype)
         tp_memories = memory_prealloc_chooser(instance_recommendation['size'], instance)
-        if 'flash2' == strategy or 'flash1' == strategy:
+        if 'smoothquant' == strategy:
+            rolling_batch = dynamic_batch_deepspeed
+        elif 'flash2' == strategy or 'flash1' == strategy:
             rolling_batch = lmi_dist_rolling_batch
         elif 'neuronx' == strategy:
             rolling_batch = tnx_rolling_batch
