@@ -8,7 +8,7 @@ version "1.0-SNAPSHOT"
 
 defaultTasks "build"
 
-def djlVersion = getEnv("DJL_VERSION", "${djl_version}")
+def djlVersion = getEnv("DJL_VERSION", "${djl_version}-SNAPSHOT")
 def stagingRepo = getEnv("DJL_STAGING", null)
 
 repositories {
