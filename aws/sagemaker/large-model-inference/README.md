@@ -36,6 +36,7 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 
 - [LLAMA-2-13B-SmoothQuant](sample-llm/ds_deploy_llama2-13b-smoothquant.ipynb)
 - [LLAMA-2-13B-RollingBatch-SmoothQuant](sample-llm/ds_rollingbatch_deploy_llama2-13b-smoothquant.ipynb)
+- [GPT-NeoX-20B-RollingBatch-SmoothQuant](sample-llm/ds_rollingbatch_deploy_gpt-neox-20b-smoothquant.ipynb)
 
 ### FasterTransformer
 
