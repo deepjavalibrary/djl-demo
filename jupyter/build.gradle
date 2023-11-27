@@ -1,0 +1,17 @@
+tasks.register('increaseDjlVersion') {
+    doLast {
+        String[] versions = djl_version.split("\\.");
+        versions[1] = String.valueOf(Integer.parseInt(versions[1]) - 1)
+        def previousVersion = String.join(".", versions)
+        def collection = fileTree(project.projectDir).filter { it.name.endsWith(".ipynb") }
+
+        collection.each { File file ->
+            file.text = file.text.replaceAll("/${previousVersion}/", "/${djl_version}/")
+                    .replaceAll(">${previousVersion}<", ">${djl_version}<")
+                    .replaceAll("'${previousVersion}'", "'${djl_version}'")
+                    .replaceAll("-${previousVersion}", "-${djl_version}")
+                    .replaceAll("_${previousVersion}", "_${djl_version}")
+                    .replaceAll(":${previousVersion}([\"\\\\\\n])", ":${djl_version}\$1")
+        }
+    }
+}
