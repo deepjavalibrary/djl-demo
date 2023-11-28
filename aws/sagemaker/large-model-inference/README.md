@@ -29,8 +29,12 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 - [LLAMA2-13B-GPTQ](sample-llm/rollingbatch_deploy_llama2-13b-gptq.ipynb)
 
 ### HF Acc Rolling Batch
-
+- [LLAMA2-70B](sample-llm/hf_acc_deploy_llama2_70b.ipynb)
+- [LLAMA 7B rolling batch with customized model.py](sample-llm/hf_acc_deploy_llama_7b_customized_preprocessing.ipynb)
 - [Mistral 7B](sample-llm/hf_acc_deploy_mistral_7b.ipynb)
+- [Falcon-40B](sample-llm/hf_acc_deploy_falcon_40b.ipynb)
+- [CodeLLAMA-34B](sample-llm/hf_acc_deploy_codellama_34b.ipynb)
+- [LLAMA2-13B-GPTQ](sample-llm/hf_acc_deploy_llama2-13b-gptq.ipynb)
 
 ### DeepSpeed
 
