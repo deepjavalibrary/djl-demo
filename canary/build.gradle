@@ -6,12 +6,13 @@ plugins {
 group "com.example"
 version "1.0-SNAPSHOT"
 
-def djlVersion = getEnv("DJL_VERSION", "${djl_version}")
+def djlVersion = getEnv("DJL_VERSION", "0.26.0-SNAPSHOT")
 def engine = getEnv("DJL_ENGINE", "pytorch-native-auto")
 def os = getOsName()
 def arch = System.getProperty("os.arch") == "amd64" ? "x86_64" : System.getProperty("os.arch")
 def stagingRepo = getEnv("DJL_STAGING", null)
-def ptVersion = getEnv("PT_VERSION", "2.0.1")
+def ptVersion = getEnv("PT_VERSION", "2.1.1")
+def ptJniVersion = ptVersion.replaceAll("-SNAPSHOT", "")
 
 repositories {
     mavenCentral()
@@ -46,7 +47,7 @@ dependencies {
     if (engine.startsWith("pytorch")) {
         runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
         if (!engine.contains("-auto")) {
-            runtimeOnly "ai.djl.pytorch:pytorch-jni:${ptVersion}-${djlVersion}!!"
+            runtimeOnly "ai.djl.pytorch:pytorch-jni:${ptJniVersion}-${djlVersion}!!"
             runtimeOnly "ai.djl.pytorch:${engine}:${ptVersion}!!:${os}-${arch}"
         }
         runtimeOnly "ai.djl:basicdataset"

@@ -62,23 +62,19 @@ jobs:
           set -x
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=$PT_VERSION ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.11.0 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.12.1 ./gradlew clean run
-          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.13.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.0.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.1.1 ./gradlew clean run
+          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=1.11.0 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=1.12.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=1.13.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=2.0.1 ./gradlew clean run
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=2.1.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
       - name: Test OnnxRuntime
         working-directory: canary
