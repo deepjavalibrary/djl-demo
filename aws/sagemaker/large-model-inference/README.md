@@ -20,6 +20,7 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 
 - [LLAMA2-70B](sample-llm/rollingbatch_deploy_llama2_70b_w_pagedattn.ipynb)
 - [LLAMA 7B rolling batch with customized model.py](sample-llm/rollingbatch_llama_7b_customized_preprocessing.ipynb)
+- [LLAMA 7B rolling batch with stop reasoning](sample-llm/rollingbatch_llama_7b_stop_reason.ipynb)
 - [Flan-UL2](sample-llm/rollingbatch_deploy_flan_ul2.ipynb)
 - [MPT-30B](sample-llm/rollingbatch_deploy_mpt_30b.ipynb)
 - [Octocoder](sample-llm/rollingbatch_deploy_octocoder_w_pagedattn.ipynb)
