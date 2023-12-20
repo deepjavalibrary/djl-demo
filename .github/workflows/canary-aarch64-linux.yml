@@ -94,12 +94,17 @@ jobs:
           set -x
           DJL_ENGINE=sentencepiece PYTORCH_PRECXX11=true ./gradlew clean run
           rm -rf /root/.djl.ai/
+      - name: Test XGBoost
+        working-directory: canary
+        run: |
+          set -x
+          DJL_ENGINE=xgboost ./gradlew clean run
+          rm -rf /root/.djl.ai/
       # MXNet doesn't support aarch64
       # TensorFlow doesn't support aarch64
       # PaddlePaddle doesn't support aarch64
       # fastText doesn't support aarch64
       # TFLite doesn't support aarch64
-      # Xgboost doesn't support aarch64 ?
       # LightGBM doesn't support aarch64 ?
 
   create-aarch64-runner:
