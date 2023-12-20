@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.24.0")
+    implementation platform("ai.djl:bom:0.25.0")
     implementation "ai.djl.spark:spark_2.12"
     runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
     runtimeOnly "ai.djl.huggingface:tokenizers"
