@@ -110,7 +110,7 @@ Start DJLServing and load the workflow at startup:
 
 ```
 cd multi-model/
-djl-serving -w file://$PWD/workflow.json
+djl-serving -m file://$PWD/workflow.json
 ```
 
 If DJLServing is already started, use the management API to register the workflow:
