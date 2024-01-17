@@ -59,6 +59,8 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 - [OPT RollingBatch](sample-llm/tnx_rollingbatch_deploy_opt.ipynb)
 - [LLAMA-13B RollingBatch](sample-llm/tnx_rollingbatch_deploy_llama_13b.ipynb)
 - [LLAMA-7B Int8 RollingBatch](sample-llm/tnx_rollingbatch_deploy_llama_7b_int8.ipynb)
+- [Mistral-7B RollingBatch](sample-llm/tnx_rollingbatch_deploy_mistral_7b.ipynb)
+- [LLAMA-70B RollingBatch](sample-llm/tnx_rollingbatch_deploy_llama_70b.ipynb)
 
 ### TensorRT-LLM Rolling Batch
 
