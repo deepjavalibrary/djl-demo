@@ -65,6 +65,9 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 ### TensorRT-LLM Rolling Batch
 
 - [LLAMA-13B RollingBatch](sample-llm/trtllm_rollingbatch_deploy_llama_13b.ipynb)
+- [Baichuan2-13B RollingBatch](sample-llm/trtllm_rollingbatch_deploy_baichuan2_13b.ipynb)
+- [ChatGLM3-6B RollingBatch](sample-llm/trtllm_rollingbatch_deploy_chatglm3_6b.ipynb)
+- [Qwen 7B RollingBatch](sample-llm/trtllm_rollingbatch_deploy_qwen_7b.ipynb)
 
 ### Misc
 
