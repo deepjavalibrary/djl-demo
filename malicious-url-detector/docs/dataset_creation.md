@@ -7,10 +7,10 @@ This example uses a .csv file to store the data. The .csv is available under thi
 
 The CSV file has the following format.
 
-|url   | isMalicious  |
-|---|---|
-| sample.url.good.com  | 0  |
-| sample.url.bad.com  | 1  |
+| url                 | isMalicious |
+|---------------------|-------------|
+| sample.url.good.com | 0           |
+| sample.url.bad.com  | 1           |
 
 
 # DJL dataset blueprints
@@ -28,8 +28,7 @@ To read the CSV file, implement a CSVDataset class that extends RandomAccessData
 
 The CSVDataset definition looks like the following.
 
-
-```java
+```
 public class CSVDataset extends RandomAccessDataset {
     private static final int FEATURE_LENGTH = 1014;
     private static final String ALL_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789-,;.!?:'\"/\\|_@#$%^&*~`+ =<>()[]{}";
@@ -44,8 +43,7 @@ The CSVDataset class defines the parameters needed to process the input CSV entr
 
 Every RandomAccessDataSet extension needs to implement a per-index getter method. The getter method returns a Record object that consists of an encoded input and label.
 
- ```java
-    /** {@inheritDoc} */
+ ```
     @Override
     public Record get(NDManager manager, long index) {
         NDList datum = new NDList();
@@ -58,15 +56,9 @@ Every RandomAccessDataSet extension needs to implement a per-index getter method
     }
 ```
 
-The ```encodeData()```  method encodes the input text into NDArrays. The following example implements a one-hot encoding based on the work described in [Character-level Convolutional Networks for Text Classification](https://arxiv.org/abs/1509.01626).
+The `encodeData()`  method encodes the input text into NDArrays. The following example implements a one-hot encoding based on the work described in [Character-level Convolutional Networks for Text Classification](https://arxiv.org/abs/1509.01626).
 
-```java
-/**
- * Convert the URL string to NDArray encoded form
- *
- * @param manager NDManager for NDArray context
- * @param url URL in string format
- */
+```
 private NDArray encodeData(NDManager manager, String url) {
     NDArray encoded = manager.zeros(new Shape(alphabets.size(), FEATURE_LENGTH));
     char[] arrayText = url.toCharArray();
@@ -82,7 +74,7 @@ private NDArray encodeData(NDManager manager, String url) {
 }
 ```
 
-Define  a ```builder``` class, which initializes the dataset object for TRAIN or TEST subsets.
+Define  a `builder` class, which initializes the dataset object for TRAIN or TEST subsets.
 
 ```java
 public static final class Builder extends BaseBuilder<Builder> {
@@ -134,7 +126,7 @@ public static final class Builder extends BaseBuilder<Builder> {
 
 The following code illustrates a typical call flow to declare a dataset object based on CSVDataset.
 
-```java
+```
 // For train subset
 int batchSize = 128;
 CSVDataset csvDataset =
