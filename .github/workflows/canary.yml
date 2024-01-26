@@ -67,3 +67,10 @@ jobs:
       repo-id: ${{ github.events.inputs.repo-id }}
       djl-version: ${{ github.event.inputs.djl-version }}
       pt-version: ${{ github.event.inputs.pt-version }}
+
+  publish-success-metric:
+    needs: [ aarch64-linux, centos, gpu, m1-mac, mac, ubuntu, windows ]
+    if: always()
+    uses: ./.github/workflows/publish-job-success.yml
+    with:
+      metric-name: DJLDemo-Canary-Failure
