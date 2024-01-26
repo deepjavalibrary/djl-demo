@@ -40,3 +40,9 @@ jobs:
           cd extension && mvn package install && cd ..
           cd extension-example && ./mvnw package
 
+  publish-success-metric:
+    needs: [ compile-test ]
+    if: always()
+    uses: ./.github/workflows/publish-job-success.yml
+    with:
+      metric-name: DJLDemo-NightlyIntegrationTest-Failure

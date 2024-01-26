@@ -63,3 +63,10 @@ jobs:
         if: ${{github.event.inputs.download}} == 'huggingface' || ${{github.event.inputs.download}} == 'all'
         working-directory: canary
         run: DJL_ENGINE=tokenizers ./gradlew run -Dmain="ai.djl.canary.ModelZooTest"
+
+  publish-success-metric:
+    needs: [ canary-modelzoo ]
+    if: always()
+    uses: ./.github/workflows/publish-job-success.yml
+    with:
+      metric-name: DJLDemo-CanaryModelZoo-Failure
