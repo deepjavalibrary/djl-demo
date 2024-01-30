@@ -34,7 +34,7 @@ on:
 jobs:
   canary-test-arm64-osx:
     if: github.repository == 'deepjavalibrary/djl-demo'
-    runs-on: macos-latest-xlarge
+    runs-on: macos-14 #m1
     env:
       AWS_REGION: us-east-1
       DJL_STAGING: ${{github.event.inputs.repo-id}}
