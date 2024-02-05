@@ -54,8 +54,8 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 
 - [LLAMA-13B](sample-llm/vllm_deploy_llama_13b.ipynb)
 - [Mistral-7B](sample-llm/vllm_deploy_mistral_7b.ipynb)
+- [LLAMA-7B RollingBatch with Customized Processing](sample-llm/vllm_rollingbatch_deploy_customized_processing.ipynb)
 - [Mixtral-8x-7b](sample-llm/vllm_rollingbatch_deploy_mixtral_8x7b.ipynb)
-
 
 ### Neuron inference
 
@@ -68,11 +68,11 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 ### TensorRT-LLM Rolling Batch
 
 - [LLAMA-13B RollingBatch](sample-llm/trtllm_rollingbatch_deploy_llama_13b.ipynb)
+- [LLAMA-7B RollingBatch with Customized Processing](sample-llm/trtllm_rollingbatch_deploy_customized_processing.ipynb)
 - [Baichuan2-13B RollingBatch](sample-llm/trtllm_rollingbatch_deploy_baichuan2_13b.ipynb)
 - [ChatGLM3-6B RollingBatch](sample-llm/trtllm_rollingbatch_deploy_chatglm3_6b.ipynb)
 - [Qwen 7B RollingBatch](sample-llm/trtllm_rollingbatch_deploy_qwen_7b.ipynb)
 - [Mixtral-8x-7b](sample-llm/trtllm_rollingbatch_deploy_mixtral_8x7b.ipynb)
-
 
 ### Misc
 
