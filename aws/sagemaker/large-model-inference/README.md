@@ -21,6 +21,7 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 - [LLAMA2-70B](sample-llm/rollingbatch_deploy_llama2_70b_w_pagedattn.ipynb)
 - [LLAMA 7B rolling batch with customized model.py](sample-llm/rollingbatch_llama_7b_customized_preprocessing.ipynb)
 - [LLAMA 7B rolling batch with stop reasoning](sample-llm/rollingbatch_llama_7b_stop_reason.ipynb)
+- [LLAMA 7B rolling batch with chat template](sample-llm/rollingbatch_llama_7b_chat.ipynb)
 - [Flan-UL2](sample-llm/rollingbatch_deploy_flan_ul2.ipynb)
 - [MPT-30B](sample-llm/rollingbatch_deploy_mpt_30b.ipynb)
 - [Octocoder](sample-llm/rollingbatch_deploy_octocoder_w_pagedattn.ipynb)
@@ -29,6 +30,7 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 - [CodeLLAMA-34B](sample-llm/rollingbatch_deploy_codellama_34b.ipynb)
 - [LLAMA2-13B-GPTQ](sample-llm/rollingbatch_deploy_llama2-13b-gptq.ipynb)
 - [LLAMA2-70B-GPTQ](sample-llm/rollingbatch_deploy_llama2-70b-gptq.ipynb)
+- [Mixtral-8x-7b](sample-llm/lmi_dist_rollingbatch_deploy_mixtral_8x7b.ipynb)
 
 ### HF Acc Rolling Batch
 - [LLAMA2-70B](sample-llm/hf_acc_deploy_llama2_70b.ipynb)
@@ -53,17 +55,24 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 - [LLAMA-13B](sample-llm/vllm_deploy_llama_13b.ipynb)
 - [Mistral-7B](sample-llm/vllm_deploy_mistral_7b.ipynb)
 - [LLAMA-7B RollingBatch with Customized Processing](sample-llm/vllm_rollingbatch_deploy_customized_processing.ipynb)
+- [Mixtral-8x-7b](sample-llm/vllm_rollingbatch_deploy_mixtral_8x7b.ipynb)
 
 ### Neuron inference
 
 - [OPT RollingBatch](sample-llm/tnx_rollingbatch_deploy_opt.ipynb)
 - [LLAMA-13B RollingBatch](sample-llm/tnx_rollingbatch_deploy_llama_13b.ipynb)
 - [LLAMA-7B Int8 RollingBatch](sample-llm/tnx_rollingbatch_deploy_llama_7b_int8.ipynb)
+- [Mistral-7B RollingBatch](sample-llm/tnx_rollingbatch_deploy_mistral_7b.ipynb)
+- [LLAMA-70B RollingBatch](sample-llm/tnx_rollingbatch_deploy_llama_70b.ipynb)
 
 ### TensorRT-LLM Rolling Batch
 
 - [LLAMA-13B RollingBatch](sample-llm/trtllm_rollingbatch_deploy_llama_13b.ipynb)
 - [LLAMA-7B RollingBatch with Customized Processing](sample-llm/trtllm_rollingbatch_deploy_customized_processing.ipynb)
+- [Baichuan2-13B RollingBatch](sample-llm/trtllm_rollingbatch_deploy_baichuan2_13b.ipynb)
+- [ChatGLM3-6B RollingBatch](sample-llm/trtllm_rollingbatch_deploy_chatglm3_6b.ipynb)
+- [Qwen 7B RollingBatch](sample-llm/trtllm_rollingbatch_deploy_qwen_7b.ipynb)
+- [Mixtral-8x-7b](sample-llm/trtllm_rollingbatch_deploy_mixtral_8x7b.ipynb)
 
 ### Misc
 

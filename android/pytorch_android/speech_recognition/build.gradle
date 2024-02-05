@@ -34,6 +34,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:1.6.1"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
     implementation "ai.djl:api"
+    implementation "org.apache.commons:commons-compress:1.23.0!!"
     implementation "ai.djl.android:core"
     runtimeOnly "ai.djl.pytorch:pytorch-engine"
     runtimeOnly "ai.djl.android:pytorch-native"

@@ -42,6 +42,7 @@ dependencies {
     implementation "androidx.camera:camera-view:1.2.2"
 
     implementation "ai.djl:api"
+    implementation "org.apache.commons:commons-compress:1.23.0!!"
     implementation "ai.djl.android:core"
     runtimeOnly "ai.djl.pytorch:pytorch-engine"
     runtimeOnly "ai.djl.android:pytorch-native"

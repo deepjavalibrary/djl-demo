@@ -89,7 +89,7 @@ Finally applies postprocessing to the inferenced result output to the output "ou
 Under the current folder, start DJLServing and load the workflow at startup:
 
 ```
-djl-serving -w file://$PWD/workflow.json
+djl-serving -m file://$PWD/workflow.json
 ```
 
 If DJLServing is already started, use the management API to register the workflow:
