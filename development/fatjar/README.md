@@ -71,7 +71,7 @@ java -jar target/fatjar-assembly-1.0-SNAPSHOT.jar
 ## Testing offline mode
 
 To ensure the application doesn't download the native dependencies at runtime, you can set system
-property: `offline=true`.
+property: `ai.djl.offline=true`.
 
 You can test offline mode with gradle or using java command line option:
 
@@ -79,11 +79,11 @@ You can test offline mode with gradle or using java command line option:
 cd development/fatjar
 
 # for gradle
-./gradlew run -Doffline=true
+./gradlew run -Dai.djl.offline=true
 
 # for maven
 mvn package
-mvn exec:java -Doffline=true
+mvn exec:java -Dai.djl.offline=true
 ```
 
 If your os doesn't match your native library, you will see the follow error:
