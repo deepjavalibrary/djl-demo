@@ -75,12 +75,13 @@ jobs:
           rm -rf /root/.djl.ai/
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
           rm -rf /root/.djl.ai/
-      - name: Test OnnxRuntime
-        working-directory: canary
-        run: |
-          set -x
-          DJL_ENGINE=onnxruntime PYTORCH_PRECXX11=true ./gradlew clean run
-          rm -rf /root/.djl.ai/
+      # OnnxRuntime 1.17.1 requires GLIBC 2.27
+      # - name: Test OnnxRuntime
+      #   working-directory: canary
+      #   run: |
+      #     set -x
+      #     DJL_ENGINE=onnxruntime PYTORCH_PRECXX11=true ./gradlew clean run
+      #     rm -rf /root/.djl.ai/
       - name: Test Xgboost
         working-directory: canary
         run: |
