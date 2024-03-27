@@ -72,12 +72,13 @@ jobs:
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=2.1.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
-      - name: Test OnnxRuntime
-        working-directory: canary
-        run: |
-          set -x
-          DJL_ENGINE=onnxruntime ./gradlew clean run
-          rm -rf /root/.djl.ai/
+      # OnnxRuntime 1.17.1 requires GLIBC 2.27
+      # - name: Test OnnxRuntime
+      #   working-directory: canary
+      #   run: |
+      #     set -x
+      #     DJL_ENGINE=onnxruntime ./gradlew clean run
+      #     rm -rf /root/.djl.ai/
       - name: Test Huggingface tokenizers
         working-directory: canary
         run: |
