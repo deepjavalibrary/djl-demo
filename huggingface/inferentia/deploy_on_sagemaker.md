@@ -29,11 +29,11 @@ for more detail.
 AWS_ACCOUNT=$(aws sts get-caller-identity | jq -r .Account || true)
 
 aws ecr get-login-password | docker login --username AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com
-aws ecr create-repository --repository-name djl-inf1
+aws ecr create-repository --repository-name djl-inf2
 
-docker pull deepjavalibrary/djl-serving:0.21.0-pytorch-inf1
-docker tag deepjavalibrary/djl-serving:0.21.0-pytorch-inf1 $AWS_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/djl-inf1
-docker push $AWS_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/djl-inf1
+docker pull deepjavalibrary/djl-serving:0.27.0-pytorch-inf2
+docker tag deepjavalibrary/djl-serving:0.27.0-pytorch-inf2 $AWS_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/djl-inf2
+docker push $AWS_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/djl-inf2
 ```
 
 ## Upload your model to AWS S3 bucket
@@ -58,21 +58,21 @@ aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonS3ReadOnly
 
 ```shell
 aws sagemaker create-model --model-name bertqa --primary-container \
-    "Image=${AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/djl-inf1,ModelDataUrl=s3://$BUCKET_NAME/serving/question_answering.tar.gz" \
+    "Image=${AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/djl-inf2,ModelDataUrl=s3://$BUCKET_NAME/serving/question_answering.tar.gz" \
     --execution-role-arn "arn:aws:iam::${AWS_ACCOUNT}:role/AmazonSageMaker-ExecutionRole-djl"
 ```
 
 ## Create SageMaker endpoint config
 
 ```shell
-aws sagemaker create-endpoint-config --endpoint-config-name bertqa-inf1-config \
-    --production-variants VariantName=AllTraffic,ModelName=bertqa,InitialInstanceCount=1,InstanceType=ml.inf1.2xlarge,InitialVariantWeight=1.0
+aws sagemaker create-endpoint-config --endpoint-config-name bertqa-inf2-config \
+    --production-variants VariantName=AllTraffic,ModelName=bertqa,InitialInstanceCount=1,InstanceType=ml.inf2.2xlarge,InitialVariantWeight=1.0
 ```
 
 ## Create SageMaker endpoint
 
 ```shell
-aws sagemaker create-endpoint --endpoint-name bertqa --endpoint-config-name bertqa-inf1-config
+aws sagemaker create-endpoint --endpoint-name bertqa --endpoint-config-name bertqa-inf2-config
 ```
 
 ## Test your model

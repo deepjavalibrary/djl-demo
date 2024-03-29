@@ -18,7 +18,7 @@ java {
 }
 
 dependencies {
-    implementation platform("ai.djl:bom:0.21.0")
+    implementation platform("ai.djl:bom:${djl_version}")
     implementation "ai.djl:api"
     runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
 }
