@@ -7,11 +7,11 @@
 
 ### 拉取镜像
 
-`docker pull deepjavalibrary/djl-serving:pytorch-cu113-nightly`
+`docker pull deepjavalibrary/djl-serving:pytorch-gpu-nightly`
 
 ### 创建容器
 
-`nvidia-docker run -itd --name serving1 -p 8080:8080 deepjavalibrary/djl-serving:0.19.0-pytorch-cu113`
+`nvidia-docker run -itd --name serving1 -p 8080:8080 deepjavalibrary/djl-serving:0.27.0-pytorch-gpu`
 
 如果你没有gpu环境，可以把**nvidia-docker**换成**docker**
 

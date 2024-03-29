@@ -73,7 +73,7 @@ public class PythonTranslator implements NoBatchifyTranslator<String, Classifica
             throw new TranslateException("Python preprocess() failed: " + output.getMessage());
         }
 
-        /* TODO: use the following code in 0.22.0
+        /* TODO: use the following code in 0.27.0
         return output.getDataAsNDList(ctx.getNDManager());
         */
 

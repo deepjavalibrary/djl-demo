@@ -30,8 +30,7 @@ dependencies {
 
     runtimeOnly "ai.djl.pytorch:pytorch-model-zoo"
     runtimeOnly "ai.djl.pytorch:pytorch-jni"
-    // TODO: remove version after 0.22.0 bom fix
-    runtimeOnly "ai.djl.pytorch:pytorch-native-cu117:1.13.1:linux-x86_64"
+    runtimeOnly "ai.djl.pytorch:pytorch-native-cu121"
     runtimeOnly "org.slf4j:slf4j-simple:${slf4j_simple_version}"
 }
 
