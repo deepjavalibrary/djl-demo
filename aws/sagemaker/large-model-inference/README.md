@@ -77,6 +77,7 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 ### Misc
 
 - [Multi-LoRA Adapters](sample-llm/multi_lora_adapter_inference.ipynb)
+- [Multi-LoRA Adapters Advanced](sample-llm/multi_lora_adapter_inference_advanced.ipynb)
 
 ### Amazon SageMaker Examples
 
