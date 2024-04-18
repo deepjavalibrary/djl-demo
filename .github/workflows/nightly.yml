@@ -30,6 +30,3 @@ jobs:
       - name: Compile Apache Camel
         working-directory: camel-djl
         run: mvn package
-      - name: Compile graalvm
-        working-directory: graalvm
-        run: ./mvnw package
