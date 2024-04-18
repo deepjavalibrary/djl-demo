@@ -33,9 +33,3 @@ jobs:
       - name: Compile graalvm
         working-directory: graalvm
         run: ./mvnw package
-      - name: Compile Quarkus
-        working-directory: quarkus
-        run: |
-          cd example && ./mvnw package && cd ..
-          cd extension && mvn package install && cd ..
-          cd extension-example && ./mvnw package
