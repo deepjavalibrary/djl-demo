@@ -72,7 +72,7 @@ public final class CanaryTest {
         Path dir = Utils.getEngineCacheDir();
         logger.info("Engine cache dir: {} (exist={}).", dir, Files.exists(dir));
         logger.info("----------Environment Variables----------");
-        System.getenv().forEach((k, v) -> logger.info(k + ": " + v));
+        System.getenv().forEach((k, v) -> logger.info("{}: {}", k, v));
 
         logger.info("");
         logger.info("----------Default Engine----------");
@@ -319,7 +319,7 @@ public final class CanaryTest {
         DownloadUtils.download(
                 "https://resources.djl.ai/test-models/xgboost/regression.json",
                 modelDir.resolve("regression.json").toString());
-        try (Model model = Model.newInstance("XGBoost")) {
+        try (Model model = Model.newInstance("canary", "XGBoost")) {
             model.load(modelDir, "regression");
             Predictor<NDList, NDList> predictor = model.newPredictor(new NoopTranslator());
             try (NDManager manager = NDManager.newBaseManager()) {
@@ -351,6 +351,7 @@ public final class CanaryTest {
                 Criteria.builder()
                         .setTypes(NDList.class, NDList.class)
                         .optModelPath(modelDir)
+                        .optEngine("LightGBM")
                         .optModelName("quadratic")
                         .build();
 
