@@ -99,9 +99,7 @@ jobs:
           rm -rf /root/.djl.ai/
       # MXNet doesn't support aarch64
       # TensorFlow doesn't support aarch64
-      # PaddlePaddle doesn't support aarch64
       # fastText doesn't support aarch64
-      # TFLite doesn't support aarch64
       # LightGBM doesn't support aarch64 ?
 
   create-aarch64-runner:

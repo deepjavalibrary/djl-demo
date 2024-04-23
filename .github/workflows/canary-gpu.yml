@@ -108,20 +108,6 @@ jobs:
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
           rm -rf /root/.djl.ai/
           # tensorflow-native-cu113 cannot run on CU112 since 0.22.0
-      - name: Test Paddle
-        working-directory: canary
-        run: |
-          set -x
-          mkdir -p $HOME/.djl.ai/paddle/2.3.2-cu112-linux-x86_64
-          DJL_CACHE_DIR=$HOME/.djl.ai/ DJL_ENGINE=paddlepaddle-native-auto \
-          LD_LIBRARY_PATH=$DJL_CACHE_DIR/paddle/2.3.2-cu112-linux-x86_64 \
-          ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          mkdir -p $HOME/.djl.ai/paddle/2.3.2-20221103-cu112-linux-x86_64
-          DJL_CACHE_DIR=$HOME/.djl.ai/ DJL_ENGINE=paddlepaddle-native-cu112 \
-          LD_LIBRARY_PATH=$DJL_CACHE_DIR/paddle/2.3.2-20221103-cu112-linux-x86_64 \
-          ./gradlew clean run
-          rm -rf /root/.djl.ai/
       - name: Test Xgboost GPU
         working-directory: canary
         run: |
@@ -176,14 +162,6 @@ jobs:
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=tensorflow-native-cu113 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-      - name: Test Paddle
-        working-directory: canary
-        run: |
-          set -x
-          DJL_ENGINE=paddlepaddle-native-auto ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=paddlepaddle-native-cpu ./gradlew clean run
           rm -rf /root/.djl.ai/
       - name: Test Xgboost GPU
         working-directory: canary
@@ -262,14 +240,6 @@ jobs:
           DJL_ENGINE=tensorflow-native-auto ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
-          rm -rf /root/.djl.ai/
-      - name: Test Paddle
-        working-directory: canary
-        run: |
-          set -x
-          DJL_ENGINE=paddlepaddle-native-auto ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=paddlepaddle-native-cpu ./gradlew clean run
           rm -rf /root/.djl.ai/
       - name: Test Xgboost GPU
         working-directory: canary

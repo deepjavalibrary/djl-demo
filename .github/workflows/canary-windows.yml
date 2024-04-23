@@ -86,16 +86,6 @@ jobs:
         run: |
           set -x
           DJL_ENGINE=onnxruntime ./gradlew clean run
-      - name: Test PaddlePaddle
-        working-directory: canary
-        shell: bash
-        run: |
-          set -x
-          DJL_ENGINE=paddlepaddle-native-auto ./gradlew clean run
-          rm -rf ~/.djl.ai
-          DJL_ENGINE=paddlepaddle-native-cpu ./gradlew clean run
-          rm -rf ~/.djl.ai
-      # TFLite doesn't support Windows
       # Xgboost doesn't support Windows
       # LightGBM doesn't support Windows
       # Huggingface tokenizers doesn't support Windows

@@ -103,22 +103,6 @@ jobs:
           set -x
           DJL_ENGINE=onnxruntime ./gradlew clean run
           rm -rf $HOME/.djl.ai/
-      - name: Test TFLite
-        working-directory: canary
-        run: |
-          set -x
-          DJL_ENGINE=tflite-native-auto ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
-          DJL_ENGINE=tflite-native-cpu ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
-      - name: Test PaddlePaddle
-        working-directory: canary
-        run: |
-          set -x
-          DJL_ENGINE=paddlepaddle-native-auto ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
-          DJL_ENGINE=paddlepaddle-native-cpu ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
       - name: Test Xgboost
         working-directory: canary
         run: |
