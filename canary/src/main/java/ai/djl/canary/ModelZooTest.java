@@ -45,10 +45,6 @@ public class ModelZooTest {
             groupId = "ai.djl.tensorflow";
         } else if (djlEngine.startsWith("onnxruntime")) {
             groupId = "ai.djl.onnxruntime";
-        } else if (djlEngine.startsWith("paddlepaddle")) {
-            groupId = "ai.djl.paddlepaddle";
-        } else if (djlEngine.startsWith("tflite")) {
-            groupId = "ai.djl.tflite";
         } else if (djlEngine.startsWith("tokenizer")) {
             groupId = "ai.djl.huggingface.pytorch";
         } else {

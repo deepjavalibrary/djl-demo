@@ -28,13 +28,11 @@ Next, we need to prepare a model file. DJL Serving supports model artifacts for 
 * PyTorch (torchscript only)
 * TensorFlow
 * ONNX
-* PaddlePaddle
 
 See the documentation for more details on how to prepare the model file for
 [MXNet](https://github.com/deepjavalibrary/djl/blob/master/docs/mxnet/how_to_convert_your_model_to_symbol.md),
 [PyTorch](https://github.com/deepjavalibrary/djl/blob/master/docs/pytorch/how_to_convert_your_model_to_torchscript.md),
-[TensorFlow](https://github.com/deepjavalibrary/djl/blob/master/docs/tensorflow/how_to_import_tensorflow_models_in_DJL.md)
-and [PaddlePaddle](https://github.com/deepjavalibrary/djl/blob/master/docs/paddlepaddle/how_to_create_paddlepaddle_model.md) engine.
+[TensorFlow](https://github.com/deepjavalibrary/djl/blob/master/docs/tensorflow/how_to_import_tensorflow_models_in_DJL.md) engine.
 
 After we prepared the model file, we can add it to the workflow.
 The workflow definition supports both local model and url.

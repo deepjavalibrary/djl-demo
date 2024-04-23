@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       engine:
-        description: 'model zoo (pytorch|tensorflow|mxnet|onnxruntime|paddlepaddle|tflite|huggingface|basic)'
+        description: 'model zoo (pytorch|tensorflow|mxnet|onnxruntime|huggingface|basic)'
         required: false
         default: 'all'
       download:
@@ -51,14 +51,6 @@ jobs:
         if: ${{github.event.inputs.download}} == 'basic' || ${{github.event.inputs.download}} == 'all'
         working-directory: canary
         run: ./gradlew run -Dmain="ai.djl.canary.ModelZooTest"
-      - name: Test PaddlePaddle model zoo
-        if: ${{github.event.inputs.download}} == 'paddlepaddle' || ${{github.event.inputs.download}} == 'all'
-        working-directory: canary
-        run: DJL_ENGINE=paddlepaddle-native-auto ./gradlew run -Dmain="ai.djl.canary.ModelZooTest"
-      - name: Test TFLite model zoo
-        if: ${{github.event.inputs.download}} == 'tflite' || ${{github.event.inputs.download}} == 'all'
-        working-directory: canary
-        run: DJL_ENGINE=tflite-native-auto ./gradlew run -Dmain="ai.djl.canary.ModelZooTest"
       - name: Test Huggingface tokenizers
         if: ${{github.event.inputs.download}} == 'huggingface' || ${{github.event.inputs.download}} == 'all'
         working-directory: canary

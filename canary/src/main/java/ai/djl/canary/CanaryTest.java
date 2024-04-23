@@ -108,17 +108,11 @@ public final class CanaryTest {
         } else if (djlEngine.startsWith("lightgbm")) {
             testLightgbm();
             return;
-        } else if (djlEngine.startsWith("tflite")) {
-            testTflite();
-            return;
         } else if (djlEngine.startsWith("python")) {
             testPython();
             return;
         } else if (djlEngine.startsWith("fasttext")) {
             testFastText();
-            return;
-        } else if (djlEngine.startsWith("paddle")) {
-            testPaddle();
             return;
         } else if (djlEngine.startsWith("tokenizers")) {
             testTokenizers();
@@ -243,50 +237,6 @@ public final class CanaryTest {
             String original = "Hello World";
             List<String> tokens = tokenizer.tokenize(original);
             logger.info("{}", String.join(",", tokens));
-        }
-    }
-
-    public static void testPaddle() throws IOException, ModelException, TranslateException {
-        logger.info("----------Test PaddlePaddle ----------");
-        Criteria<Image, DetectedObjects> criteria =
-                Criteria.builder()
-                        .setTypes(Image.class, DetectedObjects.class)
-                        .optApplication(Application.CV.OBJECT_DETECTION)
-                        .optEngine("PaddlePaddle")
-                        .optArtifactId("face_detection")
-                        .optFilter("flavor", "server")
-                        .build();
-
-        String url =
-                "https://raw.githubusercontent.com/PaddlePaddle/PaddleHub/release/v1.5/demo/mask_detection/python/images/mask.jpg";
-        try (ZooModel<Image, DetectedObjects> model = ModelZoo.loadModel(criteria);
-                Predictor<Image, DetectedObjects> predictor = model.newPredictor()) {
-            Image img = ImageFactory.getInstance().fromUrl(url);
-            DetectedObjects objs = predictor.predict(img);
-            logger.info(objs.toString());
-        }
-    }
-
-    private static void testTflite() throws ModelException, IOException, TranslateException {
-        if (System.getProperty("os.name").startsWith("Win")) {
-            throw new AssertionError("TFLite only work on macOS and Linux.");
-        }
-        Criteria<Image, Classifications> criteria =
-                Criteria.builder()
-                        .setTypes(Image.class, Classifications.class)
-                        .optEngine("TFLite")
-                        .optFilter("dataset", "aiyDish")
-                        .build();
-        try (ZooModel<Image, Classifications> model = ModelZoo.loadModel(criteria);
-                Predictor<Image, Classifications> predictor = model.newPredictor()) {
-            Image image =
-                    ImageFactory.getInstance()
-                            .fromUrl("https://resources.djl.ai/images/sachertorte.jpg");
-            Classifications prediction = predictor.predict(image);
-            logger.info(prediction.toString());
-            if (!"Sachertorte".equals(prediction.best().getClassName())) {
-                throw new AssertionError("Wrong prediction result");
-            }
         }
     }
 

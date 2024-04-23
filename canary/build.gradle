@@ -62,20 +62,9 @@ dependencies {
     } else if (engine.startsWith("onnxruntime")) {
         runtimeOnly "ai.djl.onnxruntime:onnxruntime-engine"
         runtimeOnly "ai.djl.pytorch:pytorch-engine"
-    } else if (engine.startsWith("paddlepaddle")) {
-        runtimeOnly "ai.djl.paddlepaddle:paddlepaddle-model-zoo"
-        if (!engine.contains("-auto")) {
-            runtimeOnly "ai.djl.paddlepaddle:${engine}::${os}-x86_64"
-        }
-        implementation "ai.djl.pytorch:pytorch-engine"
     } else if (engine.startsWith("fasttext")) {
         runtimeOnly "ai.djl.fasttext:fasttext-engine"
         runtimeOnly "ai.djl.pytorch:pytorch-engine"
-    } else if (engine.startsWith("tflite")) {
-        runtimeOnly "ai.djl.tflite:tflite-engine"
-        if (!engine.contains("-auto")) {
-            runtimeOnly "ai.djl.tflite:${engine}::${os}-x86_64"
-        }
     } else if (engine.startsWith("xgboost")) {
         if (engine == "xgboost-gpu") {
             runtimeOnly "ai.djl.ml.xgboost:xgboost-gpu"
