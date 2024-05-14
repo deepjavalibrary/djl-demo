@@ -34,7 +34,7 @@ on:
 jobs:
   canary-test-mac:
     if: github.repository == 'deepjavalibrary/djl-demo'
-    runs-on: macos-12
+    runs-on: macos-13
     env:
       AWS_REGION: us-east-1
       DJL_STAGING: ${{github.event.inputs.repo-id}}
@@ -47,6 +47,9 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: 17
+      - name: install libomp on macos
+        if: ${{ runner.os == 'macOS' }}
+        run: brew install libomp
       - name: Test MXNet
         working-directory: canary
         run: |
@@ -63,13 +66,13 @@ jobs:
           rm -rf $HOME/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.13.1 ./gradlew clean run
           rm -rf $HOME/.djl.ai/
-          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.1.2 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.2.2 ./gradlew clean run
           rm -rf $HOME/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
           rm -rf $HOME/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu PT_VERSION=1.13.1 ./gradlew clean run
           rm -rf $HOME/.djl.ai/
-          DJL_ENGINE=pytorch-native-cpu PT_VERSION=2.1.2 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-cpu PT_VERSION=2.2.2 ./gradlew clean run
           rm -rf $HOME/.djl.ai/
       - name: Test TensorFlow
         working-directory: canary
