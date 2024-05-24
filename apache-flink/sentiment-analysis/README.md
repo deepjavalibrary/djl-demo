@@ -26,7 +26,7 @@ nc -l -p 9000
 After that you can open another terminal in the project and run the follows:
 
 ```
-./gradlew run --args="--port 9000"
+./gradlew run
 ```
 
 On Windows use `gradlew.bat` instead.
@@ -45,7 +45,7 @@ Loading:     100% |████████████████████�
 [Flat Map (10/12)] INFO ai.djl.pytorch.engine.PtEngine - Number of inter-op threads is 6
 [Flat Map (10/12)] INFO ai.djl.pytorch.engine.PtEngine - Number of intra-op threads is 1
 [
-        class: "Positive", probability: 0.99870
-        class: "Negative", probability: 0.00129
+        {"class": "Positive", "probability": 0.99870}
+        {"class": "Negative", "probability": 0.00129}
 ]
 ```
