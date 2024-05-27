@@ -32,7 +32,7 @@ public class DjlImageVisitor extends H264FrameDecoder {
         Criteria<Image, DetectedObjects> criteria =
                 Criteria.builder()
                         .setTypes(Image.class, DetectedObjects.class)
-                        .optArtifactId("ai.djl.mxnet:ssd")
+                        .optModelUrls("djl://ai.djl.pytorch/yolov5s")
                         .build();
         predictor = criteria.loadModel().newPredictor();
         counter = 0;
