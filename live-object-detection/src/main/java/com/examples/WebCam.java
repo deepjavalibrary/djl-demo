@@ -12,7 +12,6 @@
  */
 package com.examples;
 
-import ai.djl.Application;
 import ai.djl.ModelException;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.cv.Image;
@@ -26,9 +25,13 @@ import ai.djl.translate.TranslateException;
 import nu.pattern.OpenCV;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -47,6 +50,16 @@ public class WebCam {
             return;
         }
 
+        double ratio =
+                capture.get(Videoio.CAP_PROP_FRAME_WIDTH)
+                        / capture.get(Videoio.CAP_PROP_FRAME_HEIGHT);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int height = (int) (screenSize.height * 0.65f);
+        int width = (int) (height * ratio);
+        if (width > screenSize.width) {
+            width = screenSize.width;
+        }
+
         Mat image = new Mat();
         boolean captured = false;
         for (int i = 0; i < 10; ++i) {
@@ -54,6 +67,7 @@ public class WebCam {
             if (captured) {
                 break;
             }
+
             try {
                 Thread.sleep(50);
             } catch (InterruptedException ignore) {
@@ -64,14 +78,18 @@ public class WebCam {
             JOptionPane.showConfirmDialog(null, "Failed to capture image from WebCam.");
         }
 
-        ViewerFrame frame = new ViewerFrame(image.width(), image.height());
+        ViewerFrame frame = new ViewerFrame(width, height);
         ImageFactory factory = ImageFactory.getInstance();
+        Size size = new Size(width, height);
 
         while (capture.isOpened()) {
             if (!capture.read(image)) {
                 break;
             }
-            Image img = factory.fromImage(image);
+            Mat resizeImage = new Mat();
+            Imgproc.resize(image, resizeImage, size);
+
+            Image img = factory.fromImage(resizeImage);
             DetectedObjects detections = predictor.predict(img);
             img.drawBoundingBoxes(detections);
 
@@ -89,10 +107,8 @@ public class WebCam {
     private static ZooModel<Image, DetectedObjects> loadModel() throws IOException, ModelException {
         Criteria<Image, DetectedObjects> criteria =
                 Criteria.builder()
-                        .optApplication(Application.CV.OBJECT_DETECTION)
                         .setTypes(Image.class, DetectedObjects.class)
-                        .optFilter("backbone", "mobilenet1.0")
-                        .optFilter("dataset", "voc")
+                        .optModelUrls("djl://ai.djl.pytorch/yolov5s")
                         .optProgress(new ProgressBar())
                         .build();
 
