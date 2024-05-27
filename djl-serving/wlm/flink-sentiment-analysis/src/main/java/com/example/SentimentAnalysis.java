@@ -12,11 +12,14 @@
  */
 package com.example;
 
+import ai.djl.ModelException;
 import ai.djl.modality.Classifications;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.serving.wlm.Job;
 import ai.djl.serving.wlm.ModelInfo;
 import ai.djl.serving.wlm.WorkLoadManager;
+import ai.djl.serving.wlm.WorkerPool;
+import ai.djl.serving.wlm.util.WlmConfigManager;
 import ai.djl.training.util.ProgressBar;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
@@ -24,6 +27,8 @@ import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.Collector;
+
+import java.io.IOException;
 
 /**
  * Implements a streaming version of the sentiment analysis program.
@@ -40,14 +45,13 @@ import org.apache.flink.util.Collector;
 public class SentimentAnalysis {
 
     public static void main(String[] args) throws Exception {
-
         // the host and the port to connect to
-        final String hostname;
-        final int port;
+        String hostname;
+        int port;
         try {
             final ParameterTool params = ParameterTool.fromArgs(args);
             hostname = params.has("hostname") ? params.get("hostname") : "localhost";
-            port = params.getInt("port");
+            port = params.has("port") ? params.getInt("port") : 9000;
         } catch (Exception e) {
             System.err.println(
                     "No port specified. Please run 'SentimentAnalysis --hostname <hostname> --port"
@@ -87,12 +91,23 @@ public class SentimentAnalysis {
                             .setTypes(String.class, Classifications.class)
                             .optProgress(new ProgressBar())
                             .build();
+            WlmConfigManager wlmc = WlmConfigManager.getInstance();
+            wlmc.setLoadOnDevices("*");
             modelInfo = new ModelInfo<>("model", url, criteria);
-            wlm.registerWorkerPool(modelInfo).scaleWorkers(null, 1, 4);
+            try {
+                modelInfo.initialize();
+            } catch (IOException | ModelException e) {
+                throw new IllegalStateException(e);
+            }
+            WorkerPool<String, Classifications> pool = wlm.registerWorkerPool(modelInfo);
+            String[] devices = modelInfo.getLoadOnDevices();
+            for (String device : devices) {
+                pool.scaleWorkers(device, 1, 4);
+            }
         }
 
         @Override
-        public void flatMap(String value, Collector<Classifications> out) throws Exception {
+        public void flatMap(String value, Collector<Classifications> out) {
             Classifications output = wlm.runJob(new Job<>(modelInfo, value)).join();
             out.collect(output);
         }

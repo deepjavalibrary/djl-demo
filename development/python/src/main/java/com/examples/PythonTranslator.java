@@ -17,9 +17,7 @@ import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
 import ai.djl.modality.Input;
 import ai.djl.modality.Output;
-import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
-import ai.djl.ndarray.types.Shape;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.NoBatchifyTranslator;
@@ -73,14 +71,7 @@ public class PythonTranslator implements NoBatchifyTranslator<String, Classifica
             throw new TranslateException("Python preprocess() failed: " + output.getMessage());
         }
 
-        /* TODO: use the following code in 0.27.0
         return output.getDataAsNDList(ctx.getNDManager());
-        */
-
-        // Workaround a bug in 0.21.0
-        NDArray array = output.getDataAsNDList(ctx.getNDManager()).get(0);
-        array = ctx.getNDManager().create(array.toFloatArray(), new Shape(1, 3, 224, 224));
-        return new NDList(array);
     }
 
     @Override

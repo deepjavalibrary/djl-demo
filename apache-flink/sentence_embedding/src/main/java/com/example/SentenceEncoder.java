@@ -15,14 +15,9 @@ package com.example;
 import ai.djl.Application;
 import ai.djl.ModelException;
 import ai.djl.inference.Predictor;
-import ai.djl.ndarray.NDList;
-import ai.djl.ndarray.NDManager;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.util.ProgressBar;
-import ai.djl.translate.Batchifier;
-import ai.djl.translate.Translator;
-import ai.djl.translate.TranslatorContext;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.utils.ParameterTool;
@@ -50,14 +45,13 @@ import java.util.Arrays;
 public class SentenceEncoder {
 
     public static void main(String[] args) throws Exception {
-
         // the host and the port to connect to
-        final String hostname;
-        final int port;
+        String hostname;
+        int port;
         try {
-            final ParameterTool params = ParameterTool.fromArgs(args);
+            ParameterTool params = ParameterTool.fromArgs(args);
             hostname = params.has("hostname") ? params.get("hostname") : "localhost";
-            port = params.getInt("port");
+            port = params.has("port") ? params.getInt("port") : 9000;
         } catch (Exception e) {
             System.err.println(
                     "No port specified. Please run 'SentimentAnalysis --hostname <hostname> --port"
@@ -70,7 +64,7 @@ public class SentenceEncoder {
         }
 
         // get the execution environment
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         // get input data by connecting to the socket
         DataStream<String> text = env.socketTextStream(hostname, port, "\n");
@@ -92,14 +86,12 @@ public class SentenceEncoder {
                 throws ModelException, IOException {
             if (predictor == null) {
                 String modelUrl =
-                        "https://storage.googleapis.com/tfhub-modules/google/universal-sentence-encoder/4.tar.gz";
-
+                        "djl://ai.djl.huggingface.pytorch/sentence-transformers/all-MiniLM-L6-v2";
                 Criteria<String, float[]> criteria =
                         Criteria.builder()
                                 .optApplication(Application.NLP.TEXT_EMBEDDING)
                                 .setTypes(String.class, float[].class)
                                 .optModelUrls(modelUrl)
-                                .optTranslator(new MyTranslator())
                                 .optProgress(new ProgressBar())
                                 .build();
                 ZooModel<String, float[]> model = criteria.loadModel();
@@ -112,27 +104,6 @@ public class SentenceEncoder {
         public void flatMap(String value, Collector<String> out) throws Exception {
             Predictor<String, float[]> predictor = getOrCreatePredictor();
             out.collect(Arrays.toString(predictor.predict(value)));
-        }
-    }
-
-    private static final class MyTranslator implements Translator<String, float[]> {
-
-        MyTranslator() {}
-
-        @Override
-        public NDList processInput(TranslatorContext ctx, String inputs) {
-            NDManager manager = NDManager.newBaseManager();
-            return new NDList(manager.create(inputs).expandDims(0));
-        }
-
-        @Override
-        public float[] processOutput(TranslatorContext ctx, NDList list) {
-            return list.singletonOrThrow().get(0).toFloatArray();
-        }
-
-        @Override
-        public Batchifier getBatchifier() {
-            return null;
         }
     }
 }
