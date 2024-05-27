@@ -10,7 +10,7 @@ AWS Lambda provides a low cost and low maintenance solution. However, deploying 
 In this demo, we are going to show you how [Deep Java Library (DJL)](http://djl.ai) resolve above issues.
 
 The Lambda Function we are creating is an image classification application that predicts labels along with their
-probabilities using a pre-trained MXNet model.
+probabilities using a pre-trained PyTorch model.
 
 ## Preparation
 - [You need to install aws cli on your system](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
@@ -36,6 +36,7 @@ Above command will create:
 - a Lambda Function named `DJL-Lambda`
 
 ## Invoke Lambda Function 
+
 ```shell script
 aws lambda invoke --function-name DJL-Lambda --payload '{"inputImageUrl":"https://djl-ai.s3.amazonaws.com/resources/images/kitten.jpg"}' build/output.json
 
@@ -70,6 +71,7 @@ The output will be stored in output.json file:
 
 ## Clean up
 Use the following command to clean up resources created in your AWS account:
+
 ```shell
 ./cleanup.sh
 ```
@@ -77,15 +79,9 @@ Use the following command to clean up resources created in your AWS account:
 ## Design choices
 
 ### Minimize package size
-DJL can download deep learning framework at runtime. In this demo we use the following dependency:
-```
-    runtimeOnly "ai.djl.mxnet:mxnet-native-auto:1.7.0-backport"
-```
-With this auto detection dependency, the final `.zip` file is less then 3M.
-The extracted MXNet native library file will be stored in `/tmp` folder, and it's around 155M, this can be further
-reduced to less than 50M if use a custom build MXNet without MKL support.
+DJL can download deep learning framework at runtime.
 
-The MXNet native library is store in S3, the download latency compare to Lambda startup time is negligible.
+With this auto detection dependency, the final `.zip` file is less then 3M. The extracted native library file will be stored in `/tmp` folder.
 
 ### Model loading
 DJL ModelZoo design allows you to deploy model in three ways:
@@ -93,11 +89,10 @@ DJL ModelZoo design allows you to deploy model in three ways:
 - Load models from your own model zoo
 - Load models from S3 bucket. DJL supports SageMaker trained model (.tar.gz) format.
 
-In this demo, we are using DJL built-in MXNet model zoo. By default, it uses `resnet-18` model.
-You can try different pre-trained model by passing `artifactId` parameter in the request:
+In this demo, we are using DJL built-in PyTorch model zoo. By default, it uses `resnet18` model.
 
 ```shell script
-aws lambda invoke --function-name DJL-Lambda --payload '{"artifactId": "squeezenet", "inputImageUrl":"https://djl-ai.s3.amazonaws.com/resources/images/kitten.jpg"}' build/output.json
+aws lambda invoke --function-name DJL-Lambda --payload '{"inputImageUrl":"https://djl-ai.s3.amazonaws.com/resources/images/kitten.jpg"}' build/output.json
 ```
 
 ## Limitations

@@ -20,24 +20,20 @@ import ai.djl.modality.cv.ImageFactory;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.TranslateException;
+import ai.djl.util.JsonUtils;
 import ai.djl.util.Utils;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
 
 public class Handler implements RequestStreamHandler {
-
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     static {
         // DJL saves model and native libraries in cache folder.
@@ -50,21 +46,19 @@ public class Handler implements RequestStreamHandler {
         LambdaLogger logger = context.getLogger();
         String input = Utils.toString(is);
         try {
-            Request request = GSON.fromJson(input, Request.class);
+            Request request = JsonUtils.GSON.fromJson(input, Request.class);
             String url = request.getInputImageUrl();
             String artifactId = request.getArtifactId();
-            Map<String, String> filters = request.getFilters();
             Criteria<Image, Classifications> criteria =
                     Criteria.builder()
                             .setTypes(Image.class, Classifications.class)
                             .optArtifactId(artifactId)
-                            .optFilters(filters)
                             .build();
             try (ZooModel<Image, Classifications> model = criteria.loadModel();
                     Predictor<Image, Classifications> predictor = model.newPredictor()) {
                 Image image = ImageFactory.getInstance().fromUrl(url);
                 List<Classifications.Classification> result = predictor.predict(image).topK(5);
-                os.write(GSON.toJson(result).getBytes(StandardCharsets.UTF_8));
+                os.write(JsonUtils.GSON_PRETTY.toJson(result).getBytes(StandardCharsets.UTF_8));
             }
         } catch (RuntimeException | ModelException | TranslateException e) {
             logger.log("Failed handle input: " + input);

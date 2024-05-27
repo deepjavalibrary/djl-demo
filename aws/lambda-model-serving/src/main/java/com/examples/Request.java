@@ -12,14 +12,10 @@
  */
 package com.examples;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Request {
 
     private String inputImageUrl;
     private String artifactId;
-    private Map<String, String> filters;
 
     public String getInputImageUrl() {
         return inputImageUrl;
@@ -31,24 +27,12 @@ public class Request {
 
     public String getArtifactId() {
         if (artifactId == null) {
-            artifactId = "ai.djl.mxnet:resnet";
-            if (filters == null) {
-                filters = new HashMap<>();
-            }
-            filters.putIfAbsent("layers", "18");
+            artifactId = "ai.djl.pytorch:resnet";
         }
         return artifactId;
     }
 
     public void setArtifactId(String artifactId) {
         this.artifactId = artifactId;
-    }
-
-    public Map<String, String> getFilters() {
-        return filters;
-    }
-
-    public void setFilters(Map<String, String> filters) {
-        this.filters = filters;
     }
 }

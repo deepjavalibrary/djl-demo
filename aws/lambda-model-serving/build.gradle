@@ -14,7 +14,7 @@ repositories {
 
 dependencies {
     implementation platform("ai.djl:bom:${djl_version}")
-    implementation "ai.djl.mxnet:mxnet-model-zoo"
+    implementation "ai.djl.pytorch:pytorch-model-zoo"
 
     implementation "com.amazonaws:aws-lambda-java-core:1.2.1"
 
