@@ -14,7 +14,6 @@ package org.examples.module;
 
 import ai.djl.Application;
 import ai.djl.ModelException;
-import ai.djl.engine.Engine;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
@@ -27,8 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /** Module test for DJL. */
 @SuppressWarnings("MissingJavadocMethod")
@@ -42,20 +39,12 @@ public final class ModuleTest {
         logger.info("----------Test inference----------");
         String url = "https://resources.djl.ai/images/dog_bike_car.jpg";
         Image img = ImageFactory.getInstance().fromUrl(url);
-        String backbone = "resnet50";
-        Map<String, String> options = null;
-        if ("TensorFlow".equals(Engine.getInstance().getEngineName())) {
-            backbone = "mobilenet_v2";
-            options = new ConcurrentHashMap<>();
-            options.put("Tags", "");
-        }
 
         Criteria<Image, DetectedObjects> criteria =
                 Criteria.builder()
                         .optApplication(Application.CV.OBJECT_DETECTION)
                         .setTypes(Image.class, DetectedObjects.class)
-                        .optFilter("backbone", backbone)
-                        .optOptions(options)
+                        .optModelUrls("djl://ai.djl.pytorch/yolov5s")
                         .build();
 
         try (ZooModel<Image, DetectedObjects> model = criteria.loadModel();

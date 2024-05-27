@@ -33,7 +33,7 @@ java {
 }
 
 extraJavaModuleInfo {
-    automaticModule("opencv-4.7.0-0.jar", "org.openpnp.opencv")
+    automaticModule("opencv-4.9.0-0.jar", "org.openpnp.opencv")
 }
 
 dependencies {
@@ -41,7 +41,7 @@ dependencies {
     implementation "ai.djl:api"
     implementation "ai.djl.pytorch:pytorch-model-zoo"
     implementation "ai.djl.opencv:opencv"
-
+    implementation("org.apache.commons:commons-lang3:3.14.0")
     implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_slf4j_version}"
 }
 

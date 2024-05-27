@@ -4,6 +4,7 @@ module org.examples.module {
     requires jdk.crypto.cryptoki;
     requires org.slf4j;
     requires org.apache.commons.compress;
+    requires org.apache.commons.lang3;
     requires org.apache.logging.log4j;
     requires org.apache.logging.log4j.slf4j;
     requires com.google.gson;
