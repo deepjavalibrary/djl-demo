@@ -21,10 +21,13 @@ import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.transform.Resize;
 import ai.djl.modality.cv.transform.ToTensor;
 import ai.djl.modality.cv.translator.ImageClassificationTranslator;
+import ai.djl.training.util.DownloadUtils;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 
 import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -36,15 +39,22 @@ public class Inference {
         Path modelDir = Paths.get("models");
 
         // the path of image to classify
-        String imageFilePath;
+        Path imageFilePath;
         if (args.length == 0) {
-            imageFilePath = "ut-zap50k-images-square/Sandals/Heel/Annie/7350693.3.jpg";
+            imageFilePath = Paths.get("ut-zap50k-images-square/Sandals/Heel/Annie/7350693.3.jpg");
         } else {
-            imageFilePath = args[0];
+            imageFilePath = Paths.get(args[0]);
         }
 
+        if (Files.notExists(imageFilePath)) {
+            System.out.println("Please specify and image file or download the dataset.");
+            return;
+        }
+
+        downloadModelIfNeeded(modelDir);
+
         // Load the image file from the path
-        Image img = ImageFactory.getInstance().fromFile(Paths.get(imageFilePath));
+        Image img = ImageFactory.getInstance().fromFile(imageFilePath);
 
         try (Model model = Models.getModel()) { // empty model instance
             // load the model
@@ -66,5 +76,16 @@ public class Inference {
                 System.out.println(predictResult);
             }
         }
+    }
+
+    private static void downloadModelIfNeeded(Path modelDir) throws IOException {
+        Path modelFle = modelDir.resolve("shoeclassifier-0002.params");
+        String url =
+                "https://resources.djl.ai/demo/footwear_classification/shoeclassifier-0002.params";
+        DownloadUtils.download(new URL(url), modelFle, null);
+
+        Path synsetFle = modelDir.resolve("synset.txt");
+        url = "https://resources.djl.ai/demo/footwear_classification/synset.txt";
+        DownloadUtils.download(new URL(url), synsetFle, null);
     }
 }
