@@ -28,10 +28,13 @@ cd java-pre-post-processing/function/
 ```
 
 Then copy the jar in the `deps` folder under the model server home. For example, if the model server home is
-`/opt/djl/`, you can copy the jar to `/opt/djl/deps/`.
+`/opt/djl/`, you can copy the jar to `/opt/djl/deps/`. For testing purpose, you can set model server home to
+current directory:
 
 ```
-cp build/libs/function-1.0-SNAPSHOT.jar /opt/djl/deps/
+export MODEL_SERVER_HOME=$PWD/build
+mkdir -p $MODEL_SERVER_HOME/deps
+cp build/libs/function-1.0-SNAPSHOT.jar $MODEL_SERVER_HOME/deps
 ```
 
 ### Step 2: Prepare model file

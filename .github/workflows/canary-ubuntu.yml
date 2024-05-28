@@ -55,10 +55,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libgomp1
       - name: Test BOM dependencies
-        working-directory: canary
+        working-directory: bom
         run: |
           set -x
-          if [[ $(./gradlew -b bom.gradle dep --configuration runtimeClassPath | grep FAILED | wc -l) -gt 0 ]]; then false; fi
+          if [[ $(./gradlew dep --configuration runtimeClassPath | grep FAILED | wc -l) -gt 0 ]]; then false; fi
       - name: Test MXNet
         working-directory: canary
         run: |

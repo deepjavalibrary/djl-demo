@@ -16,27 +16,39 @@ This demo will make predictions on whether the tweet is positive or negative.
 
 #### 1. start zookeeper:
 
-`zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties`
+```
+zookeeper-server-start /opt/homebrew/etc/kafka/zookeeper.properties
+```
 
 #### 2. start kafka server:
 
-`kafka-server-start  /usr/local/etc/kafka/server.properties`
+```
+kafka-server-start /opt/homebrew/etc/kafka/server.properties
+```
 
 #### 3. create test topic
 
-`kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic twitter-data`
+```
+kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic twitter-data
+```
 
 #### 4. download data
 
-`wget https://resources.djl.ai/demo/kafka/data.txt`
+```
+curl -O https://resources.djl.ai/demo/kafka/data.txt
+```
 
 #### 5. pipe twitter data into producer
 
-`kafka-console-producer --broker-list localhost:9092 --topic twitter-data < data.txt`
+```
+kafka-console-producer --broker-list localhost:9092 --topic twitter-data < data.txt
+```
 
 #### 6. run prediction inside consumer
 
-`./gradlew run`
+```
+./gradlew run
+```
 
 ### sample output
 

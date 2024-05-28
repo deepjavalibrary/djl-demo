@@ -22,11 +22,6 @@ jobs:
       - name: Compile Apache Beam
         working-directory: apache-beam/ctr-prediction
         run: mvn package
-      - name: Compile EMR projects
-        working-directory: aws
-        run: |
-          cd emr-distributed-inference/dataprocess && ./gradlew build && cd ../../
-          cd emr-distributed-inference/image-classification-gpu && ./gradlew build && cd ../../
       - name: Compile Apache Camel
         working-directory: camel-djl
         run: mvn package
