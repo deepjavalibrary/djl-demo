@@ -1,4 +1,5 @@
 rootProject.name = "djl-demo"
+include(":apache-flink:image-classification")
 include(":apache-flink:sentence_embedding")
 include(":apache-flink:sentiment-analysis")
 include(":apache-kafka")
