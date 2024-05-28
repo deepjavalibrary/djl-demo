@@ -38,19 +38,18 @@ import java.io.IOException;
  * nc -l 12345 on Linux or nc -l -p 12345 on Windows
  * </pre>
  *
- * and run this example with the hostname and the port as arguments.
+ * <p>and run this example with the hostname and the port as arguments.
  */
 public class SentimentAnalysis {
 
     public static void main(String[] args) throws Exception {
-
         // the host and the port to connect to
-        final String hostname;
-        final int port;
+        String hostname;
+        int port;
         try {
-            final ParameterTool params = ParameterTool.fromArgs(args);
+            ParameterTool params = ParameterTool.fromArgs(args);
             hostname = params.has("hostname") ? params.get("hostname") : "localhost";
-            port = params.getInt("port");
+            port = params.has("port") ? params.getInt("port") : 9000;
         } catch (Exception e) {
             System.err.println(
                     "No port specified. Please run 'SentimentAnalysis --hostname <hostname> --port"
@@ -63,7 +62,7 @@ public class SentimentAnalysis {
         }
 
         // get the execution environment
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         // get input data by connecting to the socket
         DataStream<String> text = env.socketTextStream(hostname, port, "\n");
@@ -99,7 +98,8 @@ public class SentimentAnalysis {
         @Override
         public void flatMap(String value, Collector<Classifications> out) throws Exception {
             Predictor<String, Classifications> predictor = getOrCreatePredictor();
-            out.collect(predictor.predict(value));
+            Classifications classifications = predictor.predict(value);
+            out.collect(classifications);
         }
     }
 }

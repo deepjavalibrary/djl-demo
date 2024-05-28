@@ -24,7 +24,8 @@ dependencies {
 }
 
 application {
-    getMainClass().set(System.getProperty("main", "com.example.SentimentAnalysis"))
+    mainClass = "com.example.SentimentAnalysis"
+    applicationDefaultJvmArgs = ["--add-opens", "java.base/java.lang=ALL-UNNAMED", "--add-opens", "java.base/java.util=ALL-UNNAMED"]
 }
 
 configure(this) {
