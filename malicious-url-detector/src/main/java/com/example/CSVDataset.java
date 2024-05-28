@@ -108,6 +108,7 @@ public class CSVDataset extends RandomAccessDataset {
         }
         return encoded;
     }
+
     /**
      * Convert the label string to NDArray encoded form
      *

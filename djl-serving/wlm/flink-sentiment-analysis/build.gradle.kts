@@ -13,10 +13,10 @@ repositories {
 }
 
 dependencies {
-    implementation("org.apache.flink:flink-streaming-java:${property("flint_version")}")
     implementation(platform("ai.djl:bom:${property("djl_version")}"))
     implementation("ai.djl:api")
-    implementation("ai.djl.serving:wlm:${property("djl_version")}-SNAPSHOT!!")
+    implementation("ai.djl.serving:wlm")
+    implementation("org.apache.flink:flink-streaming-java:${property("flint_version")}")
     implementation("org.slf4j:slf4j-simple:${property("slf4j_version")}")
 
     runtimeOnly("org.apache.flink:flink-clients:${property("flint_version")}")

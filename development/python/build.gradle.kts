@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("ai.djl:bom:${property("djl_version")}"))
+    implementation(platform("ai.djl:bom:${property("djl_version")}-SNAPSHOT"))
     implementation("ai.djl:api")
 
     runtimeOnly("ai.djl.pytorch:pytorch-engine")
