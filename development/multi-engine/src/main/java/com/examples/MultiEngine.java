@@ -64,7 +64,9 @@ public final class MultiEngine {
     }
 
     private static Image detectPersonWithPyTorchModel(Image img)
-            throws MalformedModelException, ModelNotFoundException, IOException,
+            throws MalformedModelException,
+                    ModelNotFoundException,
+                    IOException,
                     TranslateException {
 
         // Criteria object to load the model from model zoo
@@ -105,7 +107,9 @@ public final class MultiEngine {
     }
 
     private static Joints detectJointsWithMxnetModel(Image person)
-            throws MalformedModelException, ModelNotFoundException, IOException,
+            throws MalformedModelException,
+                    ModelNotFoundException,
+                    IOException,
                     TranslateException {
 
         // Criteria object to load the model from model zoo
