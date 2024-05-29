@@ -42,6 +42,11 @@ public class PneumoniaDetection {
     private static final List<String> CLASSES = Arrays.asList("Normal", "Pneumonia");
 
     public static void main(String[] args) throws IOException, TranslateException, ModelException {
+        if ("aarch64".equals(System.getProperty("os.arch"))) {
+            logger.info("TensorFlow engine doesn't support ARM");
+            return;
+        }
+
         String imagePath;
         if (args.length == 0) {
             imagePath = "https://djl-ai.s3.amazonaws.com/resources/images/chest_xray.jpg";
