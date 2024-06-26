@@ -79,8 +79,6 @@ jobs:
           rm -rf /root/.djl.ai/
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=tensorflow-native-cu113 ./gradlew clean run
-          rm -rf /root/.djl.ai/
       - name: Test Xgboost GPU
         working-directory: canary
         run: |
@@ -92,7 +90,7 @@ jobs:
     if: github.repository == 'deepjavalibrary/djl-demo'
     runs-on: [ self-hosted, gpu ]
     container:
-      image: nvidia/cuda:12.1.1-cudnn8-runtime-ubuntu20.04
+      image: nvidia/cuda:12.1.1-cudnn8-devel-ubuntu22.04
       options: --gpus all --runtime=nvidia
       env:
         AWS_REGION: us-east-1
@@ -166,6 +164,8 @@ jobs:
           DJL_ENGINE=tensorflow-native-auto ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=tensorflow-native-cu121 ./gradlew clean run
           rm -rf /root/.djl.ai/
       - name: Test Xgboost GPU
         working-directory: canary

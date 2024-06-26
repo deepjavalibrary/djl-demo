@@ -49,7 +49,7 @@ dependencies {
     } else if (engine.startsWith("tensorflow")) {
         runtimeOnly("ai.djl.tensorflow:tensorflow-model-zoo")
         if (!engine.contains("-auto")) {
-            runtimeOnly("ai.djl.tensorflow:${engine}::${os}-x86_64")
+            runtimeOnly("ai.djl.tensorflow:${engine}::${os}-${arch}")
         }
     } else if (engine.startsWith("onnxruntime")) {
         runtimeOnly("ai.djl.onnxruntime:onnxruntime-engine")
@@ -78,7 +78,7 @@ dependencies {
     } else if (engine.startsWith("mxnet")) {
         runtimeOnly("ai.djl.mxnet:mxnet-model-zoo")
         if (!engine.contains("-auto")) {
-            runtimeOnly("ai.djl.mxnet:${engine}::${os}-x86_64")
+            runtimeOnly("ai.djl.mxnet:${engine}::${os}-${arch}")
         }
     } else {
         throw GradleException("Unsupported engine: ${engine}.")
