@@ -62,13 +62,9 @@ jobs:
         working-directory: canary
         run: |
           set -x
-          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=$PT_VERSION ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.13.1 ./gradlew clean run
           rm -rf $HOME/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.2.2 ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
-          DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
           rm -rf $HOME/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu PT_VERSION=1.13.1 ./gradlew clean run
           rm -rf $HOME/.djl.ai/
@@ -86,35 +82,30 @@ jobs:
         working-directory: canary
         run: |
           set -x
-          DJL_ENGINE=fasttext ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
+          DJL_ENGINE=fasttext PYTORCH_VERSION=2.2.2 ./gradlew clean run
       - name: Test OnnxRuntime
         working-directory: canary
         run: |
           set -x
-          DJL_ENGINE=onnxruntime ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
+          DJL_ENGINE=onnxruntime PYTORCH_VERSION=2.2.2 ./gradlew clean run
       - name: Test Xgboost
         working-directory: canary
         run: |
           set -x
-          DJL_ENGINE=xgboost ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
+          DJL_ENGINE=xgboost PYTORCH_VERSION=2.2.2 ./gradlew clean run
       - name: Test LightGBM
         working-directory: canary
         run: |
           set -x
-          DJL_ENGINE=lightgbm ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
+          DJL_ENGINE=lightgbm PYTORCH_VERSION=2.2.2 ./gradlew clean run
       - name: Test Huggingface tokenizers
         working-directory: canary
         run: |
           set -x
-          DJL_ENGINE=tokenizers ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
+          DJL_ENGINE=tokenizers PYTORCH_VERSION=2.2.2 ./gradlew clean run
       - name: Test SentencePiece tokenizers
         working-directory: canary
         run: |
           set -x
-          DJL_ENGINE=sentencepiece ./gradlew clean run
+          DJL_ENGINE=sentencepiece PYTORCH_VERSION=2.2.2 ./gradlew clean run
           rm -rf /root/.djl.ai/
