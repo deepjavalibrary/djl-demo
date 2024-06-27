@@ -68,6 +68,14 @@ jobs:
           rm -rf $HOME/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu PT_VERSION=2.3.1 ./gradlew clean run
           rm -rf $HOME/.djl.ai/
+      - name: Test TensorFlow
+        working-directory: canary
+        run: |
+          set -x
+          DJL_ENGINE=tensorflow-native-auto ./gradlew clean run
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
+          rm -rf /root/.djl.ai/
       - name: Test OnnxRuntime
         working-directory: canary
         run: |
@@ -87,7 +95,6 @@ jobs:
           DJL_ENGINE=sentencepiece ./gradlew clean run
           rm -rf /root/.djl.ai/
       # MXNet doesn't support aarch64
-      # TensorFlow doesn't support aarch64
       # fastText doesn't support aarch64
       # Xgboost doesn't support aarch64 ?
       # LightGBM doesn't support aarch64 ?

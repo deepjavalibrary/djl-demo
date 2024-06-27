@@ -51,6 +51,7 @@ jobs:
       - name: Install libgomp
         run: |
           yum -y install libgomp
+          curl -o /usr/lib64/libstdc++.so.6 https://publish.djl.ai/extra/centos7/libstdc%2B%2B.so.6
       - name: Test PyTorch
         working-directory: canary
         run: |
