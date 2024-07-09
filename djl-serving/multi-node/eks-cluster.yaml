@@ -1,0 +1,35 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: multi-node-cluster-p4de
+  region: us-west-2
+  version: "1.30"
+
+iam:
+  withOIDC: true
+
+availabilityZones: ["us-west-2a","us-west-2c","us-west-2b"]
+
+managedNodeGroups:
+  - name: efa-ng
+    instanceType: p4de.24xlarge
+    minSize: 2
+    desiredCapacity: 2
+    maxSize: 2
+    availabilityZones: ["us-west-2a"]
+    volumeSize: 1200
+    privateNetworking: true
+    efaEnabled: true # remove if not using EFA-enabled instances
+    iam:
+      instanceRolearn: "arn:aws:iam::125045733377:role/ec2-admin-role"
+    ssh:
+      allow: true
+      publicKeyName: "multinode"
+    capacityReservation:
+      capacityReservationTarget:
+        capacityReservationID: "cr-0468e11ba77bbc5de"
+# below optional
+kubernetesNetworkConfig:
+  ipFamily: IPv4
+  serviceIPv4CIDR: 172.21.0.0/16

@@ -1,0 +1,112 @@
+apiVersion: leaderworkerset.x-k8s.io/v1
+kind: LeaderWorkerSet
+metadata:
+  name: lmi
+spec:
+  replicas: 1
+  leaderWorkerTemplate:
+    size: 2
+    restartPolicy: RecreateGroupOnPodRestart
+    leaderTemplate:
+      metadata:
+        labels:
+          role: leader
+      spec:
+        containers:
+          - name: lmi-leader
+            image: deepjavalibrary/djl-serving:lmi-nightly
+            volumeMounts:
+              - name: dshm
+                mountPath: /dev/shm
+              - name: model-storage
+                mountPath: /opt/ml/model
+            env:
+              - name: GROUP_INDEX
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.labels['leaderworkerset.sigs.k8s.io/group-index']
+              - name: NAMESPACE
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.namespace
+              - name: LWS_NAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.labels['leaderworkerset.sigs.k8s.io/name']
+              - name: DJL_WORKER_ADDR_FORMAT
+                value: "$(LWS_NAME)-$(GROUP_INDEX)-%d.$(LWS_NAME).$(NAMESPACE)"
+              - name: DJL_LEADER_ADDR
+                value: "$(LWS_LEADER_ADDRESS)"
+              - name: DJL_CLUSTER_SIZE
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.annotations['leaderworkerset.sigs.k8s.io/size']
+              - name: HF_MODEL_ID
+                value: "/opt/ml/model"
+              - name: TENSOR_PARALLEL_DEGREE
+                value: "16"
+              - name: MASTER_ADDR
+                value: "$(LWS_LEADER_ADDRESS)"
+              - name: OPTION_MAX_ROLLING_BATCH_SIZE
+                value: "64"
+            command:
+              - sh
+              - -c
+              - "service ssh start;djl-serving"
+            resources:
+              limits:
+                nvidia.com/gpu: "8"
+              requests:
+                cpu: "32"
+                memory: 640Gi
+                nvidia.com/gpu: "8"
+            ports:
+              - containerPort: 8080
+            readinessProbe:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 15
+              periodSeconds: 10
+        volumes:
+          - name: dshm
+            emptyDir:
+              medium: Memory
+          - name: model-storage
+            hostPath:
+              path: /home/ubuntu/model/opt-1-3b/
+    workerTemplate:
+      spec:
+        containers:
+          - name: lmi-worker
+            image: deepjavalibrary/djl-serving:lmi-nightly
+            volumeMounts:
+              - name: dshm
+                mountPath: /dev/shm
+              - name: model-storage
+                mountPath: /opt/ml/model
+              - name: cache-storage
+                mountPath: /tmp/.djl.ai/python/
+            env:
+              - name: HF_MODEL_ID
+                value: "/opt/ml/model"
+            command:
+              - sh
+              - -c
+              - "service ssh start;tail -f"
+            resources:
+              limits:
+                nvidia.com/gpu: "8"
+              requests:
+                cpu: "32"
+                memory: 640Gi
+                nvidia.com/gpu: "8"
+        volumes:
+          - name: dshm
+            emptyDir:
+              medium: Memory
+          - name: model-storage
+            hostPath:
+              path: /home/ubuntu/model/opt-1-3b/
+          - name: cache-storage
+            hostPath:
+              path: /home/ubuntu/python/
