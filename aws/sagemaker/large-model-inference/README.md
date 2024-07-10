@@ -3,7 +3,6 @@
 In this section, we provide some sample instruction to use LMI container on SageMaker.
 
 - [Bring-Your-Own-Container template](BYOC_template_with_LMI_solution.ipynb)
-- [Standard model.py template](standard_template_with_LMI_solution.ipynb)
 - [LMI PySDK template](pysdk_template_with_LMI_solution.ipynb)
 
 For the list of LMI containers that is on DLC, please click [here](https://github.com/aws/deep-learning-containers/blob/master/available_images.md#large-model-inference-containers).
@@ -40,15 +39,15 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 - [CodeLLAMA-34B](sample-llm/hf_acc_deploy_codellama_34b.ipynb)
 - [LLAMA2-13B-GPTQ](sample-llm/hf_acc_deploy_llama2-13b-gptq.ipynb)
 
-### DeepSpeed
+### <del>DeepSpeed (deprecated)</del>
 
-- [LLAMA-2-13B-SmoothQuant](sample-llm/ds_deploy_llama2-13b-smoothquant.ipynb)
-- [LLAMA-2-13B-RollingBatch-SmoothQuant](sample-llm/ds_rollingbatch_deploy_llama2-13b-smoothquant.ipynb)
-- [GPT-NeoX-20B-RollingBatch-SmoothQuant](sample-llm/ds_rollingbatch_deploy_gpt-neox-20b-smoothquant.ipynb)
+- <del>[LLAMA-2-13B-SmoothQuant](sample-llm/ds_deploy_llama2-13b-smoothquant.ipynb)</del>
+- <del>[LLAMA-2-13B-RollingBatch-SmoothQuant](sample-llm/ds_rollingbatch_deploy_llama2-13b-smoothquant.ipynb)</del>
+- <del>[GPT-NeoX-20B-RollingBatch-SmoothQuant](sample-llm/ds_rollingbatch_deploy_gpt-neox-20b-smoothquant.ipynb)</del>
 
-### FasterTransformer
+### <del>FasterTransformer (deprecated)</del>
 
-- [OpenAssistant GPTNeoX](sample-llm/fastertransformer_deploy_pythia12b_triton_mode.ipynb)
+- <del>[OpenAssistant GPTNeoX](sample-llm/fastertransformer_deploy_pythia12b_triton_mode.ipynb)</del>
 
 ### VLLM Rolling Batch
 
@@ -64,6 +63,7 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 - [LLAMA-7B Int8 RollingBatch](sample-llm/tnx_rollingbatch_deploy_llama_7b_int8.ipynb)
 - [Mistral-7B RollingBatch](sample-llm/tnx_rollingbatch_deploy_mistral_7b.ipynb)
 - [LLAMA-70B RollingBatch](sample-llm/tnx_rollingbatch_deploy_llama_70b.ipynb)
+- [Speculative Decoding deployment guide for Neuron](sample-llm/tnx_speculative_decoding_deploy_llama2_70b.ipynb)
 
 ### TensorRT-LLM Rolling Batch
 
@@ -78,6 +78,7 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 
 - [Multi-LoRA Adapters](sample-llm/multi_lora_adapter_inference.ipynb)
 - [Multi-LoRA Adapters Advanced](sample-llm/multi_lora_adapter_inference_advanced.ipynb)
+- [Text embedding model deployment guide](sample-llm/text_embedding_deploy_bert.ipynb)
 
 ### Amazon SageMaker Examples
 
