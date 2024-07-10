@@ -40,18 +40,14 @@ jobs:
       DJL_STAGING: ${{github.event.inputs.repo-id}}
       DJL_VERSION: ${{github.event.inputs.djl-version}}
       PT_VERSION: ${{github.event.inputs.pt-version}}
-    container: centos:7
+      JAVA_HOME: /usr/lib/jvm/java-17-amazon-corretto
+    container: amazonlinux:2
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'corretto'
-          java-version: 17
       - name: Install libgomp
         run: |
-          yum -y install libgomp
-          curl -o /usr/lib64/libstdc++.so.6 https://publish.djl.ai/extra/centos7/libstdc%2B%2B.so.6
+          yum install -y tar gzip libgomp
+          yum -y install java-17-amazon-corretto-devel
+      - uses: taiki-e/checkout-action@v1
       - name: Test PyTorch
         working-directory: canary
         run: |
