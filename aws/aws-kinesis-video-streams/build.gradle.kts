@@ -23,7 +23,7 @@ dependencies {
     implementation("com.amazonaws:amazon-kinesis-video-streams-parser-library:${property("kinesis_video_stream_parser_version")}")
 
     runtimeOnly("ai.djl.pytorch:pytorch-model-zoo")
-    runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:${property("log4j_slf4j_version")}")
+    runtimeOnly("org.apache.logging.log4j:log4j-slf4j2-impl:${property("log4j_slf4j_version")}")
 }
 
 tasks {

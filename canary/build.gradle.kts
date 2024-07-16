@@ -34,7 +34,7 @@ dependencies {
     implementation("ai.djl.huggingface:tokenizers")
 
     implementation("commons-cli:commons-cli:${property("commons_cli_version")}")
-    runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:${property("log4j_slf4j_version")}")
+    runtimeOnly("org.apache.logging.log4j:log4j-slf4j2-impl:${property("log4j_slf4j_version")}")
 
     if (engine.startsWith("pytorch")) {
         runtimeOnly("ai.djl.pytorch:pytorch-model-zoo")

@@ -8,6 +8,8 @@ apply(file("../../tools/gradle/javaFormatter.gradle.kts"))
 
 group = "com.example"
 version = "1.0-SNAPSHOT"
+var djlVersion = property("djl_version") as String
+djlVersion = if (djlVersion.endsWith("-SNAPSHOT")) djlVersion else "${djlVersion}-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -16,13 +18,13 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("ai.djl:bom:${property("djl_version")}-SNAPSHOT"))
+    implementation(platform("ai.djl:bom:${djlVersion}"))
     implementation("ai.djl:api")
 
     runtimeOnly("ai.djl.pytorch:pytorch-model-zoo")
     runtimeOnly("ai.djl.python:python")
 
-    runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:${property("log4j_slf4j_version")}")
+    runtimeOnly("org.apache.logging.log4j:log4j-slf4j2-impl:${property("log4j_slf4j_version")}")
 }
 
 tasks {
