@@ -21,7 +21,7 @@ dependencies {
     implementation("ai.djl.pytorch:pytorch-model-zoo")
     implementation("ai.djl.opencv:opencv")
     implementation("org.apache.commons:commons-lang3:${property("commons_lang3_version")}")
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:${property("log4j_slf4j_version")}")
+    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:${property("log4j_slf4j_version")}")
 }
 
 tasks {

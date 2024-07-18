@@ -17,7 +17,6 @@ dependencies {
     implementation(platform("ai.djl:bom:${property("djl_version")}"))
     implementation("ai.djl:api")
     implementation("ai.djl.huggingface:tokenizers")
-    implementation("ai.djl.llama:llama")
 
     runtimeOnly("ai.djl.pytorch:pytorch-engine")
     implementation("org.slf4j:slf4j-simple:${property("slf4j_version")}")

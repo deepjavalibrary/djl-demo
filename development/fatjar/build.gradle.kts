@@ -24,8 +24,7 @@ dependencies {
     runtimeOnly("ai.djl.pytorch:pytorch-jni")
 
     // Uncomment one of the following native library for your target platform
-    runtimeOnly("ai.djl.pytorch:pytorch-native-cpu::osx-x86_64")
-    // runtimeOnly("ai.djl.pytorch:pytorch-native-cpu::osx-aarch64")
+    runtimeOnly("ai.djl.pytorch:pytorch-native-cpu::osx-aarch64")
     // runtimeOnly("ai.djl.pytorch:pytorch-native-cpu::linux-aarch64")
     // runtimeOnly("ai.djl.pytorch:pytorch-native-cpu::linux-x86_64")
     // runtimeOnly("ai.djl.pytorch:pytorch-native-cpu-precxx11::linux-x86_64")
