@@ -6,6 +6,8 @@ apply(file("../../../tools/gradle/javaFormatter.gradle.kts"))
 
 group = "com.example"
 version = "1.0-SNAPSHOT"
+var djlVersion = property("djl_version") as String
+djlVersion = if (djlVersion.endsWith("-SNAPSHOT")) djlVersion else "${djlVersion}-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -13,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("ai.djl:bom:${property("djl_version")}"))
+    implementation(platform("ai.djl:bom:${djlVersion}"))
     implementation("ai.djl:api")
     implementation("ai.djl.serving:wlm")
     implementation("org.apache.flink:flink-streaming-java:${property("flint_version")}")
