@@ -26,7 +26,7 @@ jobs:
       djl-version: ${{ github.event.inputs.djl-version }}
       pt-version: ${{ github.event.inputs.pt-version }}
   centos:
-    uses: ./.github/workflows/canary-centos.yml
+    uses: ./.github/workflows/canary-al2.yml
     secrets: inherit
     with:
       repo-id: ${{ github.events.inputs.repo-id }}
@@ -41,13 +41,6 @@ jobs:
       pt-version: ${{ github.event.inputs.pt-version }}
   m1-mac:
     uses: ./.github/workflows/canary-m1-mac.yml
-    secrets: inherit
-    with:
-      repo-id: ${{ github.events.inputs.repo-id }}
-      djl-version: ${{ github.event.inputs.djl-version }}
-      pt-version: ${{ github.event.inputs.pt-version }}
-  mac:
-    uses: ./.github/workflows/canary-mac.yml
     secrets: inherit
     with:
       repo-id: ${{ github.events.inputs.repo-id }}

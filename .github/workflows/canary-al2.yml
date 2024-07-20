@@ -32,7 +32,7 @@ on:
         default: ''
 
 jobs:
-  canary-test-centos:
+  canary-test-al2:
     if: github.repository == 'deepjavalibrary/djl-demo'
     runs-on: ubuntu-latest
     env:
@@ -107,5 +107,5 @@ jobs:
           set -x
           DJL_ENGINE=sentencepiece PYTORCH_PRECXX11=true ./gradlew clean run
           rm -rf /root/.djl.ai/
-      # MXNet doesn't support centos 7
-      # fastText doesn't support centos 7
+      # MXNet doesn't support amazonlinux:2
+      # fastText doesn't support amazonlinux:2
