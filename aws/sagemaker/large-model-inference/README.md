@@ -5,19 +5,23 @@ In this section, we provide some sample instruction to use LMI container on Sage
 - [Bring-Your-Own-Container template](BYOC_template_with_LMI_solution.ipynb)
 - [LMI PySDK template](pysdk_template_with_LMI_solution.ipynb)
 
-For the list of LMI containers that is on DLC, please click [here](https://github.com/aws/deep-learning-containers/blob/master/available_images.md#large-model-inference-containers).
+For the list of LMI containers that is on DLC, please
+click [here](https://github.com/aws/deep-learning-containers/blob/master/available_images.md#large-model-inference-containers).
 
-For the list of available BYOC containers, please clck [here](https://hub.docker.com/r/deepjavalibrary/djl-serving/tags).
+For the list of available BYOC containers, please
+clck [here](https://hub.docker.com/r/deepjavalibrary/djl-serving/tags).
 
-For more information on LMI documentation on SageMaker, click [here](https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints-large-model-inference.html).
+For more information on LMI documentation on SageMaker,
+click [here](https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints-large-model-inference.html).
 
-For all the serving.prorperties options you could set on DJLServing, click [here](https://docs.djl.ai/docs/serving/serving/docs/modes.html#servingproperties).
+For all the serving.properties options you could set on DJLServing,
+click [here](https://docs.djl.ai/docs/serving/serving/docs/modes.html#servingproperties).
 
 ## Sample notebooks
 
 ### LMI_Dist Rolling Batch
 
-- [LLAMA2-70B](sample-llm/rollingbatch_deploy_llama2_70b_w_pagedattn.ipynb)
+- [LLAMA2-70B](sample-llm/rollingbatch_deploy_llama2_70b.ipynb)
 - [LLAMA 7B rolling batch with customized model.py](sample-llm/rollingbatch_llama_7b_customized_preprocessing.ipynb)
 - [LLAMA 7B rolling batch with stop reasoning](sample-llm/rollingbatch_llama_7b_stop_reason.ipynb)
 - [LLAMA 7B rolling batch with chat template](sample-llm/rollingbatch_llama_7b_chat.ipynb)
@@ -29,15 +33,16 @@ For all the serving.prorperties options you could set on DJLServing, click [here
 - [CodeLLAMA-34B](sample-llm/rollingbatch_deploy_codellama_34b.ipynb)
 - [LLAMA2-13B-GPTQ](sample-llm/rollingbatch_deploy_llama2-13b-gptq.ipynb)
 - [LLAMA2-70B-GPTQ](sample-llm/rollingbatch_deploy_llama2-70b-gptq.ipynb)
-- [Mixtral-8x-7b](sample-llm/lmi_dist_rollingbatch_deploy_mixtral_8x7b.ipynb)
+- [Mixtral-8x-7b](sample-llm/rollingbatch_deploy_mixtral_8x7b.ipynb)
 
 ### HF Acc Rolling Batch
+
 - [LLAMA2-70B](sample-llm/hf_acc_deploy_llama2_70b.ipynb)
 - [LLAMA 7B rolling batch with customized model.py](sample-llm/hf_acc_deploy_llama_7b_customized_preprocessing.ipynb)
 - [Mistral 7B](sample-llm/hf_acc_deploy_mistral_7b.ipynb)
 - [Falcon-40B](sample-llm/hf_acc_deploy_falcon_40b.ipynb)
 - [CodeLLAMA-34B](sample-llm/hf_acc_deploy_codellama_34b.ipynb)
-- [LLAMA2-13B-GPTQ](sample-llm/hf_acc_deploy_llama2-13b-gptq.ipynb)
+- [LLAMA2-13B-GPTQ](sample-llm/hf_acc_deploy_llama2_13b_gptq.ipynb)
 
 ### <del>DeepSpeed (deprecated)</del>
 
