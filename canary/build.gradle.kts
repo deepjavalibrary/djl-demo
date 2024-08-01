@@ -9,12 +9,12 @@ apply(file("../tools/gradle/javaFormatter.gradle.kts"))
 group = "com.example"
 version = "1.0-SNAPSHOT"
 
-val djlVersion = getEnv("DJL_VERSION", "0.29.0")
+val djlVersion = getEnv("DJL_VERSION", "0.30.0-SNAPSHOT")
 val engine: String = getEnv("DJL_ENGINE", "pytorch-native-auto")
 val os = getOsName()
 val arch: String = if (System.getProperty("os.arch") == "amd64") "x86_64" else System.getProperty("os.arch")
 val stagingRepo = getEnv("DJL_STAGING", "")
-val ptVersion = getEnv("PT_VERSION", "2.3.1")
+val ptVersion = getEnv("PT_VERSION", "2.4.0-SNAPSHOT")
 val ptJniVersion = ptVersion.replace("-SNAPSHOT", "")
 
 repositories {
