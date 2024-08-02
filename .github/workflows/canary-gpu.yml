@@ -70,7 +70,6 @@ jobs:
           set -x
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=$PT_VERSION ./gradlew clean run
           rm -rf /root/.djl.ai/
-          rm -rf /root/.djl.ai/
       - name: Test Tensorflow
         working-directory: canary
         run: |
@@ -86,6 +85,49 @@ jobs:
           DJL_ENGINE=xgboost-gpu ./gradlew clean run
           rm -rf /root/.djl.ai/
 
+  canary-test-cuda121:
+    if: github.repository == 'deepjavalibrary/djl-demo'
+    runs-on: [ self-hosted, gpu ]
+    container:
+      image: nvidia/cuda:12.1.1-cudnn8-devel-ubuntu22.04
+      options: --gpus all --runtime=nvidia
+      env:
+        AWS_REGION: us-east-1
+        DJL_STAGING: ${{github.event.inputs.repo-id}}
+        DJL_VERSION: ${{github.event.inputs.djl-version}}
+        PT_VERSION: ${{github.event.inputs.pt-version}}
+    timeout-minutes: 30
+    needs: create-gpu-runner
+    steps:
+      - name: Setup Environment
+        run: |
+          apt-get update
+          apt-get install -y software-properties-common wget libgomp1
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: corretto
+      - name: Test PyTorch
+        working-directory: canary
+        run: |
+          set -x
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.13.1 ./gradlew clean run
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=pytorch-native-cu117 PT_VERSION=1.13.1 ./gradlew clean run
+          rm -rf /root/.djl.ai/
+      - name: Test Tensorflow
+        working-directory: canary
+        run: |
+          set -x
+          DJL_ENGINE=tensorflow-native-auto ./gradlew clean run
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=tensorflow-native-cu121 ./gradlew clean run
+          rm -rf /root/.djl.ai/
+
   canary-test-cuda124:
     if: github.repository == 'deepjavalibrary/djl-demo'
     runs-on: [ self-hosted, gpu ]
@@ -97,7 +139,7 @@ jobs:
         DJL_STAGING: ${{github.event.inputs.repo-id}}
         DJL_VERSION: ${{github.event.inputs.djl-version}}
         PT_VERSION: ${{github.event.inputs.pt-version}}
-    timeout-minutes: 30
+    timeout-minutes: 60
     needs: create-gpu-runner
     steps:
       - name: Setup Environment
@@ -123,8 +165,6 @@ jobs:
         run: |
           set -x
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=$PT_VERSION ./gradlew clean run
-          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.13.1 ./gradlew clean run
-          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.1.2 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.3.1 ./gradlew clean run
@@ -132,8 +172,6 @@ jobs:
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.4.0 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=$PT_VERSION ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.13.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=2.1.2 ./gradlew clean run
           rm -rf /root/.djl.ai/
@@ -145,9 +183,7 @@ jobs:
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu121 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu117 PT_VERSION=1.13.1 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-cu124 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu121 PT_VERSION=2.1.2 ./gradlew clean run
           rm -rf /root/.djl.ai/
@@ -155,25 +191,13 @@ jobs:
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu124 PT_VERSION=2.4.0 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu121-precxx11 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu117-precxx11 PT_VERSION=1.13.1 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-cu124-precxx11 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu121-precxx11 PT_VERSION=2.1.2 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu121-precxx11 PT_VERSION=2.3.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu124-precxx11 PT_VERSION=2.4.0 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-      - name: Test Tensorflow
-        working-directory: canary
-        run: |
-          set -x
-          DJL_ENGINE=tensorflow-native-auto ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=tensorflow-native-cu121 ./gradlew clean run
           rm -rf /root/.djl.ai/
       - name: Test Xgboost GPU
         working-directory: canary
@@ -201,7 +225,7 @@ jobs:
   stop-runners:
     if: always()
     runs-on: [ self-hosted, scheduler ]
-    needs: [ create-gpu-runner, canary-test-cuda113, canary-test-cuda124 ]
+    needs: [ create-gpu-runner, canary-test-cuda113, canary-test-cuda121, canary-test-cuda124 ]
     steps:
       - name: Stop all instances
         run: |
