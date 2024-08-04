@@ -1,2 +1,0 @@
-include ':mxnet_android_template'
-rootProject.name = "mxnet_android"
