@@ -46,13 +46,13 @@ click [here](https://docs.djl.ai/docs/serving/serving/docs/modes.html#servingpro
 
 ### <del>DeepSpeed (deprecated)</del>
 
-- <del>[LLAMA-2-13B-SmoothQuant](sample-llm/ds_deploy_llama2-13b-smoothquant.ipynb)</del>
-- <del>[LLAMA-2-13B-RollingBatch-SmoothQuant](sample-llm/ds_rollingbatch_deploy_llama2-13b-smoothquant.ipynb)</del>
-- <del>[GPT-NeoX-20B-RollingBatch-SmoothQuant](sample-llm/ds_rollingbatch_deploy_gpt-neox-20b-smoothquant.ipynb)</del>
+- <del>[LLAMA-2-13B-SmoothQuant](sample-llm/deprecated/ds_deploy_llama2-13b-smoothquant.ipynb)</del>
+- <del>[LLAMA-2-13B-RollingBatch-SmoothQuant](sample-llm/deprecated/ds_rollingbatch_deploy_llama2-13b-smoothquant.ipynb)</del>
+- <del>[GPT-NeoX-20B-RollingBatch-SmoothQuant](sample-llm/deprecated/ds_rollingbatch_deploy_gpt-neox-20b-smoothquant.ipynb)</del>
 
 ### <del>FasterTransformer (deprecated)</del>
 
-- <del>[OpenAssistant GPTNeoX](sample-llm/fastertransformer_deploy_pythia12b_triton_mode.ipynb)</del>
+- <del>[OpenAssistant GPTNeoX](sample-llm/deprecated/fastertransformer_deploy_pythia12b_triton_mode.ipynb)</del>
 
 ### VLLM Rolling Batch
 
