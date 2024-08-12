@@ -17,7 +17,7 @@ DJL and pass input/output back and force.
 
 ### Create a python model
 
-First you need create a [`model.py`](src/test/resources/resnet18/model.py) file. In this file, you
+First you need create a [`model.py`](https://github.com/deepjavalibrary/djl-demo/blob/master/development/python/src/test/resources/resnet18/model.py) file. In this file, you
 need to define three functions:
 
 - `def handle(inputs: Input) -> Optional[Output]:`, this required for DJL Python engine to load the model
@@ -64,7 +64,7 @@ DJL's `Translator` design pattern:
 `Translator` is a DJL design pattern that allows you define your own pre-process and post-process.
 
 You can load python model in the translator and invoke python `preprocess()` and `postprocess()`
-function in the translator. See: [PythonTranslator](src/main/java/com/examples/PythonTranslator.java) code.
+function in the translator. See: [PythonTranslator](https://github.com/deepjavalibrary/djl-demo/blob/master/development/python/src/main/java/com/examples/PythonTranslator.java) code.
 
 ### Put them together
 

@@ -15,9 +15,9 @@ Before starting, you need to install DJLServing. You can find installation instr
 Currently only Java custom workflow function are supported. To use Python custom workflow function,
 the main idea is to treat the Python function as a "model" and run it using the DJLServing Python engine.
 
-In [preprocess/model.py](preprocess/model.py) we apply transformations such as resize.
+In [preprocess/model.py](https://github.com/deepjavalibrary/djl-demo/blob/master/djl-serving/workflows/python-pre-post-processing/preprocess/model.py) we apply transformations such as resize.
 
-In [postprocess/model.py](postprocess/model.py) we apply softmax function to convert
+In [postprocess/model.py](https://github.com/deepjavalibrary/djl-demo/blob/master/djl-serving/workflows/python-pre-post-processing/postprocess/model.py) we apply softmax function to convert
 logits to probabilities and map to class names.
 
 ### Step 2: Prepare model file

@@ -13,7 +13,7 @@ Before starting, you need to install DJLServing. You can find installation instr
 
 ## Define the workflow
 
-First, we use the `function` folder to start building our own custom WorkflowFunction [ExtractPersonWF](function/src/main/java/org/example/ExtractPersonWF.java).
+First, we use the `function` folder to start building our own custom WorkflowFunction [ExtractPersonWF](https://github.com/deepjavalibrary/djl-demo/blob/master/djl-serving/workflows/multi-model/function/src/main/java/org/example/ExtractPersonWF.java).
 The WorkflowFunction is a lambda function that can be run within a workflow. It takes a list of inputs.
 In this example, we define the ExtractPersonWF function that takes two inputs:
 the input image and the detected objects. It returns the cropped person image.
