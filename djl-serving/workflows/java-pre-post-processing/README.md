@@ -14,10 +14,10 @@ Before starting, you need to install DJLServing. You can find installation instr
 
 ### Step 1: Create the Java pre/post processing workflow functions
 
-In [PreprocessWF.java](function/src/main/java/org/example/PreprocessWF.java) we define a custom Java workflow function
+In [PreprocessWF.java](https://github.com/deepjavalibrary/djl-demo/blob/master/djl-serving/workflows/java-pre-post-processing/function/src/main/java/org/example/PreprocessWF.java) we define a custom Java workflow function
 that apply transformations such as resize to the input image.
 
-In [PostprocessWF.java](function/src/main/java/org/example/PostprocessWF.java) we define a custom Java workflow function
+In [PostprocessWF.java](fhttps://github.com/deepjavalibrary/djl-demo/blob/master/djl-serving/workflows/java-pre-post-processing/function/src/main/java/org/example/PreprocessWF.java) we define a custom Java workflow function
 to process the probabilities to classifications JSON output.
 
 Once it is done, you can package the whole project in a jar:

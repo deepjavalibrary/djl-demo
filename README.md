@@ -71,10 +71,6 @@ An example that shows how to build speech recognition app.
 
 An example that shows how to build object detection app with ONNX model.
 
-### [Build Android app with MXNet engine](android/mxnet-android/README.md)
-
-A template that can be used to build Android applications with MXNet engine.
-
 ## AWS services
 
 ### [AWS Kinesis Video Streams](aws/aws-kinesis-video-streams/README.md)

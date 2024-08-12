@@ -22,7 +22,7 @@ from djl_python import Output
 def handle(inputs: Input) -> Output:
 ```
 
-In this example, we define [resnet18/model.py](resnet18/model.py).
+In this example, we define [resnet18/model.py](https://github.com/deepjavalibrary/djl-demo/blob/master/djl-serving/workflows/python/resnet18/model.py).
 
 ### Step 2: Define the workflow
 

@@ -33,7 +33,7 @@ eksctl create cluster -f eks-cluster.yaml
 
 ## Install LeaderWorkerSet
 
-Follow the [guide]((https://github.com/kubernetes-sigs/lws/blob/main/docs/setup/install.md)) on how to install LWS.
+Follow the [guide](https://github.com/kubernetes-sigs/lws/blob/main/docs/setup/install.md) on how to install LWS.
 
 ## Deploy LeaderWorkerSet of DJL Serving
 
