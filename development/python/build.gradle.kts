@@ -8,7 +8,7 @@ apply(file("../../tools/gradle/javaFormatter.gradle.kts"))
 group = "com.examples"
 version = "1.0-SNAPSHOT"
 var djlVersion = property("djl_version") as String
-djlVersion = if (djlVersion.endsWith("-SNAPSHOT")) djlVersion else "${djlVersion}-SNAPSHOT"
+// djlVersion = if (djlVersion.endsWith("-SNAPSHOT")) djlVersion else "${djlVersion}-SNAPSHOT"
 
 repositories {
     mavenCentral()
