@@ -83,7 +83,7 @@ You can use the following command line to deploy to your AWS Elastic Beanstalk:
 ..\..\gradlew deploy
 ```
 
-Alternately you can create a new environment with the AWS BeanStalk Console.
+Alternatively you can create a new environment with the AWS BeanStalk Console.
 Give you application a name. Set the platform to these options for this example:
 
 ![Platform Select Option](https://resources.djl.ai/demo/beanstalk-model-serving/images/platform.png)
