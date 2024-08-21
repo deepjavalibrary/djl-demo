@@ -24,7 +24,7 @@ Deep Java Library (DJL) provides a [TrainingConfig](https://github.com/deepjaval
 For example, this trainingConfiguration is used to initialize the Trainer object, which in turn initializes the parameters of the model.
 ```java
     /**
-    *Learning Rate definition, FactorTracker is a parent for simimlar hyperparameteres
+    *Learning Rate definition, FactorTracker is a parent for similar hyperparameters
     * Sets learningRate and number of steps
     */
     int learningRate = 0.01;
@@ -49,7 +49,7 @@ For example, this trainingConfiguration is used to initialize the Trainer object
                                 XavierInitializer.RandomType.UNIFORM,
                                 XavierInitializer.FactorType.AVG,
                                 2.24);
-     //Set distribution of Initializer Randamozier to uniform and Factor to be average, with magintude.
+     //Set distribution of Initializer Randamozier to uniform and Factor to be average, with magnitude.
      
     //Use the above to create a TrainingConfig object
   
