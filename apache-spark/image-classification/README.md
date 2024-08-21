@@ -13,7 +13,7 @@ You can also look at the Spark3.0 version of this demo [here](../spark3.0/image)
 
 We provide two options to build, you can choose to build with `sbt` or `gradle`.
 
-We use PyTorch engine by default, you can switch to MXNet or TensorFlow Engine adding these lines:
+We use PyTorch engine by default, you can switch to MXNet or TensorFlow Engine by adding these lines:
 
 ### sbt
 
