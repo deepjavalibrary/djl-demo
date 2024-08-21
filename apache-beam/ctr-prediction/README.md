@@ -2,7 +2,7 @@
 
 In this demo, we will show you how to run click-through rate (CTR) prediction on Ads Data at scale using [Apache Beam](https://beam.apache.org/) and [Deep Java Library](https://djl.ai)
 
-Utilizing Apache Beam, you can train you model once and deploy using different big data solutions([Flink](https://flink.apache.org/), [Spark](https://spark.apache.org/), and more) that suits your needs. 
+Utilizing Apache Beam, you can train your model once and deploy using different big data solutions([Flink](https://flink.apache.org/), [Spark](https://spark.apache.org/), and more) that suits your needs. 
 
 
 ## Train your model
