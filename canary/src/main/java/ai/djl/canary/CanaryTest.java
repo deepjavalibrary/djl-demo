@@ -272,7 +272,7 @@ public final class CanaryTest {
         try (Model model = Model.newInstance("canary", "XGBoost")) {
             model.load(modelDir, "regression");
             Predictor<NDList, NDList> predictor = model.newPredictor(new NoopTranslator());
-            try (NDManager manager = NDManager.newBaseManager()) {
+            try (NDManager manager = NDManager.newBaseManager("XGBoost")) {
                 NDArray array = manager.ones(new Shape(10, 13));
                 NDList output = predictor.predict(new NDList(array));
                 float[] result = output.singletonOrThrow().toFloatArray();
@@ -307,7 +307,7 @@ public final class CanaryTest {
 
         try (ZooModel<NDList, NDList> model = criteria.loadModel();
                 Predictor<NDList, NDList> predictor = model.newPredictor()) {
-            try (NDManager manager = NDManager.newBaseManager()) {
+            try (NDManager manager = NDManager.newBaseManager("LightGBM")) {
                 NDArray array = manager.ones(new Shape(10, 4));
                 NDList output = predictor.predict(new NDList(array));
                 float[] result = output.singletonOrThrow().toFloatArray();
