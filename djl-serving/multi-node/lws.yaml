@@ -18,6 +18,8 @@ spec:
             volumeMounts:
               - name: dshm
                 mountPath: /dev/shm
+              - name: model-storage
+                mountPath: /opt/ml/model
               - name: cache-storage
                 mountPath: /tmp/.djl.ai/
             env:
@@ -44,7 +46,7 @@ spec:
                   fieldRef:
                     fieldPath: metadata.annotations['leaderworkerset.sigs.k8s.io/size']
               - name: HF_MODEL_ID
-                value: "s3://djl-llm/llama-3.1-405b-hf/"
+                value: "s3://my_bucket/llama-3.1-405b-hf/"
               - name: TENSOR_PARALLEL_DEGREE
                 value: "8"
               - name: PIPELINE_PARALLEL_DEGREE
@@ -79,6 +81,9 @@ spec:
           - name: dshm
             emptyDir:
               medium: Memory
+          - name: model-storage
+            hostPath:
+              path: /opt/ml/model/
           - name: cache-storage
             hostPath:
               path: /tmp/.djl.ai/
@@ -90,13 +95,15 @@ spec:
             volumeMounts:
               - name: dshm
                 mountPath: /dev/shm
+              - name: model-storage
+                mountPath: /opt/ml/model
               - name: cache-storage
                 mountPath: /tmp/.djl.ai/
             env:
               - name: DJL_LEADER_ADDR
                 value: "$(LWS_LEADER_ADDRESS)"
               - name: HF_MODEL_ID
-                value: "s3://djl-llm/llama-3.1-405b-hf/"
+                value: "s3://my_bucket/llama-3.1-405b-hf/"
               - name: AWS_ACCESS_KEY_ID
                 value: ""
               - name: AWS_SECRET_ACCESS_KEY
@@ -118,6 +125,9 @@ spec:
           - name: dshm
             emptyDir:
               medium: Memory
+          - name: model-storage
+            hostPath:
+              path: /opt/ml/model/
           - name: cache-storage
             hostPath:
               path: /tmp/.djl.ai/
