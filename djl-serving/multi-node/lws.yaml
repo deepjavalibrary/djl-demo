@@ -18,8 +18,8 @@ spec:
             volumeMounts:
               - name: dshm
                 mountPath: /dev/shm
-              - name: model-storage
-                mountPath: /opt/ml/model
+              - name: cache-storage
+                mountPath: /tmp/.djl.ai/
             env:
               - name: GROUP_INDEX
                 valueFrom:
@@ -37,18 +37,26 @@ spec:
                 value: "$(LWS_NAME)-$(GROUP_INDEX)-%d.$(LWS_NAME).$(NAMESPACE)"
               - name: DJL_LEADER_ADDR
                 value: "$(LWS_LEADER_ADDRESS)"
+              - name: MASTER_ADDR
+                value: "$(LWS_LEADER_ADDRESS)"
               - name: DJL_CLUSTER_SIZE
                 valueFrom:
                   fieldRef:
                     fieldPath: metadata.annotations['leaderworkerset.sigs.k8s.io/size']
               - name: HF_MODEL_ID
-                value: "/opt/ml/model"
+                value: "s3://djl-llm/llama-3.1-405b-hf/"
               - name: TENSOR_PARALLEL_DEGREE
-                value: "16"
-              - name: MASTER_ADDR
-                value: "$(LWS_LEADER_ADDRESS)"
+                value: "8"
+              - name: PIPELINE_PARALLEL_DEGREE
+                value: "2"
               - name: OPTION_MAX_ROLLING_BATCH_SIZE
                 value: "64"
+              - name: AWS_ACCESS_KEY_ID
+                value: ""
+              - name: AWS_SECRET_ACCESS_KEY
+                value: ""
+              - name: AWS_SESSION_TOKEN
+                value: ""
             command:
               - sh
               - -c
@@ -71,9 +79,9 @@ spec:
           - name: dshm
             emptyDir:
               medium: Memory
-          - name: model-storage
+          - name: cache-storage
             hostPath:
-              path: /home/ubuntu/model/opt-1-3b/
+              path: /tmp/.djl.ai/
     workerTemplate:
       spec:
         containers:
@@ -82,17 +90,23 @@ spec:
             volumeMounts:
               - name: dshm
                 mountPath: /dev/shm
-              - name: model-storage
-                mountPath: /opt/ml/model
               - name: cache-storage
-                mountPath: /tmp/.djl.ai/python/
+                mountPath: /tmp/.djl.ai/
             env:
+              - name: DJL_LEADER_ADDR
+                value: "$(LWS_LEADER_ADDRESS)"
               - name: HF_MODEL_ID
-                value: "/opt/ml/model"
+                value: "s3://djl-llm/llama-3.1-405b-hf/"
+              - name: AWS_ACCESS_KEY_ID
+                value: ""
+              - name: AWS_SECRET_ACCESS_KEY
+                value: ""
+              - name: AWS_SESSION_TOKEN
+                value: ""
             command:
               - sh
               - -c
-              - "service ssh start;tail -f"
+              - "service ssh start; /usr/bin/python3 /opt/djl/partition/run_multi_node_setup.py; tail -f"
             resources:
               limits:
                 nvidia.com/gpu: "8"
@@ -104,9 +118,6 @@ spec:
           - name: dshm
             emptyDir:
               medium: Memory
-          - name: model-storage
-            hostPath:
-              path: /home/ubuntu/model/opt-1-3b/
           - name: cache-storage
             hostPath:
-              path: /home/ubuntu/python/
+              path: /tmp/.djl.ai/
