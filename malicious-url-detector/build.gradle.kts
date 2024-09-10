@@ -21,7 +21,7 @@ dependencies {
     }
 
     implementation("commons-cli:commons-cli:${property("commons_cli_version")}")
-    implementation("org.apache.httpcomponents:httpcore:${property("httpclient_version")}")
+    implementation("org.apache.httpcomponents.core5:httpcore5:${property("httpclient_version")}")
     implementation("org.apache.commons:commons-csv:${property("commons_csv_version")}")
 
     runtimeOnly("org.slf4j:slf4j-simple:${property("slf4j_version")}")

@@ -14,14 +14,15 @@ package com.example;
 
 import ai.djl.modality.Classifications;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.HttpVersion;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.FileEntity;
-import org.apache.http.message.BasicHttpResponse;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.HttpResponse;
+import org.apache.hc.core5.http.HttpStatus;
+import org.apache.hc.core5.http.HttpVersion;
+import org.apache.hc.core5.http.ParseException;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.io.entity.FileEntity;
+import org.apache.hc.core5.http.message.BasicHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,11 +81,11 @@ public class RequestHandler implements Runnable {
         try {
             requestString = proxyToClientReader.readLine();
         } catch (IOException e) {
-            logger.error("Error reading request from client" + e.getMessage());
+            logger.error("Error reading request from client{}", e.getMessage());
             return;
         }
 
-        logger.info("Request Received " + requestString);
+        logger.info("Request Received {}", requestString);
         String[] parts = requestString.split(" ", 3);
         String requestType = parts[0];
         String urlString = parts[1];
@@ -95,16 +96,16 @@ public class RequestHandler implements Runnable {
         Classifications output = maliciousURLModel.inference(urlString);
         logger.debug(output.toString());
         if (output.get("malicious").getProbability() >= 0.50) {
-            logger.info("Malicious URL detected and blocked " + urlString);
+            logger.info("Malicious URL detected and blocked {}", urlString);
             blockedMaliciousSiteRequested();
             return;
         }
 
         if (requestType.equals("CONNECT")) {
-            logger.info("HTTPS Request for " + urlString + "\n");
+            logger.info("HTTPS Request for {}\n", urlString);
             handleSecureRequest(urlString);
         } else {
-            logger.info("HTTP Request for " + urlString + "\n");
+            logger.info("HTTP Request for {}\n", urlString);
             handleRequest(urlString);
         }
     }
@@ -117,11 +118,11 @@ public class RequestHandler implements Runnable {
     private void handleRequest(String urlString) {
         try {
             // Define some response objects
-            HttpResponse responseOk =
-                    new BasicHttpResponse(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "OK");
+            HttpResponse responseOk = new BasicHttpResponse(HttpStatus.SC_OK, "OK");
+            responseOk.setVersion(HttpVersion.HTTP_1_1);
             HttpResponse responseNotFound =
-                    new BasicHttpResponse(
-                            HttpVersion.HTTP_1_1, HttpStatus.SC_NOT_FOUND, "NOT FOUND");
+                    new BasicHttpResponse(HttpStatus.SC_NOT_FOUND, "NOT FOUND");
+            responseNotFound.setVersion(HttpVersion.HTTP_1_1);
             String responseHeader = "\nProxy-agent: FilterProxyServer/1.0\n\r\n";
             String fileType = urlString.substring(urlString.lastIndexOf("."));
             // Check if request is for a image file resource
@@ -131,8 +132,7 @@ public class RequestHandler implements Runnable {
                 BufferedImage image = ImageIO.read(remoteURL);
 
                 if (image != null) {
-                    proxyToClientWriter.write(
-                            responseOk.getStatusLine().toString() + responseHeader);
+                    proxyToClientWriter.write(responseOk.toString());
                     proxyToClientWriter.flush();
 
                     ImageIO.write(image, fileType.substring(1), clientSocket.getOutputStream());
@@ -176,15 +176,15 @@ public class RequestHandler implements Runnable {
     /** Handles URLs predicted as malicious. */
     private void blockedMaliciousSiteRequested() {
         try {
-            HttpResponse response =
-                    new BasicHttpResponse(HttpVersion.HTTP_1_1, HttpStatus.SC_BAD_REQUEST, "MAL");
+            HttpResponse response = new BasicHttpResponse(HttpStatus.SC_BAD_REQUEST, "MAL");
+            response.setVersion(HttpVersion.HTTP_1_1);
             HttpEntity httpEntity = new FileEntity(new File("index.html"), ContentType.WILDCARD);
             BufferedWriter bufferedWriter =
                     new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-            bufferedWriter.write(response.getStatusLine().toString());
+            bufferedWriter.write(response.toString());
             String headers =
                     "Proxy-agent: FilterProxy/1.0\r\n"
-                            + httpEntity.getContentType().toString()
+                            + httpEntity.getContentType()
                             + "\r\n"
                             + "Content-Length: "
                             + httpEntity.getContentLength()
@@ -194,7 +194,7 @@ public class RequestHandler implements Runnable {
             bufferedWriter.write(EntityUtils.toString(httpEntity));
             bufferedWriter.flush();
             bufferedWriter.close();
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             logger.error("Error writing to client when requested a blocked site", e);
         }
     }
@@ -205,12 +205,11 @@ public class RequestHandler implements Runnable {
      * @param urlString desired file to be transmitted over https
      */
     private void handleSecureRequest(String urlString) {
-        HttpResponse responseOk =
-                new BasicHttpResponse(
-                        HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "Connection Established");
+        HttpResponse responseOk = new BasicHttpResponse(HttpStatus.SC_OK, "Connection Established");
+        responseOk.setVersion(HttpVersion.HTTP_1_1);
         HttpResponse responseTimeout =
-                new BasicHttpResponse(
-                        HttpVersion.HTTP_1_1, HttpStatus.SC_GATEWAY_TIMEOUT, "Timeout Occurred");
+                new BasicHttpResponse(HttpStatus.SC_GATEWAY_TIMEOUT, "Timeout Occurred");
+        responseTimeout.setVersion(HttpVersion.HTTP_1_1);
         String responseHeader = "\nProxy-agent: FilterProxyServer/1.0\n\r\n";
         String url = urlString.substring(7);
         String[] parts = url.split(":");
@@ -222,7 +221,7 @@ public class RequestHandler implements Runnable {
             Socket proxyToServerSocket = new Socket(address, port);
             proxyToServerSocket.setSoTimeout(7000);
             // Send Connection established to the client
-            proxyToClientWriter.write(responseOk.getStatusLine().toString() + responseHeader);
+            proxyToClientWriter.write(responseOk + responseHeader);
             proxyToClientWriter.flush();
 
             BufferedWriter proxyToServerBW =
@@ -275,8 +274,7 @@ public class RequestHandler implements Runnable {
             proxyToClientWriter.close();
         } catch (Exception e) {
             try {
-                proxyToClientWriter.write(
-                        responseTimeout.getStatusLine().toString() + responseHeader);
+                proxyToClientWriter.write(responseTimeout + responseHeader);
                 proxyToClientWriter.flush();
             } catch (IOException ioException) {
                 logger.error("", e);

@@ -53,7 +53,7 @@ public class FilterProxy implements Runnable {
             serverSocket = new ServerSocket(port);
             running = true;
         } catch (IOException e) {
-            logger.error("Failed listening on port: " + serverSocket.getLocalPort(), e);
+            logger.error("Failed listening on port: {}", serverSocket.getLocalPort(), e);
         }
     }
 
