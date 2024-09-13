@@ -27,6 +27,7 @@ public class EMI {
 
     private static final Logger logger = LoggerFactory.getLogger(EMI.class);
 
+    @SuppressWarnings("deprecation")
     public static void main(String[] args) throws Exception {
         MultipleParameterTool params = MultipleParameterTool.fromArgs(args);
         // set up the execution environment
