@@ -10,8 +10,5 @@ resolvers += Resolver.jcenterRepo
 libraryDependencies += "org.apache.spark" %% "spark-core" % "2.3.0"
 libraryDependencies += "ai.djl" % "api" % "0.12.0"
 
-// libraryDependencies += "ai.djl.mxnet" % "mxnet-model-zoo" % "0.12.0"
-// libraryDependencies += "ai.djl.mxnet" % "mxnet-native-auto" % "1.8.0"
-
 libraryDependencies += "ai.djl.pytorch" % "pytorch-model-zoo" % "0.12.0"
 libraryDependencies += "ai.djl.pytorch" % "pytorch-native-auto" % "1.8.1"
