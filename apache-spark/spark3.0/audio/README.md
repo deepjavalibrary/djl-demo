@@ -14,10 +14,10 @@ We provide two options to build, you can choose to build with `sbt` or `gradle`.
 ### sbt
 
 ```
-libraryDependencies += "ai.djl.spark" % "spark_2.12" % "0.27.0"
-libraryDependencies += "ai.djl.pytorch" % "pytorch-engine" % "0.27.0"
-libraryDependencies += "ai.djl.pytorch" % "pytorch-model-zoo" % "0.27.0"
-libraryDependencies += "ai.djl.pytorch" % "pytorch-native-cpu-precxx11" % "2.1.1"
+libraryDependencies += "ai.djl.spark" % "spark_2.12" % "0.30.0"
+libraryDependencies += "ai.djl.pytorch" % "pytorch-engine" % "0.30.0"
+libraryDependencies += "ai.djl.pytorch" % "pytorch-model-zoo" % "0.30.0"
+libraryDependencies += "ai.djl.pytorch" % "pytorch-native-cpu-precxx11" % "2.4.0"
 ```
 
 ### gradle

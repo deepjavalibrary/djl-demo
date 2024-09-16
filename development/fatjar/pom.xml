@@ -10,7 +10,7 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <djl.version>0.27.0</djl.version>
+        <djl.version>0.30.0</djl.version>
         <exec.mainClass>com.examples.FatJar</exec.mainClass>
     </properties>
 
