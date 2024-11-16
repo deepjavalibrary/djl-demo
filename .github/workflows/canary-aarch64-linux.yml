@@ -49,7 +49,7 @@ jobs:
       - name: Setup Environment
         run: |
           yum -y update
-          yum install -y tar gzip libgomp
+          yum install -y tar gzip libgomp libatomic
           yum -y install java-17-amazon-corretto-devel
       - uses: taiki-e/checkout-action@v1
       - name: Test PyTorch
