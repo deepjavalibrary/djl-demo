@@ -82,7 +82,7 @@ click [here](https://docs.djl.ai/docs/serving/serving/docs/modes.html#servingpro
 ### Misc
 
 - [Multi-LoRA Adapters](sample-llm/multi_lora_adapter_inference.ipynb)
-- [Multi-LoRA Adapters Advanced](sample-llm/multi_lora_adapter_inference_advanced.ipynb)
+- [Multi-LoRA Adapters Custom](sample-llm/multi_lora_adapter_inference_custom.ipynb)
 - [Text embedding model deployment guide](sample-llm/text_embedding_deploy_bert.ipynb)
 
 ### Amazon SageMaker Examples
