@@ -65,7 +65,7 @@ You can open the `http://localhost:8888` to see the hosted instance on docker.
 
 ### Build docker image by yourself
 
-You can read [Dockerfile](https://docs.djl.ai/docs/demos/jupyter/Dockerfile) for detail. To build docker image:
+You can read [Dockerfile](https://github.com/deepjavalibrary/djl-demo/blob/master/jupyter/Dockerfile) for detail. To build docker image:
 
 ```sh
 cd jupyter
