@@ -48,10 +48,10 @@ export TF_CPP_MIN_LOG_LEVEL=1
 Run the following command to build the native executable for this project:
 
 ```shell
-# build native iamge with TensorFlow engine
+# build native image with TensorFlow engine
 ./mvnw clean package -Pnative -Ptensorflow
 
-# build native iamge with PyTorch engine
+# build native image with PyTorch engine
 ./mvnw clean package -Pnative -Ppytorch
 ```
 
