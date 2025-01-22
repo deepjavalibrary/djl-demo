@@ -23,7 +23,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 /**
- * FilterProxy class receives requests on a server socket, and handles requests on indvidual threads
+ * FilterProxy class receives requests on a server socket, and handles requests on individual threads
  * looking for malicious url patterns.
  */
 public class FilterProxy implements Runnable {
