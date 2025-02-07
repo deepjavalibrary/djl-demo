@@ -60,8 +60,6 @@ jobs:
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=2.3.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=2.4.0 ./gradlew clean run
-          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=2.5.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 ./gradlew clean run
@@ -71,8 +69,6 @@ jobs:
           DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=2.1.2 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=2.3.1 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=2.4.0 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=2.5.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
