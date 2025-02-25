@@ -158,7 +158,13 @@
                 </dependency>
                 <dependency>
                     <groupId>ai.djl.pytorch</groupId>
-                    <artifactId>pytorch-native-auto</artifactId>
+                    <artifactId>pytorch-jni</artifactId>
+                    <version>2.4.0-0.30.0</version>
+                </dependency>
+                <dependency>
+                    <groupId>ai.djl.pytorch</groupId>
+                    <artifactId>pytorch-native-cpu</artifactId>
+                    <version>2.4.0</version>
                 </dependency>
             </dependencies>
         </profile>
