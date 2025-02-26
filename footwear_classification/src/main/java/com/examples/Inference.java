@@ -21,6 +21,7 @@ import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.transform.Resize;
 import ai.djl.modality.cv.transform.ToTensor;
 import ai.djl.modality.cv.translator.ImageClassificationTranslator;
+import ai.djl.modality.cv.transform.CenterCrop;
 import ai.djl.training.util.DownloadUtils;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
@@ -64,7 +65,8 @@ public class Inference {
             // out of the box this translator converts images to ResNet friendly ResNet 18 shape
             Translator<Image, Classifications> translator =
                     ImageClassificationTranslator.builder()
-                            .addTransform(new Resize(Models.IMAGE_WIDTH, Models.IMAGE_HEIGHT))
+                            .addTransform(new Resize(Models.IMAGE_HEIGHT, Models.IMAGE_WIDTH))
+                            .addTransform(new CenterCrop(Models.IMAGE_HEIGHT, Models.IMAGE_WIDTH)) 
                             .addTransform(new ToTensor())
                             .optApplySoftmax(true)
                             .build();
