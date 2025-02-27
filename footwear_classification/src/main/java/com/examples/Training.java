@@ -70,7 +70,7 @@ public final class Training {
             // metrics collect and report key performance indicators, like accuracy
             trainer.setMetrics(new Metrics());
 
-            Shape inputShape = new Shape(1, 3, Models.IMAGE_HEIGHT, Models.IMAGE_HEIGHT);
+            Shape inputShape = new Shape(1, 3, Models.IMAGE_HEIGHT, Models.IMAGE_WIDTH);
 
             // initialize trainer with proper input shape
             trainer.initialize(inputShape);

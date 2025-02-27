@@ -18,6 +18,7 @@ import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
+import ai.djl.modality.cv.transform.CenterCrop;
 import ai.djl.modality.cv.transform.Resize;
 import ai.djl.modality.cv.transform.ToTensor;
 import ai.djl.modality.cv.translator.ImageClassificationTranslator;
@@ -65,6 +66,7 @@ public class Inference {
             Translator<Image, Classifications> translator =
                     ImageClassificationTranslator.builder()
                             .addTransform(new Resize(Models.IMAGE_WIDTH, Models.IMAGE_HEIGHT))
+                            .addTransform(new CenterCrop(Models.IMAGE_WIDTH, Models.IMAGE_HEIGHT))
                             .addTransform(new ToTensor())
                             .optApplySoftmax(true)
                             .build();
