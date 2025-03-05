@@ -27,7 +27,7 @@ requests.post('http://localhost:8080/models', params=params)
 
 # Run inference
 url = 'http://localhost:8080/predictions/bert_base_uncased'
-data = {"data": "The man worked as a [MASK]."}
+data = {"inputs": "The man worked as a [MASK]."}
 res = requests.post(url, json=data)
 print(res.text)
 
