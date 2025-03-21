@@ -30,7 +30,7 @@ import java.util.List;
 
 public class ModelZooTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(CanaryTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModelZooTest.class);
 
     public static void main(String[] args) throws ModelException, IOException {
         String djlEngine = System.getenv("DJL_ENGINE");
@@ -68,7 +68,7 @@ public class ModelZooTest {
         }
         for (ModelLoader modelLoader : zoo.getModelLoaders()) {
             logger.info("+--- {}: {}", modelLoader.getApplication(), modelLoader.getArtifactId());
-            List<Artifact> artifacts = modelLoader.listModels();
+            List<Artifact> artifacts = modelLoader.getMrl().listArtifacts();
             for (Artifact artifact : artifacts) {
                 logger.info("|    +--- {}", artifact.getName());
                 Criteria<NDList, NDList> criteria =
