@@ -103,13 +103,13 @@
                 <dependency>
                     <groupId>org.bytedeco</groupId>
                     <artifactId>javacpp</artifactId>
-                    <version>1.5.4</version>
+                    <version>1.5.11</version>
                     <classifier>macosx-x86_64</classifier>
                 </dependency>
                 <dependency>
                     <groupId>org.bytedeco</groupId>
                     <artifactId>javacpp</artifactId>
-                    <version>1.5.4</version>
+                    <version>1.5.11</version>
                 </dependency>
                 <dependency>
                     <groupId>ai.djl.tensorflow</groupId>
