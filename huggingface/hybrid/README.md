@@ -19,7 +19,7 @@ Go into the `model` directory and run the following command to download Huggingf
 ```
 cd models
 
-pip install requirements.txt
+pip install -r requirements.txt
 python download_models.py
 ```
 
