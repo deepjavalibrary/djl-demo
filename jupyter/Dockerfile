@@ -3,7 +3,7 @@ FROM ubuntu:18.04
 RUN apt-get update || true
 RUN apt-get install -y openjdk-11-jdk-headless
 RUN apt-get install -y python3-pip git
-RUN pip3 install jupyter
+RUN pip3 install packaging jupyter
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y locales \
     && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
