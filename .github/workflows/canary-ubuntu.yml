@@ -37,7 +37,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-20.04, ubuntu-22.04, ubuntu-24.04 ]
+        os: [ ubuntu-22.04, ubuntu-24.04 ]
     env:
       AWS_REGION: us-east-1
       DJL_STAGING: ${{github.event.inputs.repo-id}}
