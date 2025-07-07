@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("ai.djl:bom:${djlVersion}"))
+    implementation(platform("ai.djl:bom:0.28.0"))
     implementation("ai.djl:api")
     implementation("ai.djl.serving:wlm")
     implementation("org.apache.flink:flink-streaming-java:${property("flint_version")}")
