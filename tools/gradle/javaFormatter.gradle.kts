@@ -15,9 +15,10 @@ import java.io.PrintWriter
 
 tasks {
     register("formatJava") {
+        val sourceSets = project.sourceSets
         doLast {
             val formatter = Main(PrintWriter(System.out, true), PrintWriter(System.err, true), System.`in`)
-            for (item in project.sourceSets)
+            for (item in sourceSets)
                 for (file in item.allSource) {
                     if (!file.name.endsWith(".java") || "generated-src" in file.absolutePath)
                         continue
@@ -28,9 +29,15 @@ tasks {
     }
 
     val verifyJava by registering {
+        val resultFilePath = "build/verifyJava-result.txt"
+        inputs.files(project.sourceSets.flatMap { it.allSource })
+        inputs.files(project.fileTree("generated-src"))
+        outputs.file(project.file(resultFilePath))
+
+        val proj = project
         doLast {
             val formatter = Main(PrintWriter(System.out, true), PrintWriter(System.err, true), System.`in`)
-            for (item in project.sourceSets)
+            for (item in proj.sourceSets)
                 for (file in item.allSource) {
                     if (!file.name.endsWith(".java") || "generated-src" in file.absolutePath)
                         continue
@@ -43,6 +50,7 @@ tasks {
                                     + "See https://github.com/deepjavalibrary/djl/blob/master/docs/development/development_guideline.md#coding-conventions for more details"
                         )
                 }
+            proj.file(resultFilePath).writeText("Success")
         }
     }
 
