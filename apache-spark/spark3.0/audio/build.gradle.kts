@@ -1,7 +1,7 @@
 plugins {
     scala
     application
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "9.0.0-rc1"
 }
 
 group = "com.example"
