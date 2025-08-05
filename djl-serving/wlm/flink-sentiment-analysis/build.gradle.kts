@@ -11,7 +11,8 @@ djlVersion = if (djlVersion.endsWith("-SNAPSHOT")) djlVersion else "${djlVersion
 
 repositories {
     mavenCentral()
-    maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    mavenLocal()
+    maven("https://central.sonatype.com/repository/maven-snapshots/")
 }
 
 dependencies {

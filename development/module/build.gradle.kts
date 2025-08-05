@@ -12,7 +12,8 @@ version = "1.0"
 
 repositories {
     mavenCentral()
-    maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    mavenLocal()
+    maven("https://central.sonatype.com/repository/maven-snapshots/")
 }
 
 dependencies {
