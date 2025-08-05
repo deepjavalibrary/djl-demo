@@ -50,7 +50,7 @@ under the License.
         </repository>
         <repository>
             <id>djl.ai</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <url>https://central.sonatype.com/repository/maven-snapshots</url>
         </repository>
     </repositories>
 

@@ -47,13 +47,13 @@
     <repositories>
         <repository>
             <id>sonatype-nexus-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <url>https://central.sonatype.com/repository/maven-snapshots</url>
         </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
             <id>sonatype-nexus-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <url>https://central.sonatype.com/repository/maven-snapshots</url>
         </pluginRepository>
     </pluginRepositories>
     <profiles>
