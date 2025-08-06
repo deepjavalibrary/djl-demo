@@ -75,21 +75,17 @@ jobs:
           rm -rf $HOME/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.13.1 ./gradlew clean run
           rm -rf $HOME/.djl.ai/
-          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.1.2 ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
-          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.3.1 ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.5.1 ./gradlew clean run
+          rm -rf $HOME/.djl.ai/
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.7.1 ./gradlew clean run
           rm -rf $HOME/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
           rm -rf $HOME/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu PT_VERSION=1.13.1 ./gradlew clean run
           rm -rf $HOME/.djl.ai/
-          DJL_ENGINE=pytorch-native-cpu PT_VERSION=2.1.2 ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
-          DJL_ENGINE=pytorch-native-cpu PT_VERSION=2.3.1 ./gradlew clean run
-          rm -rf $HOME/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu PT_VERSION=2.5.1 ./gradlew clean run
+          rm -rf $HOME/.djl.ai/
+          DJL_ENGINE=pytorch-native-cpu PT_VERSION=2.7.1 ./gradlew clean run
           rm -rf $HOME/.djl.ai/
       - name: Test TensorFlow
         working-directory: canary

@@ -13,5 +13,6 @@
     <Logger name="ai.djl" level="${sys:ai.djl.logging.level:-debug}" additivity="false">
       <AppenderRef ref="console"/>
     </Logger>
+    <Logger name="ai.djl.repository.zoo" level="WARN"/>
   </Loggers>
 </Configuration>

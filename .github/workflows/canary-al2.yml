@@ -41,7 +41,7 @@ jobs:
       DJL_VERSION: ${{github.event.inputs.djl-version}}
       PT_VERSION: ${{github.event.inputs.pt-version}}
       JAVA_HOME: /usr/lib/jvm/java-17-amazon-corretto
-    container: amazonlinux:2
+    container: amazonlinux:2023
     steps:
       - name: Install libgomp
         run: |
@@ -52,25 +52,21 @@ jobs:
         working-directory: canary
         run: |
           set -x
-          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=$PT_VERSION PYTORCH_PRECXX11=true ./gradlew clean run
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=$PT_VERSION ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=1.13.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=2.1.2 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=2.3.1 ./gradlew clean run
-          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=2.5.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cpu-precxx11 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=2.7.1 ./gradlew clean run
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=1.13.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=2.1.2 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=2.3.1 ./gradlew clean run
-          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=2.5.1 ./gradlew clean run
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=pytorch-native-cpu PT_VERSION=2.7.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
       - name: Test TensorFlow
         working-directory: canary
@@ -80,36 +76,35 @@ jobs:
           rm -rf /root/.djl.ai/
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
           rm -rf /root/.djl.ai/
-      # OnnxRuntime 1.17.1 requires GLIBC 2.27
-      # - name: Test OnnxRuntime
-      #   working-directory: canary
-      #   run: |
-      #     set -x
-      #     DJL_ENGINE=onnxruntime PYTORCH_PRECXX11=true ./gradlew clean run
-      #     rm -rf /root/.djl.ai/
+      - name: Test OnnxRuntime
+        working-directory: canary
+        run: |
+          set -x
+          DJL_ENGINE=onnxruntime ./gradlew clean run
+          rm -rf /root/.djl.ai/
       - name: Test Xgboost
         working-directory: canary
         run: |
           set -x
-          DJL_ENGINE=xgboost PYTORCH_PRECXX11=true ./gradlew clean run
+          DJL_ENGINE=xgboost ./gradlew clean run
           rm -rf /root/.djl.ai/
       - name: Test LightGBM
         working-directory: canary
         run: |
           set -x
-          DJL_ENGINE=lightgbm PYTORCH_PRECXX11=true ./gradlew clean run
+          DJL_ENGINE=lightgbm ./gradlew clean run
           rm -rf /root/.djl.ai/
       - name: Test Huggingface tokenizers
         working-directory: canary
         run: |
           set -x
-          DJL_ENGINE=tokenizers PYTORCH_PRECXX11=true ./gradlew clean run
+          DJL_ENGINE=tokenizers ./gradlew clean run
           rm -rf /root/.djl.ai/
       - name: Test SentencePiece tokenizers
         working-directory: canary
         run: |
           set -x
-          DJL_ENGINE=sentencepiece PYTORCH_PRECXX11=true ./gradlew clean run
+          DJL_ENGINE=sentencepiece ./gradlew clean run
           rm -rf /root/.djl.ai/
-      # MXNet doesn't support amazonlinux:2
-      # fastText doesn't support amazonlinux:2
+      # MXNet doesn't support amazonlinux:2023
+      # fastText doesn't support amazonlinux:2023
