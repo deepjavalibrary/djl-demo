@@ -165,39 +165,28 @@ jobs:
         run: |
           set -x
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=$PT_VERSION ./gradlew clean run
-          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.1.2 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.3.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.5.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=$PT_VERSION ./gradlew clean run
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.7.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=2.1.2 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=2.3.1 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=$PT_VERSION ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_PRECXX11=true PYTORCH_VERSION=2.5.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.7.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cpu-precxx11 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu124 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu121 PT_VERSION=2.1.2 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu121 PT_VERSION=2.3.1 ./gradlew clean run
-          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu124 PT_VERSION=2.5.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu124-precxx11 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu121-precxx11 PT_VERSION=2.1.2 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu121-precxx11 PT_VERSION=2.3.1 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-cu128 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu124-precxx11 PT_VERSION=2.5.1 ./gradlew clean run
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=pytorch-native-cu128 PT_VERSION=2.7.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
       - name: Test Xgboost GPU
         working-directory: canary

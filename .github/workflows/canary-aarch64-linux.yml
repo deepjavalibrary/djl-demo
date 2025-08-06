@@ -36,7 +36,7 @@ jobs:
     if: github.repository == 'deepjavalibrary/djl-demo'
     runs-on: [ self-hosted, aarch64 ]
     container:
-      image: amazonlinux:2
+      image: amazonlinux:2023
       env:
         AWS_REGION: us-east-1
         DJL_STAGING: ${{github.event.inputs.repo-id}}
@@ -60,21 +60,17 @@ jobs:
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=1.13.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.1.2 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.3.1 ./gradlew clean run
-          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.5.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cpu-precxx11 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-auto PYTORCH_VERSION=2.7.1 ./gradlew clean run
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=1.13.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=2.1.2 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=2.3.1 ./gradlew clean run
-          rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu-precxx11 PT_VERSION=2.5.1 ./gradlew clean run
+          rm -rf /root/.djl.ai/
+          DJL_ENGINE=pytorch-native-cpu PT_VERSION=2.7.1 ./gradlew clean run
           rm -rf /root/.djl.ai/
       - name: Test TensorFlow
         working-directory: canary
@@ -84,24 +80,23 @@ jobs:
           rm -rf /root/.djl.ai/
           DJL_ENGINE=tensorflow-native-cpu ./gradlew clean run
           rm -rf /root/.djl.ai/
-      # OnnxRuntime 1.17.1 requires GLIBC 2.27
-      # - name: Test OnnxRuntime
-      #   working-directory: canary
-      #   run: |
-      #     set -x
-      #     DJL_ENGINE=onnxruntime ./gradlew clean run
-      #     rm -rf /root/.djl.ai/
+      - name: Test OnnxRuntime
+        working-directory: canary
+        run: |
+          set -x
+          DJL_ENGINE=onnxruntime ./gradlew clean run
+          rm -rf /root/.djl.ai/
       - name: Test Huggingface tokenizers
         working-directory: canary
         run: |
           set -x
-          DJL_ENGINE=tokenizers PYTORCH_PRECXX11=true ./gradlew clean run
+          DJL_ENGINE=tokenizers ./gradlew clean run
           rm -rf /root/.djl.ai/
       - name: Test SentencePiece tokenizers
         working-directory: canary
         run: |
           set -x
-          DJL_ENGINE=sentencepiece PYTORCH_PRECXX11=true ./gradlew clean run
+          DJL_ENGINE=sentencepiece ./gradlew clean run
           rm -rf /root/.djl.ai/
       - name: Test XGBoost
         working-directory: canary
