@@ -178,11 +178,9 @@ jobs:
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cpu ./gradlew clean run
           rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu124 ./gradlew clean run
+          DJL_ENGINE=pytorch-native-cu128 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu124 PT_VERSION=2.5.1 ./gradlew clean run
-          rm -rf /root/.djl.ai/
-          DJL_ENGINE=pytorch-native-cu128 ./gradlew clean run
           rm -rf /root/.djl.ai/
           DJL_ENGINE=pytorch-native-cu124-precxx11 PT_VERSION=2.5.1 ./gradlew clean run
           rm -rf /root/.djl.ai/

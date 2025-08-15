@@ -92,10 +92,7 @@ public final class CanaryTest {
             djlEngine = "pytorch-native-auto";
         }
 
-        if (djlEngine.startsWith("tensorrt")) {
-            testTensorrt();
-            return;
-        } else if (djlEngine.startsWith("onnxruntime")) {
+        if (djlEngine.startsWith("onnxruntime")) {
             testOnnxRuntime();
             return;
         } else if (djlEngine.startsWith("xgboost")) {
@@ -160,27 +157,6 @@ public final class CanaryTest {
                 DetectedObjects detection = predictor.predict(img);
                 logger.info("{}", detection);
             }
-        }
-    }
-
-    private static void testTensorrt() throws ModelException, IOException, TranslateException {
-        if (!System.getProperty("os.name").startsWith("Linux") || !CudaUtils.hasCuda()) {
-            throw new AssertionError("TensorRT only work on Linux GPU instance.");
-        }
-        Criteria<Image, Classifications> criteria =
-                Criteria.builder()
-                        .setTypes(Image.class, Classifications.class)
-                        .optEngine("TensorRT") // use TensorRT engine
-                        .optModelUrls(
-                                "https://mlrepo.djl.ai/model/cv/image_classification/ai/djl/onnxruntime/resnet/0.0.1/resnet18_v1-7.tar.gz")
-                        .build();
-
-        String url = "https://resources.djl.ai/images/kitten.jpg";
-        Image image = ImageFactory.getInstance().fromUrl(url);
-        try (ZooModel<Image, Classifications> model = ModelZoo.loadModel(criteria);
-                Predictor<Image, Classifications> predictor = model.newPredictor()) {
-            Classifications classifications = predictor.predict(image);
-            logger.info("{}", classifications);
         }
     }
 

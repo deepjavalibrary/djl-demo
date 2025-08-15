@@ -9,12 +9,12 @@ apply(file("../tools/gradle/javaFormatter.gradle.kts"))
 group = "com.example"
 version = "1.0-SNAPSHOT"
 
-val djlVersion = getEnv("DJL_VERSION", "0.34.0-SNAPSHOT")
+val djlVersion = getEnv("DJL_VERSION", "0.35.0-SNAPSHOT")
 val engine: String = getEnv("DJL_ENGINE", "pytorch-native-auto")
 val os = getOsName()
 val arch: String = if (System.getProperty("os.arch") == "amd64") "x86_64" else System.getProperty("os.arch")
 val stagingRepo = getEnv("DJL_STAGING", "")
-val ptVersion = getEnv("PT_VERSION", "2.7.1-SNAPSHOT")
+val ptVersion = getEnv("PT_VERSION", "2.7.1")
 val ptJniVersion = ptVersion.replace("-SNAPSHOT", "")
 
 repositories {
@@ -66,9 +66,6 @@ dependencies {
         }
     } else if (engine.startsWith("lightgbm")) {
         runtimeOnly("ai.djl.ml.lightgbm:lightgbm")
-    } else if (engine.startsWith("tensorrt")) {
-        runtimeOnly("ai.djl.tensorrt:tensorrt")
-        runtimeOnly("ai.djl.pytorch:pytorch-engine")
     } else if (engine.startsWith("python")) {
         runtimeOnly("ai.djl.python:python")
     } else if (engine.startsWith("tokenizers")) {

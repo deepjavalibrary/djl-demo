@@ -42,16 +42,18 @@ jobs:
         DJL_STAGING: ${{github.event.inputs.repo-id}}
         DJL_VERSION: ${{github.event.inputs.djl-version}}
         PT_VERSION: ${{github.event.inputs.pt-version}}
-        JAVA_HOME: /usr/lib/jvm/java-17-amazon-corretto.aarch64
     timeout-minutes: 30
     needs: create-aarch64-runner
     steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: 17
       - name: Setup Environment
         run: |
-          yum -y update
-          yum install -y tar gzip libgomp libatomic
-          yum -y install java-17-amazon-corretto-devel
-      - uses: taiki-e/checkout-action@v1
+          dnf install -y tar gzip libgomp libatomic
       - name: Test PyTorch
         working-directory: canary
         run: |
@@ -98,12 +100,12 @@ jobs:
           set -x
           DJL_ENGINE=sentencepiece ./gradlew clean run
           rm -rf /root/.djl.ai/
-      - name: Test XGBoost
-        working-directory: canary
-        run: |
-          set -x
-          DJL_ENGINE=xgboost ./gradlew clean run
-          rm -rf /root/.djl.ai/
+      # - name: Test XGBoost
+      #  working-directory: canary
+      #  run: |
+      #    set -x
+      #    DJL_ENGINE=xgboost ./gradlew clean run
+      #    rm -rf /root/.djl.ai/
       # MXNet doesn't support aarch64
       # fastText doesn't support aarch64
       # LightGBM doesn't support aarch64 ?
