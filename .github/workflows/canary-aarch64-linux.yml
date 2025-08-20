@@ -45,15 +45,15 @@ jobs:
     timeout-minutes: 30
     needs: create-aarch64-runner
     steps:
+      - name: Setup Environment
+        run: |
+          dnf install -y tar gzip libgomp libatomic
       - uses: actions/checkout@v4
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'corretto'
           java-version: 17
-      - name: Setup Environment
-        run: |
-          dnf install -y tar gzip libgomp libatomic
       - name: Test PyTorch
         working-directory: canary
         run: |

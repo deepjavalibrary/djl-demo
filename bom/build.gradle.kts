@@ -62,7 +62,6 @@ dependencies {
     implementation("ai.djl.tensorflow:tensorflow-native-cpu::win-x86_64")
     implementation("ai.djl.tensorflow:tensorflow-native-cu121::linux-x86_64")
     implementation("ai.djl.tensorflow:tensorflow-native-cu121::win-x86_64")
-    implementation("ai.djl.tensorrt:tensorrt")
     implementation("ai.djl.timeseries:timeseries")
     implementation("com.microsoft.onnxruntime:onnxruntime")
     implementation("com.microsoft.onnxruntime:onnxruntime_gpu")
