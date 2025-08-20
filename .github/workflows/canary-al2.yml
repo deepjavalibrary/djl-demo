@@ -42,15 +42,15 @@ jobs:
       PT_VERSION: ${{github.event.inputs.pt-version}}
     container: amazonlinux:2023
     steps:
+      - name: Install libgomp
+        run: |
+          dnf install -y tar gzip libgomp
       - uses: actions/checkout@v4
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'corretto'
           java-version: 17
-      - name: Install libgomp
-        run: |
-          dnf install -y tar gzip libgomp
       - name: Test PyTorch
         working-directory: canary
         run: |

@@ -64,6 +64,7 @@ dependencies {
         } else {
             runtimeOnly("ai.djl.ml.xgboost:xgboost")
         }
+        runtimeOnly("ai.djl.pytorch:pytorch-engine")
     } else if (engine.startsWith("lightgbm")) {
         runtimeOnly("ai.djl.ml.lightgbm:lightgbm")
     } else if (engine.startsWith("python")) {
