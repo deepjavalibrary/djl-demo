@@ -165,7 +165,7 @@ jobs:
   stop-runners:
     if: always()
     runs-on: [ self-hosted, scheduler ]
-    needs: [ create-gpu-runner, canary-test-cuda113, canary-test-cuda121, canary-test-cuda124 ]
+    needs: [ create-gpu-runner, canary-test-cuda113, canary-test-cuda128 ]
     steps:
       - name: Stop all instances
         run: |
