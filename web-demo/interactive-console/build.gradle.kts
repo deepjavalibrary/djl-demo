@@ -1,5 +1,5 @@
 plugins {
-    id("org.springframework.boot") version "3.3.0"
+    id("org.springframework.boot") version "4.0.0-M2"
     java
 }
 apply(file("../../tools/gradle/javaFormatter.gradle.kts"))
