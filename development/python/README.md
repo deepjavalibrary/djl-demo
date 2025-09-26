@@ -13,7 +13,7 @@ you can load your model in DJL, and keep pre/post processing code in Python.
 ## A simple solution
 
 In this simple solution, you will learn how to use Python engine to invoke a python function from
-DJL and pass input/output back and force.
+DJL and pass input/output back and forth.
 
 ### Create a python model
 
